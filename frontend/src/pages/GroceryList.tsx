@@ -1,14 +1,14 @@
-import '../styles/NewListPage.css'
+import '../styles/GroceryList.css'
 import NavBar from '../components/NavBar';
 
 
-const NewListPage = () => {
+const GroceryList = () => {
     return (
         <div>
             <NavBar />
-            NewListPage
+            GroceryList
         </div>
     )
 }
 
-export default NewListPage;
+export default GroceryList;

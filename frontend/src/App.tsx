@@ -12,6 +12,7 @@ import RecipesPage from './pages/RecipesPage';
 import LoginPage from './pages/LoginPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import NoMatchPage from './pages/NoMatchPage';
+import GroceryList from './pages/GroceryList';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="create" element={<CreateRecipePage />} />
         </Route>
         <Route path="login" element={<LoginPage />} />
+        <Route path="grocery-list" element={<GroceryList />} />
         <Route path="*" element={<NoMatchPage />} />
       </Routes>
     </BrowserRouter>
