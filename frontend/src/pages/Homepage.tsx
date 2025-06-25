@@ -1,16 +1,11 @@
 import "../styles/Homepage.css";
 import NavBar from "../components/NavBar";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTicket } from "@fortawesome/free-solid-svg-icons";
+import type {navigationTypes} from '../utils/types'
 
-const Homepage = () => {
-  const [navOpen, setNavOpen] = useState<boolean>(false);
-
-  const toggleNav = () => {
-    setNavOpen((prev) => !prev);
-  };
-  
+const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
   return (
     <div>
       <button onClick={toggleNav}>
@@ -20,7 +15,7 @@ const Homepage = () => {
           onClick={toggleNav}
         />
       </button>
-      {navOpen && <NavBar onCloseNav={toggleNav} />}
+      {navOpen && <NavBar toggleNav={toggleNav} />}
       Homepage
     </div>
   );

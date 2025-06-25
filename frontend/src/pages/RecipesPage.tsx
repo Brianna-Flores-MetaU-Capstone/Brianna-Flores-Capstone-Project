@@ -4,20 +4,19 @@ import NavBar from "../components/NavBar";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTicket } from "@fortawesome/free-solid-svg-icons";
+import type {navigationTypes} from '../utils/types'
 
-const RecipesPage = () => {
-  const [navOpen, setNavOpen] = useState<boolean>(false);
-
+const RecipesPage = ( {navOpen, toggleNav} : navigationTypes) => {
   return (
     <div>
-      <button onClick={() => setNavOpen((prev) => !prev)}>
+      <button onClick={toggleNav}>
         <FontAwesomeIcon
           icon={faBars}
           className="nav-icon"
-          onClick={() => setNavOpen((prev) => !prev)}
+          onClick={toggleNav}
         />
       </button>
-      {navOpen && <NavBar onCloseNav={() => setNavOpen((prev) => !prev)} />}
+      {navOpen && <NavBar toggleNav={toggleNav} />}
       RecipesPage
       <Outlet />
     </div>
