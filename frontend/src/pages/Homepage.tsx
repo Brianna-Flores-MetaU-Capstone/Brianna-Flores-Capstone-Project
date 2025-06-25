@@ -1,8 +1,7 @@
 import "../styles/Homepage.css";
 import NavBar from "../components/NavBar";
-import { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import type {navigationTypes} from '../utils/types'
 
 const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
@@ -12,7 +11,6 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
         <FontAwesomeIcon
           icon={faBars}
           className="nav-icon"
-          onClick={toggleNav}
         />
       </button>
       {navOpen && <NavBar toggleNav={toggleNav} />}
