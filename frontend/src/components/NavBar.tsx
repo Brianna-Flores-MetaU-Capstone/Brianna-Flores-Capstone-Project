@@ -2,10 +2,12 @@ import '../styles/Homepage.css'
 import '../styles/NavBar.css'
 import { NavLink, Link } from "react-router"
 
-const NavBar = () => {
+
+const NavBar = ({ onCloseNav }: {onCloseNav: () => void}) => {
+
     return (
         <nav className="navbar-container">
-            <span className="close-nav">
+            <span className="close-nav" onClick={onCloseNav}>
                 &times;
             </span>
             {/* end: used so anything after "/" will generate respective content */}
