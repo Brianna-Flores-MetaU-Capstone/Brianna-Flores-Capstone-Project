@@ -28,7 +28,7 @@ model Ingredient {
   quantity             Int
   unit                 String
   estimatedCostPerUnit Decimal
-  aisle                String?
+  department           String?
   productImage         String?
   expiration           DateTime?
   estimatedCost        Decimal?
@@ -51,7 +51,7 @@ model Recipe {
   ingredientsNeeded Ingredient[]
   sourceUrl         String
   totalCost         Decimal // total cost of ingredients to create for baseline servings
-  instructions      String [] // store json return of steps
+  instructions      String[] // store json return of steps
   // intollerences
   containsDairy     Boolean?
   containsPeanuts   Boolean?
