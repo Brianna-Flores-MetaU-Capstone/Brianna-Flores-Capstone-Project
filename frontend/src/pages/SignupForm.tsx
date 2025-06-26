@@ -1,13 +1,12 @@
-import '../styles/LoginPage.css'
 import { useState } from "react";
 import { auth } from "../../../backend/index"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import type {navigationTypes} from '../utils/types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBar";
 
-const LoginPage = ( {navOpen, toggleNav} : navigationTypes) => {
+const SignupForm = ( {navOpen, toggleNav} : navigationTypes) => {
     const [formData, setFormData] = useState({ username: "", password: "" });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,11 +22,14 @@ const LoginPage = ( {navOpen, toggleNav} : navigationTypes) => {
             throw new Error("Username and password are required")
         }
 
-        signInWithEmailAndPassword(auth, formData.username, formData.password)
+        if (formData.password.length < 8) {
+            throw new Error("Password must be at least 8 characters long")
+        }
+        createUserWithEmailAndPassword(auth, formData.username, formData.password)
         .then((userCredential) => {
-            // Signed in 
+            // Signed up 
             const user = userCredential.user;
-            console.log("signed in user ", user)
+            console.log("created user ", user)
             // ...
         })
         .catch((error) => {
@@ -51,10 +53,11 @@ const LoginPage = ( {navOpen, toggleNav} : navigationTypes) => {
                 <input type="text" name="username" value={formData.username} onChange={handleChange} />
                 <label htmlFor="password">Password</label>
                 <input type="password" name="password" value={formData.password} onChange={handleChange} />
-                <button type="submit">Login!</button>
+                <p>Password must be at least 8 characters</p>
+                <button type="submit">Register!</button>
             </form>
         </div>
     )
 }
 
-export default LoginPage;
+export default SignupForm;

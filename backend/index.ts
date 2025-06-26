@@ -16,7 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export {auth}
+export { auth }
 
 // server side rendering vs client side rendering
 // server: HTML is already there (immediate display)
