@@ -3,7 +3,7 @@ import '../styles/LoginPage.css'
 const LoginPage = () => {
     return (
         <div>
-            LoginPage
+            <h1>Login</h1>
         </div>
     )
 }
