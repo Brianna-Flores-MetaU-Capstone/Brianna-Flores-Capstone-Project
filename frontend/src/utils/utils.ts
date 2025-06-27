@@ -15,8 +15,6 @@ const validateInput = (formData: formData) => {
 };
 
 const handleNewUser = async (newUser: newUserType) => {
-    console.log("before try");
-    console.log(newUser);
     try {
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",
