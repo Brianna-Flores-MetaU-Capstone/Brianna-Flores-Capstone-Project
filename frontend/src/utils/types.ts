@@ -3,4 +3,14 @@ type navigationTypes = {
     toggleNav: () => void 
 }
 
-export type {navigationTypes}
+type messageTypes = {
+    type: string
+    text: string
+}
+
+type newUserType = {
+    id: string
+    email: string
+}
+
+export type {navigationTypes, messageTypes, newUserType}
