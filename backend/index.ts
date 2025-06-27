@@ -1,23 +1,23 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+// import { initializeApp } from "firebase/app";
+// import { getAuth } from "firebase/auth";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAVBDGCSruON93L0w_XNgA6u6VwJIxJuHE",
-  authDomain: "brianna-flores-capstone.firebaseapp.com",
-  projectId: "brianna-flores-capstone",
-  storageBucket: "brianna-flores-capstone.firebasestorage.app",
-  messagingSenderId: "743225958659",
-  appId: "1:743225958659:web:801572788a437ecf2bc936",
-  measurementId: "G-52WNDX6L9F"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAVBDGCSruON93L0w_XNgA6u6VwJIxJuHE",
+//   authDomain: "brianna-flores-capstone.firebaseapp.com",
+//   projectId: "brianna-flores-capstone",
+//   storageBucket: "brianna-flores-capstone.firebasestorage.app",
+//   messagingSenderId: "743225958659",
+//   appId: "1:743225958659:web:801572788a437ecf2bc936",
+//   measurementId: "G-52WNDX6L9F"
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
 
-console.log("got auth,", auth)
+// console.log("got auth,", auth)
 
-export { auth }
+// export { auth }
 
 
 // const express = require('express');
