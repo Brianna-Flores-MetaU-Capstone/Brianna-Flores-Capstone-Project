@@ -3,4 +3,9 @@ type navigationTypes = {
     toggleNav: () => void 
 }
 
-export type {navigationTypes}
+interface searchRequestType {
+    numToRequest: number
+    offset: number
+}
+
+export type {navigationTypes, searchRequestType}
