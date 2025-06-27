@@ -1,10 +1,7 @@
 import "../styles/Meal.css"
 
-const MealInfoModal = () => {
+const MealInfoModal = ({handleModalClose}: {handleModalClose: () => void}) => {
     // const handleMealCardClick = (event: React.MouseEvent<HTMLElement>) => {
-    const handleModalClose = () => {
-        // open meal card modal
-    }
 
     return (
         //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)

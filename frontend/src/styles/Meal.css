@@ -45,7 +45,7 @@
   width: 60%;
   height: 500px;
   position: relative;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .diets-and-intollerances {
@@ -54,10 +54,14 @@
 
 .diets-and-intollerances li {
   display: inline-block;
-  margin-right: 20px;
+  margin-right: 5px;
   padding: 5px 10px 5px 10px;
   background-color: #D9EDF8;
   font-size: 15px;
+}
+
+.meal-card .diets-and-intollerances li {
+    font-size: 10px;
 }
 
 .modal-header {
@@ -71,5 +75,5 @@
 }
 
 .modal-header .meal-img {
-    width: 60%;
+    width: 50%;
 }

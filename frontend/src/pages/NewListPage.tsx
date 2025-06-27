@@ -5,8 +5,11 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import type { navigationTypes } from "../utils/types";
 import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
+import {useState} from 'react'
 
 const NewListPage = ({ navOpen, toggleNav }: navigationTypes) => {
+  const [addAnotherMealOpen, setAddAnotherMealOpen] = useState(false);
+  const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
   return (
     <div>
       <button onClick={toggleNav}>
@@ -14,8 +17,8 @@ const NewListPage = ({ navOpen, toggleNav }: navigationTypes) => {
       </button>
       {navOpen && <NavBar toggleNav={toggleNav} />} 
       <h1>Chosen Meals</h1>
-      <MealCard />
-      <MealInfoModal />
+      <MealCard onMealCardClick={() => setMealInfoModalOpen((prev) => !prev)}/>
+      {mealInfoModalOpen && <MealInfoModal handleModalClose={() => setMealInfoModalOpen((prev) => !prev)} />}
     </div>
   );
 };
