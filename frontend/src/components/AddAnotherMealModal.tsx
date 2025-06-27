@@ -1,20 +1,18 @@
 import React from "react";
 import "../styles/Meal.css";
 import { useState } from "react";
+import MealCard from "./MealCard";
 
-import type { searchRequestType } from "../utils/types";
+import type { searchRequestType, recipeType } from "../utils/types";
+import { parseRecipeData } from "../utils/utils";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 const GROUP_OF_DISPLAYED_CARDS = 3;
 const TOTAL_SEARCH_REQUESTS = 6;
 
-const AddAnotherMealModal = ({
-  handleModalClose,
-}: {
-  handleModalClose: () => void;
-}) => {
+const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;}) => {
   const [mealRequest, setMealRequest] = useState({ recipe: "", days: "" });
-  const [mealResults, setMealResults] = useState([]);
+  const [mealResults, setMealResults] = useState<recipeType[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
 
@@ -24,12 +22,7 @@ const AddAnotherMealModal = ({
   };
 
   // fetch recipes from API dependent on user input
-  const fetchSearchRecipes = async ({
-    numToRequest,
-    offset,
-  }: searchRequestType) => {
-    console.log(mealRequest);
-
+  const fetchSearchRecipes = async ({ numToRequest, offset }: searchRequestType) => {
     try {
       const response = await fetch(
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipe}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
@@ -38,11 +31,11 @@ const AddAnotherMealModal = ({
         throw new Error("Failed to fetch searched recipes");
       }
       const data = await response.json();
-      const recipes = data.results;
-      console.log(data);
-      setMealResults(recipes);
+      const parsedRecipes = parseRecipeData(data.results)
+      console.log("parsed recipes", parsedRecipes)
+      setMealResults(parsedRecipes);
 
-      // TODO: check if recipes are in database (according to id), otherwise add to database
+      // TODO: add fetched recipes to database
       // helper method
     } catch (error) {
       console.error(error);
@@ -119,6 +112,17 @@ const AddAnotherMealModal = ({
           />
           <button>Find Some Recipes!</button>
         </form>
+
+        <section className="result-cards">
+            {
+                mealResults.map((meal) => {
+                    return (
+                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} />
+                    )
+                })
+            }
+        </section>
+
         {/* if search clicked, add a generate more button */}
         {searchClicked && (
           <button onClick={() => setSearchClicked(false)}>
