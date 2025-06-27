@@ -3,7 +3,7 @@ import './App.css'
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
 
 // import pages for routing
 import Homepage from './pages/Homepage';
