@@ -7,9 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router";
+import type { formData } from "../utils/types";
+import { validateInput } from "../utils/utils";
 
 const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState<formData>({ username: "", password: "" });
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
 
@@ -20,11 +22,12 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    // check password is valid length
-    if (!formData.username || !formData.password) {
-      setMessage({ type: "error", text: "Username and password are required." });
-      throw new Error("Username and password are required");
+    const valid = validateInput(formData)
+    if (valid.type === "error" && valid.text) {
+      setMessage(valid)
+      throw new Error(valid.text)
     }
+
 
     signInWithEmailAndPassword(auth, formData.username, formData.password)
       .then((userCredential) => {
@@ -65,11 +68,11 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
         />
         <button type="submit">Login!</button>
       </form>
+      {message && <p className={`message ${message.type}`}>{message.text}</p>}
       <p>New User?</p>
       <button onClick={() => navigate("/signup")}>
         Register for an Account!
       </button>
-      {message && <p className={`message ${message.type}`}>{message.text}</p>}
     </div>
   );
 };

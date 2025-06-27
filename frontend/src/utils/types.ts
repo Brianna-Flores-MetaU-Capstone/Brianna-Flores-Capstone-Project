@@ -9,8 +9,13 @@ type messageTypes = {
 }
 
 type newUserType = {
-    id: string
+    firebaseId: string
     email: string
 }
 
-export type {navigationTypes, messageTypes, newUserType}
+type formData = {
+    username: string
+    password: string
+}
+
+export type {navigationTypes, messageTypes, newUserType, formData}
