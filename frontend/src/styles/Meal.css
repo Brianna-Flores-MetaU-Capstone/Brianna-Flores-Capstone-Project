@@ -21,7 +21,8 @@
 
 .meal-card:hover,
 .meal-card:focus {
-  transform: scale(1.1);
+    cursor: pointer;
+  /* transform: scale(1.1); */
 }
 
 .modal {
@@ -76,4 +77,9 @@
 
 .modal-header .meal-img {
     width: 50%;
+}
+
+/* CSS for AddAnotherMealModal.tsx */
+.meal-form {
+    
 }
