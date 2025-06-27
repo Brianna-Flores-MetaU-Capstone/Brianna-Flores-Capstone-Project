@@ -21,9 +21,9 @@ const NewListPage = ({ navOpen, toggleNav }: navigationTypes) => {
       <h1>Chosen Meals</h1>
       <section>
         {/* use map on array of selected meals to create meal cards  */}
-        <MealCard
+        {/* <MealCard
           onMealCardClick={() => setMealInfoModalOpen((prev) => !prev)}
-        />
+        /> */}
       </section>
       <section>
         <button onClick={() => setAddAnotherMealOpen((prev) => !prev)}>Add Another Meal!</button>

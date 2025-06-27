@@ -80,6 +80,8 @@
 }
 
 /* CSS for AddAnotherMealModal.tsx */
-.meal-form {
-    
+.result-cards {
+  display: flex;
+  gap: 20px;
+  overflow-x: scroll;
 }

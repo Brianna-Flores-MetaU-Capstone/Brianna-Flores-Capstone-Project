@@ -89,7 +89,8 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
         <button className="modal-close" onClick={handleModalClose}>
           &times;
         </button>
-        <button onClick={() => fetchRandomRecipes()}>
+        {/* <button onClick={() => fetchRandomRecipes()}> */}
+        <button>
           Need Some Inspiration?
         </button>
         <button>I Have My Own Recipe</button>
@@ -117,7 +118,7 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
             {
                 mealResults.map((meal) => {
                     return (
-                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} />
+                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} parsedMealData={meal} />
                     )
                 })
             }
