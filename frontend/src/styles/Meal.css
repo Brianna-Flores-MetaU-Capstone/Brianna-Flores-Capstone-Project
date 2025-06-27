@@ -1,0 +1,75 @@
+.meal-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  text-align: center;
+  border: 2px solid black;
+  /* border-radius: 15%; */
+}
+
+.meal-card p {
+  padding: 0;
+  margin: 0;
+}
+
+.meal-img {
+  width: 100%;
+  /* border-radius: 15% 15% 0 0; */
+}
+
+.meal-card:hover,
+.meal-card:focus {
+  transform: scale(1.1);
+}
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background-color: #faf5f6;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  height: 500px;
+  position: relative;
+  overflow: scroll;
+}
+
+.diets-and-intollerances {
+  list-style-type: none;
+}
+
+.diets-and-intollerances li {
+  display: inline-block;
+  margin-right: 20px;
+  padding: 5px 10px 5px 10px;
+  background-color: #D9EDF8;
+  font-size: 15px;
+}
+
+.modal-header {
+    display: flex;
+    width: 100%;
+}
+
+.meal-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header .meal-img {
+    width: 60%;
+}
