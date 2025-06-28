@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "firebaseId" SET DATA TYPE TEXT;

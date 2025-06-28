@@ -1,19 +1,22 @@
-import "../styles/LoginPage.css";
 import { useState } from "react";
 import { auth } from "../utils/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import type { navigationTypes } from "../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router";
-import type { formData } from "../utils/types";
-import { validateInput } from "../utils/utils";
+import type { messageTypes, newUserType, formData } from "../utils/types";
+import { validateInput, handleNewUser } from "../utils/utils";
 
-const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formData>({ username: "", password: "" });
-  const [message, setMessage] = useState({ type: "", text: "" });
+const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
+  const [formData, setFormData] = useState<formData>({
+    username: "",
+    password: "",
+  });
+  const [message, setMessage] = useState<messageTypes>();
   const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -22,27 +25,33 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const valid = validateInput(formData)
+    const valid = validateInput(formData);
     if (valid.type === "error" && valid.text) {
-      setMessage(valid)
-      throw new Error(valid.text)
+      setSuccess(false);
+      setMessage(valid);
+      throw new Error(valid.text);
     }
-
-
-    signInWithEmailAndPassword(auth, formData.username, formData.password)
+    createUserWithEmailAndPassword(auth, formData.username, formData.password)
       .then((userCredential) => {
-        // Signed in
+        // Signed up
         const user = userCredential.user;
-        setMessage({ type: "success", text: "Login successful!" });
-        navigate("/"); // go back to homepage
+        setMessage({ type: "success", text: "Registration successful!" });
+        setSuccess(true);
+        const newUser: newUserType = {
+          firebaseId: user.uid ? user.uid : "",
+          email: user.email ? user.email : "",
+        };
+        handleNewUser(newUser);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log("error ", errorCode, errorMessage);
-        setMessage({ type: "error", text: "Login failed." });
+        setMessage({ type: "error", text: "Email already in use or invalid!" });
+        setSuccess(false);
       });
   }
+
   return (
     <div>
       <button onClick={toggleNav}>
@@ -66,15 +75,14 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
           onChange={handleChange}
           required
         />
-        <button type="submit">Login!</button>
+        <button type="submit">Register!</button>
       </form>
       {message && <p className={`message ${message.type}`}>{message.text}</p>}
-      <p>New User?</p>
-      <button onClick={() => navigate("/signup")}>
-        Register for an Account!
-      </button>
+      {success && (
+        <button onClick={() => navigate("/login")}>Take me to login!</button>
+      )}
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupForm;
