@@ -1,7 +1,8 @@
-div {
-    color: red;
-}
-
 .next-recipe img{
     width: 300px;
+}
+
+.list-ingredient {
+    display: flex;
+    justify-content: space-between;
 }

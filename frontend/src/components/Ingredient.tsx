@@ -1,11 +1,12 @@
 import React from "react"
 import type { ingredientType } from "../utils/types"
+import "../styles/Homepage.css"
 
-const Ingredient = (ingredientData: ingredientType) => {
+const Ingredient = ({ingredient}: {ingredient: ingredientType}) => {
     return (
-        <div>
-            <p>{ingredientData.name}</p>
-            <p>{`${ingredientData.amount}${ingredientData.unit} left`}</p>
+        <div className="list-ingredient">
+            <p>{ingredient.name}</p>
+            <p>{`${ingredient.amount} ${ingredient.unit}`}</p>
         </div>
     )
 }

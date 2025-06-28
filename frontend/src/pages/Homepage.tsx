@@ -7,8 +7,11 @@ import { useNavigate } from "react-router";
 
 import { auth } from "../utils/firebase"
 
+import { groceryList } from "../utils/sampleData";
+
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
+import GroceryPreview from "../components/GroceryPreview";
 
 
 
@@ -43,6 +46,7 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
       <section className="quick-access">
         <NextRecipe />
         <IngredientsPreview />
+        <GroceryPreview groceryList={groceryList}/>
       </section>
       <section className="upcoming-meals">
 
