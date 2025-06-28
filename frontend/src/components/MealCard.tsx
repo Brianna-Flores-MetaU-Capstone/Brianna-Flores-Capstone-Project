@@ -8,7 +8,6 @@ interface MealCardTypes {
 
 // const MealCard = ({onMealCardClick}: {onMealCardClick: () => void}) => {
 const MealCard = ({onMealCardClick, parsedMealData}: MealCardTypes) => {
-    console.log(parsedMealData)
     return (
         //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
         <div className="meal-card" onClick={() => onMealCardClick()}>

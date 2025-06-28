@@ -32,12 +32,9 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
       }
       const data = await response.json();
       const parsedRecipes = parseRecipeData(data.results)
-      console.log("parsed recipes", parsedRecipes)
       if (searchClicked) {
-        console.log("adding to previous meal results", mealResults)
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
-        console.log("wiping meal results", mealResults)
           setMealResults(parsedRecipes);
       }
 
@@ -58,7 +55,6 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
         throw new Error("Failed to fetch random recipes");
       }
       const data = await response.json();
-      console.log(data);
       // array of recipes
       setMealResults(data);
 
@@ -74,11 +70,9 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
         if (numToRequest % 3 === 0) {
-            // console.log("fetching 3 at offset" ,numInDatabase)
             fetchSearchRecipes({numToRequest: GROUP_OF_DISPLAYED_CARDS, offset: numInDatabase})
             setNumInDatabase((prev) => prev + GROUP_OF_DISPLAYED_CARDS);
         } else {
-            // console.log(`fetching ${GROUP_OF_DISPLAYED_CARDS - (numInDatabase % 3)} at offset ${numInDatabase}`)
             fetchSearchRecipes({numToRequest: (GROUP_OF_DISPLAYED_CARDS - (numInDatabase % 3)), offset: numInDatabase})
             setNumInDatabase(
                 (prev) => prev + GROUP_OF_DISPLAYED_CARDS - (numInDatabase % 3)
@@ -95,7 +89,6 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
   };
 
   const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("in generate")
     handleFetchRecipes();
     setSearchClicked(false);
   }
@@ -106,8 +99,8 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
         <button className="modal-close" onClick={handleModalClose}>
           &times;
         </button>
-        {/* <button onClick={() => fetchRandomRecipes()}> */}
-        <button>
+        <button onClick={() => fetchRandomRecipes()}>
+        {/* <button> */}
           Need Some Inspiration?
         </button>
         <button>I Have My Own Recipe</button>
