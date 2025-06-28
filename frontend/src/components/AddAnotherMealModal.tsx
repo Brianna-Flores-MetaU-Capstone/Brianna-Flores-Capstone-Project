@@ -10,7 +10,12 @@ const API_KEY = import.meta.env.VITE_APP_API_KEY;
 const GROUP_OF_DISPLAYED_CARDS = 3;
 const TOTAL_SEARCH_REQUESTS = 6;
 
-const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;}) => {
+interface AddAnotherMealTypes {
+    handleModalClose: () => void
+    onSelectRecipe: (data: recipeType) => void
+}
+
+const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealTypes) => {
   const [mealRequest, setMealRequest] = useState({ recipe: "", days: "" });
   const [mealResults, setMealResults] = useState<recipeType[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
@@ -128,7 +133,7 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
             {
                 mealResults.map((meal) => {
                     return (
-                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} parsedMealData={meal} />
+                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} parsedMealData={meal} onSelectRecipe={onSelectRecipe}/>
                     )
                 })
             }

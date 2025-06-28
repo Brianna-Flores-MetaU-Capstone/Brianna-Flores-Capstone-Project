@@ -4,10 +4,11 @@ import type { recipeType } from "../utils/types"
 interface MealCardTypes {
     onMealCardClick: () => void
     parsedMealData: recipeType
+    onSelectRecipe?: (data: recipeType) => void
 }
 
 // const MealCard = ({onMealCardClick}: {onMealCardClick: () => void}) => {
-const MealCard = ({onMealCardClick, parsedMealData}: MealCardTypes) => {
+const MealCard = ({onMealCardClick, parsedMealData, onSelectRecipe}: MealCardTypes) => {
     return (
         //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
         <div className="meal-card" onClick={() => onMealCardClick()}>
@@ -18,9 +19,10 @@ const MealCard = ({onMealCardClick, parsedMealData}: MealCardTypes) => {
             <ul className="diets-and-intollerances">
                 {parsedMealData.dairyFree && <li>Dairy Free</li>}
                 {parsedMealData.glutenFree && <li>Gluten Free</li>}
-                {parsedMealData.vegetarian && <li>Gluten Free</li>}
-                {parsedMealData.vegan && <li>Gluten Free</li>}
+                {parsedMealData.vegetarian && <li>Vegetarian</li>}
+                {parsedMealData.vegan && <li>Vegan</li>}
             </ul>
+            {onSelectRecipe && <button onClick={() => onSelectRecipe(parsedMealData)}>Select Recipe</button>}
         </div>
     )
 }
