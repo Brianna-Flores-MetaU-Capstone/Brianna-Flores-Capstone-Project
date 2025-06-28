@@ -7,6 +7,9 @@ import { useNavigate } from "react-router";
 
 import { auth } from "../utils/firebase"
 
+import NextRecipe from "../components/NextRecipe";
+import IngredientsPreview from "../components/IngredientsPreview";
+
 
 
 const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
@@ -26,15 +29,24 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
 
   return (
     <div>
-      <button onClick={() => navigate("/login")}>Login</button>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon
-          icon={faBars}
-          className="nav-icon"
-        />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
-      Homepage
+      <section className="homepage header">
+        <header>Grocery Buddy *insert better title lol*</header>
+        <button onClick={() => navigate("/login")}>Login</button>
+        <button onClick={toggleNav}>
+          <FontAwesomeIcon
+            icon={faBars}
+            className="nav-icon"
+          />
+        </button>
+        {navOpen && <NavBar toggleNav={toggleNav} />}
+      </section>
+      <section className="quick-access">
+        <NextRecipe />
+        <IngredientsPreview />
+      </section>
+      <section className="upcoming-meals">
+
+      </section>
     </div>
   );
 };

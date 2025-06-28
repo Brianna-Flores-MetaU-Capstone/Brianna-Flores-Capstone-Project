@@ -1,3 +1,7 @@
 div {
     color: red;
 }
+
+.next-recipe img{
+    width: 300px;
+}

@@ -1,21 +1,30 @@
-type navigationTypes = {
+interface navigationTypes {
     navOpen: boolean;
     toggleNav: () => void 
 }
 
-type messageTypes = {
+interface messageTypes {
     type: string
     text: string
 }
 
-type newUserType = {
+interface newUserType {
     firebaseId: string
     email: string
 }
 
-type formData = {
+interface formData {
     username: string
     password: string
 }
 
-export type {navigationTypes, messageTypes, newUserType, formData}
+interface ingredientType {
+    department: string
+    image: string
+    name: string
+    amount: string
+    unit: string
+    estimatedCost: number
+}
+
+export type {navigationTypes, messageTypes, newUserType, formData, ingredientType}
