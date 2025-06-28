@@ -33,7 +33,13 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
       const data = await response.json();
       const parsedRecipes = parseRecipeData(data.results)
       console.log("parsed recipes", parsedRecipes)
-      setMealResults(parsedRecipes);
+      if (searchClicked) {
+        console.log("adding to previous meal results", mealResults)
+        setMealResults((prev) => [...prev, ...parsedRecipes]);
+      } else {
+        console.log("wiping meal results", mealResults)
+          setMealResults(parsedRecipes);
+      }
 
       // TODO: add fetched recipes to database
       // helper method
@@ -63,9 +69,7 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
     }
   };
 
-  const handleSearchSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
+  const handleFetchRecipes = () => {
     const numToRequest = TOTAL_SEARCH_REQUESTS - numInDatabase;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
@@ -81,7 +85,20 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
             );
         }
     }
+  }
+
+  const handleSearchSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
+    handleFetchRecipes();
+    setSearchClicked(true);
   };
+
+  const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("in generate")
+    handleFetchRecipes();
+    setSearchClicked(false);
+  }
 
   return (
     <section className="modal" id="meal-modal">
@@ -126,7 +143,7 @@ const AddAnotherMealModal = ({handleModalClose,}: {handleModalClose: () => void;
 
         {/* if search clicked, add a generate more button */}
         {searchClicked && (
-          <button onClick={() => setSearchClicked(false)}>
+          <button onClick={handleGenerateMore}>
             Generate More!
           </button>
         )}
