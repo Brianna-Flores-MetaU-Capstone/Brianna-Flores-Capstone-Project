@@ -11,7 +11,7 @@ import { validateInput, handleNewUser } from "../utils/utils";
 
 const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
   const [formData, setFormData] = useState<formData>({
-    username: "",
+    email: "",
     password: "",
   });
   const [message, setMessage] = useState<messageTypes>();
@@ -31,7 +31,7 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
       setMessage(valid);
       throw new Error(valid.text);
     }
-    createUserWithEmailAndPassword(auth, formData.username, formData.password)
+    createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
@@ -59,16 +59,18 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
       </button>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />{" "}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Email</label>
+        <label htmlFor="email">Email</label>
         <input
+          id="email"
           type="text"
-          name="username"
-          value={formData.username}
+          name="email"
+          value={formData.email}
           onChange={handleChange}
           required
         />
         <label htmlFor="password">Password</label>
         <input
+          id="password"
           type="password"
           name="password"
           value={formData.password}

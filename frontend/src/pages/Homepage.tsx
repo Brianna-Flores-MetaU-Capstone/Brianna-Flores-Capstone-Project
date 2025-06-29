@@ -30,11 +30,18 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
     console.log("no user signed in")
   }
 
+  const handleLoginClick = () => {
+    if (navOpen) {
+      toggleNav();
+    }
+    navigate("/login");
+  }
+
   return (
     <div className="homepage-container">
       <section className="homepage-header">
         <header><h1>Grocery Buddy *insert better title lol*</h1></header>
-        <button className="login-button" onClick={() => navigate("/login")}>Login</button>
+        <button className="login-button" onClick={handleLoginClick}>Login</button>
         <button className="nav-button" onClick={toggleNav}>
           <FontAwesomeIcon
             icon={faBars}

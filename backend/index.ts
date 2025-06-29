@@ -10,7 +10,6 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 app.post('/signup', async (req: Request, res: Response) => {
-  console.log("in signup")
   try {
     if (!req.body.firebaseId || !req.body.email) {
         return res.status(400).send("Id and email are required");
@@ -22,7 +21,6 @@ app.post('/signup', async (req: Request, res: Response) => {
             email,
         }
     })
-    console.log(newUser)
     res.json(newUser)
   } catch (error) {
     console.error(error)

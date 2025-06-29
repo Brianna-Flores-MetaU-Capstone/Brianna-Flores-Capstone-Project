@@ -14,7 +14,7 @@ interface newUserType {
 }
 
 interface formData {
-    username: string
+    email: string
     password: string
 }
 
