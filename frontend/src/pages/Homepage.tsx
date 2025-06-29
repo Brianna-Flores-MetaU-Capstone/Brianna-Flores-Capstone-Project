@@ -1,22 +1,17 @@
 import "../styles/Homepage.css";
-import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from '../utils/types'
+import type { navigationTypes } from "../utils/types";
 import { useNavigate } from "react-router";
 
-import { auth } from "../utils/firebase"
+import { auth } from "../utils/firebase";
 
 import { groceryList } from "../utils/sampleData";
 
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
 import GroceryPreview from "../components/GroceryPreview";
+import AppHeader from "../components/AppHeader";
 
-
-
-const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
-
+const Homepage = ({ navOpen, toggleNav }: navigationTypes) => {
   const user = auth.currentUser;
   const navigate = useNavigate();
 
@@ -27,7 +22,7 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
     console.log("user is signed in: ", user);
   } else {
     // No user is signed in.
-    console.log("no user signed in")
+    console.log("no user signed in");
   }
 
   const handleLoginClick = () => {
@@ -35,29 +30,21 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
       toggleNav();
     }
     navigate("/login");
-  }
+  };
 
   return (
     <div className="homepage-container">
-      <section className="homepage-header">
-        <header><h1>Grocery Buddy *insert better title lol*</h1></header>
-        <button className="login-button" onClick={handleLoginClick}>Login</button>
-        <button className="nav-button" onClick={toggleNav}>
-          <FontAwesomeIcon
-            icon={faBars}
-            className="nav-icon"
-          />
-        </button>
-        <NavBar toggleNav={toggleNav} navOpen={navOpen} />
-      </section>
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <button className="login-button" onClick={handleLoginClick}>
+        Login
+      </button>
       <section className="quick-access-container">
         <NextRecipe />
         <IngredientsPreview />
-        <GroceryPreview groceryList={groceryList}/>
+        <GroceryPreview groceryList={groceryList} />
       </section>
       <section className="upcoming-meals">
         <h3>Upcoming Meals</h3>
-
       </section>
     </div>
   );

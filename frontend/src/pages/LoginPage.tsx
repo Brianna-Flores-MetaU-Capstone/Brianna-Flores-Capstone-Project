@@ -3,14 +3,12 @@ import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import type { navigationTypes } from "../utils/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router";
 import type { formDataType } from "../utils/types";
 import { validateInput } from "../utils/utils";
 import "../styles/LoginPage.css";
 import LoginRegisterForm from "../components/LoginRegisterForm";
+import AppHeader from "../components/AppHeader";
 
 const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
   const [formData, setFormData] = useState<formDataType>({
@@ -48,17 +46,7 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
   }
   return (
     <div className="login-page">
-      <section className="homepage-header">
-        <header>
-          <h1>Grocery Buddy *insert better title lol*</h1>
-        </header><button className="nav-button" onClick={toggleNav}>
-          <FontAwesomeIcon
-            icon={faBars}
-            className="nav-icon"
-          />
-        </button>
-        <NavBar toggleNav={toggleNav} navOpen={navOpen} />
-      </section>
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-page">
         <div className="login-content">
           <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
