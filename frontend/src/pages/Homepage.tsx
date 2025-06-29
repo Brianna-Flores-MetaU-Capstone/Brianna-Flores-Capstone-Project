@@ -31,11 +31,11 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
   }
 
   return (
-    <div>
-      <section className="homepage header">
-        <header>Grocery Buddy *insert better title lol*</header>
-        <button onClick={() => navigate("/login")}>Login</button>
-        <button onClick={toggleNav}>
+    <div className="homepage-container">
+      <section className="homepage-header">
+        <header><h1>Grocery Buddy *insert better title lol*</h1></header>
+        <button className="login-button" onClick={() => navigate("/login")}>Login</button>
+        <button className="nav-button" onClick={toggleNav}>
           <FontAwesomeIcon
             icon={faBars}
             className="nav-icon"
@@ -43,12 +43,13 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
         </button>
         {navOpen && <NavBar toggleNav={toggleNav} />}
       </section>
-      <section className="quick-access">
+      <section className="quick-access-container">
         <NextRecipe />
         <IngredientsPreview />
         <GroceryPreview groceryList={groceryList}/>
       </section>
       <section className="upcoming-meals">
+        <h3>Upcoming Meals</h3>
 
       </section>
     </div>

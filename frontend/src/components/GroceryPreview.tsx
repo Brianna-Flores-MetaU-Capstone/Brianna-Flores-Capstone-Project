@@ -7,7 +7,8 @@ import { v4 as uuidv4 } from "uuid";
 const GroceryPreview = ({groceryList}: {groceryList: ingredientType[]}) => {
     return (
         <div className="grocery-preview">
-            <header>Grocery List</header>
+            <h3>Grocery List</h3>
+            <div className="list-items">
             {
                 groceryList.map((item) => {
                     return (
@@ -15,6 +16,7 @@ const GroceryPreview = ({groceryList}: {groceryList: ingredientType[]}) => {
                     )
                 })
             }
+            </div>
         </div>
     )
 }

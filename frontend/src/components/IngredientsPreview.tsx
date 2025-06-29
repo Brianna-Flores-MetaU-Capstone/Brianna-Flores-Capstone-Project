@@ -10,6 +10,7 @@ const IngredientsPreview = () => {
     return (
         <div className="ingredient-preview">
             <h3>Ingredients on Hand</h3>
+            <div className="list-items">
             {
                 ingredients.map((ingredient) => {
                     return (
@@ -17,6 +18,7 @@ const IngredientsPreview = () => {
                     )
                 })
             }
+            </div>
         </div>
     )
 }

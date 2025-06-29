@@ -1,8 +1,88 @@
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.homepage-header {
+    background-color: #C6DEF1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2%;
+    padding: 1%;
+    font-size: 4vh;
+}
+
+.nav-button {
+    position: absolute;
+    left: 1vw;
+    background: none;
+    border: none;
+    font-size: 2.5vw;
+    cursor: pointer;
+}
+
+.login-button {
+    position: absolute;
+    right: 1vw;
+    background: white;
+    border: 2px solid black;
+    border-radius: 1vh;
+    font-size: 2vw;
+    cursor: pointer;
+}
+
+.quick-access-container {
+    display: flex;
+    gap: 4%;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 1vw;
+}
+
+.next-recipe {
+    flex: 1;
+    height: auto;
+    height: 30vh;
+}
+
+.list-items {
+    overflow-y: auto;
+    max-height: 22vh;
+    margin: 2% 0;
+}
+
+.ingredient-preview,
+.grocery-preview {
+    flex: 1;
+    /* overflow-y: auto; */
+    height: 30vh;
+}
+
 .next-recipe img{
-    width: 300px;
+    width: 100%;
 }
 
 .list-ingredient {
     display: flex;
     justify-content: space-between;
+    margin: 4%;
+    padding: 0% 3%;
+    background-color: #F7F2EF;
+}
+
+.grocery-preview,
+.ingredient-preview,
+.next-recipe {
+    border: 2px solid black;
+    width: 30%;
+}
+
+.grocery-preview h3,
+.ingredient-preview h3 {
+    background-color: #C9E4DE;
+    margin: 0;
+    padding: 5%;
+    text-align: center;
 }
