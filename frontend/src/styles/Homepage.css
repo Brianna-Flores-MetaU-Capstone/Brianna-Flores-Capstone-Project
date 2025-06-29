@@ -29,7 +29,7 @@
 .login-button {
     position: absolute;
     right: 1vw;
-    background: white;
+    background: none;
     border: 2px solid black;
     border-radius: 1vh;
     font-size: 2vw;

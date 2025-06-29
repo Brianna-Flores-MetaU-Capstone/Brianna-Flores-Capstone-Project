@@ -13,7 +13,7 @@ interface newUserType {
     email: string
 }
 
-interface formData {
+interface formDataType {
     email: string
     password: string
 }
@@ -27,4 +27,4 @@ interface ingredientType {
     estimatedCost: number
 }
 
-export type {navigationTypes, messageTypes, newUserType, formData, ingredientType}
+export type {navigationTypes, messageTypes, newUserType, formDataType, ingredientType}

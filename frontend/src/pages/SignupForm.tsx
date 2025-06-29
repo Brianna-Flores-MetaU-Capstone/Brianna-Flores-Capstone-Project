@@ -6,11 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router";
-import type { messageTypes, newUserType, formData } from "../utils/types";
+import type { messageTypes, newUserType, formDataType } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
+import "../styles/LoginPage.css";
+import LoginRegisterForm from "../components/LoginRegisterForm";
 
 const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formData>({
+  const [formData, setFormData] = useState<formDataType>({
     email: "",
     password: "",
   });
@@ -53,36 +55,23 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
   }
 
   return (
-    <div>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon icon={faBars} className="nav-icon" />
-      </button>
-      <NavBar toggleNav={toggleNav} navOpen={navOpen} />{" "}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="text"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Register!</button>
-      </form>
-      {message && <p className={`message ${message.type}`}>{message.text}</p>}
-      {success && (
-        <button onClick={() => navigate("/login")}>Take me to login!</button>
-      )}
+    <div className="login-page">
+      <section className="homepage-header">
+        <header>
+          <h1>Grocery Buddy *insert better title lol*</h1>
+        </header>
+        <button className="nav-button" onClick={toggleNav}>
+          <FontAwesomeIcon icon={faBars} className="nav-icon" />
+        </button>
+        <NavBar toggleNav={toggleNav} navOpen={navOpen} />
+      </section>
+      <section className="login-content">
+         <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+        {message && <p className={`message ${message.type}`}>{message.text}</p>}
+        {success && (
+          <button onClick={() => navigate("/login")}>Take me to login!</button>
+        )}
+      </section>
     </div>
   );
 };

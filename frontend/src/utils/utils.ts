@@ -1,6 +1,6 @@
-import type { newUserType, formData } from "./types";
+import type { newUserType, formDataType } from "./types";
 
-const validateInput = (formData: formData) => {
+const validateInput = (formData: formDataType) => {
   if (!formData.email || !formData.password) {
     return { type: "error", text: "Email and password are required" };
   }

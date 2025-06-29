@@ -7,12 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router";
-import type { formData } from "../utils/types";
+import type { formDataType } from "../utils/types";
 import { validateInput } from "../utils/utils";
 import "../styles/LoginPage.css";
+import LoginRegisterForm from "../components/LoginRegisterForm";
 
 const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formData>({
+  const [formData, setFormData] = useState<formDataType>({
     email: "",
     password: "",
   });
@@ -60,27 +61,7 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
       </section>
       <section className="login-page">
         <div className="login-content">
-          <form className="login-info" onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="text"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <button type="submit">Login!</button>
-          </form>
+          <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
           {message && (
             <p className={`message ${message.type}`}>{message.text}</p>
           )}

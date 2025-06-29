@@ -21,24 +21,6 @@
   transform: translateX(0);
 }
 
-@keyframes navOpen {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes navClose {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
 .nav-active {
     color: white;
 }
