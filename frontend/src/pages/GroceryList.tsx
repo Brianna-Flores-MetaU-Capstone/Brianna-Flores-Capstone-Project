@@ -13,7 +13,7 @@ const GroceryList = ( {navOpen, toggleNav} : navigationTypes) => {
                 className="nav-icon"
                 />
             </button>
-            {navOpen && <NavBar toggleNav={toggleNav} />}
+            <NavBar toggleNav={toggleNav} navOpen={navOpen} />
             GroceryList
         </div>
     )

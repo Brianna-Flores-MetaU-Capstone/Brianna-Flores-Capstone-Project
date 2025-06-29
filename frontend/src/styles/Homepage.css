@@ -11,6 +11,9 @@
     justify-content: center;
     margin-bottom: 2%;
     padding: 1%;
+}
+
+.homepage-header h1 {
     font-size: 4vh;
 }
 

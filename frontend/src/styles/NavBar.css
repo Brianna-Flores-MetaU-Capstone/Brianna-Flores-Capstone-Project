@@ -8,17 +8,34 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: #28AFB0;
-    /* animation: 0.4s ease-in-out 0s navMovement; */
-    color: black;
+    background-color: #C6DEF1;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease-in-out;
+    color: #0c4f87;
+    padding: 2%;
+    font-size: 3vh;
+    border-right: 5px solid #0c4f87;
 }
 
-@keyframes navMovement {
+.nav-open {
+  transform: translateX(0);
+}
+
+@keyframes navOpen {
   from {
     transform: translateX(-100%);
   }
   to {
     transform: translateX(0%);
+  }
+}
+
+@keyframes navClose {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
   }
 }
 
@@ -28,6 +45,19 @@
 
 .nav-inactive {
     color: black;
+}
+
+.nav-active,
+.nav-inactive {
+  text-decoration: none;
+  text-align: center;
+}
+
+.close-nav {
+  position: absolute;
+  right: 2vw;
+  top: 2vw;
+  font-size: 3vh;
 }
 
 .navbar-container .close-nav:hover,

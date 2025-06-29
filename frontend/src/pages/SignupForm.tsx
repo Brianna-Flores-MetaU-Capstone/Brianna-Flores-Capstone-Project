@@ -57,7 +57,7 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
       <button onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
       </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
+      <NavBar toggleNav={toggleNav} navOpen={navOpen} />{" "}
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Email</label>
         <input

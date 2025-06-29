@@ -11,7 +11,10 @@ import type { formData } from "../utils/types";
 import { validateInput } from "../utils/utils";
 
 const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formData>({ username: "", password: "" });
+  const [formData, setFormData] = useState<formData>({
+    username: "",
+    password: "",
+  });
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
 
@@ -22,12 +25,11 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const valid = validateInput(formData)
+    const valid = validateInput(formData);
     if (valid.type === "error" && valid.text) {
-      setMessage(valid)
-      throw new Error(valid.text)
+      setMessage(valid);
+      throw new Error(valid.text);
     }
-
 
     signInWithEmailAndPassword(auth, formData.username, formData.password)
       .then((userCredential) => {
@@ -48,7 +50,7 @@ const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
       <button onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
       </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
+      <NavBar toggleNav={toggleNav} navOpen={navOpen} />{" "}
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Email</label>
         <input

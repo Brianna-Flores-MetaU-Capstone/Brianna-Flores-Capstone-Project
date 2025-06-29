@@ -41,7 +41,7 @@ const Homepage = ( {navOpen, toggleNav} : navigationTypes) => {
             className="nav-icon"
           />
         </button>
-        {navOpen && <NavBar toggleNav={toggleNav} />}
+        <NavBar toggleNav={toggleNav} navOpen={navOpen} />
       </section>
       <section className="quick-access-container">
         <NextRecipe />
