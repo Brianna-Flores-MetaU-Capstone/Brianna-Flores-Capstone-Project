@@ -22,7 +22,7 @@
     left: 1vw;
     background: none;
     border: none;
-    font-size: 2.5vw;
+    font-size: 2.5vh;
     cursor: pointer;
 }
 
@@ -33,8 +33,12 @@
     background: none;
     border: 2px solid black;
     border-radius: 1vh;
-    font-size: 2vw;
+    font-size: 2vh;
     cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: white;
 }
 
 .quick-access-container {
@@ -48,7 +52,7 @@
 
 .list-items {
     overflow-y: auto;
-    max-height: 20vh;
+    max-height: 24vh;
     margin: 2% 0;
 }
 
@@ -88,4 +92,5 @@
     margin: 0;
     padding: 5%;
     text-align: center;
+    text-wrap: none;
 }

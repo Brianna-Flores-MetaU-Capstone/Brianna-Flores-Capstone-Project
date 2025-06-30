@@ -7,7 +7,8 @@ const ingredients: ingredientType[] = [
         name: "milk",
         amount: "5",
         unit: "cups",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     }, 
     {
         department: "dairy",
@@ -15,7 +16,8 @@ const ingredients: ingredientType[] = [
         name: "eggs",
         amount: "7",
         unit: "units",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     },
     {
         department: "dairy",
@@ -23,7 +25,8 @@ const ingredients: ingredientType[] = [
         name: "yogurt",
         amount: "3",
         unit: "containers",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     },
     {
         department: "meat",
@@ -31,7 +34,8 @@ const ingredients: ingredientType[] = [
         name: "chicken",
         amount: "4",
         unit: "breasts",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     },
     {
         department: "pantry",
@@ -39,7 +43,8 @@ const ingredients: ingredientType[] = [
         name: "soy sauce",
         amount: "1",
         unit: "cup",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     },
     {
         department: "produce",
@@ -47,7 +52,8 @@ const ingredients: ingredientType[] = [
         name: "bananas",
         amount: "3",
         unit: "units",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
     },
     {
         department: "pantry",
@@ -55,8 +61,45 @@ const ingredients: ingredientType[] = [
         name: "bread",
         amount: "12",
         unit: "slices",
-        estimatedCost: 4.00
-    }
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
+    },
+    {
+        department: "dairy",
+        image: "",
+        name: "cottage cheese",
+        amount: "1",
+        unit: "cup",
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
+    },
+    {
+        department: "pantry",
+        image: "",
+        name: "beans",
+        amount: "2",
+        unit: "cups",
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
+    },
+    {
+        department: "deli",
+        image: "",
+        name: "cheese",
+        amount: "12",
+        unit: "slices",
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
+    },
+    {
+        department: "pantry",
+        image: "",
+        name: "cereal",
+        amount: "3",
+        unit: "cups",
+        estimatedCost: 4.00,
+        expirationDate: "07/16/2025"
+    },
 ]
 
 
@@ -67,7 +110,7 @@ const groceryList: ingredientType[] = [
         name: "pasta",
         amount: "5",
         unit: "cups",
-        estimatedCost: 4.00
+        estimatedCost: 4.00,
     }, 
     {
         department: "meat",

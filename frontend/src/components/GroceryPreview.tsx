@@ -12,7 +12,7 @@ const GroceryPreview = ({groceryList}: {groceryList: ingredientType[]}) => {
             {
                 groceryList.map((item) => {
                     return (
-                        <Ingredient key={uuidv4()} ingredient={item} />
+                        <Ingredient key={uuidv4()} ingredient={item} extendedInfo={false}/>
                     )
                 })
             }

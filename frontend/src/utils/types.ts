@@ -25,6 +25,7 @@ interface ingredientType {
     amount: string
     unit: string
     estimatedCost: number
+    expirationDate?: string
 }
 
 export type {navigationTypes, messageTypes, newUserType, formDataType, ingredientType}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 import { auth } from "../utils/firebase";
 
-import { groceryList } from "../utils/sampleData";
+import { groceryList, ingredients } from "../utils/sampleData";
 
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
@@ -40,7 +40,7 @@ const Homepage = ({ navOpen, toggleNav }: navigationTypes) => {
       </button>
       <section className="quick-access-container">
         <NextRecipe />
-        <IngredientsPreview />
+        <IngredientsPreview ingredientsList={ingredients}/>
         <GroceryPreview groceryList={groceryList} />
       </section>
       <section className="upcoming-meals">

@@ -1,19 +1,19 @@
 import React from "react"
-import { ingredients } from "../utils/sampleData"
 import Ingredient from "./Ingredient"
 import "../styles/Homepage.css"
+import type { ingredientType } from "../utils/types";
 
 let count = 0;
 
-const IngredientsPreview = () => {
+const IngredientsPreview = ({ingredientsList}: {ingredientsList: ingredientType[]}) => {
     return (
         <div className="ingredient-preview">
             <h3>Ingredients on Hand</h3>
             <div className="list-items">
             {
-                ingredients.map((ingredient) => {
+                ingredientsList.map((ingredient) => {
                     return (
-                         <Ingredient key={count++} ingredient={ingredient}/>
+                         <Ingredient key={count++} ingredient={ingredient} extendedInfo={false}/>
                     )
                 })
             }
