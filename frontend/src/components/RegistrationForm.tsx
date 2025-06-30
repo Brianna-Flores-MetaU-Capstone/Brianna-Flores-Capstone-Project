@@ -52,15 +52,6 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthForm
             />
             <label htmlFor="intollerances">Intollerances</label>
             <RegistrationPreferenceButtons list={intollerances} userList={userIntollerances} handleButtonClick={handleIntolleranceClick}/>
-            {/* <div className="intollerance-list">
-                {
-                    intollerances.map((intollerance) => {
-                        return (
-                            <button key={intollerance} value={intollerance} id={intollerance} className={userIntollerances.includes(intollerance) ? "intollerance-selected" : "intollerance-not-selected"} type="button" onClick={handleIntolleranceClick}>{intollerance}</button>
-                        )
-                    })
-                }
-            </div> */}
             <label>Diets</label>
             <RegistrationPreferenceButtons list={diets} userList={userDiets} handleButtonClick={handleDietClick} />
             <button className="submit-auth" type="submit">Sign Up!</button>

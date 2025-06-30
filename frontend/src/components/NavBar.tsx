@@ -35,6 +35,11 @@ const NavBar = ({ toggleNav, navOpen }: RecipeToggleNavBar) => {
             } onClick={toggleNav} end>
                 Recipes
             </NavLink>
+            <NavLink to="/account" className={({ isActive }) => 
+                isActive ? "nav-active" : "nav-inactive"
+            } onClick={toggleNav} end>
+                Account
+            </NavLink>
         </nav>
     )
 }
