@@ -4,7 +4,7 @@ import type { RecipeAuthFormEvents } from '../utils/types'
 
 
 
-const LoginRegisterForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
+const LoginForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
     return (
         <form className="login-info" onSubmit={handleSubmit}>
             <label htmlFor="email">Email</label>
@@ -25,9 +25,9 @@ const LoginRegisterForm = ({handleSubmit, handleChange, formData}: RecipeAuthFor
               onChange={handleChange}
               required
             />
-            <button type="submit">Login!</button>
+            <button className="submit-auth" type="submit">Login!</button>
           </form>
     )
 }
 
-export default LoginRegisterForm;
+export default LoginForm;

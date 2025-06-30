@@ -15,6 +15,7 @@ import CreateRecipePage from './pages/CreateRecipePage';
 import NoMatchPage from './pages/NoMatchPage';
 import GroceryList from './pages/GroceryList';
 import SignupForm from './pages/SignupForm';
+import AccountPage from './pages/AccountPage';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="*" element={<NoMatchPage navOpen={ navOpen } toggleNav={ () => setNavOpen((prev) => !prev) }/>} />
           <Route path="login" element={<LoginPage navOpen={ navOpen } toggleNav={ () => setNavOpen((prev) => !prev) }/>} />
           <Route path="signup" element={<SignupForm navOpen={ navOpen } toggleNav={ () => setNavOpen((prev) => !prev) }/>} />
+          <Route path="account" element={<AccountPage navOpen={ navOpen } toggleNav={ () => setNavOpen((prev) => !prev) }/>} />
         </Routes>
       </BrowserRouter>
   )
