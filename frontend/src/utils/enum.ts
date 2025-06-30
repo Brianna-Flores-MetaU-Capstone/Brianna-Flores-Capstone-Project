@@ -38,4 +38,9 @@ const Units = [
     // "Wheat" 
  ]
 
-export { Units, intollerances }
+ const diets = [
+    "Vegetarian",
+    "Vegan"
+ ]
+
+export { Units, intollerances, diets }

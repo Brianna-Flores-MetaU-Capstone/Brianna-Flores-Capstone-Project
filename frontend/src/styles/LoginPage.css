@@ -56,8 +56,8 @@
 
 .new-user-section button,
 .submit-auth,
-.intollerance-selected,
-.intollerance-not-selected {
+.preference-selected,
+.preference-not-selected {
   height: 5vh;
   background-color: transparent;
   font-size: 2.5vh;
@@ -66,21 +66,17 @@
   cursor: pointer;
 }
 
-.intollerance-list {
+.preference-list {
   display: flex;
   justify-content: center;
   gap: 1vw;
   margin: 1vh;
 }
 
-.intollerance-not-selected:hover {
+.preference-not-selected:hover {
   background-color: white;
 }
 
-.intollerance-selected {
+.preference-selected {
   background-color: white;
-}
-
-.intollerance-not-selected {
-  background: none;
 }

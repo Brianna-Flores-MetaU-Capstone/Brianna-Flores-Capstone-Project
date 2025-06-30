@@ -1,24 +1,33 @@
 import React from 'react'
 import "../styles/LoginPage.css"
 import type { RecipeAuthFormEvents } from '../utils/types'
-import { intollerances } from '../utils/enum'
+import { intollerances, diets } from '../utils/enum'
 import { useState } from 'react'
+import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
 
 
 
 const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
     const [userIntollerances, setUserIntollerances] = useState<string[]>([])
+    const [userDiets, setUserDiets] = useState<string[]>([])
 
     const handleIntolleranceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const selectedIntollerance = event.currentTarget.value;
         if (userIntollerances.includes(selectedIntollerance)) {
             setUserIntollerances((prev) => prev.filter((intollerance => intollerance !== selectedIntollerance)))
-            event.currentTarget.id = "intollerance-not-selected"
         } else {
             setUserIntollerances((prev) => [...prev, selectedIntollerance])
-            event.currentTarget.id = "intollerance-selected"
         }
-    } 
+    }
+
+    const handleDietClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const selectedDiet = event.currentTarget.value;
+        if (userDiets.includes(selectedDiet)) {
+            setUserDiets((prev) => prev.filter((diet => diet !== selectedDiet)))
+        } else {
+            setUserDiets((prev) => [...prev, selectedDiet])
+        }
+    }
 
 
     return (
@@ -42,16 +51,18 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthForm
               required
             />
             <label htmlFor="intollerances">Intollerances</label>
-            <div className="intollerance-list">
+            <RegistrationPreferenceButtons list={intollerances} userList={userIntollerances} handleButtonClick={handleIntolleranceClick}/>
+            {/* <div className="intollerance-list">
                 {
                     intollerances.map((intollerance) => {
                         return (
-                            <button value={intollerance} id={intollerance} className={userIntollerances.includes(intollerance) ? "intollerance-selected" : "intollerance-not-selected"} type="button" onClick={handleIntolleranceClick}>{intollerance}</button>
-                            // <button value={intollerance} id={userIntollerances.includes(intollerance) ? "intollerance-selected" : "intollerance-not-selected"} className="intollerance-button" type="button" onClick={handleIntolleranceClick}>{intollerance}</button>
+                            <button key={intollerance} value={intollerance} id={intollerance} className={userIntollerances.includes(intollerance) ? "intollerance-selected" : "intollerance-not-selected"} type="button" onClick={handleIntolleranceClick}>{intollerance}</button>
                         )
                     })
                 }
-            </div>
+            </div> */}
+            <label>Diets</label>
+            <RegistrationPreferenceButtons list={diets} userList={userDiets} handleButtonClick={handleDietClick} />
             <button className="submit-auth" type="submit">Sign Up!</button>
           </form>
     )
