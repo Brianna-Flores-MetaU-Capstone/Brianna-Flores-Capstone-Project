@@ -1,21 +1,37 @@
-type navigationTypes = {
+interface RecipeToggleNavBar {
     navOpen: boolean;
     toggleNav: () => void 
 }
 
-type messageTypes = {
+interface RecipeAuthFormResult {
     type: string
     text: string
 }
 
-type newUserType = {
+interface RecipeNewUserFirebaseId {
     firebaseId: string
     email: string
 }
 
-type formData = {
-    username: string
+interface RecipeAuthFormData {
+    email: string
     password: string
 }
 
-export type {navigationTypes, messageTypes, newUserType, formData}
+interface RecipeIngredientData {
+    department: string
+    image: string
+    name: string
+    amount: string
+    unit: string
+    estimatedCost: number
+    expirationDate?: string
+}
+
+interface RecipeAuthFormEvents {
+    handleSubmit: (event: React.FormEvent) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    formData: RecipeAuthFormData
+}
+
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}

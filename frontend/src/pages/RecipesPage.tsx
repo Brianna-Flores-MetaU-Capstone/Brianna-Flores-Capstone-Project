@@ -1,20 +1,12 @@
 import "../styles/RecipesPage.css";
 import { Outlet } from "react-router";
-import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from '../utils/types'
+import type { RecipeToggleNavBar } from "../utils/types";
+import AppHeader from "../components/AppHeader";
 
-const RecipesPage = ( {navOpen, toggleNav} : navigationTypes) => {
+const RecipesPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   return (
     <div>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon
-          icon={faBars}
-          className="nav-icon"
-        />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       RecipesPage
       <Outlet />
     </div>

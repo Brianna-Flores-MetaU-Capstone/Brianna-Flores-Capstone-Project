@@ -1,19 +1,11 @@
 import "../styles/NewListPage.css";
-import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from '../utils/types'
+import type { RecipeToggleNavBar } from "../utils/types";
+import AppHeader from "../components/AppHeader";
 
-const NewListPage = ( {navOpen, toggleNav} : navigationTypes) => {
+const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   return (
     <div>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon
-          icon={faBars}
-          className="nav-icon"
-        />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />} NewListPage
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
     </div>
   );
 };

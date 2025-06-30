@@ -1,19 +1,32 @@
 import "../styles/IngredientsPage.css";
-import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from '../utils/types'
+import type { RecipeToggleNavBar } from "../utils/types";
+import AppHeader from "../components/AppHeader";
 
-const IngredientsPage = ( {navOpen, toggleNav} : navigationTypes) => {
+import {ingredients} from "../utils/sampleData"
+import Ingredient from "../components/Ingredient";
+import { v4 as uuidv4 } from "uuid";
+
+const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   return (
-    <div>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon
-          icon={faBars}
-          className="nav-icon"
-        />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />} IngredientsPage
+    <div className="ingredients-page">
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
+      <section className="ingredient-page-container">
+        <button className="add-ingredient-button">Add Ingredient</button>
+        <div className="ingredient-columns">
+          <h3>Ingredient</h3>
+          <h3>Quantity</h3>
+          <h3>Expiration</h3>
+        </div>
+        <div className="ingredients-page-list">
+          {
+            ingredients.map((ingredient) => {
+                return (
+                      <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={true}/>
+                )
+            })
+          }
+        </div>
+      </section>
     </div>
   );
 };
