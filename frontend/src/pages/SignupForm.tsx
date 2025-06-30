@@ -9,7 +9,6 @@ import RegistrationForm from "../components/RegistrationForm";
 import AppHeader from "../components/AppHeader";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  // const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
   const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
   const [message, setMessage] = useState<RecipeAuthFormResult>();
   const navigate = useNavigate();
@@ -17,24 +16,6 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
 
   const [userIntollerances, setUserIntollerances] = useState<string[]>([])
   const [userDiets, setUserDiets] = useState<string[]>([])
-
-  const handleIntolleranceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const selectedIntollerance = event.currentTarget.value;
-        if (userIntollerances.includes(selectedIntollerance)) {
-            setUserIntollerances((prev) => prev.filter((intollerance => intollerance !== selectedIntollerance)))
-        } else {
-            setUserIntollerances((prev) => [...prev, selectedIntollerance])
-        }
-    }
-
-    const handleDietClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const selectedDiet = event.currentTarget.value;
-        if (userDiets.includes(selectedDiet)) {
-            setUserDiets((prev) => prev.filter((diet => diet !== selectedDiet)))
-        } else {
-            setUserDiets((prev) => [...prev, selectedDiet])
-        }
-    }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

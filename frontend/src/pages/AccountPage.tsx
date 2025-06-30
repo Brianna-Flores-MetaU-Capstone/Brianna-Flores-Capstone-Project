@@ -44,22 +44,18 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           <input />
           <button>Submit</button>
         </div>
-        {/* <div className="account-intollerances"> */}
           <h2>Selected Intollerances</h2>
           <RegistrationPreferenceButtons
             list={intollerances}
             userList={userIntollerances}
             handleButtonClick={handleIntolleranceClick}
           />
-        {/* </div>
-        <div className="account-diets"> */}
         <h2>Selected Diets</h2>
         <RegistrationPreferenceButtons
           list={diets}
           userList={userDiets}
           handleButtonClick={handleDietClick}
         />
-        {/* </div> */}
       </div>
     </div>
   );
