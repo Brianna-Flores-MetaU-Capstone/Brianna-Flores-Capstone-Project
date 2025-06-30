@@ -5,13 +5,21 @@ import { v4 as uuidv4 } from "uuid";
 import { useState } from 'react'
 import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
-import AddIngredientModal from "../components/AddIngredientModal";
+import IngredientModal from "../components/IngredientModal";
+import type { RecipeIngredientData } from "../utils/types";
 
 const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false)
+  const [editIngredientData, setEditIngredientData] = useState<RecipeIngredientData>()
+  const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false)
 
   const addIngredientClick = () => {
     setAddIngredientModalOpen((prev) => !prev)
+  }
+
+  const handleEditClick = (ingredient: RecipeIngredientData) => {
+    setEditIngredientData(ingredient);
+    setEditIngredientModalOpen((prev) => !prev)
   }
 
   return (
@@ -29,13 +37,15 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           {
             ingredients.map((ingredient) => {
                 return (
-                      <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={true}/>
+                      <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={true} onEdit={handleEditClick}/>
                 )
             })
           }
         </div>
       </section>
-      {addIngredientModalOpen && <AddIngredientModal onClose={addIngredientClick} />}
+      {addIngredientModalOpen && <IngredientModal onClose={addIngredientClick} />}
+      {editIngredientModalOpen && <IngredientModal ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
+
     </div>
   );
 };

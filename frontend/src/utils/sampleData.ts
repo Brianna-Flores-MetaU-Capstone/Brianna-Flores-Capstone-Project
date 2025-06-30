@@ -5,100 +5,100 @@ const ingredients: RecipeIngredientData[] = [
         department: "dairy",
         image: "",
         name: "milk",
-        amount: "5",
+        quantity: "5",
         unit: "cups",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     }, 
     {
         department: "dairy",
         image: "",
         name: "eggs",
-        amount: "7",
+        quantity: "7",
         unit: "units",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "dairy",
         image: "",
         name: "yogurt",
-        amount: "3",
+        quantity: "3",
         unit: "containers",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "meat",
         image: "",
         name: "chicken",
-        amount: "4",
+        quantity: "4",
         unit: "breasts",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "pantry",
         image: "",
         name: "soy sauce",
-        amount: "1",
+        quantity: "1",
         unit: "cup",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "produce",
         image: "",
         name: "bananas",
-        amount: "3",
+        quantity: "3",
         unit: "units",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "pantry",
         image: "",
         name: "bread",
-        amount: "12",
+        quantity: "12",
         unit: "slices",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "dairy",
         image: "",
         name: "cottage cheese",
-        amount: "1",
+        quantity: "1",
         unit: "cup",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "pantry",
         image: "",
         name: "beans",
-        amount: "2",
+        quantity: "2",
         unit: "cups",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "deli",
         image: "",
         name: "cheese",
-        amount: "12",
+        quantity: "12",
         unit: "slices",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
     {
         department: "pantry",
         image: "",
         name: "cereal",
-        amount: "3",
+        quantity: "3",
         unit: "cups",
         estimatedCost: 4.00,
-        expirationDate: "07/16/2025"
+        expirationDate: "2025-07-24"
     },
 ]
 
@@ -108,7 +108,7 @@ const groceryList: RecipeIngredientData[] = [
         department: "pantry",
         image: "",
         name: "pasta",
-        amount: "5",
+        quantity: "5",
         unit: "cups",
         estimatedCost: 4.00,
     }, 
@@ -116,7 +116,7 @@ const groceryList: RecipeIngredientData[] = [
         department: "meat",
         image: "",
         name: "ground beef",
-        amount: "1",
+        quantity: "1",
         unit: "lb",
         estimatedCost: 4.00
     },
@@ -124,7 +124,7 @@ const groceryList: RecipeIngredientData[] = [
         department: "pantry",
         image: "",
         name: "chocolate",
-        amount: "1",
+        quantity: "1",
         unit: "bag",
         estimatedCost: 4.00
     },
@@ -132,7 +132,7 @@ const groceryList: RecipeIngredientData[] = [
         department: "frozen",
         image: "",
         name: "ice cream",
-        amount: "1",
+        quantity: "1",
         unit: "tub",
         estimatedCost: 4.00
     },
@@ -140,7 +140,7 @@ const groceryList: RecipeIngredientData[] = [
         department: "produce",
         image: "",
         name: "spinach",
-        amount: "5",
+        quantity: "5",
         unit: "oz",
         estimatedCost: 4.00
     }
