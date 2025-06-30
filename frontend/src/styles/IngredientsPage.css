@@ -33,7 +33,7 @@
 .ingredients-page .list-ingredient {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 0.2fr;
-    margin: 4% 0;
+    margin: 3vh 0;
 }
 
 .ingredient-page-container {
