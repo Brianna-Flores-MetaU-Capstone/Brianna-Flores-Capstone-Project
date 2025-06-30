@@ -1,13 +1,8 @@
 import React from "react"
-import type { ingredientType } from "../utils/types"
+import type { RecipeIngredientData } from "../utils/types"
 import "../styles/Homepage.css"
 
-interface IngredientTypeInformation {
-    ingredient: ingredientType
-    extendedInfo: boolean
-}
-
-const Ingredient = ({ingredient, extendedInfo}: IngredientTypeInformation) => {
+const Ingredient = ({ingredient, extendedInfo}: {ingredient: RecipeIngredientData; extendedInfo: boolean}) => {
     return (
         <div className="list-ingredient">
             <p className="ingredient-name">{ingredient.name}</p>

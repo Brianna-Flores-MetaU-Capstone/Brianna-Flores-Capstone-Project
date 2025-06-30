@@ -1,24 +1,24 @@
-interface navigationTypes {
+interface RecipeToggleNavBar {
     navOpen: boolean;
     toggleNav: () => void 
 }
 
-interface messageTypes {
+interface RecipeAuthFormResult {
     type: string
     text: string
 }
 
-interface newUserType {
+interface RecipeNewUserFirebaseId {
     firebaseId: string
     email: string
 }
 
-interface formDataType {
+interface RecipeAuthFormData {
     email: string
     password: string
 }
 
-interface ingredientType {
+interface RecipeIngredientData {
     department: string
     image: string
     name: string
@@ -28,4 +28,10 @@ interface ingredientType {
     expirationDate?: string
 }
 
-export type {navigationTypes, messageTypes, newUserType, formDataType, ingredientType}
+interface RecipeAuthFormEvents {
+    handleSubmit: (event: React.FormEvent) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    formData: RecipeAuthFormData
+}
+
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}

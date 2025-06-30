@@ -1,21 +1,15 @@
 import '../styles/Homepage.css'
 import '../styles/NavBar.css'
 import { NavLink } from "react-router"
+import type { RecipeToggleNavBar } from '../utils/types'
 
-interface NavbarTypes {
-    toggleNav: () => void
-    navOpen: boolean
-}
-
-// const NavBar = ({ toggleNav }: {toggleNav: () => void}) => {
-const NavBar = ({ toggleNav, navOpen }: NavbarTypes) => {
+const NavBar = ({ toggleNav, navOpen }: RecipeToggleNavBar) => {
 
     return (
         <nav className={`navbar-container ${navOpen ? "nav-open" : "nav-close"}`}>
             <span className="close-nav" onClick={toggleNav}>
                 &times;
             </span>
-            {/* end: used so anything after "/" will generate respective content */}
             <NavLink to="/" className={({ isActive }) => 
                 isActive ? "nav-active" : "nav-inactive"
             } onClick={toggleNav} end>

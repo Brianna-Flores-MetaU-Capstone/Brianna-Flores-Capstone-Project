@@ -1,8 +1,8 @@
 import '../styles/GroceryList.css'
-import type {navigationTypes} from '../utils/types'
+import type {RecipeToggleNavBar} from '../utils/types'
 import AppHeader from '../components/AppHeader';
 
-const GroceryList = ( {navOpen, toggleNav} : navigationTypes) => {
+const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
     return (
         <div>
             <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

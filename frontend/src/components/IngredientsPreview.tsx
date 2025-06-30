@@ -1,11 +1,10 @@
 import React from "react"
 import Ingredient from "./Ingredient"
 import "../styles/Homepage.css"
-import type { ingredientType } from "../utils/types";
+import type { RecipeIngredientData } from "../utils/types";
+import { v4 as uuidv4 } from "uuid";
 
-let count = 0;
-
-const IngredientsPreview = ({ingredientsList}: {ingredientsList: ingredientType[]}) => {
+const IngredientsPreview = ({ingredientsList}: {ingredientsList: RecipeIngredientData[]}) => {
     return (
         <div className="ingredient-preview">
             <h3>Ingredients on Hand</h3>
@@ -13,7 +12,7 @@ const IngredientsPreview = ({ingredientsList}: {ingredientsList: ingredientType[
             {
                 ingredientsList.map((ingredient) => {
                     return (
-                         <Ingredient key={count++} ingredient={ingredient} extendedInfo={false}/>
+                         <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={false}/>
                     )
                 })
             }

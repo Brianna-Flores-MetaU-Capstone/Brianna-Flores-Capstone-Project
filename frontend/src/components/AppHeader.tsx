@@ -2,9 +2,9 @@ import React from "react"
 import NavBar from "./NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from "../utils/types"
+import type {RecipeToggleNavBar} from "../utils/types"
 
-const AppHeader = ({navOpen, toggleNav}: navigationTypes) => {
+const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
   return (
     <section className="app-header">
       <header>

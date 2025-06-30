@@ -2,16 +2,16 @@ import "../styles/LoginPage.css";
 import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import type { navigationTypes } from "../utils/types";
+import type { RecipeToggleNavBar } from "../utils/types";
 import { useNavigate } from "react-router";
-import type { formDataType } from "../utils/types";
+import type { RecipeAuthFormData } from "../utils/types";
 import { validateInput } from "../utils/utils";
 import "../styles/LoginPage.css";
 import LoginRegisterForm from "../components/LoginRegisterForm";
 import AppHeader from "../components/AppHeader";
 
-const LoginPage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formDataType>({
+const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+  const [formData, setFormData] = useState<RecipeAuthFormData>({
     email: "",
     password: "",
   });

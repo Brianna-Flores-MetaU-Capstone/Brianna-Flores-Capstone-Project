@@ -1,12 +1,12 @@
 import "../styles/IngredientsPage.css";
-import type { navigationTypes } from "../utils/types";
+import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 
 import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
-let count = 0;
+import { v4 as uuidv4 } from "uuid";
 
-const IngredientsPage = ({ navOpen, toggleNav }: navigationTypes) => {
+const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   return (
     <div className="ingredients-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
@@ -21,7 +21,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: navigationTypes) => {
           {
             ingredients.map((ingredient) => {
                 return (
-                      <Ingredient key={count++} ingredient={ingredient} extendedInfo={true}/>
+                      <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={true}/>
                 )
             })
           }

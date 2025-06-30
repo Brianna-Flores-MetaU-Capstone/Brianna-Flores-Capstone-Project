@@ -1,29 +1,14 @@
 import "../styles/Homepage.css";
-import type { navigationTypes } from "../utils/types";
+import type { RecipeToggleNavBar } from "../utils/types";
 import { useNavigate } from "react-router";
-
-import { auth } from "../utils/firebase";
-
 import { groceryList, ingredients } from "../utils/sampleData";
-
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
 import GroceryPreview from "../components/GroceryPreview";
 import AppHeader from "../components/AppHeader";
 
-const Homepage = ({ navOpen, toggleNav }: navigationTypes) => {
-  const user = auth.currentUser;
+const Homepage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const navigate = useNavigate();
-
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user
-    // ...
-    console.log("user is signed in: ", user);
-  } else {
-    // No user is signed in.
-    console.log("no user signed in");
-  }
 
   const handleLoginClick = () => {
     if (navOpen) {

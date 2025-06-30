@@ -1,6 +1,6 @@
-import type { ingredientType } from "./types"
+import type { RecipeIngredientData } from "./types"
 
-const ingredients: ingredientType[] = [
+const ingredients: RecipeIngredientData[] = [
     {
         department: "dairy",
         image: "",
@@ -103,7 +103,7 @@ const ingredients: ingredientType[] = [
 ]
 
 
-const groceryList: ingredientType[] = [
+const groceryList: RecipeIngredientData[] = [
     {
         department: "pantry",
         image: "",

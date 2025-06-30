@@ -1,10 +1,10 @@
 import React from "react";
 import Ingredient from "./Ingredient";
-import type { ingredientType } from "../utils/types";
+import type { RecipeIngredientData } from "../utils/types";
 import "../styles/Homepage.css"
 import { v4 as uuidv4 } from "uuid";
 
-const GroceryPreview = ({groceryList}: {groceryList: ingredientType[]}) => {
+const GroceryPreview = ({groceryList}: {groceryList: RecipeIngredientData[]}) => {
     return (
         <div className="grocery-preview">
             <h3>Grocery List</h3>
