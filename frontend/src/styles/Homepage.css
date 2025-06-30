@@ -52,7 +52,7 @@
 
 .list-items {
     overflow-y: auto;
-    max-height: 24vh;
+    max-height: 70%;
     margin: 2% 0;
 }
 
