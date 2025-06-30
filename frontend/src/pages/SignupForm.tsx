@@ -5,17 +5,17 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import type { RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
-import LoginRegisterForm from "../components/LoginRegisterForm";
+import RegistrationForm from "../components/RegistrationForm";
 import AppHeader from "../components/AppHeader";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  const [formData, setFormData] = useState<RecipeAuthFormData>({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
   const [message, setMessage] = useState<RecipeAuthFormResult>();
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
+
+  const [userIntollerances, setUserIntollerances] = useState<string[]>([])
+  const [userDiets, setUserDiets] = useState<string[]>([])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -55,7 +55,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     <div className="login-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-content">
-         <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+         <RegistrationForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
         {message && <p className={`message ${message.type}`}>{message.text}</p>}
         {success && (
           <button onClick={() => navigate("/login")}>Take me to login!</button>

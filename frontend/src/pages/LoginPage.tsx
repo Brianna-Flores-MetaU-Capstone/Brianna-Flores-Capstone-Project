@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import type { RecipeAuthFormData } from "../utils/types";
 import { validateInput } from "../utils/utils";
 import "../styles/LoginPage.css";
-import LoginRegisterForm from "../components/LoginRegisterForm";
+import LoginForm from "../components/LoginForm";
 import AppHeader from "../components/AppHeader";
 
 const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
@@ -49,7 +49,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-page">
         <div className="login-content">
-          <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+          <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
           {message && (
             <p className={`message ${message.type}`}>{message.text}</p>
           )}

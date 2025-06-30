@@ -55,10 +55,28 @@
 }
 
 .new-user-section button,
-.login-info button {
+.submit-auth,
+.preference-selected,
+.preference-not-selected {
   height: 5vh;
-  background: none;
+  background-color: transparent;
   font-size: 2.5vh;
   border-radius: 1vh;
   border: 2px solid #0a3a61;
+  cursor: pointer;
+}
+
+.preference-list {
+  display: flex;
+  justify-content: center;
+  gap: 1vw;
+  margin: 1vh;
+}
+
+.preference-not-selected:hover {
+  background-color: white;
+}
+
+.preference-selected {
+  background-color: white;
 }

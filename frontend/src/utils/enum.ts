@@ -16,4 +16,31 @@ const Units = [
     "container/bag"
  ];
 
-export { Units }
+ const intollerances = [
+    "Dairy",
+    "Nuts",
+    "Soy",
+    "Egg",
+    "Seafood",
+    "Gluten",
+    "Sesame", 
+    // "Dairy",
+    // "Peanuts",
+    // "Soy",
+    // "Egg",
+    // "Seafood",
+    // "Sulfite",
+    // "Gluten",
+    // "Sesame",
+    // "TreeNut",
+    // "Grain",
+    // "Shellfish",
+    // "Wheat" 
+ ]
+
+ const diets = [
+    "Vegetarian",
+    "Vegan"
+ ]
+
+export { Units, intollerances, diets }
