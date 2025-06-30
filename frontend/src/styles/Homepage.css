@@ -52,7 +52,7 @@
 
 .list-items {
     overflow-y: auto;
-    max-height: 24vh;
+    max-height: 70%;
     margin: 2% 0;
 }
 
@@ -74,6 +74,7 @@
 .list-ingredient {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 4%;
     padding: 0% 3%;
     background-color: #F7F2EF;

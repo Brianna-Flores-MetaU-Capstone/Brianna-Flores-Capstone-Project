@@ -22,7 +22,7 @@ interface RecipeIngredientData {
     department: string
     image: string
     name: string
-    amount: string
+    quantity: string
     unit: string
     estimatedCost: number
     expirationDate?: string

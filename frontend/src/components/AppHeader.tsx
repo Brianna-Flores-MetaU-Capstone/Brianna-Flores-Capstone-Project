@@ -8,7 +8,7 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
   return (
     <section className="app-header">
       <header>
-        <h1>Grocery Buddy *insert better title lol*</h1>
+        <h1>Grocery Buddy *make a better name lol*</h1>
       </header>
       <button className="nav-button" onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
