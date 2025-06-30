@@ -23,6 +23,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           <h3>Ingredient</h3>
           <h3>Quantity</h3>
           <h3>Expiration</h3>
+          <div></div>
         </div>
         <div className="ingredients-page-list">
           {

@@ -74,6 +74,7 @@
 .list-ingredient {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 4%;
     padding: 0% 3%;
     background-color: #F7F2EF;
