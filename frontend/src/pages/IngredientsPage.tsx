@@ -4,6 +4,7 @@ import AppHeader from "../components/AppHeader";
 
 import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
+import AddIngredientModal from "../components/AddIngredientModal";
 import { v4 as uuidv4 } from "uuid";
 
 const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
@@ -27,6 +28,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           }
         </div>
       </section>
+      <AddIngredientModal />
     </div>
   );
 };
