@@ -1,19 +1,11 @@
 import '../styles/GroceryList.css'
-import NavBar from '../components/NavBar';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {navigationTypes} from '../utils/types'
+import type {RecipeToggleNavBar} from '../utils/types'
+import AppHeader from '../components/AppHeader';
 
-const GroceryList = ( {navOpen, toggleNav} : navigationTypes) => {
+const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
     return (
         <div>
-            <button onClick={toggleNav}>
-                <FontAwesomeIcon
-                icon={faBars}
-                className="nav-icon"
-                />
-            </button>
-            {navOpen && <NavBar toggleNav={toggleNav} />}
+            <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
             GroceryList
         </div>
     )

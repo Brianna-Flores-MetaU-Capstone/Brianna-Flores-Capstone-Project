@@ -1,4 +1,5 @@
-import type { recipeType, ingredientType, newUserType, formData } from "./types"
+// import type { recipeType, ingredientType, newUserType, formData } from "./types"
+import type { RecipeNewUserFirebaseId, RecipeAuthFormData, IngredientData } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
     return recipeData.map((recipe: any) => ({
@@ -31,13 +32,13 @@ const getIngredientCost = (ingredientName: string) => {
     return 0;
 }
 
-const estimateTotalCost = (ingredients: ingredientType) => {
+const estimateTotalCost = (ingredients: IngredientData) => {
     return 0;
 }
 
-const validateInput = (formData: formData) => {
-  if (!formData.username || !formData.password) {
-    return { type: "error", text: "Username and password are required" };
+const validateInput = (formData: RecipeAuthFormData) => {
+  if (!formData.email || !formData.password) {
+    return { type: "error", text: "Email and password are required" };
   }
 
   if (formData.password.length < 8) {
@@ -49,7 +50,7 @@ const validateInput = (formData: formData) => {
   return { type: "", text: "" };
 };
 
-const handleNewUser = async (newUser: newUserType) => {
+const handleNewUser = async (newUser: RecipeNewUserFirebaseId) => {
     try {
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",
@@ -62,7 +63,6 @@ const handleNewUser = async (newUser: newUserType) => {
         throw new Error("Failed to create user");
       }
       const data = await response.json();
-      console.log("successfully created a user: ", data);
     } catch (error) {
       console.error(error);
     }

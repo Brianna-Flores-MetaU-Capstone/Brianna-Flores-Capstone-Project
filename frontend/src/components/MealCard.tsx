@@ -1,10 +1,10 @@
 import "../styles/Meal.css"
-import type { recipeType } from "../utils/types"
+import type { RecipeData } from "../utils/types"
 
 interface MealCardTypes {
     onMealCardClick: () => void
-    parsedMealData: recipeType
-    onSelectRecipe?: (data: recipeType) => void
+    parsedMealData: RecipeData
+    onSelectRecipe?: (data: RecipeData) => void
 }
 
 // const MealCard = ({onMealCardClick}: {onMealCardClick: () => void}) => {

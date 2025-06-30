@@ -1,20 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { navigationTypes } from "../utils/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import NavBar from "../components/NavBar";
-import { useNavigate } from "react-router";
-import type { messageTypes, newUserType, formData } from "../utils/types";
+import type { RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
+import "../styles/LoginPage.css";
+import LoginRegisterForm from "../components/LoginRegisterForm";
+import AppHeader from "../components/AppHeader";
 
-const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
-  const [formData, setFormData] = useState<formData>({
-    username: "",
+const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+  const [formData, setFormData] = useState<RecipeAuthFormData>({
+    email: "",
     password: "",
   });
-  const [message, setMessage] = useState<messageTypes>();
+  const [message, setMessage] = useState<RecipeAuthFormResult>();
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
@@ -31,13 +30,13 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
       setMessage(valid);
       throw new Error(valid.text);
     }
-    createUserWithEmailAndPassword(auth, formData.username, formData.password)
+    createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
         setMessage({ type: "success", text: "Registration successful!" });
         setSuccess(true);
-        const newUser: newUserType = {
+        const newUser: RecipeNewUserFirebaseId = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
         };
@@ -53,34 +52,15 @@ const SignupForm = ({ navOpen, toggleNav }: navigationTypes) => {
   }
 
   return (
-    <div>
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon icon={faBars} className="nav-icon" />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Email</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Register!</button>
-      </form>
-      {message && <p className={`message ${message.type}`}>{message.text}</p>}
-      {success && (
-        <button onClick={() => navigate("/login")}>Take me to login!</button>
-      )}
+    <div className="login-page">
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
+      <section className="login-content">
+         <LoginRegisterForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+        {message && <p className={`message ${message.type}`}>{message.text}</p>}
+        {success && (
+          <button onClick={() => navigate("/login")}>Take me to login!</button>
+        )}
+      </section>
     </div>
   );
 };

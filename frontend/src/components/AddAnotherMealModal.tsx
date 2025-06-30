@@ -3,7 +3,7 @@ import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
 
-import type { searchRequestType, recipeType } from "../utils/types";
+import type { RecipeData } from "../utils/types";
 import { parseRecipeData } from "../utils/utils";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -12,12 +12,12 @@ const TOTAL_SEARCH_REQUESTS = 6;
 
 interface AddAnotherMealTypes {
     handleModalClose: () => void
-    onSelectRecipe: (data: recipeType) => void
+    onSelectRecipe: (data: RecipeData) => void
 }
 
 const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealTypes) => {
   const [mealRequest, setMealRequest] = useState({ recipe: "", days: "" });
-  const [mealResults, setMealResults] = useState<recipeType[]>([]);
+  const [mealResults, setMealResults] = useState<RecipeData[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
 
@@ -27,7 +27,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
   };
 
   // fetch recipes from API dependent on user input
-  const fetchSearchRecipes = async ({ numToRequest, offset }: searchRequestType) => {
+  const fetchSearchRecipes = async ({ numToRequest, offset }: { numToRequest: number, offset: number }) => {
     try {
       const response = await fetch(
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipe}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
@@ -54,7 +54,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
     // TODO take into account user ingredients
     try {
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato,avocado,cottage cheese,flour,sugar,pesto,banana&number=3&ranking=2`
+        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch random recipes");

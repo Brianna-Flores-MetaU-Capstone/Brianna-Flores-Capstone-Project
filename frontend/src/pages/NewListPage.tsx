@@ -2,27 +2,29 @@ import "../styles/NewListPage.css";
 import NavBar from "../components/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type { navigationTypes, recipeType } from "../utils/types";
+// import type {navigationTypes} from '../utils/types'
+
+import type { RecipeToggleNavBar, RecipeData } from "../utils/types";
+import AppHeader from "../components/AppHeader";
+
+// import type { navigationTypes, recipeType } from "../utils/types";
 import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 
-const NewListPage = ({ navOpen, toggleNav }: navigationTypes) => {
+const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [addAnotherMealOpen, setAddAnotherMealOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
-  const [selectedMeals, setSelectedMeals] = useState<recipeType[]>([]);
+  const [selectedMeals, setSelectedMeals] = useState<RecipeData[]>([]);
 
-  const handleSelectRecipe = (selectedRecipe: recipeType) => {
+  const handleSelectRecipe = (selectedRecipe: RecipeData) => {
     setSelectedMeals((prev) => [...prev, selectedRecipe])
   }
 
   return (
     <div className="new-list-page">
-      <button onClick={toggleNav}>
-        <FontAwesomeIcon icon={faBars} className="nav-icon" />
-      </button>
-      {navOpen && <NavBar toggleNav={toggleNav} />}
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <h1>Selected Meals</h1>
       <section className="selected-meals-container">
         {/* use map on array of selected meals to create meal cards  */}
