@@ -7,9 +7,35 @@ import { useState } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
 
+// get user that is currently signed in
+// code from firebase.google.com
+import { auth } from "../utils/firebase"
+import { onAuthStateChanged } from "firebase/auth";
+import type { User } from "firebase/auth";
+
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>()
+
+//   const auth = getAuth();
+    const checkUserSignedIn = () => {
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            const userSignedIn = auth.currentUser
+            setCurrentUser(userSignedIn)
+            console.log("current user is", userSignedIn);
+          //   console.log("user", userProfile?.email, "is signed in")
+            // ...
+          } else {
+            // User is signed out
+            // ...
+            console.log("there is no signed in user");
+          }
+        });
+    }
 
   const handleIntolleranceClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -36,6 +62,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   return (
     <div className="account-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+        <button onClick={checkUserSignedIn}>check whose signed in</button>
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">

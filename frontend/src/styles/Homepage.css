@@ -8,7 +8,7 @@
     background-color: #C6DEF1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin-bottom: 2%;
     padding: 1%;
 }
@@ -18,23 +18,31 @@
 }
 
 .nav-button {
-    position: absolute;
+    /* position: absolute; */
     left: 1vw;
     background: none;
     border: none;
     font-size: 2.5vh;
     cursor: pointer;
+    margin: 1.75vw;
+}
+
+.auth-access-buttons {
+    display: flex;
+    flex-direction: column;
+    margin: 1vw;
 }
 
 .login-button {
-    position: absolute;
-    right: 1vw;
-    top: 5vh;
+    /* position: absolute; */
+    /* right: 1vw; */
+    /* top: 5vh; */
     background: none;
     border: 2px solid black;
     border-radius: 1vh;
     font-size: 2vh;
     cursor: pointer;
+    margin: 0.25vh 0;
 }
 
 .login-button:hover {
