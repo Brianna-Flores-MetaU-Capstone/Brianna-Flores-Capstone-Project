@@ -17,12 +17,6 @@ interface RecipeData {
     totalEstimatedCost: number
 }
 
-
-interface RecipeAuthFormResult {
-    type: string
-    text: string
-}
-
 interface RecipeNewUserFirebaseId {
     firebaseId: string
     email: string
@@ -49,4 +43,9 @@ interface RecipeAuthFormEvents {
     formData: RecipeAuthFormData
 }
 
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, IngredientData, RecipeAuthFormEvents, RecipeData}
+interface AuthFormResultMessage {
+    type: string
+    text: string
+}
+
+export type {RecipeToggleNavBar, RecipeNewUserFirebaseId, RecipeAuthFormData, IngredientData, RecipeAuthFormEvents, RecipeData, AuthFormResultMessage}

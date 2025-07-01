@@ -41,7 +41,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="account-email">
           <h3>Email</h3>
           <input />
-          <button>Submit</button>
+          <button className="submit-auth">Submit</button>
         </div>
           <h2>Selected Intollerances</h2>
           <RegistrationPreferenceButtons

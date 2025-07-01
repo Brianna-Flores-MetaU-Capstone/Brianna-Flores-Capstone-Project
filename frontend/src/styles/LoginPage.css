@@ -63,7 +63,7 @@
   font-size: 2.5vh;
   border-radius: 1vh;
   border: 2px solid #0a3a61;
-  cursor: pointer;
+  transition: transform 0.5s ease;
 }
 
 .preference-list {
@@ -79,4 +79,22 @@
 
 .preference-selected {
   background-color: white;
+}
+
+.preference-selected:hover {
+  transform: translateY(-0.5vh);
+  cursor: pointer;
+}
+
+.signup-page .submit-auth {
+  width: 100%;
+  margin: 1vh 0;
+}
+
+.new-user-section button:hover,
+.submit-auth:hover,
+.preference-not-selected:hover {
+  transform: translateY(-0.5vh);
+  background-color: white;
+  cursor: pointer;
 }

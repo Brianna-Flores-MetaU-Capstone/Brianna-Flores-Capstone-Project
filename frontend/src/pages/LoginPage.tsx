@@ -2,20 +2,19 @@ import "../styles/LoginPage.css";
 import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import type { RecipeToggleNavBar } from "../utils/types";
 import { useNavigate } from "react-router";
-import type { RecipeAuthFormData } from "../utils/types";
-import { validateInput } from "../utils/utils";
+import type { RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import "../styles/LoginPage.css";
 import LoginForm from "../components/LoginForm";
 import AppHeader from "../components/AppHeader";
+import ErrorState from "../components/ErrorState";
 
 const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,23 +24,14 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const valid = validateInput(formData);
-    if (valid.type === "error" && valid.text) {
-      setMessage(valid);
-      throw new Error(valid.text);
-    }
-
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        setMessage({ type: "success", text: "Login successful!" });
         navigate("/"); // go back to homepage
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setMessage({ type: "error", text: "Login failed." });
+        setMessage(error.code);
       });
   }
   return (
@@ -51,7 +41,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="login-content">
           <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
           {message && (
-            <p className={`message ${message.type}`}>{message.text}</p>
+            <ErrorState errorMessage={message} />
           )}
           <div className="new-user-section">
             <p>New User?</p>
