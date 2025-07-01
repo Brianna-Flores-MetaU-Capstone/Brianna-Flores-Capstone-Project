@@ -60,7 +60,6 @@
 .grocery-preview,
 .next-recipe {
     flex: 1;
-    /* overflow-y: auto; */
     height: auto;
     height: 30vh;
 }

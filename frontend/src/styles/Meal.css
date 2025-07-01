@@ -6,7 +6,6 @@
   width: 200px;
   text-align: center;
   border: 2px solid black;
-  /* border-radius: 15%; */
 }
 
 .meal-card p {
@@ -16,13 +15,11 @@
 
 .meal-img {
   width: 100%;
-  /* border-radius: 15% 15% 0 0; */
 }
 
 .meal-card:hover,
 .meal-card:focus {
     cursor: pointer;
-  /* transform: scale(1.1); */
 }
 
 .modal {

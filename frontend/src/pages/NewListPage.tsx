@@ -33,7 +33,6 @@ const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <button>Make My List</button>
       </section>
       {addAnotherMealOpen && <AddAnotherMealModal handleModalClose={() => setAddAnotherMealOpen((prev) => !prev)} onSelectRecipe={handleSelectRecipe}/>}
-      {/* <AddAnotherMealModal handleModalClose={() => setAddAnotherMealOpen((prev) => !prev)}/> */}
       {mealInfoModalOpen && (
         <MealInfoModal
           handleModalClose={() => setMealInfoModalOpen((prev) => !prev)}
