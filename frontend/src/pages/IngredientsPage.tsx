@@ -37,14 +37,14 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           {
             ingredients.map((ingredient) => {
                 return (
-                      <Ingredient key={uuidv4()} ingredient={ingredient} extendedInfo={true} onEdit={handleEditClick}/>
+                      <Ingredient key={uuidv4()} ingredient={ingredient} presentExpiration={true} presentButtons={true} onEdit={handleEditClick}/>
                 )
             })
           }
         </div>
       </section>
-      {addIngredientModalOpen && <IngredientModal onClose={addIngredientClick} />}
-      {editIngredientModalOpen && <IngredientModal ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
+      {addIngredientModalOpen && <IngredientModal modalFor="ingredients-page" onClose={addIngredientClick} />}
+      {editIngredientModalOpen && <IngredientModal modalFor="ingredients-page" ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
 
     </div>
   );

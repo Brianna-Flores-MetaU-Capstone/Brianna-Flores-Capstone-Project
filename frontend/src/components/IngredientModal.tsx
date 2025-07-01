@@ -5,7 +5,7 @@ import type { RecipeIngredientData } from '../utils/types'
 import { useState } from 'react'
 // import IngredientModalInput from './IngredientModalInput'
 
-const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngredientData, onClose: () => void}) => {
+const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: RecipeIngredientData, onClose: () => void}) => {
     const [newIngredientData, setNewIngredientData] = useState<RecipeIngredientData>(ingredientData ?? {
         department: "",
         image: "",
@@ -44,8 +44,8 @@ const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngr
                             }
                         </select>
                     </div>
-                    <label htmlFor="ingredient-expiration">Expiration Date</label>
-                    <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/>
+                    { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
+                    { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
                     <label htmlFor="ingredient-department">Department</label>
                     <input name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange} required/>
                     {ingredientData? <button type="submit" className="add-ingredient-button">Edit Ingredient!</button>: <button type="submit" className="add-ingredient-button">Add Ingredient!</button>}
