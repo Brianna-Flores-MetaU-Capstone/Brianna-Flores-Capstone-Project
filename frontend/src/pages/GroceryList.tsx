@@ -5,6 +5,7 @@ import GroceryListDepartment from '../components/GroceryListDepartment';
 import type { RecipeIngredientData } from '../utils/types'
 import { useState } from 'react'
 import IngredientModal from '../components/IngredientModal';
+import { departments } from "../utils/sampleData"
 
 const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
     const [editGroceryItemData, setEditGroceryItemData] = useState<RecipeIngredientData>()
@@ -25,7 +26,15 @@ const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
             <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
             <div className="grocery-list-container">
                 <button className="add-grocery-item" onClick={handleAddGrocery}>Add Item</button>
-                <GroceryListDepartment department="dairy" handleOpenModal={handleEditGrocery}/>
+                <div className="grocery-departments">
+                    {
+                        departments.map((department) => {
+                            return (
+                                <GroceryListDepartment department={department} handleOpenModal={handleEditGrocery}/>
+                            )
+                        })
+                    }
+                </div>
             </div>
             {addGroceryItemModalOpen && <IngredientModal modalFor="grocery-page" onClose={handleAddGrocery}/>}
             {editGroceryItemModalOpen && <IngredientModal modalFor="grocery-page" ingredientData={editGroceryItemData} onClose={() => setEditGroceryItemModalOpen((prev) => !prev)} />}

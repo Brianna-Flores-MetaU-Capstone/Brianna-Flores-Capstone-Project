@@ -3,7 +3,6 @@ import '../styles/IngredientsPage.css'
 import { Units } from "../utils/enum"
 import type { RecipeIngredientData } from '../utils/types'
 import { useState } from 'react'
-// import IngredientModalInput from './IngredientModalInput'
 
 const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: RecipeIngredientData, onClose: () => void}) => {
     const [newIngredientData, setNewIngredientData] = useState<RecipeIngredientData>(ingredientData ?? {

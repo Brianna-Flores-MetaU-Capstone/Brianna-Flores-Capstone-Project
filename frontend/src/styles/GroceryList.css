@@ -1,3 +1,13 @@
 .grocery-department {
-    max-width: 30%;
+    width: 25%;
+    background-color: #C6DEF1; 
+    padding: 0 1vw;
+}
+
+.grocery-departments {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2vw;
+    margin: 4vw;
 }

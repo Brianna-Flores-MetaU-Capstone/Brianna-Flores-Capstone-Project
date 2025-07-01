@@ -1,7 +1,6 @@
 import React from "react";
 import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
-import RegistrationForm from "../components/RegistrationForm";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
 import { intollerances, diets } from "../utils/enum";
 import { useState } from "react";
