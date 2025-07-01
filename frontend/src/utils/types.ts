@@ -11,6 +11,8 @@ interface RecipeAuthFormResult {
 interface RecipeNewUserFirebaseId {
     firebaseId: string
     email: string
+    intollerances: string[]
+    diets: string[]
 }
 
 interface RecipeAuthFormData {
@@ -29,7 +31,8 @@ interface RecipeIngredientData {
 }
 
 interface RecipeAuthFormEvents {
-    handleSubmit: (event: React.FormEvent) => void
+    // handleSubmit: (event: React.FormEvent) => void
+    handleSubmit: ({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }

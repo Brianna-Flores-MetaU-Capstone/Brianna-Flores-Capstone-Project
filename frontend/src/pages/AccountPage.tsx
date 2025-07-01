@@ -10,13 +10,14 @@ import "../styles/LoginPage.css";
 // get user that is currently signed in
 // code from firebase.google.com
 import { auth } from "../utils/firebase"
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateProfile, updateEmail, reauthenticateWithCredential } from "firebase/auth";
 import type { User } from "firebase/auth";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>()
+  const [currentUser, setCurrentUser] = useState<User | null>(auth.currentUser)
+  const [userEmail, setUserEmail] = useState(currentUser?.email);
 
 //   const auth = getAuth();
     const checkUserSignedIn = () => {
@@ -27,8 +28,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
             const userSignedIn = auth.currentUser
             setCurrentUser(userSignedIn)
             console.log("current user is", userSignedIn);
-          //   console.log("user", userProfile?.email, "is signed in")
-            // ...
           } else {
             // User is signed out
             // ...
@@ -36,6 +35,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           }
         });
     }
+    // checkUserSignedIn();
 
   const handleIntolleranceClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -59,6 +59,45 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
   };
 
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        console.log("user email is", value)
+        setUserEmail(value);
+    };
+
+    const handleChangeEmail = () => {
+        if (auth.currentUser && userEmail) {
+            updateEmail(auth.currentUser, userEmail).then(() => {
+                // Email updated!
+                // ...
+                console.log("updated email")
+            }).catch((error) => {
+                // An error occurred
+                // ...
+                console.log(error.code)
+            });
+        } else {
+            setUserEmail("Must login to edit email")
+        }
+    }
+
+
+
+    // const reauthenticateUser = () => {
+    //     const user = auth.currentUser;
+    //     const credential = promptForCredentials();
+
+    //     if (user) {
+    //         reauthenticateWithCredential(user, credential).then(() => {
+    //         // User re-authenticated.
+    //         }).catch((error) => {
+    //         // An error ocurred
+    //         // ...
+    //         });
+    //     }
+
+    // }
+
   return (
     <div className="account-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -67,8 +106,10 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <h1>Edit Account Details</h1>
         <div className="account-email">
           <h3>Email</h3>
-          <input />
-          <button>Submit</button>
+          <input name="email" id="email" value={userEmail ? userEmail: ""} onChange={handleInputChange}/>
+            {/* <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/> */}
+
+          <button type="submit" onClick={handleChangeEmail}>Submit</button>
         </div>
           <h2>Selected Intollerances</h2>
           <RegistrationPreferenceButtons

@@ -14,11 +14,13 @@ app.post('/signup', async (req: Request, res: Response) => {
     if (!req.body.firebaseId || !req.body.email) {
         return res.status(400).send("Id and email are required");
     }
-    const { firebaseId, email } = req.body
+    const { firebaseId, email, intollerances, diets } = req.body
     const newUser = await prisma.user.create({
         data: {
             firebaseId,
             email,
+            intollerances: JSON.parse(intollerances),
+            diets: JSON.parse(diets)
         }
     })
     res.json(newUser)

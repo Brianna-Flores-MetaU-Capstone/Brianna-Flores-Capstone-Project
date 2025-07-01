@@ -29,9 +29,14 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthForm
         }
     }
 
+    const onRegistrationSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        handleSubmit({userIntollerances, userDiets});
+    }
+
 
     return (
-        <form className="login-info" onSubmit={handleSubmit}>
+        <form className="login-info" onSubmit={onRegistrationSubmit}>
             <label htmlFor="email">Email</label>
             <input
               id="email"

@@ -6,7 +6,8 @@ import type { RecipeAuthFormEvents } from '../utils/types'
 
 const LoginForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
     return (
-        <form className="login-info" onSubmit={handleSubmit}>
+        // <form className="login-info" onSubmit={handleSubmit}>
+        <form className="login-info">
             <label htmlFor="email">Email</label>
             <input
               id="email"

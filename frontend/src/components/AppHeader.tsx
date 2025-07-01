@@ -7,6 +7,7 @@ import type {RecipeToggleNavBar} from "../utils/types"
 import { auth } from "../utils/firebase"
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
+import "../styles/Homepage.css"
 
 const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
   const navigate = useNavigate();
