@@ -3,14 +3,6 @@
     width: 100%;
 }
 
-/* .ingredient-columns {
-    display: flex;
-    justify-content: space-between;
-    border: 5px solid black;
-    padding: 0 2vw;
-    background-color: #C9E4DE;
-} */
-
 .ingredient-columns {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 0.2fr;
@@ -40,7 +32,7 @@
     margin: 3vw;
 }
 
-.add-ingredient-button {
+.add-button {
     background: none;
     color: black;
     border: 1px solid black;
@@ -50,7 +42,7 @@
     margin-bottom: 1vh;
 }
 
-.add-ingredient-button:hover {
+.add-button:hover {
     transform: translateY(-1vh);
     background-color: #C9E4DE;
     cursor: pointer;
@@ -104,7 +96,8 @@
     margin-top: 2%;
 }
 
-.ingredient-form input {
+.ingredient-form input,
+.ingredient-form select {
     font-size: 3vh;
 }
 
@@ -130,3 +123,4 @@
 .ingredient-quantity input {
     flex: 1;
 }
+

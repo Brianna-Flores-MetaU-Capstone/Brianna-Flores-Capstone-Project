@@ -1,11 +1,10 @@
 import React from 'react'
 import '../styles/IngredientsPage.css'
-import { Units } from "../utils/enum"
+import { Units, Departments } from "../utils/enum"
 import type { RecipeIngredientData } from '../utils/types'
 import { useState } from 'react'
-// import IngredientModalInput from './IngredientModalInput'
 
-const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngredientData, onClose: () => void}) => {
+const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: RecipeIngredientData, onClose: () => void}) => {
     const [newIngredientData, setNewIngredientData] = useState<RecipeIngredientData>(ingredientData ?? {
         department: "",
         image: "",
@@ -16,15 +15,15 @@ const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngr
         expirationDate: ""
     })
     
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target;
         setNewIngredientData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const { value } = event.target;
-        setNewIngredientData((prev) => ({...prev, unit: value}))
-    }
+    // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //     const { name, value } = event.target;
+    //     setNewIngredientData((prev) => ({...prev, [name]: value}))
+    // }
 
     return (
         <div className="modal" id="ingredient-modal">
@@ -33,10 +32,10 @@ const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngr
                 <form className="ingredient-form">
                     <label htmlFor="ingredient-name">Ingredient Name</label>
                     <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/>
-                    <label htmlFor="ingredient-quantity">Quantity on Hand</label>
+                    <label htmlFor="ingredient-quantity">{modalFor === "ingredients-page" ? "Quantity on Hand" : "Quantity"}</label>
                     <div className='ingredient-quantity'>
                         <input type="number" name="quantity" id="ingredient-quantity" value={newIngredientData?.quantity} onChange={handleInputChange} required/>
-                        <select name="unit" value={newIngredientData?.unit} onChange={handleSelectChange} required>
+                        <select name="unit" value={newIngredientData?.unit} onChange={handleInputChange} required>
                             {
                                 Units.map((unit) => (
                                     <option key={unit} value={unit}>{unit}</option>
@@ -44,11 +43,20 @@ const IngredientModal = ({ingredientData, onClose}: {ingredientData?: RecipeIngr
                             }
                         </select>
                     </div>
-                    <label htmlFor="ingredient-expiration">Expiration Date</label>
-                    <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/>
+                    { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
+                    { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
                     <label htmlFor="ingredient-department">Department</label>
-                    <input name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange} required/>
-                    {ingredientData? <button type="submit" className="add-ingredient-button">Edit Ingredient!</button>: <button type="submit" className="add-ingredient-button">Add Ingredient!</button>}
+                    {/* <input name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange} required/> */}
+                    <select name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange}>
+                        {
+                            Departments.map((department: string) => {
+                                return (
+                                    <option>{department}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    {ingredientData? <button type="submit" className="add-button">Edit Ingredient!</button>: <button type="submit" className="add-button">Add Ingredient!</button>}
                 </form>
             </div>
         </div>

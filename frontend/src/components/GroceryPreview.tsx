@@ -12,7 +12,7 @@ const GroceryPreview = ({groceryList}: {groceryList: RecipeIngredientData[]}) =>
             {
                 groceryList.map((item) => {
                     return (
-                        <Ingredient key={uuidv4()} ingredient={item} extendedInfo={false}/>
+                        <Ingredient key={uuidv4()} ingredient={item} groceryCheck={true} presentExpiration={false} presentButtons={false}/>
                     )
                 })
             }
