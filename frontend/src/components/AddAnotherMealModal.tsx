@@ -105,7 +105,6 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
           &times;
         </button>
         <button onClick={() => fetchRandomRecipes()}>
-        {/* <button> */}
           Need Some Inspiration?
         </button>
         <button>I Have My Own Recipe</button>

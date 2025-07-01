@@ -1,13 +1,6 @@
 import "../styles/NewListPage.css";
-import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-// import type {navigationTypes} from '../utils/types'
-
 import type { RecipeToggleNavBar, RecipeData } from "../utils/types";
 import AppHeader from "../components/AppHeader";
-
-// import type { navigationTypes, recipeType } from "../utils/types";
 import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState } from "react";
@@ -27,10 +20,6 @@ const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <h1>Selected Meals</h1>
       <section className="selected-meals-container">
-        {/* use map on array of selected meals to create meal cards  */}
-        {/* <MealCard
-          onMealCardClick={() => setMealInfoModalOpen((prev) => !prev)}
-        /> */}
         {
             selectedMeals.map((meal) => {
                 return (

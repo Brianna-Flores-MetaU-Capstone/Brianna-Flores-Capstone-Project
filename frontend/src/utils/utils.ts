@@ -1,4 +1,3 @@
-// import type { recipeType, ingredientType, newUserType, formData } from "./types"
 import type { RecipeNewUserFirebaseId, RecipeAuthFormData, IngredientData } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
