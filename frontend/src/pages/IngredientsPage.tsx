@@ -26,7 +26,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     <div className="ingredients-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="ingredient-page-container">
-        <button className="add-ingredient-button" onClick={addIngredientClick}>Add Ingredient</button>
+        <button className="add-button" onClick={addIngredientClick}>Add Ingredient</button>
         <div className="ingredient-columns">
           <h3>Ingredient</h3>
           <h3>Quantity</h3>
@@ -37,7 +37,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           {
             ingredients.map((ingredient) => {
                 return (
-                      <Ingredient key={uuidv4()} ingredient={ingredient} presentExpiration={true} presentButtons={true} onEdit={handleEditClick}/>
+                      <Ingredient key={uuidv4()} ingredient={ingredient} groceryCheck={false} presentExpiration={true} presentButtons={true} onEdit={handleEditClick}/>
                 )
             })
           }

@@ -25,12 +25,12 @@ const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
         <div>
             <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
             <div className="grocery-list-container">
-                <button className="add-grocery-item" onClick={handleAddGrocery}>Add Item</button>
+                <button className="add-button" onClick={handleAddGrocery}>Add Item</button>
                 <div className="grocery-departments">
                     {
                         departments.map((department) => {
                             return (
-                                <GroceryListDepartment department={department} handleOpenModal={handleEditGrocery}/>
+                                <GroceryListDepartment key={department} department={department} handleOpenModal={handleEditGrocery}/>
                             )
                         })
                     }

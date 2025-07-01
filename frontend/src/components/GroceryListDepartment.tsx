@@ -10,11 +10,11 @@ const GroceryListDepartment = ({department, handleOpenModal}: {department: strin
 
     return (
         <div className="grocery-department">
-            <h3>{department}</h3>
+            <h3 className="department-header">{department}</h3>
                 {
                     filteredGroceries.map((item) => {
                         return (
-                            <Ingredient ingredient={item} presentExpiration={false} presentButtons={true} onEdit={handleOpenModal}/>
+                            <Ingredient key={item.name} ingredient={item} groceryCheck={true} presentExpiration={false} presentButtons={true} onEdit={handleOpenModal}/>
                         )
                     })
                 }

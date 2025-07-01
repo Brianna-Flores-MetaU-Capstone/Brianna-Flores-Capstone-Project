@@ -12,7 +12,7 @@ const IngredientsPreview = ({ingredientsList}: {ingredientsList: RecipeIngredien
             {
                 ingredientsList.map((ingredient) => {
                     return (
-                         <Ingredient key={uuidv4()} ingredient={ingredient} presentExpiration={false} presentButtons={false}/>
+                         <Ingredient key={uuidv4()} ingredient={ingredient} groceryCheck={false} presentExpiration={false} presentButtons={false}/>
                     )
                 })
             }

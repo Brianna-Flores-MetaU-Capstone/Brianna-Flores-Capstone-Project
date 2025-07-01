@@ -32,7 +32,7 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                 <form className="ingredient-form">
                     <label htmlFor="ingredient-name">Ingredient Name</label>
                     <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/>
-                    <label htmlFor="ingredient-quantity">Quantity on Hand</label>
+                    <label htmlFor="ingredient-quantity">{modalFor === "ingredients-page" ? "Quantity on Hand" : "Quantity"}</label>
                     <div className='ingredient-quantity'>
                         <input type="number" name="quantity" id="ingredient-quantity" value={newIngredientData?.quantity} onChange={handleInputChange} required/>
                         <select name="unit" value={newIngredientData?.unit} onChange={handleSelectChange} required>
@@ -47,7 +47,7 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                     { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
                     <label htmlFor="ingredient-department">Department</label>
                     <input name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange} required/>
-                    {ingredientData? <button type="submit" className="add-ingredient-button">Edit Ingredient!</button>: <button type="submit" className="add-ingredient-button">Add Ingredient!</button>}
+                    {ingredientData? <button type="submit" className="add-button">Edit Ingredient!</button>: <button type="submit" className="add-button">Add Ingredient!</button>}
                 </form>
             </div>
         </div>

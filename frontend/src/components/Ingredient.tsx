@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
-const Ingredient = ({ingredient, presentExpiration, presentButtons, onEdit}: {ingredient: RecipeIngredientData; presentExpiration: boolean, presentButtons: boolean, onEdit?: (ingredient: RecipeIngredientData) => void}) => {
+const Ingredient = ({ingredient, groceryCheck, presentExpiration, presentButtons, onEdit}: {ingredient: RecipeIngredientData, groceryCheck: boolean, presentExpiration: boolean, presentButtons: boolean, onEdit?: (ingredient: RecipeIngredientData) => void}) => {
     return (
         <div className="list-ingredient">
+            {groceryCheck && <input type="checkbox"/>}
             <p className="ingredient-name">{ingredient.name}</p>
             <p className="ingredient-amount">{`${ingredient.quantity} ${ingredient.unit}`}</p>
             {presentExpiration && <p className="ingredient-expiration">{ingredient.expirationDate}</p>}
