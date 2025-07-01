@@ -6,6 +6,7 @@ import type { RecipeIngredientData } from '../utils/types'
 import { useState } from 'react'
 import IngredientModal from '../components/IngredientModal';
 import { departments } from "../utils/sampleData"
+import SearchBar from '../components/SearchBar';
 
 const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
     const [editGroceryItemData, setEditGroceryItemData] = useState<RecipeIngredientData>()
@@ -25,7 +26,10 @@ const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
         <div>
             <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
             <div className="grocery-list-container">
+                <SearchBar />
                 <button className="add-button" onClick={handleAddGrocery}>Add Item</button>
+                <button className="add-button" onClick={handleAddGrocery}>Clear Purchased Items</button>
+                
                 <div className="grocery-departments">
                     {
                         departments.map((department) => {
@@ -35,6 +39,8 @@ const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
                         })
                     }
                 </div>
+                <h3>Estimated Cost</h3>
+                <h3>$x.xx</h3>
             </div>
             {addGroceryItemModalOpen && <IngredientModal modalFor="grocery-page" onClose={handleAddGrocery}/>}
             {editGroceryItemModalOpen && <IngredientModal modalFor="grocery-page" ingredientData={editGroceryItemData} onClose={() => setEditGroceryItemModalOpen((prev) => !prev)} />}

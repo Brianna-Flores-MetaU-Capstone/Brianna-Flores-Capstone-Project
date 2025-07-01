@@ -3,10 +3,8 @@
 }
 
 .grocery-department {
-    /* width: 100%; */
     background-color: #C6DEF1; 
     padding: 0 2vw;
-    /* margin: 3vw; */
 }
 
 .grocery-department .list-ingredient {
@@ -18,14 +16,5 @@
 .grocery-departments {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-
-    /* display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center; */
     gap: 2vw;
-}
-
-.department-header {
-    
 }
