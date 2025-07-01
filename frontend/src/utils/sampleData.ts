@@ -1,8 +1,19 @@
 import type { IngredientData } from "./types"
 
+// sample data, will only display departments user needs ingredients from
+// add/remove departments from list dependent on ingredients user needs
+const departments: string[] = [
+    "Pasta and Rice",
+    "Meat",
+    "Sweet Snacks",
+    "Frozen",
+    "Produce",
+    "Milk, Eggs, Other Dairy"
+]
+
 const ingredients: IngredientData[] = [
     {
-        department: "dairy",
+        department: "Milk, Eggs, Other Dairy",
         image: "",
         name: "milk",
         quantity: "5",
@@ -11,7 +22,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     }, 
     {
-        department: "dairy",
+        department: "Milk, Eggs, Other Dairy",
         image: "",
         name: "eggs",
         quantity: "7",
@@ -20,7 +31,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "dairy",
+        department: "Milk, Eggs, Other Dairy",
         image: "",
         name: "yogurt",
         quantity: "3",
@@ -29,7 +40,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "meat",
+        department: "Meat",
         image: "",
         name: "chicken",
         quantity: "4",
@@ -38,7 +49,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "pantry",
+        department: "Condiments",
         image: "",
         name: "soy sauce",
         quantity: "1",
@@ -47,7 +58,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "produce",
+        department: "Produce",
         image: "",
         name: "bananas",
         quantity: "3",
@@ -56,7 +67,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "pantry",
+        department: "Bakery/Bread",
         image: "",
         name: "bread",
         quantity: "12",
@@ -65,7 +76,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "dairy",
+        department: "Milk, Eggs, Other Dairy",
         image: "",
         name: "cottage cheese",
         quantity: "1",
@@ -74,7 +85,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "pantry",
+        department: "Canned and Jarred",
         image: "",
         name: "beans",
         quantity: "2",
@@ -83,7 +94,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "deli",
+        department: "Cheese",
         image: "",
         name: "cheese",
         quantity: "12",
@@ -92,7 +103,7 @@ const ingredients: IngredientData[] = [
         expirationDate: "2025-07-24"
     },
     {
-        department: "pantry",
+        department: "Cereal",
         image: "",
         name: "cereal",
         quantity: "3",
@@ -105,7 +116,7 @@ const ingredients: IngredientData[] = [
 
 const groceryList: IngredientData[] = [
     {
-        department: "pantry",
+        department: "Pasta and Rice",
         image: "",
         name: "pasta",
         quantity: "5",
@@ -113,7 +124,7 @@ const groceryList: IngredientData[] = [
         estimatedCost: 4.00,
     }, 
     {
-        department: "meat",
+        department: "Meat",
         image: "",
         name: "ground beef",
         quantity: "1",
@@ -121,7 +132,7 @@ const groceryList: IngredientData[] = [
         estimatedCost: 4.00
     },
     {
-        department: "pantry",
+        department: "Sweet Snacks",
         image: "",
         name: "chocolate",
         quantity: "1",
@@ -129,7 +140,7 @@ const groceryList: IngredientData[] = [
         estimatedCost: 4.00
     },
     {
-        department: "frozen",
+        department: "Frozen",
         image: "",
         name: "ice cream",
         quantity: "1",
@@ -137,13 +148,31 @@ const groceryList: IngredientData[] = [
         estimatedCost: 4.00
     },
     {
-        department: "produce",
+        department: "Produce",
         image: "",
         name: "spinach",
         quantity: "5",
         unit: "oz",
         estimatedCost: 4.00
-    }
+    },
+    {
+        department: "Milk, Eggs, Other Dairy",
+        image: "",
+        name: "milk",
+        quantity: "5",
+        unit: "cups",
+        estimatedCost: 4.00,
+        expirationDate: "2025-07-24"
+    }, 
+    {
+        department: "Produce",
+        image: "",
+        name: "bananas",
+        quantity: "3",
+        unit: "units",
+        estimatedCost: 4.00,
+        expirationDate: "2025-07-24"
+    },
 ]
 
-export {ingredients, groceryList}
+export {ingredients, groceryList, departments}

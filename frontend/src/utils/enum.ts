@@ -16,7 +16,7 @@ const Units = [
     "container/bag"
  ];
 
- const intollerances = [
+ const Intollerances = [
     "Dairy",
     "Nuts",
     "Soy",
@@ -24,23 +24,41 @@ const Units = [
     "Seafood",
     "Gluten",
     "Sesame", 
-    // "Dairy",
-    // "Peanuts",
-    // "Soy",
-    // "Egg",
-    // "Seafood",
-    // "Sulfite",
-    // "Gluten",
-    // "Sesame",
-    // "TreeNut",
-    // "Grain",
-    // "Shellfish",
-    // "Wheat" 
  ]
 
- const diets = [
+ const Diets = [
     "Vegetarian",
     "Vegan"
  ]
 
-export { Units, intollerances, diets }
+ const Departments = [
+    "Baking",
+    "Health Foods",
+    "Spices and Seasonings",
+    'Pasta and Rice',
+    'Bakery/Bread',
+    'Refrigerated',
+    'Canned and Jarred',
+    'Frozen',
+    'Nut butters, Jams, and Honey',
+    'Oil, Vinegar, Salad Dressing',
+    'Condiments',
+    'Savory Snacks',
+    'Milk, Eggs, Other Dairy',
+    'Ethnic Foods',
+    'Tea and Coffee',
+    'Meat',
+    'Gourmet',
+    'Sweet Snacks',
+    'Gluten Free',
+    'Cereal',
+    'Nuts',
+    'Beverages',
+    'Produce',
+    'Seafood',
+    'Cheese',
+    'Dried Fruits',
+    'Bread',
+ ]
+
+export { Units, Intollerances, Diets, Departments }
