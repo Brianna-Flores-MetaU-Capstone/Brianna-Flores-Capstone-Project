@@ -1,7 +1,7 @@
 import React from 'react'
 import "../styles/LoginPage.css"
 import type { RecipeAuthFormEvents } from '../utils/types'
-import { intollerances, diets } from '../utils/enum'
+import { Intollerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
 
@@ -51,9 +51,9 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthForm
               required
             />
             <label htmlFor="intollerances">Intollerances</label>
-            <RegistrationPreferenceButtons list={intollerances} userList={userIntollerances} handleButtonClick={handleIntolleranceClick}/>
+            <RegistrationPreferenceButtons list={Intollerances} userList={userIntollerances} handleButtonClick={handleIntolleranceClick}/>
             <label>Diets</label>
-            <RegistrationPreferenceButtons list={diets} userList={userDiets} handleButtonClick={handleDietClick} />
+            <RegistrationPreferenceButtons list={Diets} userList={userDiets} handleButtonClick={handleDietClick} />
             <button className="submit-auth" type="submit">Sign Up!</button>
           </form>
     )

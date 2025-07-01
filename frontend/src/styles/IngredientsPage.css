@@ -96,7 +96,8 @@
     margin-top: 2%;
 }
 
-.ingredient-form input {
+.ingredient-form input,
+.ingredient-form select {
     font-size: 3vh;
 }
 
@@ -122,3 +123,4 @@
 .ingredient-quantity input {
     flex: 1;
 }
+
