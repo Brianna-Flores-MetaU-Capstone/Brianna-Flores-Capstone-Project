@@ -40,16 +40,12 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         const user = userCredential.user;
         setMessage({ type: "success", text: "Registration successful!" });
         setSuccess(true);
-        console.log("user intollerances", userIntollerances)
-        console.log("user diets", userDiets)
         const newUser: RecipeNewUserFirebaseId = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
           intollerances: userIntollerances,
-          // diets: userDiets
           diets: userDiets
         };
-        console.log("new user is", newUser)
         handleNewUser(newUser);
       })
       .catch((error) => {

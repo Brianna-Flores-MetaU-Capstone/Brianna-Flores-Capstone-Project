@@ -16,8 +16,6 @@ const validateInput = (formData: RecipeAuthFormData) => {
 
 const handleNewUser = async (newUser: RecipeNewUserFirebaseId) => {
     try {
-      console.log(newUser);
-      console.log(JSON.stringify(newUser))
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",
         headers: {
@@ -29,7 +27,6 @@ const handleNewUser = async (newUser: RecipeNewUserFirebaseId) => {
         throw new Error("Failed to create user");
       }
       const data = await response.json();
-      console.log("data returned", data)
     } catch (error) {
       console.error(error);
     }

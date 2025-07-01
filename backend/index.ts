@@ -19,8 +19,8 @@ app.post('/signup', async (req: Request, res: Response) => {
         data: {
             firebaseId,
             email,
-            intollerances: JSON.parse(intollerances),
-            diets: JSON.parse(diets)
+            intollerances,
+            diets,
         }
     })
     res.json(newUser)
