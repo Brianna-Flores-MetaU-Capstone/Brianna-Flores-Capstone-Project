@@ -49,7 +49,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-page">
         <div className="login-content">
-          {/* <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/> */}
+          <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
           {message && (
             <p className={`message ${message.type}`}>{message.text}</p>
           )}

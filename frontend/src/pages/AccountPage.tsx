@@ -3,7 +3,7 @@ import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
 import { Intollerances, Diets } from "../utils/enum";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
 
@@ -17,7 +17,46 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(auth.currentUser)
-  const [userEmail, setUserEmail] = useState(currentUser?.email);
+  const [userEmail, setUserEmail] = useState<string>();
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log("current user", currentUser)
+      // get the users data from database (email, intollerances, diets)
+      getUserData(currentUser)
+    }
+  }, [])
+
+  // when a new user is signed in, update the email, intollerances, and diets
+  useEffect(() => {
+    if (currentUser) {
+      console.log("current user", currentUser)
+      // get the users data from database (email, intollerances, diets)
+      getUserData(currentUser)
+    }
+  }, [currentUser])
+
+
+  const getUserData = async (currentUser: User) => {
+    try {
+      const userData = await fetch(`http://localhost:3000/account/${currentUser.uid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      if (!userData.ok) {
+        throw new Error("Failed to create comment");
+      }
+      const data = await userData.json();
+      console.log(data)
+      setUserEmail(data.email)
+      setUserIntollerances(data.intollerances)
+      setUserDiets(data.diets)
+    } catch (error) {
+        console.error(error)
+    }
+  }
 
 //   const auth = getAuth();
     const checkUserSignedIn = () => {
@@ -65,7 +104,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         setUserEmail(value);
     };
 
-    const handleChangeEmail = () => {
+    const handleAccountChanges = () => {
         if (auth.currentUser && userEmail) {
             updateEmail(auth.currentUser, userEmail).then(() => {
                 // Email updated!
@@ -82,22 +121,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
 
 
-
-    // const reauthenticateUser = () => {
-    //     const user = auth.currentUser;
-    //     const credential = promptForCredentials();
-
-    //     if (user) {
-    //         reauthenticateWithCredential(user, credential).then(() => {
-    //         // User re-authenticated.
-    //         }).catch((error) => {
-    //         // An error ocurred
-    //         // ...
-    //         });
-    //     }
-
-    // }
-
   return (
     <div className="account-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -107,9 +130,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="account-email">
           <h3>Email</h3>
           <input name="email" id="email" value={userEmail ? userEmail: ""} onChange={handleInputChange}/>
-            {/* <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/> */}
-
-          <button type="submit" onClick={handleChangeEmail}>Submit</button>
         </div>
           <h2>Selected Intollerances</h2>
           <RegistrationPreferenceButtons
@@ -123,6 +143,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           userList={userDiets}
           handleButtonClick={handleDietClick}
         />
+        <button type="submit" onClick={handleAccountChanges}>Submit</button>
       </div>
     </div>
   );

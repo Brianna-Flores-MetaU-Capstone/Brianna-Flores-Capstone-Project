@@ -1,13 +1,14 @@
 import React from 'react'
 import "../styles/LoginPage.css"
-import type { RecipeAuthFormEvents } from '../utils/types'
+// import type { RecipeAuthFormEvents } from '../utils/types'
+import type { RecipeRegistrationFormEvents } from '../utils/types'
 import { Intollerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
 
 
 
-const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
+const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistrationFormEvents) => {
     const [userIntollerances, setUserIntollerances] = useState<string[]>([])
     const [userDiets, setUserDiets] = useState<string[]>([])
 

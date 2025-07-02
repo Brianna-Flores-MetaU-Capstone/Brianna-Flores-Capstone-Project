@@ -30,6 +30,29 @@ app.post('/signup', async (req: Request, res: Response) => {
   }
 })
 
+// get the user data from the database based on their firebase id
+app.get('/account/:firebaseId', async (req: Request, res: Response) => {
+  const firebaseId = req.params.firebaseId;
+  try {
+    const user = await checkUserExists(firebaseId);
+
+    if(user) {
+      res.json(user);
+    } else {
+      res.status(404).send("User not found")
+    }
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching the user")
+  }
+})
+
+const checkUserExists = async (firebaseId: string) => {
+  const user = await prisma.User.findUnique({
+      where: {firebaseId: firebaseId}
+  })
+  return user;
+}
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)

@@ -1,13 +1,12 @@
 import React from 'react'
 import "../styles/LoginPage.css"
-import type { RecipeAuthFormEvents } from '../utils/types'
+import type { RecipeLoginFormEvents } from '../utils/types'
 
 
 
-const LoginForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
+const LoginForm = ({handleSubmit, handleChange, formData}: RecipeLoginFormEvents) => {
     return (
-        // <form className="login-info" onSubmit={handleSubmit}>
-        <form className="login-info">
+        <form className="login-info" onSubmit={handleSubmit}>
             <label htmlFor="email">Email</label>
             <input
               id="email"

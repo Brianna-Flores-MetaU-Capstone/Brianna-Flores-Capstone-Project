@@ -30,11 +30,20 @@ interface RecipeIngredientData {
     expirationDate?: string
 }
 
-interface RecipeAuthFormEvents {
+// interface RecipeAuthFormEvents {
+interface RecipeRegistrationFormEvents {
     // handleSubmit: (event: React.FormEvent) => void
     handleSubmit: ({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
+interface RecipeLoginFormEvents {
+    handleSubmit: (event: React.FormEvent) => void
+    // handleSubmit: ({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    formData: RecipeAuthFormData
+}
+
+// export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents}
