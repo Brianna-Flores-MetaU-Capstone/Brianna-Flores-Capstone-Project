@@ -20,11 +20,6 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
         setNewIngredientData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     const { name, value } = event.target;
-    //     setNewIngredientData((prev) => ({...prev, [name]: value}))
-    // }
-
     return (
         <div className="modal" id="ingredient-modal">
             <div className="modal-content">
@@ -46,7 +41,6 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                     { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
                     { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
                     <label htmlFor="ingredient-department">Department</label>
-                    {/* <input name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange} required/> */}
                     <select name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange}>
                         {
                             Departments.map((department: string) => {

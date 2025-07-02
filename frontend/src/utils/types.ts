@@ -1,3 +1,5 @@
+import type { User } from "firebase/auth";
+
 interface RecipeToggleNavBar {
     navOpen: boolean;
     toggleNav: () => void 
@@ -8,9 +10,11 @@ interface RecipeAuthFormResult {
     text: string
 }
 
-interface RecipeNewUserFirebaseId {
+interface RecipeUserAccountInfo {
     firebaseId: string
     email: string
+    intolerances: string[]
+    diets: string[]
 }
 
 interface RecipeAuthFormData {
@@ -28,10 +32,29 @@ interface RecipeIngredientData {
     expirationDate?: string
 }
 
-interface RecipeAuthFormEvents {
-    handleSubmit: (event: React.FormEvent) => void
+// interface RecipeAuthFormEvents {
+interface RecipeRegistrationFormEvents {
+    // handleSubmit: (event: React.FormEvent) => void
+    handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
+interface RecipeLoginFormEvents {
+    handleSubmit: (event: React.FormEvent) => void
+    // handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    formData: RecipeAuthFormData
+}
+
+interface CurrentUserData {
+    user: User
+    userEmail: string,
+    userIntolerances: string[],
+    userDiets: string[]
+}
+
+
+
+// export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData}

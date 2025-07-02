@@ -1,59 +1,61 @@
 import React from 'react'
 import "../styles/LoginPage.css"
-import type { RecipeAuthFormEvents } from '../utils/types'
-import { Intollerances, Diets } from '../utils/enum'
+// import type { RecipeAuthFormEvents } from '../utils/types'
+import type { RecipeRegistrationFormEvents } from '../utils/types'
+import { Intolerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
+import { PreferenceList, Authentication } from '../utils/constants'
 
 
 
-const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeAuthFormEvents) => {
-    const [userIntollerances, setUserIntollerances] = useState<string[]>([])
+const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistrationFormEvents) => {
+    const [userIntolerances, setUserIntolerances] = useState<string[]>([])
     const [userDiets, setUserDiets] = useState<string[]>([])
 
-    const handleIntolleranceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const selectedIntollerance = event.currentTarget.value;
-        if (userIntollerances.includes(selectedIntollerance)) {
-            setUserIntollerances((prev) => prev.filter((intollerance => intollerance !== selectedIntollerance)))
+    const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const { name, value } = event.currentTarget
+        const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
+        const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
+        if (userList.includes(value)) {
+            setterFunction((prev) =>
+            prev.filter((item) => item !== value)
+            );
         } else {
-            setUserIntollerances((prev) => [...prev, selectedIntollerance])
+            setterFunction((prev) => [...prev, value]);
         }
     }
 
-    const handleDietClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const selectedDiet = event.currentTarget.value;
-        if (userDiets.includes(selectedDiet)) {
-            setUserDiets((prev) => prev.filter((diet => diet !== selectedDiet)))
-        } else {
-            setUserDiets((prev) => [...prev, selectedDiet])
-        }
+    const onRegistrationSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        handleSubmit({userIntolerances, userDiets});
     }
 
 
     return (
-        <form className="login-info" onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
+        <form className="login-info" onSubmit={onRegistrationSubmit}>
+            <label htmlFor={Authentication.EMAIL}>Email</label>
             <input
-              id="email"
+              id={Authentication.EMAIL}
               type="text"
-              name="email"
+              name={Authentication.EMAIL}
               value={formData.email}
               onChange={handleChange}
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor={Authentication.PASSWORD}>Password</label>
             <input
-              id="password"
+              id={Authentication.PASSWORD}
               type="password"
-              name="password"
+              name={Authentication.PASSWORD}
               value={formData.password}
               onChange={handleChange}
               required
             />
-            <label htmlFor="intollerances">Intollerances</label>
-            <RegistrationPreferenceButtons list={Intollerances} userList={userIntollerances} handleButtonClick={handleIntolleranceClick}/>
+            <label htmlFor="intolerances">Intolerances</label>
+            <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
             <label>Diets</label>
-            <RegistrationPreferenceButtons list={Diets} userList={userDiets} handleButtonClick={handleDietClick} />
+            <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
             <button className="submit-auth" type="submit">Sign Up!</button>
           </form>
     )

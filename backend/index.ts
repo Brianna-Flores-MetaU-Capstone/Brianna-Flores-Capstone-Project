@@ -14,11 +14,13 @@ app.post('/signup', async (req: Request, res: Response) => {
     if (!req.body.firebaseId || !req.body.email) {
         return res.status(400).send("Id and email are required");
     }
-    const { firebaseId, email } = req.body
+    const { firebaseId, email, intolerances, diets } = req.body
     const newUser = await prisma.user.create({
         data: {
             firebaseId,
             email,
+            intolerances,
+            diets,
         }
     })
     res.json(newUser)
@@ -27,6 +29,55 @@ app.post('/signup', async (req: Request, res: Response) => {
     res.status(500).json({error: "Something went wrong during signup!"})
   }
 })
+
+// get the user data from the database based on their firebase id
+app.get('/account/:firebaseId', async (req: Request, res: Response) => {
+  const firebaseId = req.params.firebaseId;
+  try {
+    const user = await checkUserExists(firebaseId);
+
+    if(user) {
+      res.json(user);
+    } else {
+      res.status(404).send("User not found")
+    }
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching the user")
+  }
+})
+
+app.put('/account/:firebaseId', async (req: Request, res: Response) => {
+  if (!req.body.email || !req.body.intolerances || !req.body.diets) {
+    return res.status(400).send("Missing requirements");
+  }
+  const firebaseId = req.params.firebaseId;
+  const { email, intolerances, diets } = req.body
+  try {
+    const user = await checkUserExists(firebaseId)
+    if(!user) {
+      return res.status(404).send("User not found")
+    }
+
+    const updatedUser = await prisma.User.update({
+      where: {firebaseId: firebaseId},
+      data: {
+        email,
+        intolerances,
+        diets
+      }
+    })
+    res.json(updatedUser)
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the user")
+  }
+})
+
+const checkUserExists = async (firebaseId: string) => {
+  const user = await prisma.User.findUnique({
+      where: {firebaseId: firebaseId}
+  })
+  return user;
+}
 
 
 app.listen(PORT, () => {

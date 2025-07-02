@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
+import type { RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import RegistrationForm from "../components/RegistrationForm";
 import AppHeader from "../components/AppHeader";
+import { Intolerances } from "../utils/enum";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
@@ -14,16 +15,19 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
-  const [userIntollerances, setUserIntollerances] = useState<string[]>([])
-  const [userDiets, setUserDiets] = useState<string[]>([])
+  // const [userIntolerances, setUserIntolerances] = useState<string[]>([])
+  // const [userDiets, setUserDiets] = useState<string[]>([])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
+
+
+  // function handleSubmit(event: React.FormEvent) {
+  function handleSubmit({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) {
+    // event.preventDefault();
     const valid = validateInput(formData);
     if (valid.type === "error" && valid.text) {
       setSuccess(false);
@@ -36,9 +40,11 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         const user = userCredential.user;
         setMessage({ type: "success", text: "Registration successful!" });
         setSuccess(true);
-        const newUser: RecipeNewUserFirebaseId = {
+        const newUser: RecipeUserAccountInfo = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
+          intolerances: userIntolerances,
+          diets: userDiets
         };
         handleNewUser(newUser);
       })
