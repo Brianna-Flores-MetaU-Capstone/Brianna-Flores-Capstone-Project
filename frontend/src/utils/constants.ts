@@ -1,11 +1,11 @@
-const PreferenceList = {
+const PreferenceListCategory = {
   INTOLERANCES: "INTOLERANCES",
   DIETS: "DIETS"
 }
 
-const Authentication = {
+const AuthenticationFieldType = {
     EMAIL: "email",
     PASSWORD: "password"
 }
 
-export {PreferenceList, Authentication}
+export {PreferenceListCategory, AuthenticationFieldType}

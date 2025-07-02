@@ -10,7 +10,7 @@ import { auth } from "../utils/firebase";
 import { onAuthStateChanged, EmailAuthProvider, updateEmail, reauthenticateWithCredential } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
-import { PreferenceList, Authentication } from "../utils/constants";
+import { PreferenceListCategory, AuthenticationFieldType } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
 
@@ -48,22 +48,22 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
 
   const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { name, value } = event.currentTarget
-    const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
-    const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
+    const setPreferenceList = name === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
+    const userList = name === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
     if (userList.includes(value)) {
-      setterFunction((prev) =>
+      setPreferenceList((prev) =>
         prev.filter((item) => item !== value)
       );
     } else {
-      setterFunction((prev) => [...prev, value]);
+      setPreferenceList((prev) => [...prev, value]);
     }
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    if (name === Authentication.EMAIL) {
+    if (name === AuthenticationFieldType.EMAIL) {
       setUserEmail(value);
-    } else if (name === Authentication.PASSWORD) {
+    } else if (name === AuthenticationFieldType.PASSWORD) {
       setUserPassword(value);
     }
   };
@@ -122,16 +122,16 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="account-email">
           <h3>Email</h3>
           <input
-            name={Authentication.EMAIL}
-            id={Authentication.EMAIL}
+            name={AuthenticationFieldType.EMAIL}
+            id={AuthenticationFieldType.EMAIL}
             value={userEmail ? userEmail : ""}
             onChange={handleInputChange}
           />
         </div>
         <h2>Selected Intolerances</h2>
-        <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceListCategory.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
-        <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceListCategory.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
         <AuthenticatePassword handleAccountSubmit={handleAccountSubmit} handleInputChange={handleInputChange} />
         { message && <ErrorState errorMessage={message} /> }
       </div>

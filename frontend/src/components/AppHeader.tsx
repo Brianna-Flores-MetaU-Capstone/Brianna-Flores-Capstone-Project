@@ -18,7 +18,7 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
     })
   }
 
-  const handleLoginClick = () => {
+  const handleLogin = () => {
     if (navOpen) {
       toggleNav();
     }
@@ -30,10 +30,11 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
       <button className="nav-button" onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
       </button>
-      <h1>Grocery Buddy *make a better name lol*</h1>
+      {/* TODO make a better name */}
+      <h1>Grocery Buddy</h1>
       <div className="auth-access-buttons">
         <button className="login-button" onClick={handleLogout}>Logout</button>
-        <button className="login-button" onClick={handleLoginClick}>Login</button>
+        <button className="login-button" onClick={handleLogin}>Login</button>
       </div>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />
     </section>

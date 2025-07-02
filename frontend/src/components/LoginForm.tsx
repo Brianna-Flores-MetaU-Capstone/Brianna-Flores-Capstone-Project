@@ -1,27 +1,27 @@
 import React from 'react'
 import "../styles/LoginPage.css"
 import type { RecipeLoginFormEvents } from '../utils/types'
-import { Authentication } from '../utils/constants'
+import { AuthenticationFieldType } from '../utils/constants'
 
 
 
 const LoginForm = ({handleSubmit, handleChange, formData}: RecipeLoginFormEvents) => {
     return (
         <form className="login-info" onSubmit={handleSubmit}>
-            <label htmlFor={Authentication.EMAIL}>Email</label>
+            <label htmlFor={AuthenticationFieldType.EMAIL}>Email</label>
             <input
-              id={Authentication.EMAIL}
+              id={AuthenticationFieldType.EMAIL}
               type="text"
-              name={Authentication.EMAIL}
+              name={AuthenticationFieldType.EMAIL}
               value={formData.email}
               onChange={handleChange}
               required
             />
-            <label htmlFor={Authentication.PASSWORD}>Password</label>
+            <label htmlFor={AuthenticationFieldType.PASSWORD}>Password</label>
             <input
-              id={Authentication.PASSWORD}
+              id={AuthenticationFieldType.PASSWORD}
               type="password"
-              name={Authentication.PASSWORD}
+              name={AuthenticationFieldType.PASSWORD}
               value={formData.password}
               onChange={handleChange}
               required
