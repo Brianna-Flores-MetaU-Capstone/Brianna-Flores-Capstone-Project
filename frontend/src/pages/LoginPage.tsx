@@ -27,7 +27,6 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
         navigate("/"); // go back to homepage
       })
       .catch((error) => {

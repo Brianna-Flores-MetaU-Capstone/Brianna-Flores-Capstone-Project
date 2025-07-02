@@ -1,5 +1,6 @@
 import React from 'react'
 import { errorCodes } from '../utils/firebase'
+
 const ErrorState = ({errorMessage}: {errorMessage: string}) => {
     const displayedMessage = errorCodes[errorMessage]
     return  (
