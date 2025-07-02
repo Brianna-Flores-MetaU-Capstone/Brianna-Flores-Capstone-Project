@@ -16,59 +16,42 @@ import {
   reauthenticateWithCredential,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
-// import { EmailAuthProvider } from "firebase/auth/web-extension";
+import { updateAccount, getUserData } from "../utils/databaseHelpers";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
-  // const [currentUser, setCurrentUser] = useState<User | null>()
+  const [currentUser, setCurrentUser] = useState<User | null>()
   const [userEmail, setUserEmail] = useState<string>();
   const [userPassword, setUserPassword] = useState<string>();
-  const [userSignedIn, setUserSignedIn] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
     // const user = auth.currentUser;
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("yay we signed in!", user);
-        const uid = user.uid;
-        setUserSignedIn(true);
+        console.log("yay were signed in!", user);
+        setCurrentUser(user);
         // get the users data from database (email, intollerances, diets)
-        getUserData(user);
+        setUserInfo(user);
+        setLoadingData(false);
       } else {
         console.log("no one singed in so sad ;-;");
-        setUserSignedIn(false);
       }
     });
   }, []);
 
-  const getUserData = async (user: User) => {
-    try {
-      const userData = await fetch(
-        `http://localhost:3000/account/${user.uid}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!userData.ok) {
-        throw new Error("Failed to get user data");
-      }
-      const data = await userData.json();
-      console.log(data);
-      setUserEmail(data.email);
-      setUserIntollerances(data.intollerances);
-      setUserDiets(data.diets);
-    } catch (error) {
-      console.error(error);
+  const setUserInfo = async (user: User) => {
+    const userData = await getUserData(user);
+    console.log("user data is", userData)
+    if (userData) {
+      setUserEmail(userData.userEmail);
+      setUserIntollerances(userData.userIntollerances);
+      setUserDiets(userData.userDiets);
     }
-  };
+  }
 
-  const handleIntolleranceClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleIntolleranceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedIntollerance = event.currentTarget.value;
     if (userIntollerances.includes(selectedIntollerance)) {
       setUserIntollerances((prev) =>
@@ -104,7 +87,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       return;
     }
     const user = auth.currentUser;
-    if (user && user.email) {
+    if (user && user.email && userEmail) {
       try {
         // validate credentials to update account
         const credential = EmailAuthProvider.credential(
@@ -127,7 +110,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
                 });
             }
             // then update account in database
-            updateAccount();
+            updateAccount({user, userEmail, userIntollerances, userDiets});
           })
           .catch((error) => {
             console.log("an error occurred during reauthentication");
@@ -139,31 +122,15 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
   };
 
-  const updateAccount = async () => {
-    const updatedUser = await fetch(
-      `http://localhost:3000/account/${auth.currentUser?.uid}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          intollerances: userIntollerances,
-          diets: userDiets,
-        }),
-      }
-    );
-    if (!updatedUser.ok) {
-      throw new Error("Failed to update user");
-    }
-    const data = await updatedUser.json();
-    console.log(data);
-    return data;
-  };
 
-
-  if (!userSignedIn) {
+  if(loadingData && currentUser) {
+    return (
+      <div>
+        <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+        <p>Loading Data</p>
+      </div>
+    )
+  } else if (!currentUser) {
     return (
       <div className="account-page">
         <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

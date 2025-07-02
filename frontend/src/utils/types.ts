@@ -1,3 +1,5 @@
+import type { User } from "firebase/auth";
+
 interface RecipeToggleNavBar {
     navOpen: boolean;
     toggleNav: () => void 
@@ -45,5 +47,14 @@ interface RecipeLoginFormEvents {
     formData: RecipeAuthFormData
 }
 
+interface CurrentUserData {
+    user: User
+    userEmail: string,
+    userIntollerances: string[],
+    userDiets: string[]
+}
+
+
+
 // export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents}
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData}
