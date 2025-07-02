@@ -8,7 +8,7 @@ const RegistrationPreferenceButtons = ({listName, listItems, userList, handleBut
             {
                 listItems.map((item) => {
                     return (
-                        <button key={item} name={listName} value={item} id={item} className={userList.includes(item) ? "preference-selected" : "preference-not-selected"} type="button" onClick={handleButtonClick}>{item}</button>
+                        <button key={item} data-category={listName} data-selection={item} id={item} className={userList.includes(item) ? "preference-selected" : "preference-not-selected"} type="button" onClick={handleButtonClick}>{item}</button>
                     )
                 })
             }

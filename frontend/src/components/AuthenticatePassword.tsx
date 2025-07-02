@@ -5,7 +5,7 @@ const AuthenticatePassword = ({handleAccountSubmit, handleInputChange}: {handleA
     return (
         <form className="confirm-password" onSubmit={handleAccountSubmit}>
             <h3>Confirm Password</h3>
-            <input type="password" name={AuthenticationFieldType.PASSWORD} id={AuthenticationFieldType.PASSWORD} onChange={handleInputChange} required/>
+            <input type="password" data-credential={AuthenticationFieldType.PASSWORD} id={AuthenticationFieldType.PASSWORD} onChange={handleInputChange} required/>
             <button className="submit-auth" type="submit">Submit</button>
         </form>
     )

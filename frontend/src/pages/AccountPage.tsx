@@ -47,23 +47,26 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   }
 
   const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { name, value } = event.currentTarget
-    const setPreferenceList = name === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
-    const userList = name === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
-    if (userList.includes(value)) {
-      setPreferenceList((prev) =>
-        prev.filter((item) => item !== value)
-      );
-    } else {
-      setPreferenceList((prev) => [...prev, value]);
-    }
+      const { category, selection } = (event.currentTarget as HTMLButtonElement).dataset
+      const setPreferenceList = category === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
+      const userList = category === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
+      if (selection) {
+          if (userList.includes(selection)) {
+              setPreferenceList((prev) =>
+              prev.filter((item) => item !== selection)
+              );
+          } else {
+              setPreferenceList((prev) => [...prev, selection]);
+          }
+      }
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === AuthenticationFieldType.EMAIL) {
+    const { credential } = (event.target as HTMLInputElement).dataset
+    const { value } = event.target;
+    if (credential === AuthenticationFieldType.EMAIL) {
       setUserEmail(value);
-    } else if (name === AuthenticationFieldType.PASSWORD) {
+    } else if (credential === AuthenticationFieldType.PASSWORD) {
       setUserPassword(value);
     }
   };
@@ -122,7 +125,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="account-email">
           <h3>Email</h3>
           <input
-            name={AuthenticationFieldType.EMAIL}
+            data-credential={AuthenticationFieldType.EMAIL}
             id={AuthenticationFieldType.EMAIL}
             value={userEmail ? userEmail : ""}
             onChange={handleInputChange}

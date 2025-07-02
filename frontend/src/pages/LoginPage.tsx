@@ -25,9 +25,8 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     signInWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
-        // Signed in
-        navigate("/"); // go back to homepage
+      .then(() => {
+        navigate("/");
       })
       .catch((error) => {
         setMessage(error.code);

@@ -13,15 +13,17 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
     const [userDiets, setUserDiets] = useState<string[]>([])
 
     const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const { name, value } = event.currentTarget
-        const setPreferenceList = name === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
-        const userList = name === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
-        if (userList.includes(value)) {
-            setPreferenceList((prev) =>
-            prev.filter((item) => item !== value)
-            );
-        } else {
-            setPreferenceList((prev) => [...prev, value]);
+        const { category, selection } = (event.currentTarget as HTMLButtonElement).dataset
+        const setPreferenceList = category === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
+        const userList = category === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
+        if (selection) {
+            if (userList.includes(selection)) {
+                setPreferenceList((prev) =>
+                prev.filter((item) => item !== selection)
+                );
+            } else {
+                setPreferenceList((prev) => [...prev, selection]);
+            }
         }
     }
 
