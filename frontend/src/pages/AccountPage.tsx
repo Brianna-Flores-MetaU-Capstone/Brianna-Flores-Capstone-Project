@@ -1,23 +1,17 @@
 import React from "react";
-import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
+import type { RecipeToggleNavBar } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
-
-// code from firebase.google.com
 import { auth } from "../utils/firebase";
-import {
-  onAuthStateChanged,
-  EmailAuthProvider,
-  updateEmail,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { onAuthStateChanged, EmailAuthProvider, updateEmail, reauthenticateWithCredential } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
 import { PreferenceList, Authentication } from "../utils/constants";
+import AuthenticatePassword from "../components/AuthenticatePassword";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -48,7 +42,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       setUserDiets(userData.userDiets);
     }
   }
-
 
   const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { name, value } = event.currentTarget
@@ -95,8 +88,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
               updateEmail(user, userEmail)
                 .catch((error) => {
                   console.log("TODO: Incoorporate error component after merging");
-                  console.log("an error occurred when updating the email");
-                  console.log(error.code);
                 });
             }
             // then update account in database
@@ -104,8 +95,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           })
           .catch((error) => {
             console.log("TODO: Incoorporate error component after merging");
-            console.log("an error occurred during reauthentication");
-            console.log(error.code);
           });
       } catch (error) {
         console.log("TODO: Incoorporate error component after merging");
@@ -141,11 +130,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
         <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
-        <form className="confirm-password" onSubmit={handleAccountSubmit}>
-          <h3>Confirm Password</h3>
-          <input type="password" name={Authentication.PASSWORD} id={Authentication.PASSWORD} onChange={handleInputChange} required/>
-          <button className="submit-auth" type="submit">Submit</button>
-        </form>
+        <AuthenticatePassword handleAccountSubmit={handleAccountSubmit} handleInputChange={handleInputChange} />
       </div>
     </div>
   );

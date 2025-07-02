@@ -15,7 +15,6 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
 
     const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const { name, value } = event.currentTarget
-        console.log("name", name, "value", value)
         const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
         const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
         if (userList.includes(value)) {
