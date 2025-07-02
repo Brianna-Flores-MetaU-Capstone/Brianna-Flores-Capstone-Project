@@ -1,11 +1,11 @@
 import React from "react"
-import type { RecipeIngredientData } from "../utils/types"
+import type { IngredientData } from "../utils/types"
 import "../styles/Homepage.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
-const Ingredient = ({ingredient, groceryCheck, presentExpiration, presentButtons, onEdit}: {ingredient: RecipeIngredientData, groceryCheck: boolean, presentExpiration: boolean, presentButtons: boolean, onEdit?: (ingredient: RecipeIngredientData) => void}) => {
+const Ingredient = ({ingredient, groceryCheck, presentExpiration, presentButtons, onEdit}: {ingredient: IngredientData, groceryCheck: boolean, presentExpiration: boolean, presentButtons: boolean, onEdit?: (ingredient: IngredientData) => void}) => {
     return (
         <div className="list-ingredient">
             {groceryCheck && <input type="checkbox"/>}

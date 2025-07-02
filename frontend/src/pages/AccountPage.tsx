@@ -12,6 +12,7 @@ import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
 import { PreferenceList, Authentication } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
+import ErrorState from "../components/ErrorState";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -20,6 +21,8 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userEmail, setUserEmail] = useState<string>();
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
+  const [message, setMessage] = useState<string>();
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -69,8 +72,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     event.preventDefault()
     event.currentTarget.reset();
     if (!userPassword) {
-      console.log("TODO: Incoorporate error component after merging");
-      console.log("password required to continue");
+      setMessage("auth/no-password");
       return;
     }
 
@@ -85,19 +87,19 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
             //if the users email was changed, update on firebase side too
             if (user.email && userEmail && user.email !== userEmail) {
               // get credential by signing user in with email
-              updateEmail(user, userEmail)
-                .catch((error) => {
-                  console.log("TODO: Incoorporate error component after merging");
+              updateEmail(user, userEmail).catch((error) => {
+                  setMessage(error.code);
                 });
             }
             // then update account in database
             updateAccount({user, userEmail, userIntolerances, userDiets});
-          })
-          .catch((error) => {
-            console.log("TODO: Incoorporate error component after merging");
+            setMessage("success/profile-update")
+          }).catch((error) => {
+            setMessage(error.code)
+            setUserPassword("")
           });
       } catch (error) {
-        console.log("TODO: Incoorporate error component after merging");
+        setMessage("auth/operation-not-allowed")
       }
     }
   };
@@ -131,6 +133,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <h2>Selected Diets</h2>
         <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
         <AuthenticatePassword handleAccountSubmit={handleAccountSubmit} handleInputChange={handleInputChange} />
+        { message && <ErrorState errorMessage={message} /> }
       </div>
     </div>
   );

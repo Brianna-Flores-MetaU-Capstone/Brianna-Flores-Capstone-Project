@@ -1,11 +1,11 @@
 import React from 'react'
 import '../styles/IngredientsPage.css'
 import { Units, Departments } from "../utils/enum"
-import type { RecipeIngredientData } from '../utils/types'
+import type { IngredientData } from '../utils/types'
 import { useState } from 'react'
 
-const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: RecipeIngredientData, onClose: () => void}) => {
-    const [newIngredientData, setNewIngredientData] = useState<RecipeIngredientData>(ingredientData ?? {
+const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: IngredientData, onClose: () => void}) => {
+    const [newIngredientData, setNewIngredientData] = useState<IngredientData>(ingredientData ?? {
         department: "",
         image: "",
         name: "",

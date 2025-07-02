@@ -10,6 +10,7 @@
 .account-email {
     display: flex;
     align-items: center;
+    font-size: 3vh;
     gap: 0.5vw;
 }
 
@@ -31,4 +32,8 @@
 .account-email input,
 .confirm-password input {
     font-size: 2vh;
+}
+
+.account-email input {
+    font-size: 3vh;
 }

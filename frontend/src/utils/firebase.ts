@@ -12,8 +12,21 @@ const firebaseConfig = {
   measurementId: "G-VTGPZ429HH"
 };
 
+const errorCodes: {[errorMessage: string]: string} = {
+  "auth/email-already-in-use": "Email already in use, try to login",
+  "auth/internal-error": "Internal error, please try again",
+  "auth/invalid-email": "Please enter a valid email",
+  "auth/user-not-found": "No account with given email exists",
+  "auth/password-does-not-meet-requirements": "Password must be at least 8 characters long",
+  "auth/invalid-credential": "Login failed",
+  "auth/wrong-password": "Login failed",
+  "auth/no-password": "Please enter a password",
+  "auth/operation-not-allowed": "Failed operation",
+  "success/profile-update": "Successfully updated profile"
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export { auth }
+export { auth, errorCodes }

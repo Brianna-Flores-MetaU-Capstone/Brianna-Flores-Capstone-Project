@@ -14,8 +14,7 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
 
   const handleLogout = () => {
     signOut(auth).catch((error) => {
-      console.log("TODO: Implement error state component")
-      console.log("error during signout ;-;")
+      
     })
   }
 

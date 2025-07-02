@@ -6,18 +6,18 @@ import { useState } from 'react'
 import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
 import IngredientModal from "../components/IngredientModal";
-import type { RecipeIngredientData } from "../utils/types";
+import type { IngredientData } from "../utils/types";
 
 const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false)
-  const [editIngredientData, setEditIngredientData] = useState<RecipeIngredientData>()
+  const [editIngredientData, setEditIngredientData] = useState<IngredientData>()
   const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false)
 
   const addIngredientClick = () => {
     setAddIngredientModalOpen((prev) => !prev)
   }
 
-  const handleEditClick = (ingredient: RecipeIngredientData) => {
+  const handleEditClick = (ingredient: IngredientData) => {
     setEditIngredientData(ingredient);
     setEditIngredientModalOpen((prev) => !prev)
   }

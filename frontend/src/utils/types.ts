@@ -5,9 +5,18 @@ interface RecipeToggleNavBar {
     toggleNav: () => void 
 }
 
-interface RecipeAuthFormResult {
-    type: string
-    text: string
+interface RecipeData {
+    id: number
+    image: string
+    title: string
+    servings: number
+    sourceUrl: string
+    vegetarian: boolean
+    vegan: boolean
+    glutenFree: boolean
+    dairyFree: boolean
+    ingredients: IngredientData[]
+    totalEstimatedCost: number
 }
 
 interface RecipeUserAccountInfo {
@@ -22,7 +31,7 @@ interface RecipeAuthFormData {
     password: string
 }
 
-interface RecipeIngredientData {
+interface IngredientData {
     department: string
     image: string
     name: string
@@ -32,17 +41,19 @@ interface RecipeIngredientData {
     expirationDate?: string
 }
 
-// interface RecipeAuthFormEvents {
 interface RecipeRegistrationFormEvents {
-    // handleSubmit: (event: React.FormEvent) => void
     handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
+interface AuthFormResultMessage {
+    type: string
+    text: string
+}
+
 interface RecipeLoginFormEvents {
     handleSubmit: (event: React.FormEvent) => void
-    // handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
@@ -54,7 +65,9 @@ interface CurrentUserData {
     userDiets: string[]
 }
 
+interface AuthFormResultMessage {
+    type: string
+    text: string
+}
 
-
-// export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData}
+export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}

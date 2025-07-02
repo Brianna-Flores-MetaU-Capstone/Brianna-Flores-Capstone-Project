@@ -1,4 +1,4 @@
-import type { RecipeIngredientData } from "./types"
+import type { IngredientData } from "./types"
 
 // sample data, will only display departments user needs ingredients from
 // add/remove departments from list dependent on ingredients user needs
@@ -11,7 +11,7 @@ const departments: string[] = [
     "Milk, Eggs, Other Dairy"
 ]
 
-const ingredients: RecipeIngredientData[] = [
+const ingredients: IngredientData[] = [
     {
         department: "Milk, Eggs, Other Dairy",
         image: "",
@@ -114,7 +114,7 @@ const ingredients: RecipeIngredientData[] = [
 ]
 
 
-const groceryList: RecipeIngredientData[] = [
+const groceryList: IngredientData[] = [
     {
         department: "Pasta and Rice",
         image: "",

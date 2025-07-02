@@ -2,9 +2,9 @@
 import React from 'react'
 import Ingredient from './Ingredient'
 import { groceryList } from '../utils/sampleData'
-import type { RecipeIngredientData } from '../utils/types'
+import type { IngredientData } from '../utils/types'
 
-const GroceryListDepartment = ({department, handleOpenModal}: {department: string, handleOpenModal: (ingredient: RecipeIngredientData) => void}) => {
+const GroceryListDepartment = ({department, handleOpenModal}: {department: string, handleOpenModal: (ingredient: IngredientData) => void}) => {
 
     const filteredGroceries = groceryList.filter((item) => item.department === department)
 
