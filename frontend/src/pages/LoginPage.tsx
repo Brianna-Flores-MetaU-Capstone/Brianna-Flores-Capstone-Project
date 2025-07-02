@@ -32,6 +32,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       })
       .catch((error) => {
         setMessage(error.code);
+        console.log(error.code)
       });
   }
   return (
@@ -45,7 +46,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           )}
           <div className="new-user-section">
             <p>New User?</p>
-            <button onClick={() => navigate("/signup")}>
+            <button className="submit-auth" onClick={() => navigate("/signup")}>
               Register for an Account!
             </button>
           </div>

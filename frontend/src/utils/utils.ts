@@ -1,4 +1,4 @@
-import type { RecipeNewUserFirebaseId, RecipeAuthFormData, IngredientData } from "./types";
+import type { RecipeUserAccountInfo, RecipeAuthFormData, IngredientData } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
     return recipeData.map((recipe: any) => ({
@@ -49,7 +49,7 @@ const validateInput = (formData: RecipeAuthFormData) => {
   return { type: "", text: "" };
 };
 
-const handleNewUser = async (newUser: RecipeNewUserFirebaseId) => {
+const handleNewUser = async (newUser: RecipeUserAccountInfo) => {
     try {
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",

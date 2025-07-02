@@ -16,7 +16,7 @@ const Units = [
     "container/bag"
  ];
 
- const Intollerances = [
+ const Intolerances = [
     "Dairy",
     "Nuts",
     "Soy",
@@ -60,5 +60,5 @@ const Units = [
     'Dried Fruits',
     'Bread',
  ]
-
-export { Units, Intollerances, Diets, Departments }
+ 
+export { Units, Intolerances, Diets, Departments }

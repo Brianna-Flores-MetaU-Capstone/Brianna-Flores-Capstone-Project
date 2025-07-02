@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
+import type { AuthFormResultMessage, RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import RegistrationForm from "../components/RegistrationForm";
 import AppHeader from "../components/AppHeader";
+import { Intolerances } from "../utils/enum";
 import ErrorState from "../components/ErrorState";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
@@ -20,20 +21,33 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
+  // function handleSubmit(event: React.FormEvent) {
+  function handleSubmit({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) {
+    // event.preventDefault();
+    // const valid = validateInput(formData);
+    // if (valid.type === "error" && valid.text) {
+    //   setSuccess(false);
+    //   console.log(valid.text)
+    //   setMessage(valid.text);
+    //   throw new Error(valid.text);
+    // }
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        const newUser: RecipeNewUserFirebaseId = {
+        // setMessage("Registration successful!");
+        // setSuccess(true);
+        const newUser: RecipeUserAccountInfo = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
+          intolerances: userIntolerances,
+          diets: userDiets
         };
         handleNewUser(newUser);
         setSuccess(true);
       })
       .catch((error) => {
+        console.log(error.code)
         setMessage(error.code);
         setSuccess(false);
       });

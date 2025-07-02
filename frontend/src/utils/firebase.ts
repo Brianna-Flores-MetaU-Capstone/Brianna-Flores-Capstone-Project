@@ -18,6 +18,7 @@ const errorCodes: {[errorMessage: string]: string} = {
   "auth/invalid-email": "Please enter a valid email",
   "auth/password-does-not-meet-requirements": "Password must be at least 8 characters long",
   "auth/invalid-credential": "Login failed",
+  "auth/wrong-password": "Login failed"
 }
 
 // Initialize Firebase

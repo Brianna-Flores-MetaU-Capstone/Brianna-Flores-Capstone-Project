@@ -14,6 +14,26 @@
     gap: 0.5vw;
 }
 
+.not-signed-in,
+.loading {
+    text-align: center;
+    font-size: 3vh;
+}
+
+.confirm-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+}
+
+.account-email,
+.confirm-password,
+.account-email input,
+.confirm-password input {
+    font-size: 2vh;
+}
+
 .account-email input {
     font-size: 3vh;
 }
