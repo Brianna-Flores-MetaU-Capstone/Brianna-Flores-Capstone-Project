@@ -51,8 +51,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     const { name, value } = event.currentTarget
     const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
     const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
-    console.log("name is", name)
-    console.log("Preference list", PreferenceList.INTOLERANCES)
     if (userList.includes(value)) {
       setterFunction((prev) =>
         prev.filter((item) => item !== value)
@@ -141,9 +139,9 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           />
         </div>
         <h2>Selected Intolerances</h2>
-        <RegistrationPreferenceButtons listName="INTOLERANCES" listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
-        <RegistrationPreferenceButtons listName="DIETS" listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
         <div className="confirm-password">
           <h3>Confirm Password</h3>
           <input type="password" name={Authentication.PASSWORD} id={Authentication.PASSWORD} onChange={handleInputChange} required/>

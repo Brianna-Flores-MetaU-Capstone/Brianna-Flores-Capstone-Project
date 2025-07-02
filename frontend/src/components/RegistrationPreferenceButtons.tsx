@@ -1,8 +1,7 @@
 import React from 'react'
 import "../styles/LoginPage.css"
-import type { Preference } from '../utils/enum'
 
-const RegistrationPreferenceButtons = ({listName, listItems, userList, handleButtonClick}: {listName: Preference, listItems: string[], userList: string[], handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void}) => {
+const RegistrationPreferenceButtons = ({listName, listItems, userList, handleButtonClick}: {listName: string, listItems: string[], userList: string[], handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void}) => {
     
     return (
         <div className="preference-list">

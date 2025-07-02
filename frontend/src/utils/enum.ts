@@ -60,8 +60,5 @@ const Units = [
     'Dried Fruits',
     'Bread',
  ]
-
- type Preference = "INTOLERANCES" | "DIETS"
-
-export type { Preference }
+ 
 export { Units, Intolerances, Diets, Departments }

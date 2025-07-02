@@ -54,9 +54,9 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
               required
             />
             <label htmlFor="intolerances">Intolerances</label>
-            <RegistrationPreferenceButtons listName="INTOLERANCES" listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+            <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
             <label>Diets</label>
-            <RegistrationPreferenceButtons listName="DIETS" listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
+            <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
             <button className="submit-auth" type="submit">Sign Up!</button>
           </form>
     )
