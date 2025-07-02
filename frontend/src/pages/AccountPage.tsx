@@ -8,70 +8,63 @@ import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
 
 // code from firebase.google.com
-import { auth } from "../utils/firebase"
-import { onAuthStateChanged, updateProfile, updateEmail, reauthenticateWithCredential } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import {
+  onAuthStateChanged,
+  EmailAuthProvider,
+  updateEmail,
+  reauthenticateWithCredential,
+} from "firebase/auth";
 import type { User } from "firebase/auth";
+// import { EmailAuthProvider } from "firebase/auth/web-extension";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>(auth.currentUser)
+  // const [currentUser, setCurrentUser] = useState<User | null>()
   const [userEmail, setUserEmail] = useState<string>();
-  const [emailChanged, setEmailChanged] = useState(false)
+  const [userPassword, setUserPassword] = useState<string>();
+  const [userSignedIn, setUserSignedIn] = useState(false);
 
   useEffect(() => {
-    if (currentUser) {
-      console.log("current user", currentUser)
-      // get the users data from database (email, intollerances, diets)
-      getUserData(currentUser)
-    }
-  }, [])
+    // const user = auth.currentUser;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("yay we signed in!", user);
+        const uid = user.uid;
+        setUserSignedIn(true);
+        // get the users data from database (email, intollerances, diets)
+        getUserData(user);
+      } else {
+        console.log("no one singed in so sad ;-;");
+        setUserSignedIn(false);
+      }
+    });
+  }, []);
 
-  // when a new user is signed in, update the email, intollerances, and diets
-  useEffect(() => {
-    if (currentUser) {
-      console.log("current user", currentUser)
-      // get the users data from database (email, intollerances, diets)
-      getUserData(currentUser)
-    }
-  }, [currentUser])
-
-
-  const getUserData = async (currentUser: User) => {
+  const getUserData = async (user: User) => {
     try {
-      const userData = await fetch(`http://localhost:3000/account/${currentUser.uid}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const userData = await fetch(
+        `http://localhost:3000/account/${user.uid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!userData.ok) {
-        throw new Error("Failed to create comment");
+        throw new Error("Failed to get user data");
       }
       const data = await userData.json();
-      console.log(data)
-      setUserEmail(data.email)
-      setUserIntollerances(data.intollerances)
-      setUserDiets(data.diets)
+      console.log(data);
+      setUserEmail(data.email);
+      setUserIntollerances(data.intollerances);
+      setUserDiets(data.diets);
     } catch (error) {
-        console.error(error)
+      console.error(error);
     }
-  }
-
-    const checkUserSignedIn = () => {
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const userSignedIn = auth.currentUser
-            setCurrentUser(userSignedIn)
-            console.log("current user is", userSignedIn);
-          } else {
-            console.log("there is no signed in user");
-          }
-        });
-    }
-    // checkUserSignedIn();
+  };
 
   const handleIntolleranceClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -95,63 +88,129 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
   };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        console.log("user email is", value)
-        setUserEmail(value);
-        setEmailChanged(true);
-    };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setUserEmail(value);
+    } else if (name === "password") {
+      setUserPassword(value);
+    }
+  };
 
-    const handleAccountSubmit = () => {
-      if (currentUser) {
-        updateAccount();
+  const handleAccountSubmit = () => {
+    if (!userPassword) {
+      // TODO Incoorporate error state component
+      console.log("password required to continue");
+      return;
+    }
+    const user = auth.currentUser;
+    if (user && user.email) {
+      try {
+        // validate credentials to update account
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          userPassword
+        );
+        // valdate credentials to update account
+        reauthenticateWithCredential(user, credential)
+          .then(() => {
+            //if the users email was changed, update on firebase side too
+            if (user.email && userEmail && user.email !== userEmail) {
+              // get credential by signing user in with email
+              updateEmail(user, userEmail)
+                .then(() => {
+                  console.log("updated email");
+                })
+                .catch((error) => {
+                  console.log(error.code);
+                  console.log("an error occurred when updating the email");
+                });
+            }
+            // then update account in database
+            updateAccount();
+          })
+          .catch((error) => {
+            console.log("an error occurred during reauthentication");
+            console.log(error.code);
+          });
+      } catch (error) {
+        console.log("oh no some error");
       }
     }
+  };
 
-    const updateAccount = async () => {
-      const updatedUser = await fetch(`http://localhost:3000/account/${currentUser?.uid}`, {
+  const updateAccount = async () => {
+    const updatedUser = await fetch(
+      `http://localhost:3000/account/${auth.currentUser?.uid}`,
+      {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-                              email: userEmail,
-                              intollerances: userIntollerances,
-                              diets: userDiets
-        })
-      })
-      if (!updatedUser.ok) {
-        throw new Error("Failed to update user");
+          email: userEmail,
+          intollerances: userIntollerances,
+          diets: userDiets,
+        }),
       }
-      const data = await updatedUser.json();
-      console.log(data);
-      return data;
+    );
+    if (!updatedUser.ok) {
+      throw new Error("Failed to update user");
     }
+    const data = await updatedUser.json();
+    console.log(data);
+    return data;
+  };
 
+
+  if (!userSignedIn) {
+    return (
+      <div className="account-page">
+        <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+        <p>Sign in to edit account details</p>
+      </div>
+    );
+  }
 
   return (
     <div className="account-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-        <button onClick={checkUserSignedIn}>check whose signed in</button>
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">
           <h3>Email</h3>
-          <input name="email" id="email" value={userEmail ? userEmail: ""} onChange={handleInputChange}/>
-        </div>
-          <h2>Selected Intollerances</h2>
-          <RegistrationPreferenceButtons
-            list={Intollerances}
-            userList={userIntollerances}
-            handleButtonClick={handleIntolleranceClick}
+          <input
+            name="email"
+            id="email"
+            value={userEmail ? userEmail : ""}
+            onChange={handleInputChange}
           />
+        </div>
+        <h2>Selected Intollerances</h2>
+        <RegistrationPreferenceButtons
+          list={Intollerances}
+          userList={userIntollerances}
+          handleButtonClick={handleIntolleranceClick}
+        />
         <h2>Selected Diets</h2>
         <RegistrationPreferenceButtons
           list={Diets}
           userList={userDiets}
           handleButtonClick={handleDietClick}
         />
-        <button type="submit" onClick={handleAccountSubmit}>Submit</button>
+        <div className="confirm-password">
+          <h3>Confirm Password</h3>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <button type="submit" onClick={handleAccountSubmit}>
+          Submit
+        </button>
       </div>
     </div>
   );
