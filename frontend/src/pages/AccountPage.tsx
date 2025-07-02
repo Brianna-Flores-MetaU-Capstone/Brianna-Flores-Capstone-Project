@@ -33,6 +33,9 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         setCurrentUser(user);
         setUserInfo(user);
         setLoadingData(false);
+      } else {
+        setCurrentUser(null);
+        setLoadingData(false);
       }
     });
   }, []);
@@ -69,12 +72,15 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
   };
 
-  const handleAccountSubmit = () => {
+  const handleAccountSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    event.currentTarget.reset();
     if (!userPassword) {
       console.log("TODO: Incoorporate error component after merging");
       console.log("password required to continue");
       return;
     }
+
     const user = auth.currentUser;
     if (user && user.email && userEmail) {
       try {
@@ -108,18 +114,11 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   };
 
 
-  if(loadingData && currentUser) {
-    return (
-      <div>
-        <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-        <p>Loading Data</p>
-      </div>
-    )
-  } else if (!currentUser) {
+  if(!currentUser && !loadingData) {
     return (
       <div className="account-page">
         <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-        <p>Sign in to edit account details</p>
+        <p className="not-signed-in">Sign in to edit account details</p>
       </div>
     );
   }
@@ -142,13 +141,11 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
         <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
-        <div className="confirm-password">
+        <form className="confirm-password" onSubmit={handleAccountSubmit}>
           <h3>Confirm Password</h3>
           <input type="password" name={Authentication.PASSWORD} id={Authentication.PASSWORD} onChange={handleInputChange} required/>
-        </div>
-        <button type="submit" onClick={handleAccountSubmit}>
-          Submit
-        </button>
+          <button className="submit-auth" type="submit">Submit</button>
+        </form>
       </div>
     </div>
   );
