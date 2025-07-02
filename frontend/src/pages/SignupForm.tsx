@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
+import type { RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import { validateInput, handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import RegistrationForm from "../components/RegistrationForm";
@@ -40,7 +40,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         const user = userCredential.user;
         setMessage({ type: "success", text: "Registration successful!" });
         setSuccess(true);
-        const newUser: RecipeNewUserFirebaseId = {
+        const newUser: RecipeUserAccountInfo = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
           intollerances: userIntollerances,

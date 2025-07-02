@@ -8,7 +8,7 @@ interface RecipeAuthFormResult {
     text: string
 }
 
-interface RecipeNewUserFirebaseId {
+interface RecipeUserAccountInfo {
     firebaseId: string
     email: string
     intollerances: string[]
@@ -46,4 +46,4 @@ interface RecipeLoginFormEvents {
 }
 
 // export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
-export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents}
+export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeUserAccountInfo, RecipeAuthFormData, RecipeIngredientData, RecipeRegistrationFormEvents, RecipeLoginFormEvents}

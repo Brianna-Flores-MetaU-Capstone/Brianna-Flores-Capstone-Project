@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
 
-// get user that is currently signed in
 // code from firebase.google.com
 import { auth } from "../utils/firebase"
 import { onAuthStateChanged, updateProfile, updateEmail, reauthenticateWithCredential } from "firebase/auth";
@@ -18,6 +17,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(auth.currentUser)
   const [userEmail, setUserEmail] = useState<string>();
+  const [emailChanged, setEmailChanged] = useState(false)
 
   useEffect(() => {
     if (currentUser) {
@@ -58,7 +58,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     }
   }
 
-//   const auth = getAuth();
     const checkUserSignedIn = () => {
         onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -68,8 +67,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
             setCurrentUser(userSignedIn)
             console.log("current user is", userSignedIn);
           } else {
-            // User is signed out
-            // ...
             console.log("there is no signed in user");
           }
         });
@@ -102,22 +99,33 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         const { value } = event.target;
         console.log("user email is", value)
         setUserEmail(value);
+        setEmailChanged(true);
     };
 
-    const handleAccountChanges = () => {
-        if (auth.currentUser && userEmail) {
-            updateEmail(auth.currentUser, userEmail).then(() => {
-                // Email updated!
-                // ...
-                console.log("updated email")
-            }).catch((error) => {
-                // An error occurred
-                // ...
-                console.log(error.code)
-            });
-        } else {
-            setUserEmail("Must login to edit email")
-        }
+    const handleAccountSubmit = () => {
+      if (currentUser) {
+        updateAccount();
+      }
+    }
+
+    const updateAccount = async () => {
+      const updatedUser = await fetch(`http://localhost:3000/account/${currentUser?.uid}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+                              email: userEmail,
+                              intollerances: userIntollerances,
+                              diets: userDiets
+        })
+      })
+      if (!updatedUser.ok) {
+        throw new Error("Failed to update user");
+      }
+      const data = await updatedUser.json();
+      console.log(data);
+      return data;
     }
 
 
@@ -143,7 +151,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           userList={userDiets}
           handleButtonClick={handleDietClick}
         />
-        <button type="submit" onClick={handleAccountChanges}>Submit</button>
+        <button type="submit" onClick={handleAccountSubmit}>Submit</button>
       </div>
     </div>
   );
