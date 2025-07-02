@@ -31,7 +31,6 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       })
       .catch((error) => {
         setMessage(error.code);
-        console.log(error.code)
       });
   }
   return (

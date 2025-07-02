@@ -42,7 +42,6 @@ interface IngredientData {
 }
 
 interface RecipeRegistrationFormEvents {
-    // handleSubmit: (event: React.FormEvent) => void
     handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
@@ -55,7 +54,6 @@ interface AuthFormResultMessage {
 
 interface RecipeLoginFormEvents {
     handleSubmit: (event: React.FormEvent) => void
-    // handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
@@ -72,7 +70,4 @@ interface AuthFormResultMessage {
     text: string
 }
 
-
-
-// export type {RecipeToggleNavBar, RecipeAuthFormResult, RecipeNewUserFirebaseId, RecipeAuthFormData, RecipeIngredientData, RecipeAuthFormEvents}
 export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}

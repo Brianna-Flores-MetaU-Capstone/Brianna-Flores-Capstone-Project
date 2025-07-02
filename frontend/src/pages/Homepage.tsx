@@ -1,6 +1,5 @@
 import "../styles/Homepage.css";
 import type { RecipeToggleNavBar } from "../utils/types";
-// import { useNavigate } from "react-router";
 import { groceryList, ingredients } from "../utils/sampleData";
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
@@ -8,21 +7,9 @@ import GroceryPreview from "../components/GroceryPreview";
 import AppHeader from "../components/AppHeader";
 
 const Homepage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  // const navigate = useNavigate();
-
-  // const handleLoginClick = () => {
-  //   if (navOpen) {
-  //     toggleNav();
-  //   }
-  //   navigate("/login");
-  // };
-
   return (
     <div className="homepage-container">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      {/* <button className="login-button" onClick={handleLoginClick}>
-        Login
-      </button> */}
       <section className="quick-access-container">
         <NextRecipe />
         <IngredientsPreview ingredientsList={ingredients}/>

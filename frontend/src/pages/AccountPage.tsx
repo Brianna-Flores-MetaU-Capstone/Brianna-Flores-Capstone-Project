@@ -65,7 +65,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       setUserEmail(value);
     } else if (name === Authentication.PASSWORD) {
       setUserPassword(value);
-      console.log(userPassword)
     }
   };
 
@@ -73,8 +72,6 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     event.preventDefault()
     event.currentTarget.reset();
     if (!userPassword) {
-      console.log("TODO: Incoorporate error component after merging");
-      console.log("password required to continue");
       setMessage("auth/no-password");
       return;
     }

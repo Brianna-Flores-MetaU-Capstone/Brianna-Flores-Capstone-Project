@@ -43,8 +43,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
           setMealResults(parsedRecipes);
       }
 
-      // TODO: add fetched recipes to database
-      // helper method
+      // TODO: add fetched recipes to database helper method
     } catch (error) {
       console.error(error);
     }
