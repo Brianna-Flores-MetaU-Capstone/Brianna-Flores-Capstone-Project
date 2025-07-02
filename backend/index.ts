@@ -46,6 +46,32 @@ app.get('/account/:firebaseId', async (req: Request, res: Response) => {
   }
 })
 
+app.put('/account/:firebaseId', async (req: Request, res: Response) => {
+  if (!req.body.email || !req.body.intollerances || !req.body.diets) {
+    return res.status(400).send("Missing requirements");
+  }
+  const firebaseId = req.params.firebaseId;
+  const { email, intollerances, diets } = req.body
+  try {
+    const user = await checkUserExists(firebaseId)
+    if(!user) {
+      return res.status(404).send("User not found")
+    }
+
+    const updatedUser = await prisma.User.update({
+      where: {firebaseId: firebaseId},
+      data: {
+        email,
+        intollerances,
+        diets
+      }
+    })
+    res.json(updatedUser)
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the user")
+  }
+})
+
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.User.findUnique({
       where: {firebaseId: firebaseId}
