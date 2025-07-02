@@ -1,7 +1,7 @@
 import type { CurrentUserData } from "./types"
 import type { User } from "firebase/auth";
  
- const updateAccount = async ({user, userEmail, userIntollerances, userDiets}: CurrentUserData) => {
+ const updateAccount = async ({user, userEmail, userIntolerances, userDiets}: CurrentUserData) => {
     const updatedUser = await fetch(
       `http://localhost:3000/account/${user.uid}`,
       {
@@ -11,7 +11,7 @@ import type { User } from "firebase/auth";
         },
         body: JSON.stringify({
           email: userEmail,
-          intollerances: userIntollerances,
+          intolerances: userIntolerances,
           diets: userDiets,
         }),
       }
@@ -42,13 +42,10 @@ import type { User } from "firebase/auth";
         const userDataObj: CurrentUserData = {
             user, 
             userEmail: data.email, 
-            userIntollerances: data.intollerances, 
+            userIntolerances: data.intolerances, 
             userDiets: data.diets
         }
         return userDataObj
-        // setUserEmail(data.email);
-        // setUserIntollerances(data.intollerances);
-        // setUserDiets(data.diets);
       } catch (error) {
         console.error(error);
       }

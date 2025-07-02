@@ -7,7 +7,7 @@ import { validateInput, handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import RegistrationForm from "../components/RegistrationForm";
 import AppHeader from "../components/AppHeader";
-import { Intollerances } from "../utils/enum";
+import { Intolerances } from "../utils/enum";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
@@ -15,7 +15,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
-  // const [userIntollerances, setUserIntollerances] = useState<string[]>([])
+  // const [userIntolerances, setUserIntolerances] = useState<string[]>([])
   // const [userDiets, setUserDiets] = useState<string[]>([])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
 
 
   // function handleSubmit(event: React.FormEvent) {
-  function handleSubmit({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) {
+  function handleSubmit({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) {
     // event.preventDefault();
     const valid = validateInput(formData);
     if (valid.type === "error" && valid.text) {
@@ -43,7 +43,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         const newUser: RecipeUserAccountInfo = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
-          intollerances: userIntollerances,
+          intolerances: userIntolerances,
           diets: userDiets
         };
         handleNewUser(newUser);

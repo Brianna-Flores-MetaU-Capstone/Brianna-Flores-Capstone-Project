@@ -16,7 +16,7 @@ const Units = [
     "container/bag"
  ];
 
- const Intollerances = [
+ const Intolerances = [
     "Dairy",
     "Nuts",
     "Soy",
@@ -61,4 +61,7 @@ const Units = [
     'Bread',
  ]
 
-export { Units, Intollerances, Diets, Departments }
+ type Preference = "INTOLERANCES" | "DIETS"
+
+export type { Preference }
+export { Units, Intolerances, Diets, Departments }

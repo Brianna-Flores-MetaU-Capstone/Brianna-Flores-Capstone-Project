@@ -13,7 +13,7 @@ interface RecipeAuthFormResult {
 interface RecipeUserAccountInfo {
     firebaseId: string
     email: string
-    intollerances: string[]
+    intolerances: string[]
     diets: string[]
 }
 
@@ -35,14 +35,14 @@ interface RecipeIngredientData {
 // interface RecipeAuthFormEvents {
 interface RecipeRegistrationFormEvents {
     // handleSubmit: (event: React.FormEvent) => void
-    handleSubmit: ({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) => void
+    handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
 interface RecipeLoginFormEvents {
     handleSubmit: (event: React.FormEvent) => void
-    // handleSubmit: ({userIntollerances, userDiets}: {userIntollerances: string[], userDiets: string[]}) => void
+    // handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
@@ -50,7 +50,7 @@ interface RecipeLoginFormEvents {
 interface CurrentUserData {
     user: User
     userEmail: string,
-    userIntollerances: string[],
+    userIntolerances: string[],
     userDiets: string[]
 }
 

@@ -14,12 +14,12 @@ app.post('/signup', async (req: Request, res: Response) => {
     if (!req.body.firebaseId || !req.body.email) {
         return res.status(400).send("Id and email are required");
     }
-    const { firebaseId, email, intollerances, diets } = req.body
+    const { firebaseId, email, intolerances, diets } = req.body
     const newUser = await prisma.user.create({
         data: {
             firebaseId,
             email,
-            intollerances,
+            intolerances,
             diets,
         }
     })
@@ -47,11 +47,11 @@ app.get('/account/:firebaseId', async (req: Request, res: Response) => {
 })
 
 app.put('/account/:firebaseId', async (req: Request, res: Response) => {
-  if (!req.body.email || !req.body.intollerances || !req.body.diets) {
+  if (!req.body.email || !req.body.intolerances || !req.body.diets) {
     return res.status(400).send("Missing requirements");
   }
   const firebaseId = req.params.firebaseId;
-  const { email, intollerances, diets } = req.body
+  const { email, intolerances, diets } = req.body
   try {
     const user = await checkUserExists(firebaseId)
     if(!user) {
@@ -62,7 +62,7 @@ app.put('/account/:firebaseId', async (req: Request, res: Response) => {
       where: {firebaseId: firebaseId},
       data: {
         email,
-        intollerances,
+        intolerances,
         diets
       }
     })

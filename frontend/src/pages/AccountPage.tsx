@@ -2,7 +2,7 @@ import React from "react";
 import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import { Intollerances, Diets } from "../utils/enum";
+import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
@@ -17,9 +17,10 @@ import {
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
+import { PreferenceList, Authentication } from "../utils/constants";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  const [userIntollerances, setUserIntollerances] = useState<string[]>([]);
+  const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>()
   const [userEmail, setUserEmail] = useState<string>();
@@ -27,62 +28,50 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    // const user = auth.currentUser;
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("yay were signed in!", user);
         setCurrentUser(user);
-        // get the users data from database (email, intollerances, diets)
         setUserInfo(user);
         setLoadingData(false);
-      } else {
-        console.log("no one singed in so sad ;-;");
       }
     });
   }, []);
 
   const setUserInfo = async (user: User) => {
     const userData = await getUserData(user);
-    console.log("user data is", userData)
     if (userData) {
       setUserEmail(userData.userEmail);
-      setUserIntollerances(userData.userIntollerances);
+      setUserIntolerances(userData.userIntolerances);
       setUserDiets(userData.userDiets);
     }
   }
 
-  const handleIntolleranceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedIntollerance = event.currentTarget.value;
-    if (userIntollerances.includes(selectedIntollerance)) {
-      setUserIntollerances((prev) =>
-        prev.filter((intollerance) => intollerance !== selectedIntollerance)
+
+  const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { name, value } = event.currentTarget
+    const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
+    const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
+    if (userList.includes(value)) {
+      setterFunction((prev) =>
+        prev.filter((item) => item !== value)
       );
     } else {
-      setUserIntollerances((prev) => [...prev, selectedIntollerance]);
+      setterFunction((prev) => [...prev, value]);
     }
-  };
-
-  const handleDietClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedDiet = event.currentTarget.value;
-    if (userDiets.includes(selectedDiet)) {
-      setUserDiets((prev) => prev.filter((diet) => diet !== selectedDiet));
-    } else {
-      setUserDiets((prev) => [...prev, selectedDiet]);
-    }
-  };
+  }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    if (name === "email") {
+    if (name === Authentication.EMAIL) {
       setUserEmail(value);
-    } else if (name === "password") {
+    } else if (name === Authentication.PASSWORD) {
       setUserPassword(value);
     }
   };
 
   const handleAccountSubmit = () => {
     if (!userPassword) {
-      // TODO Incoorporate error state component
+      console.log("TODO: Incoorporate error component after merging");
       console.log("password required to continue");
       return;
     }
@@ -90,10 +79,7 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     if (user && user.email && userEmail) {
       try {
         // validate credentials to update account
-        const credential = EmailAuthProvider.credential(
-          user.email,
-          userPassword
-        );
+        const credential = EmailAuthProvider.credential(user.email, userPassword);
         // valdate credentials to update account
         reauthenticateWithCredential(user, credential)
           .then(() => {
@@ -101,23 +87,22 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
             if (user.email && userEmail && user.email !== userEmail) {
               // get credential by signing user in with email
               updateEmail(user, userEmail)
-                .then(() => {
-                  console.log("updated email");
-                })
                 .catch((error) => {
-                  console.log(error.code);
+                  console.log("TODO: Incoorporate error component after merging");
                   console.log("an error occurred when updating the email");
+                  console.log(error.code);
                 });
             }
             // then update account in database
-            updateAccount({user, userEmail, userIntollerances, userDiets});
+            updateAccount({user, userEmail, userIntolerances, userDiets});
           })
           .catch((error) => {
+            console.log("TODO: Incoorporate error component after merging");
             console.log("an error occurred during reauthentication");
             console.log(error.code);
           });
       } catch (error) {
-        console.log("oh no some error");
+        console.log("TODO: Incoorporate error component after merging");
       }
     }
   };
@@ -147,33 +132,19 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
         <div className="account-email">
           <h3>Email</h3>
           <input
-            name="email"
-            id="email"
+            name={Authentication.EMAIL}
+            id={Authentication.EMAIL}
             value={userEmail ? userEmail : ""}
             onChange={handleInputChange}
           />
         </div>
-        <h2>Selected Intollerances</h2>
-        <RegistrationPreferenceButtons
-          list={Intollerances}
-          userList={userIntollerances}
-          handleButtonClick={handleIntolleranceClick}
-        />
+        <h2>Selected Intolerances</h2>
+        <RegistrationPreferenceButtons listName="INTOLERANCES" listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
-        <RegistrationPreferenceButtons
-          list={Diets}
-          userList={userDiets}
-          handleButtonClick={handleDietClick}
-        />
+        <RegistrationPreferenceButtons listName="DIETS" listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
         <div className="confirm-password">
           <h3>Confirm Password</h3>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={handleInputChange}
-            required
-          />
+          <input type="password" name={Authentication.PASSWORD} id={Authentication.PASSWORD} onChange={handleInputChange} required/>
         </div>
         <button type="submit" onClick={handleAccountSubmit}>
           Submit
