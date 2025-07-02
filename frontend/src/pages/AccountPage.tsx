@@ -51,6 +51,8 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     const { name, value } = event.currentTarget
     const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
     const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
+    console.log("name is", name)
+    console.log("Preference list", PreferenceList.INTOLERANCES)
     if (userList.includes(value)) {
       setterFunction((prev) =>
         prev.filter((item) => item !== value)

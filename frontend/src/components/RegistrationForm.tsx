@@ -5,7 +5,7 @@ import type { RecipeRegistrationFormEvents } from '../utils/types'
 import { Intolerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
-import { Authentication } from '../utils/constants'
+import { PreferenceList, Authentication } from '../utils/constants'
 
 
 
@@ -15,8 +15,9 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
 
     const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const { name, value } = event.currentTarget
-        const setterFunction = name === "intolerances" ? setUserIntolerances : setUserDiets;
-        const userList = name === "intolerances" ? userIntolerances : userDiets;
+        console.log("name", name, "value", value)
+        const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
+        const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
         if (userList.includes(value)) {
             setterFunction((prev) =>
             prev.filter((item) => item !== value)
