@@ -1,5 +1,6 @@
 import React from 'react'
 import "../styles/LoginPage.css"
+import Button from '@mui/material/button'
 
 const RegistrationPreferenceButtons = ({listName, listItems, userList, handleButtonClick}: {listName: string, listItems: string[], userList: string[], handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void}) => {
     

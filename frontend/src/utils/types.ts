@@ -41,10 +41,10 @@ interface IngredientData {
     expirationDate?: string
 }
 
-interface RecipeRegistrationFormEvents {
+interface RecipeAuthFormEvents {
     handleRegistrationSubmit?: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleLoginSubmit?: (event: React.FormEvent) => void
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    handleAuthInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
@@ -60,9 +60,4 @@ interface CurrentUserData {
     userDiets: string[]
 }
 
-interface AuthFormResultMessage {
-    type: string
-    text: string
-}
-
-export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}
+export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}

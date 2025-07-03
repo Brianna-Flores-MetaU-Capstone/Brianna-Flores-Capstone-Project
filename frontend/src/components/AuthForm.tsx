@@ -1,6 +1,6 @@
 import React from 'react'
 import "../styles/LoginPage.css"
-import type { RecipeRegistrationFormEvents } from '../utils/types'
+import type { RecipeAuthFormEvents } from '../utils/types'
 import { Intolerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
@@ -8,7 +8,7 @@ import { PreferenceListCategory, AuthenticationFieldType } from '../utils/consta
 
 
 
-const RegistrationForm = ({handleRegistrationSubmit, handleLoginSubmit, handleInputChange, formData}: RecipeRegistrationFormEvents) => {
+const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputChange, formData}: RecipeAuthFormEvents) => {
     const [userIntolerances, setUserIntolerances] = useState<string[]>([])
     const [userDiets, setUserDiets] = useState<string[]>([])
 
@@ -43,18 +43,18 @@ const RegistrationForm = ({handleRegistrationSubmit, handleLoginSubmit, handleIn
             <input
               id={AuthenticationFieldType.EMAIL}
               type="text"
-              name={AuthenticationFieldType.EMAIL}
+              data-credential={AuthenticationFieldType.EMAIL}
               value={formData.email}
-              onChange={handleInputChange}
+              onChange={handleAuthInputChange}
               required
             />
             <label htmlFor={AuthenticationFieldType.PASSWORD}>Password</label>
             <input
               id={AuthenticationFieldType.PASSWORD}
               type="password"
-              name={AuthenticationFieldType.PASSWORD}
+              data-credential={AuthenticationFieldType.PASSWORD}
               value={formData.password}
-              onChange={handleInputChange}
+              onChange={handleAuthInputChange}
               required
             />
             {
@@ -71,4 +71,4 @@ const RegistrationForm = ({handleRegistrationSubmit, handleLoginSubmit, handleIn
     )
 }
 
-export default RegistrationForm;
+export default AuthForm;

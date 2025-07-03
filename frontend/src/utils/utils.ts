@@ -67,4 +67,10 @@ const handleNewUser = async (newUser: RecipeUserAccountInfo) => {
     }
   };
 
-export { validateInput, handleNewUser, parseRecipeData };
+  const handleAuthInputChange = (event: React.ChangeEvent<HTMLInputElement>, setFormData: React.Dispatch<React.SetStateAction<RecipeAuthFormData>>) => {
+    const credential = event.target.dataset.credential as keyof RecipeAuthFormData
+    const value = event.target.value;
+    setFormData((prev) => ({ ...prev, [credential]: value }));
+  };
+
+export { validateInput, handleNewUser, parseRecipeData, handleAuthInputChange };

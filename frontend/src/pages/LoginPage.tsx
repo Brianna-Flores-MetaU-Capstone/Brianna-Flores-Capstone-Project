@@ -7,7 +7,8 @@ import type { RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import "../styles/LoginPage.css";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
-import RegistrationForm from "../components/RegistrationForm";
+import AuthForm from "../components/AuthForm";
+import { handleAuthInputChange } from "../utils/utils";
 
 const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({
@@ -16,11 +17,6 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   });
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -37,7 +33,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-page">
         <div className="login-content">
-          <RegistrationForm handleLoginSubmit={handleSubmit} handleInputChange={handleInputChange} formData={formData} />
+          <AuthForm handleLoginSubmit={handleSubmit} handleAuthInputChange={(event) => handleAuthInputChange(event, setFormData)} formData={formData} />
           {message && (
             <ErrorState errorMessage={message} />
           )}
