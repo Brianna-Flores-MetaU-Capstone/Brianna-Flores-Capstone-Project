@@ -4,8 +4,9 @@ import type { RecipeAuthFormEvents } from '../utils/types'
 import { Intolerances, Diets } from '../utils/enum'
 import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
-import { PreferenceListCategory, AuthenticationFieldType } from '../utils/constants'
-
+import { PreferenceCategoryEnum, AuthenticationFieldEnum } from '../utils/constants'
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/button"
 
 
 const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputChange, formData}: RecipeAuthFormEvents) => {
@@ -14,8 +15,8 @@ const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputC
 
     const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const { category, selection } = (event.currentTarget as HTMLButtonElement).dataset
-        const setPreferenceList = category === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
-        const userList = category === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
+        const setPreferenceList = category === PreferenceCategoryEnum.INTOLERANCES ? setUserIntolerances : setUserDiets;
+        const userList = category === PreferenceCategoryEnum.INTOLERANCES ? userIntolerances : userDiets;
         if (selection) {
             if (userList.includes(selection)) {
                 setPreferenceList((prev) =>
@@ -39,34 +40,19 @@ const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputC
 
     return (
         <form className="login-info" onSubmit={onRegistrationSubmit}>
-            <label htmlFor={AuthenticationFieldType.EMAIL}>Email</label>
-            <input
-              id={AuthenticationFieldType.EMAIL}
-              type="text"
-              data-credential={AuthenticationFieldType.EMAIL}
-              value={formData.email}
-              onChange={handleAuthInputChange}
-              required
-            />
-            <label htmlFor={AuthenticationFieldType.PASSWORD}>Password</label>
-            <input
-              id={AuthenticationFieldType.PASSWORD}
-              type="password"
-              data-credential={AuthenticationFieldType.PASSWORD}
-              value={formData.password}
-              onChange={handleAuthInputChange}
-              required
-            />
+            <TextField required id={AuthenticationFieldEnum.EMAIL} type="text" value={formData.email} slotProps={{htmlInput: { 'data-credential': `${AuthenticationFieldEnum.EMAIL}`}}} onChange={handleAuthInputChange} label="Enter Email" variant="standard" />
+            <TextField required id={AuthenticationFieldEnum.PASSWORD} type="password" slotProps={{htmlInput: { 'data-credential': `${AuthenticationFieldEnum.PASSWORD}`}}} value={formData.password} onChange={handleAuthInputChange} label="Enter Password" variant="standard" />
             {
                 handleRegistrationSubmit && 
                 <div>
                     <label htmlFor="intolerances">Intolerances</label>
-                    <RegistrationPreferenceButtons listName={PreferenceListCategory.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+                    <RegistrationPreferenceButtons listName={PreferenceCategoryEnum.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
                     <label>Diets</label>
-                    <RegistrationPreferenceButtons listName={PreferenceListCategory.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
+                    <RegistrationPreferenceButtons listName={PreferenceCategoryEnum.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
                 </div>
             }
-            <button className="submit-auth" type="submit">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</button>
+            {/* <button className="submit-auth" type="submit">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</button> */}
+            <Button className="submit-auth" type="submit" variant="outlined">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</Button>
           </form>
     )
 }

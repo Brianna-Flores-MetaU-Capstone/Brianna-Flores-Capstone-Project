@@ -1,11 +1,14 @@
-const PreferenceListCategory = {
+const PreferenceCategoryEnum = {
   INTOLERANCES: "INTOLERANCES",
   DIETS: "DIETS"
 }
 
-const AuthenticationFieldType = {
+const AuthenticationFieldEnum = {
     EMAIL: "email",
     PASSWORD: "password"
 }
 
-export {PreferenceListCategory, AuthenticationFieldType}
+const GROUP_OF_DISPLAYED_CARDS = 3;
+const TOTAL_SEARCH_REQUESTS = 6;
+
+export {PreferenceCategoryEnum, AuthenticationFieldEnum, GROUP_OF_DISPLAYED_CARDS, TOTAL_SEARCH_REQUESTS}

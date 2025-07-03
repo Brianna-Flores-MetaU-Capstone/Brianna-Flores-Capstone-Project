@@ -10,9 +10,10 @@ import { auth } from "../utils/firebase";
 import { onAuthStateChanged, EmailAuthProvider, updateEmail, reauthenticateWithCredential } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
-import { PreferenceListCategory, AuthenticationFieldType } from "../utils/constants";
+import { PreferenceCategoryEnum, AuthenticationFieldEnum } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
+import TextField from "@mui/material/TextField";
 
 const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -48,8 +49,8 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
 
   const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       const { category, selection } = (event.currentTarget as HTMLButtonElement).dataset
-      const setPreferenceList = category === PreferenceListCategory.INTOLERANCES ? setUserIntolerances : setUserDiets;
-      const userList = category === PreferenceListCategory.INTOLERANCES ? userIntolerances : userDiets;
+      const setPreferenceList = category === PreferenceCategoryEnum.INTOLERANCES ? setUserIntolerances : setUserDiets;
+      const userList = category === PreferenceCategoryEnum.INTOLERANCES ? userIntolerances : userDiets;
       if (selection) {
           if (userList.includes(selection)) {
               setPreferenceList((prev) =>
@@ -64,9 +65,9 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { credential } = (event.target as HTMLInputElement).dataset
     const { value } = event.target;
-    if (credential === AuthenticationFieldType.EMAIL) {
+    if (credential === AuthenticationFieldEnum.EMAIL) {
       setUserEmail(value);
-    } else if (credential === AuthenticationFieldType.PASSWORD) {
+    } else if (credential === AuthenticationFieldEnum.PASSWORD) {
       setUserPassword(value);
     }
   };
@@ -123,18 +124,12 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">
-          <h3>Email</h3>
-          <input
-            data-credential={AuthenticationFieldType.EMAIL}
-            id={AuthenticationFieldType.EMAIL}
-            value={userEmail ? userEmail : ""}
-            onChange={handleInputChange}
-          />
+          <TextField required id={AuthenticationFieldEnum.EMAIL} slotProps={{htmlInput: { 'data-credential': `${AuthenticationFieldEnum.EMAIL}`}}} onChange={handleInputChange} value={userEmail ? userEmail : ""} label="Email" variant="standard" />
         </div>
         <h2>Selected Intolerances</h2>
-        <RegistrationPreferenceButtons listName={PreferenceListCategory.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceCategoryEnum.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
         <h2>Selected Diets</h2>
-        <RegistrationPreferenceButtons listName={PreferenceListCategory.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons listName={PreferenceCategoryEnum.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
         <AuthenticatePassword handleAccountSubmit={handleAccountSubmit} handleInputChange={handleInputChange} />
         { message && <ErrorState errorMessage={message} /> }
       </div>

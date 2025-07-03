@@ -2,13 +2,12 @@ import React from "react";
 import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
-
+import TextField from "@mui/material/TextField";
 import type { RecipeData, UserRequestFormData } from "../utils/types";
 import { parseRecipeData } from "../utils/utils";
+import { GROUP_OF_DISPLAYED_CARDS, TOTAL_SEARCH_REQUESTS } from "../utils/constants";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
-const GROUP_OF_DISPLAYED_CARDS = 3;
-const TOTAL_SEARCH_REQUESTS = 6;
 
 interface AddAnotherMealTypes {
     handleModalClose: () => void
@@ -109,22 +108,8 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
         </button>
         <button>I Have My Own Recipe</button>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
-          <label htmlFor="recipe">Recipe</label>
-          <input
-            type="text"
-            data-reciperequest="recipe"
-            value={mealRequest.recipeName}
-            onChange={handleInputChange}
-            required
-          />
-          <label htmlFor="days">Days to Eat</label>
-          <input
-            type="text"
-            data-reciperequest="days"
-            value={mealRequest.servings}
-            onChange={handleInputChange}
-            required
-          />
+          <TextField required slotProps={{htmlInput: { "data-reciperequest": "recipeName"}}} onChange={handleInputChange} value={mealRequest.recipeName} label="Recipe" variant="standard" />
+          <TextField required slotProps={{htmlInput: { "data-reciperequest": "servings"}}} onChange={handleInputChange} value={mealRequest.servings} label="Servings" variant="standard" />
           <button>Find Some Recipes!</button>
         </form>
 
