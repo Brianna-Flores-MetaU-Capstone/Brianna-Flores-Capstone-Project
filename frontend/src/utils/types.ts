@@ -42,20 +42,15 @@ interface IngredientData {
 }
 
 interface RecipeRegistrationFormEvents {
-    handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    handleRegistrationSubmit?: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
+    handleLoginSubmit?: (event: React.FormEvent) => void
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     formData: RecipeAuthFormData
 }
 
 interface AuthFormResultMessage {
     type: string
     text: string
-}
-
-interface RecipeLoginFormEvents {
-    handleSubmit: (event: React.FormEvent) => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    formData: RecipeAuthFormData
 }
 
 interface CurrentUserData {
@@ -70,4 +65,4 @@ interface AuthFormResultMessage {
     text: string
 }
 
-export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}
+export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}

@@ -8,7 +8,7 @@ import { PreferenceListCategory, AuthenticationFieldType } from '../utils/consta
 
 
 
-const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistrationFormEvents) => {
+const RegistrationForm = ({handleRegistrationSubmit, handleLoginSubmit, handleInputChange, formData}: RecipeRegistrationFormEvents) => {
     const [userIntolerances, setUserIntolerances] = useState<string[]>([])
     const [userDiets, setUserDiets] = useState<string[]>([])
 
@@ -29,7 +29,11 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
 
     const onRegistrationSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleSubmit({userIntolerances, userDiets});
+        if (handleRegistrationSubmit) {
+            handleRegistrationSubmit({userIntolerances, userDiets});
+        } else if (handleLoginSubmit) {
+            handleLoginSubmit(event)
+        }
     }
 
 
@@ -41,7 +45,7 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
               type="text"
               name={AuthenticationFieldType.EMAIL}
               value={formData.email}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
             <label htmlFor={AuthenticationFieldType.PASSWORD}>Password</label>
@@ -50,14 +54,19 @@ const RegistrationForm = ({handleSubmit, handleChange, formData}: RecipeRegistra
               type="password"
               name={AuthenticationFieldType.PASSWORD}
               value={formData.password}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
-            <label htmlFor="intolerances">Intolerances</label>
-            <RegistrationPreferenceButtons listName={PreferenceListCategory.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
-            <label>Diets</label>
-            <RegistrationPreferenceButtons listName={PreferenceListCategory.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
-            <button className="submit-auth" type="submit">Sign Up!</button>
+            {
+                handleRegistrationSubmit && 
+                <div>
+                    <label htmlFor="intolerances">Intolerances</label>
+                    <RegistrationPreferenceButtons listName={PreferenceListCategory.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+                    <label>Diets</label>
+                    <RegistrationPreferenceButtons listName={PreferenceListCategory.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
+                </div>
+            }
+            <button className="submit-auth" type="submit">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</button>
           </form>
     )
 }

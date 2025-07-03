@@ -5,9 +5,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
 import type { RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
 import "../styles/LoginPage.css";
-import LoginForm from "../components/LoginForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
+import RegistrationForm from "../components/RegistrationForm";
 
 const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({
@@ -17,7 +17,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -37,7 +37,7 @@ const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-page">
         <div className="login-content">
-          <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+          <RegistrationForm handleLoginSubmit={handleSubmit} handleInputChange={handleInputChange} formData={formData} />
           {message && (
             <ErrorState errorMessage={message} />
           )}

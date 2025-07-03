@@ -15,7 +15,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -44,7 +44,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     <div className="login-page signup-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="login-content">
-         <RegistrationForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+         <RegistrationForm handleRegistrationSubmit={handleSubmit} handleInputChange={handleInputChange} formData={formData}/>
         {message && !success && <ErrorState errorMessage={message} />}
         {success && (
           <button className="submit-auth" onClick={() => navigate("/login")}>Take me to login!</button>
