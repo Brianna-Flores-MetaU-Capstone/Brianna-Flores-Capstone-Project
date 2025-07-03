@@ -6,7 +6,8 @@ import { useState } from 'react'
 import RegistrationPreferenceButtons from './RegistrationPreferenceButtons'
 import { PreferenceCategoryEnum, AuthenticationFieldEnum } from '../utils/constants'
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/button"
+import Button from '@mui/material/Button'
+import SharedInput from './SharedInput'
 
 
 const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputChange, formData}: RecipeAuthFormEvents) => {
@@ -40,6 +41,7 @@ const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputC
 
     return (
         <form className="login-info" onSubmit={onRegistrationSubmit}>
+            {/* <SharedInput inputLabel="Enter Email" inputType="text" fieldData={AuthenticationFieldEnum.EMAIL} inputValue={formData.email} handleInputChange={handleAuthInputChange} /> */}
             <TextField required id={AuthenticationFieldEnum.EMAIL} type="text" value={formData.email} slotProps={{htmlInput: { 'data-credential': `${AuthenticationFieldEnum.EMAIL}`}}} onChange={handleAuthInputChange} label="Enter Email" variant="standard" />
             <TextField required id={AuthenticationFieldEnum.PASSWORD} type="password" slotProps={{htmlInput: { 'data-credential': `${AuthenticationFieldEnum.PASSWORD}`}}} value={formData.password} onChange={handleAuthInputChange} label="Enter Password" variant="standard" />
             {
@@ -51,7 +53,6 @@ const AuthForm = ({handleRegistrationSubmit, handleLoginSubmit, handleAuthInputC
                     <RegistrationPreferenceButtons listName={PreferenceCategoryEnum.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick} />
                 </div>
             }
-            {/* <button className="submit-auth" type="submit">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</button> */}
             <Button className="submit-auth" type="submit" variant="outlined">{handleRegistrationSubmit ? "Sign Up!" : "Login!"}</Button>
           </form>
     )

@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import type { RecipeData, UserRequestFormData } from "../utils/types";
 import { parseRecipeData } from "../utils/utils";
 import { GROUP_OF_DISPLAYED_CARDS, TOTAL_SEARCH_REQUESTS } from "../utils/constants";
+// import SharedInput from "./SharedInput";
+import Button from "@mui/material/Button";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -19,6 +21,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
   const [mealResults, setMealResults] = useState<RecipeData[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reciperequest = event.target.dataset.reciperequest as keyof UserRequestFormData
@@ -29,6 +32,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
   // fetch recipes from API dependent on user input
   const fetchSearchRecipes = async ({ numToRequest, offset }: { numToRequest: number, offset: number }) => {
     try {
+      setLoading(true);
       const response = await fetch(
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
       );
@@ -42,7 +46,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
       } else {
           setMealResults(parsedRecipes);
       }
-
+      setLoading(false)
       // TODO: add fetched recipes to database helper method
     } catch (error) {
       console.error(error);
@@ -52,6 +56,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
   const fetchRandomRecipes = async () => {
     // TODO take into account user ingredients
     try {
+      setLoading(true);
       const response = await fetch(
         `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2`
       );
@@ -61,7 +66,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
       const data = await response.json();
       // array of recipes
       setMealResults(data);
-
+      setLoading(false);
       // TODO: check if recipes are in database (according to id), otherwise add to database
       // helper method (due to repeated code)
     } catch (error) {
@@ -103,14 +108,14 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
         <button className="modal-close" onClick={handleModalClose}>
           &times;
         </button>
-        <button onClick={() => fetchRandomRecipes()}>
-          Need Some Inspiration?
-        </button>
-        <button>I Have My Own Recipe</button>
+        <Button loading={loading} onClick={fetchRandomRecipes}>Need Some Inspiration?</Button>
+        <Button>I Have My Own Recipe</Button>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
+          {/* <SharedInput inputLabel="Recipe" inputType="text" fieldData="recipeName" handleInputChange={handleInputChange}/>
+          <SharedInput inputLabel="Servings" inputType="text" fieldData="servings" handleInputChange={handleInputChange}/> */}
           <TextField required slotProps={{htmlInput: { "data-reciperequest": "recipeName"}}} onChange={handleInputChange} value={mealRequest.recipeName} label="Recipe" variant="standard" />
           <TextField required slotProps={{htmlInput: { "data-reciperequest": "servings"}}} onChange={handleInputChange} value={mealRequest.servings} label="Servings" variant="standard" />
-          <button>Find Some Recipes!</button>
+          <Button type="submit" loading={loading} variant="outlined" loadingPosition="start">Find some Recipes!</Button>
         </form>
 
         <section className="result-cards">
@@ -125,9 +130,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
 
         {/* if search clicked, add a generate more button */}
         {searchClicked && (
-          <button onClick={handleGenerateMore}>
-            Generate More!
-          </button>
+          <Button onClick={handleGenerateMore}>Generate More!</Button>
         )}
       </div>
     </section>

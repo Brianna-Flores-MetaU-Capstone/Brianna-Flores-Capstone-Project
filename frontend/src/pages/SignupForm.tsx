@@ -9,6 +9,7 @@ import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
+import Button from "@mui/material/Button";
 
 const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
@@ -43,7 +44,7 @@ const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
          <AuthForm handleRegistrationSubmit={handleSubmit} handleAuthInputChange={(event) => handleAuthInputChange(event, setFormData)} formData={formData}/>
         {message && !success && <ErrorState errorMessage={message} />}
         {success && (
-          <button className="submit-auth" onClick={() => navigate("/login")}>Take me to login!</button>
+          <Button className="submit-auth" onClick={() => navigate("/login")}>Take me to login!</Button>
         )}
       </section>
     </div>

@@ -7,6 +7,7 @@ import { useState } from 'react'
 import IngredientModal from '../components/IngredientModal';
 import { departments } from "../utils/sampleData"
 import SearchBar from '../components/SearchBar';
+import Button from '@mui/material/Button';
 
 const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
     const [editGroceryItemData, setEditGroceryItemData] = useState<IngredientData>()
@@ -27,8 +28,8 @@ const GroceryList = ( {navOpen, toggleNav} : RecipeToggleNavBar) => {
             <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
             <div className="grocery-list-container">
                 <SearchBar />
-                <button className="add-button" onClick={handleAddGrocery}>Add Item</button>
-                <button className="add-button" onClick={handleAddGrocery}>Clear Purchased Items</button>
+                <Button className="add-button" onClick={handleAddGrocery}>Add Item</Button>
+                <Button className="add-button" onClick={handleAddGrocery}>Clear Purchased Items</Button>
                 
                 <div className="grocery-departments">
                     {

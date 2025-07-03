@@ -5,6 +5,7 @@ import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
+import Button from "@mui/material/Button";
 
 const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [addAnotherMealOpen, setAddAnotherMealOpen] = useState(false);
@@ -29,8 +30,8 @@ const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           }
       </section>
       <section>
-        <button onClick={() => setAddAnotherMealOpen((prev) => !prev)}>Add Another Meal!</button>
-        <button>Make My List</button>
+        <Button onClick={() => setAddAnotherMealOpen((prev) => !prev)}>Add Another Meal!</Button>
+        <Button>Make My List</Button>
       </section>
       {addAnotherMealOpen && <AddAnotherMealModal handleModalClose={() => setAddAnotherMealOpen((prev) => !prev)} onSelectRecipe={handleSelectRecipe}/>}
       {mealInfoModalOpen && (

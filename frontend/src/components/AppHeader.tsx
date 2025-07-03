@@ -8,6 +8,7 @@ import { auth } from "../utils/firebase"
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 import "../styles/Homepage.css"
+import Button from "@mui/material/Button";
 
 const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
   const navigate = useNavigate();
@@ -33,8 +34,8 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
       {/* TODO make a better name */}
       <h1>Grocery Buddy</h1>
       <div className="auth-access-buttons">
-        <button className="login-button" onClick={handleLogout}>Logout</button>
-        <button className="login-button" onClick={handleLogin}>Login</button>
+        <Button onClick={handleLogout}>Logout</Button>
+        <Button onClick={handleLogin}>Login</Button>
       </div>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />
     </section>

@@ -7,6 +7,7 @@ import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
 import IngredientModal from "../components/IngredientModal";
 import type { IngredientData } from "../utils/types";
+import Button from "@mui/material/Button";
 
 const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false)
@@ -26,7 +27,7 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     <div className="ingredients-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="ingredient-page-container">
-        <button className="add-button" onClick={addIngredientClick}>Add Ingredient</button>
+        <Button className="add-button" onClick={addIngredientClick}>Add Ingredient</Button>
         <div className="ingredient-columns">
           <h3>Ingredient</h3>
           <h3>Quantity</h3>

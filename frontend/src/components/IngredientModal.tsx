@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import type { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import Button from '@mui/material/Button'
 
 const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: IngredientData, onClose: () => void}) => {
     const [newIngredientData, setNewIngredientData] = useState<IngredientData>(ingredientData ?? {
@@ -51,7 +53,7 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                     </div>
                     { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
                     { modalFor === "ingredients-page" && <input type="date" data-ingredientfield="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
-                    <label htmlFor="ingredient-department">Department</label>
+                    <InputLabel>Select a Department</InputLabel>
                     <Select id="department" name="department" value={newIngredientData?.department} onChange={handleSelectChange} label="Department">
                         {
                             Departments.map((department) => (
@@ -59,7 +61,7 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                             ))
                         }
                     </Select>
-                    {ingredientData? <button type="submit" className="add-button">Edit Ingredient!</button>: <button type="submit" className="add-button">Add Ingredient!</button>}
+                    <Button type="submit" className="add-button">{ingredientData? "Edit Ingredient!": "Add Ingredient!"}</Button>
                 </form>
             </div>
         </div>
