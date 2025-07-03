@@ -60,4 +60,9 @@ interface CurrentUserData {
     userDiets: string[]
 }
 
-export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}
+interface UserRequestFormData {
+    recipeName: string
+    servings: string
+}
+
+export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage, UserRequestFormData }

@@ -16,8 +16,9 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
     })
     
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = event.target;
-        setNewIngredientData((prev) => ({ ...prev, [name]: value }));
+        const ingredientfield = event.target.dataset.ingredientfield as keyof IngredientData
+        const value = event.target.value;
+        setNewIngredientData((prev) => ({ ...prev, [ingredientfield]: value }));
     };
 
     return (
@@ -26,11 +27,11 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                 <button className='modal-close' onClick={onClose}>&times;</button>
                 <form className="ingredient-form">
                     <label htmlFor="ingredient-name">Ingredient Name</label>
-                    <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/>
+                    <input data-ingredientfield="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/>
                     <label htmlFor="ingredient-quantity">{modalFor === "ingredients-page" ? "Quantity on Hand" : "Quantity"}</label>
                     <div className='ingredient-quantity'>
-                        <input type="number" name="quantity" id="ingredient-quantity" value={newIngredientData?.quantity} onChange={handleInputChange} required/>
-                        <select name="unit" value={newIngredientData?.unit} onChange={handleInputChange} required>
+                        <input type="number" data-ingredientfield="quantity" id="ingredient-quantity" value={newIngredientData?.quantity} onChange={handleInputChange} required/>
+                        <select data-ingredientfield="unit" value={newIngredientData?.unit} onChange={handleInputChange} required>
                             {
                                 Units.map((unit) => (
                                     <option key={unit} value={unit}>{unit}</option>
@@ -39,13 +40,13 @@ const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string,
                         </select>
                     </div>
                     { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
-                    { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
+                    { modalFor === "ingredients-page" && <input type="date" data-ingredientfield="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
                     <label htmlFor="ingredient-department">Department</label>
-                    <select name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange}>
+                    <select data-ingredientfield="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange}>
                         {
                             Departments.map((department: string) => {
                                 return (
-                                    <option>{department}</option>
+                                    <option key={department}>{department}</option>
                                 )
                             })
                         }

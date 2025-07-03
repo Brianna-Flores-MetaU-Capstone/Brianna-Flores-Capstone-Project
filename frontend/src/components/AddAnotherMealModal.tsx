@@ -3,7 +3,7 @@ import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
 
-import type { RecipeData } from "../utils/types";
+import type { RecipeData, UserRequestFormData } from "../utils/types";
 import { parseRecipeData } from "../utils/utils";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -16,21 +16,22 @@ interface AddAnotherMealTypes {
 }
 
 const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealTypes) => {
-  const [mealRequest, setMealRequest] = useState({ recipe: "", days: "" });
+  const [mealRequest, setMealRequest] = useState<UserRequestFormData>({ recipeName: "", servings: "" });
   const [mealResults, setMealResults] = useState<RecipeData[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setMealRequest((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const reciperequest = event.target.dataset.reciperequest as keyof UserRequestFormData
+    const value = event.target.value
+    setMealRequest((prev) => ({ ...prev, [reciperequest]: value }));
   };
 
   // fetch recipes from API dependent on user input
   const fetchSearchRecipes = async ({ numToRequest, offset }: { numToRequest: number, offset: number }) => {
     try {
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipe}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch searched recipes");
@@ -111,17 +112,17 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
           <label htmlFor="recipe">Recipe</label>
           <input
             type="text"
-            name="recipe"
-            value={mealRequest.recipe}
-            onChange={handleChange}
+            data-reciperequest="recipe"
+            value={mealRequest.recipeName}
+            onChange={handleInputChange}
             required
           />
           <label htmlFor="days">Days to Eat</label>
           <input
             type="text"
-            name="days"
-            value={mealRequest.days}
-            onChange={handleChange}
+            data-reciperequest="days"
+            value={mealRequest.servings}
+            onChange={handleInputChange}
             required
           />
           <button>Find Some Recipes!</button>
