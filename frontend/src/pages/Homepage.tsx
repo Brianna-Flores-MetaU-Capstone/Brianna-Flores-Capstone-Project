@@ -2,9 +2,9 @@ import "../styles/Homepage.css";
 import type { GPToggleNavBarProps } from "../utils/types";
 import { groceryList, ingredients } from "../utils/sampleData";
 import NextRecipe from "../components/NextRecipe";
-import IngredientsPreview from "../components/IngredientsPreview";
-import GroceryPreview from "../components/GroceryPreview";
 import AppHeader from "../components/AppHeader";
+import GenericList from "../components/GenericList";
+import { preview } from "../utils/constants";
 
 const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
@@ -12,8 +12,16 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section className="quick-access-container">
         <NextRecipe />
-        <IngredientsPreview ingredientsList={ingredients} />
-        <GroceryPreview groceryList={groceryList} />
+        <GenericList titles={[preview.INGREDIENT]} list={ingredients} listConfig={() => ({
+          groceryCheck: false,
+          presentExpiration: false,
+          presentButtons: false
+        })}/>
+        <GenericList titles={[preview.GROCERY]} list={ingredients} listConfig={() => ({
+          groceryCheck: true,
+          presentExpiration: false,
+          presentButtons: false
+        })}/>
       </section>
       <section className="upcoming-meals">
         <h3>Upcoming Meals</h3>

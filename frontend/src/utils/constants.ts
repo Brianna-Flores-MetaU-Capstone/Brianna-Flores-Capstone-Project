@@ -23,10 +23,16 @@ const TOTAL_SEARCH_REQUESTS = 6;
 const INGREDIENT_MODAL = "ingredients-page";
 const GROCERY_MODAL = "grocery-page";
 
+const preview = {
+    GROCERY: "Grocery List",
+    INGREDIENT: "Ingredients on Hand"
+}
+
 export {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
   ingredientDataFields,
+  preview,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
   INGREDIENT_MODAL,

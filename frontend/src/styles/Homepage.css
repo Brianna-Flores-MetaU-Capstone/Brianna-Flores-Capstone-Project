@@ -59,8 +59,7 @@
   margin: 2% 0;
 }
 
-.ingredient-preview,
-.grocery-preview,
+.quick-access-container .item-list,
 .next-recipe {
   flex: 1;
   height: auto;
@@ -82,15 +81,13 @@
   background-color: #f7f2ef;
 }
 
-.grocery-preview,
-.ingredient-preview,
+.quick-access-container .item-list,
 .next-recipe {
   border: 2px solid black;
   width: 30%;
 }
 
-.grocery-preview h3,
-.ingredient-preview h3 {
+.quick-access-container .item-list h3 {
   background-color: #c9e4de;
   margin: 0;
   padding: 5%;

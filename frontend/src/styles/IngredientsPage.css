@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.ingredient-columns {
+.ingredients-page .ingredient-columns {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 0.2fr;
   border: 3px solid black;

@@ -164,7 +164,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             id={ingredientDataFields.DEPARTMENT}
             name={ingredientDataFields.DEPARTMENT}
             value={newIngredientData?.department}
-            // onChange={handleSelectChange}
             onChange={(event) =>
               dispatch({
                 type: actions.SET_INPUT,

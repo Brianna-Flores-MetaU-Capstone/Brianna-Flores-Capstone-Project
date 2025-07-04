@@ -11,6 +11,7 @@ import type {
 } from "../utils/types";
 import Button from "@mui/material/Button";
 import { INGREDIENT_MODAL } from "../utils/constants";
+import GenericList from "../components/GenericList";
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   navOpen,
@@ -41,26 +42,15 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
         >
           Add Ingredient
         </Button>
-        <div className="ingredient-columns">
-          <h3>Ingredient</h3>
-          <h3>Quantity</h3>
-          <h3>Expiration</h3>
-          <div></div>
-        </div>
-        <div className="ingredients-page-list">
-          {ingredients.map((ingredient) => {
-            return (
-              <Ingredient
-                key={uuidv4()}
-                ingredient={ingredient}
-                groceryCheck={false}
-                presentExpiration={true}
-                presentButtons={true}
-                onEdit={handleEditClick}
-              />
-            );
-          })}
-        </div>
+        <GenericList
+          titles={["Ingredient", "Quantity", 'Expiration']}
+          list={ingredients} 
+          listConfig={() => ({
+            groceryCheck: false,
+            presentExpiration: true,
+            presentButtons: true,
+            onEdit: handleEditClick
+          })}/>
       </section>
       {addIngredientModalOpen && (
         <IngredientModal
