@@ -44,8 +44,8 @@ const GroceryList: React.FC<RecipeToggleNavBarProps> = ( {navOpen, toggleNav}) =
                 <h3>Estimated Cost</h3>
                 <h3>$x.xx</h3>
             </div>
-            {addGroceryItemModalOpen && <IngredientModal modalFor={GROCERY_MODAL} onClose={handleAddGrocery}/>}
-            {editGroceryItemModalOpen && <IngredientModal modalFor={GROCERY_MODAL} ingredientData={editGroceryItemData} onClose={() => setEditGroceryItemModalOpen((prev) => !prev)} />}
+            {addGroceryItemModalOpen && <IngredientModal modalFor={GROCERY_MODAL} onClose={handleAddGrocery} modalOpen={addGroceryItemModalOpen}/>}
+            {editGroceryItemModalOpen && <IngredientModal modalFor={GROCERY_MODAL} ingredientData={editGroceryItemData} onClose={() => setEditGroceryItemModalOpen((prev) => !prev)} modalOpen={editGroceryItemModalOpen}/>}
         </div>
     )
 }

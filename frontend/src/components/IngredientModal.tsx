@@ -10,8 +10,17 @@ import type { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import Button from '@mui/material/Button'
 import { ingredientDataFields, INGREDIENT_MODAL } from '../utils/constants'
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import {modalStyle} from "../utils/utils"
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import dayjs, { Dayjs } from 'dayjs'
+import type { PickerValue } from '@mui/x-date-pickers/internals'
 
-const IngredientModal: React.FC<UniversalIngredientModalProps> = ({modalFor, ingredientData, onClose}) => {
+
+const IngredientModal: React.FC<UniversalIngredientModalProps> = ({modalFor, ingredientData, onClose, modalOpen}) => {
     const [newIngredientData, setNewIngredientData] = useState<IngredientData>(ingredientData ?? {
         department: "",
         image: "",
@@ -34,24 +43,33 @@ const IngredientModal: React.FC<UniversalIngredientModalProps> = ({modalFor, ing
         setNewIngredientData((prev) => ({ ...prev, [ingredientfield]: value }));
     };
 
+    const handleDateChange = (newDate: PickerValue) => {
+        setNewIngredientData((prev) => ({
+            ...prev,
+            expirationDate: newDate?.format('YYYY-MM-DD') ?? undefined,
+        }))
+    }
+
     return (
-        <div className="modal" id="ingredient-modal">
-            <div className="modal-content">
-                <button className='modal-close' onClick={onClose}>&times;</button>
+        <Modal open={modalOpen} onClose={onClose}>
+            <Box sx={modalStyle}>
                 <form className="ingredient-form">
                     <TextField required id="ingredient-name" name={ingredientDataFields.NAME} slotProps={{htmlInput: { "data-ingredientfield": "name"}}} onChange={handleInputChange} value={newIngredientData?.name} label="Ingredient Name" variant="standard" />
-                    <div className='ingredient-quantity'>
-                        <TextField required id="ingredient-quantity" name={ingredientDataFields.QUANTITY} slotProps={{htmlInput: { "data-ingredientfield": "quantity"}}} onChange={handleInputChange} value={newIngredientData?.quantity} label="Quantity" variant="standard" />
-                        <Select id="unit" name={ingredientDataFields.UNIT} value={newIngredientData?.unit} onChange={handleSelectChange} label="unit">
+                    <Box display="flex" width="100%">
+                        <TextField required id="ingredient-quantity" name={ingredientDataFields.QUANTITY} slotProps={{htmlInput: { "data-ingredientfield": "quantity"}}} onChange={handleInputChange} value={newIngredientData?.quantity} fullWidth label="Quantity" variant="standard" />
+                        <Select id="unit" name={ingredientDataFields.UNIT} value={newIngredientData?.unit} onChange={handleSelectChange} autoWidth label="unit">
                             {
                                 Units.map((unit) => (
                                     <MenuItem key={unit} value={unit}>{unit}</MenuItem>
                                 ))
                             }
                         </Select>
-                    </div>
-                    { modalFor === INGREDIENT_MODAL && <label htmlFor="ingredient-expiration">Expiration Date</label> }
-                    { modalFor === INGREDIENT_MODAL && <input name={ingredientDataFields.EXPIRATION_DATE} type="date" data-ingredientfield="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
+                    </Box>
+                    { modalFor === INGREDIENT_MODAL && 
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker name={ingredientDataFields.EXPIRATION_DATE} label="Expiration Date" value={newIngredientData?.expirationDate ? dayjs(newIngredientData?.expirationDate) : null} onChange={handleDateChange} />
+                        </LocalizationProvider>
+                    }
                     <InputLabel>Select a Department</InputLabel>
                     <Select id={ingredientDataFields.DEPARTMENT} name={ingredientDataFields.DEPARTMENT} value={newIngredientData?.department} onChange={handleSelectChange} label="Department">
                         {
@@ -62,8 +80,8 @@ const IngredientModal: React.FC<UniversalIngredientModalProps> = ({modalFor, ing
                     </Select>
                     <Button type="submit" className="add-button">{ingredientData? "Edit Ingredient!": "Add Ingredient!"}</Button>
                 </form>
-            </div>
-        </div>
+            </Box>
+        </Modal>
     )
 }
 

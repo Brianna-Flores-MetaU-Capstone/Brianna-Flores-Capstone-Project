@@ -39,7 +39,6 @@
     border-radius: 1vh;
     padding: 1.5vh;
     transition: transform 0.5s ease;
-    margin-bottom: 1vh;
 }
 
 .add-button:hover {
@@ -51,37 +50,6 @@
 .ingredients-page-list {
     overflow-y: auto;
     max-height: 65vh;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background-color: #faf5f6;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 60%;
-  max-height: 500px;
-  position: relative;
-  overflow-y: scroll;
-}
-
-.modal-close {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 3vh;
 }
 
 .ingredient-form {
@@ -118,8 +86,5 @@
     width: 100%;
 }
 
-.ingredient-quantity input {
-    flex: 1;
-}
 
 

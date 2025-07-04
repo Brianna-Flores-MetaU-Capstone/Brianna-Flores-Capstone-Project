@@ -68,6 +68,7 @@ interface UserRequestFormData {
 interface AddAnotherMealProps {
     handleModalClose: () => void
     onSelectRecipe: (data: RecipeData) => void
+    modalOpen: boolean
 }
 
 interface PasswordAuthenticationProps {
@@ -92,6 +93,7 @@ interface UniversalIngredientModalProps {
     modalFor: string
     ingredientData?: IngredientData
     onClose: () => void
+    modalOpen: boolean
 }
 
 export type {RecipeToggleNavBarProps, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEventProps, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage, UserRequestFormData, AddAnotherMealProps, PasswordAuthenticationProps, GroceryListDepartmentProps, UniversalIngredientProps, UniversalIngredientModalProps }

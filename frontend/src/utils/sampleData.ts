@@ -162,7 +162,6 @@ const groceryList: IngredientData[] = [
         quantity: "5",
         unit: "cups",
         estimatedCost: 4.00,
-        expirationDate: "2025-07-24"
     }, 
     {
         department: "Produce",
@@ -171,7 +170,6 @@ const groceryList: IngredientData[] = [
         quantity: "3",
         unit: "units",
         estimatedCost: 4.00,
-        expirationDate: "2025-07-24"
     },
 ]
 

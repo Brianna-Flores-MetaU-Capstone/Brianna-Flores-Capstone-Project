@@ -8,18 +8,21 @@ import type {
   UserRequestFormData,
   AddAnotherMealProps,
 } from "../utils/types";
-import { parseRecipeData } from "../utils/utils";
+import { parseRecipeData, modalStyle } from "../utils/utils";
 import {
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
   handleModalClose,
   onSelectRecipe,
+  modalOpen,
 }) => {
   const [mealRequest, setMealRequest] = useState<UserRequestFormData>({
     recipeName: "",
@@ -128,11 +131,8 @@ const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
   };
 
   return (
-    <section className="modal" id="meal-modal">
-      <div className="modal-content mealModal">
-        <button className="modal-close" onClick={handleModalClose}>
-          &times;
-        </button>
+    <Modal open={modalOpen} onClose={handleModalClose}>
+      <Box sx={modalStyle}>
         <Button loading={loading} onClick={fetchRandomRecipes}>
           Need Some Inspiration?
         </Button>
@@ -181,8 +181,8 @@ const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
         {searchClicked && (
           <Button onClick={handleGenerateMore}>Generate More!</Button>
         )}
-      </div>
-    </section>
+      </Box>
+    </Modal>
   );
 };
 

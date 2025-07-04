@@ -8,7 +8,7 @@ import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
 
 const NewListPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
-  const [addAnotherMealOpen, setAddAnotherMealOpen] = useState(false);
+  const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
   const [selectedMeals, setSelectedMeals] = useState<RecipeData[]>([]);
 
@@ -30,15 +30,11 @@ const NewListPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) 
           }
       </section>
       <section>
-        <Button onClick={() => setAddAnotherMealOpen((prev) => !prev)}>Add Another Meal!</Button>
+        <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>Add Another Meal!</Button>
         <Button>Make My List</Button>
       </section>
-      {addAnotherMealOpen && <AddAnotherMealModal handleModalClose={() => setAddAnotherMealOpen((prev) => !prev)} onSelectRecipe={handleSelectRecipe}/>}
-      {mealInfoModalOpen && (
-        <MealInfoModal
-          handleModalClose={() => setMealInfoModalOpen((prev) => !prev)}
-        />
-      )}
+      <AddAnotherMealModal handleModalClose={() => setAddAnotherMealModalOpen((prev) => !prev)} onSelectRecipe={handleSelectRecipe} modalOpen={addAnotherMealModalOpen}/>
+      <MealInfoModal handleModalClose={() => setMealInfoModalOpen((prev) => !prev)} modalOpen={mealInfoModalOpen} />
     </div>
   );
 };

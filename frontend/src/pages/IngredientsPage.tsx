@@ -27,7 +27,7 @@ const IngredientsPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav
     <div className="ingredients-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
       <section className="ingredient-page-container">
-        <Button className="add-button" onClick={addIngredientClick}>Add Ingredient</Button>
+        <Button className="add-button" variant="outlined" onClick={addIngredientClick}>Add Ingredient</Button>
         <div className="ingredient-columns">
           <h3>Ingredient</h3>
           <h3>Quantity</h3>
@@ -44,9 +44,8 @@ const IngredientsPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav
           }
         </div>
       </section>
-      {addIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} onClose={addIngredientClick} />}
-      {editIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
-
+      {addIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} onClose={addIngredientClick} modalOpen={addIngredientModalOpen} />}
+      {editIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} modalOpen={editIngredientModalOpen}/>}
     </div>
   );
 };
