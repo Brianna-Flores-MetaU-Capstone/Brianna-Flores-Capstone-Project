@@ -1,13 +1,13 @@
 import "../styles/Meal.css";
-import type { RecipeData } from "../utils/types";
+import type { GPRecipeDataTypes } from "../utils/types";
 
-interface ListMealCardProps {
+interface GPMealCardProps {
   onMealCardClick: () => void;
-  parsedMealData: RecipeData;
-  onSelectRecipe?: (data: RecipeData) => void;
+  parsedMealData: GPRecipeDataTypes;
+  onSelectRecipe?: (data: GPRecipeDataTypes) => void;
 }
 
-const MealCard: React.FC<ListMealCardProps> = ({
+const MealCard: React.FC<GPMealCardProps> = ({
   onMealCardClick,
   parsedMealData,
   onSelectRecipe,

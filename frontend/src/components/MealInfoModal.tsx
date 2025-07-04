@@ -2,19 +2,21 @@ import React from "react";
 import "../styles/Meal.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { modalStyle } from "../utils/utils";
+import { GPModalStyle } from "../utils/utils";
 
-interface MealInfoModalProps {
-    modalOpen: boolean
+interface GPMealModalProps {
+  modalOpen: boolean;
   handleModalClose: () => void;
 }
 
-const MealInfoModal: React.FC<MealInfoModalProps> = ({ handleModalClose, modalOpen }) => {
+const MealInfoModal: React.FC<GPMealModalProps> = ({
+  handleModalClose,
+  modalOpen,
+}) => {
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal open={modalOpen} onClose={handleModalClose}>
-        <Box sx={modalStyle}>
-         
+      <Box sx={GPModalStyle}>
         <div className="modal-header">
           <img
             className="meal-img"
@@ -41,8 +43,8 @@ const MealInfoModal: React.FC<MealInfoModalProps> = ({ handleModalClose, modalOp
           {/* say recipe will use 5 chicken breasts and 2 on hand, still need 3 more  */}
           <li>Ingredient 1</li>
           <li>2 Chicken Breasts</li>
-        </ul>       
-        </Box>
+        </ul>
+      </Box>
     </Modal>
   );
 };

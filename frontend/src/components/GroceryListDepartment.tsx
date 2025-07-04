@@ -1,9 +1,14 @@
 import React from "react";
 import Ingredient from "./Ingredient";
 import { groceryList } from "../utils/sampleData";
-import type { GroceryListDepartmentProps } from "../utils/types";
+import type { GPIngredientDataTypes } from "../utils/types";
 
-const GroceryListDepartment: React.FC<GroceryListDepartmentProps> = ({
+interface GPGroceryListDepartmentProps {
+  department: string;
+  handleOpenModal: (ingredient: GPIngredientDataTypes) => void;
+}
+
+const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   department,
   handleOpenModal,
 }) => {

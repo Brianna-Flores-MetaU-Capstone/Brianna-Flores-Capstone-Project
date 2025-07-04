@@ -1,11 +1,11 @@
 import React from "react";
 import { errorCodes } from "../utils/firebase";
 
-interface ErrorDisplayProps {
+interface GPErrorDisplayProps {
   errorMessage: string;
 }
 
-const ErrorState: React.FC<ErrorDisplayProps> = ({ errorMessage }) => {
+const ErrorState: React.FC<GPErrorDisplayProps> = ({ errorMessage }) => {
   const displayedMessage = errorCodes[errorMessage];
   return (
     <div>

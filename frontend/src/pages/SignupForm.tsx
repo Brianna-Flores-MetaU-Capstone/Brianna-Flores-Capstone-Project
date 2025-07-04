@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBarProps } from "../utils/types";
+import type {
+  GPAccountInfoTypes,
+  GPAuthFormDataTypes,
+  GPToggleNavBarProps,
+} from "../utils/types";
 import { handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
@@ -11,22 +15,31 @@ import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 
-const SignupForm: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
-  const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
+const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+  const [formData, setFormData] = useState<GPAuthFormDataTypes>({
+    email: "",
+    password: "",
+  });
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
-  function handleSubmit({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) {
+  function handleSubmit({
+    userIntolerances,
+    userDiets,
+  }: {
+    userIntolerances: string[];
+    userDiets: string[];
+  }) {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        const newUser: RecipeUserAccountInfo = {
+        const newUser: GPAccountInfoTypes = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
           intolerances: userIntolerances,
-          diets: userDiets
+          diets: userDiets,
         };
         handleNewUser(newUser);
         setSuccess(true);
@@ -39,12 +52,20 @@ const SignupForm: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) =
 
   return (
     <div className="login-page signup-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section className="login-content">
-         <AuthForm handleRegistrationSubmit={handleSubmit} handleAuthInputChange={(event) => handleAuthInputChange(event, setFormData)} formData={formData}/>
+        <AuthForm
+          handleRegistrationSubmit={handleSubmit}
+          handleAuthInputChange={(event) =>
+            handleAuthInputChange(event, setFormData)
+          }
+          formData={formData}
+        />
         {message && !success && <ErrorState errorMessage={message} />}
         {success && (
-          <Button className="submit-auth" onClick={() => navigate("/login")}>Take me to login!</Button>
+          <Button className="submit-auth" onClick={() => navigate("/login")}>
+            Take me to login!
+          </Button>
         )}
       </section>
     </div>

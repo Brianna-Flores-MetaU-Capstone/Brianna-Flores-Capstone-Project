@@ -1,9 +1,9 @@
 import "../styles/Homepage.css";
 import "../styles/NavBar.css";
 import { NavLink } from "react-router";
-import type { RecipeToggleNavBarProps } from "../utils/types";
+import type { GPToggleNavBarProps } from "../utils/types";
 
-const NavBar: React.FC<RecipeToggleNavBarProps> = ({ toggleNav, navOpen }) => {
+const NavBar: React.FC<GPToggleNavBarProps> = ({ toggleNav, navOpen }) => {
   return (
     <nav className={`navbar-container ${navOpen ? "nav-open" : "nav-close"}`}>
       <span className="close-nav" onClick={toggleNav}>

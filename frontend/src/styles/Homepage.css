@@ -1,100 +1,99 @@
 .homepage-container {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
 }
 
 .app-header {
-    background-color: #C6DEF1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2%;
-    padding: 1%;
+  background-color: #c6def1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2%;
+  padding: 1%;
 }
 
 .app-header h1 {
-    font-size: 4vh;
+  font-size: 4vh;
 }
 
 .nav-button {
-    left: 1vw;
-    background: none;
-    border: none;
-    font-size: 2.5vh;
-    cursor: pointer;
-    margin: 1.75vw;
+  left: 1vw;
+  background: none;
+  border: none;
+  font-size: 2.5vh;
+  cursor: pointer;
+  margin: 1.75vw;
 }
 
 .auth-access-buttons {
-    display: flex;
-    flex-direction: column;
-    margin: 1vw;
+  display: flex;
+  flex-direction: column;
+  margin: 1vw;
 }
 
 .login-button {
-    background: none;
-    border: 2px solid black;
-    border-radius: 1vh;
-    font-size: 2vh;
-    cursor: pointer;
-    margin: 0.25vh 0;
+  background: none;
+  border: 2px solid black;
+  border-radius: 1vh;
+  font-size: 2vh;
+  cursor: pointer;
+  margin: 0.25vh 0;
 }
 
 .login-button:hover {
-    background-color: white;
+  background-color: white;
 }
 
 .quick-access-container {
-    display: flex;
-    gap: 4%;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: 0 1vw;
+  display: flex;
+  gap: 4%;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 1vw;
 }
 
-
 .list-items {
-    overflow-y: auto;
-    max-height: 65%;
-    margin: 2% 0;
+  overflow-y: auto;
+  max-height: 65%;
+  margin: 2% 0;
 }
 
 .ingredient-preview,
 .grocery-preview,
 .next-recipe {
-    flex: 1;
-    height: auto;
-    height: 30vh;
+  flex: 1;
+  height: auto;
+  height: 30vh;
 }
 
-.next-recipe img{
-    width: 100%;
-    height: 80%;
-    object-fit: cover;
+.next-recipe img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
 }
 
 .list-ingredient {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 4%;
-    padding: 0% 3%;
-    background-color: #F7F2EF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4%;
+  padding: 0% 3%;
+  background-color: #f7f2ef;
 }
 
 .grocery-preview,
 .ingredient-preview,
 .next-recipe {
-    border: 2px solid black;
-    width: 30%;
+  border: 2px solid black;
+  width: 30%;
 }
 
 .grocery-preview h3,
 .ingredient-preview h3 {
-    background-color: #C9E4DE;
-    margin: 0;
-    padding: 5%;
-    text-align: center;
-    text-wrap: none;
+  background-color: #c9e4de;
+  margin: 0;
+  padding: 5%;
+  text-align: center;
+  text-wrap: none;
 }

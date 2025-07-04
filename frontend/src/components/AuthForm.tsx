@@ -1,6 +1,5 @@
 import React from "react";
 import "../styles/LoginPage.css";
-import type { RecipeAuthFormEventProps } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState } from "react";
 import RegistrationPreferenceButtons from "./RegistrationPreferenceButtons";
@@ -10,8 +9,22 @@ import {
 } from "../utils/constants";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import type { GPAuthFormDataTypes } from "../utils/types";
 
-const AuthForm: React.FC<RecipeAuthFormEventProps> = ({
+interface GPAuthFormEventProps {
+  handleRegistrationSubmit?: ({
+    userIntolerances,
+    userDiets,
+  }: {
+    userIntolerances: string[];
+    userDiets: string[];
+  }) => void;
+  handleLoginSubmit?: (event: React.FormEvent) => void;
+  handleAuthInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  formData: GPAuthFormDataTypes;
+}
+
+const AuthForm: React.FC<GPAuthFormEventProps> = ({
   handleRegistrationSubmit,
   handleLoginSubmit,
   handleAuthInputChange,

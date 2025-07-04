@@ -1,14 +1,14 @@
 import React from "react";
 import Ingredient from "./Ingredient";
-import type { IngredientData } from "../utils/types";
+import type { GPIngredientDataTypes } from "../utils/types";
 import "../styles/Homepage.css";
 import { v4 as uuidv4 } from "uuid";
 
-interface HomepageGroceryPreviewProps {
-  groceryList: IngredientData[];
+interface GPHomepageGroceryPreviewProps {
+  groceryList: GPIngredientDataTypes[];
 }
 
-const GroceryPreview: React.FC<HomepageGroceryPreviewProps> = ({
+const GroceryPreview: React.FC<GPHomepageGroceryPreviewProps> = ({
   groceryList,
 }) => {
   return (

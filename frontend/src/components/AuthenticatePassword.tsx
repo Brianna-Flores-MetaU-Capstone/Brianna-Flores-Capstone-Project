@@ -2,9 +2,13 @@ import React from "react";
 import { AuthenticationFieldEnum } from "../utils/constants";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import type { PasswordAuthenticationProps } from "../utils/types";
 
-const AuthenticatePassword: React.FC<PasswordAuthenticationProps> = ({
+interface GPPasswordAuthenticationProps {
+  handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
   handleAccountSubmit,
   handleInputChange,
 }) => {

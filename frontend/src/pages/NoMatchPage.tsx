@@ -1,7 +1,7 @@
-import type { RecipeToggleNavBarProps } from "../utils/types";
+import type { GPToggleNavBarProps } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 
-const NoMatchPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const NoMatchPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

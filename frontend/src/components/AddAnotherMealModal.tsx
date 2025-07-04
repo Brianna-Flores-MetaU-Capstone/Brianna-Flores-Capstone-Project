@@ -3,12 +3,8 @@ import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
 import TextField from "@mui/material/TextField";
-import type {
-  RecipeData,
-  UserRequestFormData,
-  AddAnotherMealProps,
-} from "../utils/types";
-import { parseRecipeData, modalStyle } from "../utils/utils";
+import type { GPRecipeDataTypes, GPRequestFormDataTypes } from "../utils/types";
+import { parseRecipeData, GPModalStyle } from "../utils/utils";
 import {
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
@@ -19,23 +15,29 @@ import Box from "@mui/material/Box";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
-const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
+interface GPAddAnotherMealProps {
+  handleModalClose: () => void;
+  onSelectRecipe: (data: GPRecipeDataTypes) => void;
+  modalOpen: boolean;
+}
+
+const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   handleModalClose,
   onSelectRecipe,
   modalOpen,
 }) => {
-  const [mealRequest, setMealRequest] = useState<UserRequestFormData>({
+  const [mealRequest, setMealRequest] = useState<GPRequestFormDataTypes>({
     recipeName: "",
     servings: "",
   });
-  const [mealResults, setMealResults] = useState<RecipeData[]>([]);
+  const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reciperequest = event.target.dataset
-      .reciperequest as keyof UserRequestFormData;
+      .reciperequest as keyof GPRequestFormDataTypes;
     const value = event.target.value;
     setMealRequest((prev) => ({ ...prev, [reciperequest]: value }));
   };
@@ -132,7 +134,7 @@ const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
 
   return (
     <Modal open={modalOpen} onClose={handleModalClose}>
-      <Box sx={modalStyle}>
+      <Box sx={GPModalStyle}>
         <Button loading={loading} onClick={fetchRandomRecipes}>
           Need Some Inspiration?
         </Button>

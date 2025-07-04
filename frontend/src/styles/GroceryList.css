@@ -1,20 +1,20 @@
 .grocery-list-container {
-    margin: 4vw;
+  margin: 4vw;
 }
 
 .grocery-department {
-    background-color: #C6DEF1; 
-    padding: 0 2vw;
+  background-color: #c6def1;
+  padding: 0 2vw;
 }
 
 .grocery-department .list-ingredient {
-    display: grid;
-    grid-template-columns: 0.5fr 1fr 0.75fr 0.5fr;
-    margin: 3vh 0;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.75fr 0.5fr;
+  margin: 3vh 0;
 }
 
 .grocery-departments {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2vw;
 }

@@ -1,41 +1,45 @@
-import type { RecipeUserAccountInfo, RecipeAuthFormData, IngredientData } from "./types";
+import type {
+  GPAccountInfoTypes,
+  GPAuthFormDataTypes,
+  GPIngredientDataTypes,
+} from "./types";
 
 const parseRecipeData = (recipeData: any) => {
-    return recipeData.map((recipe: any) => ({
-        id: recipe.id,
-        image: recipe.image,
-        title: recipe.title,
-        servings: recipe.servings,
-        sourceUrl: recipe.sourceUrl,
-        vegetarian: recipe.vegetarian,
-        vegan: recipe.vegan,
-        glutenFree: recipe.glutenFree,
-        dairyFree: recipe.dairyFree,
-        ingredients: parseIngredients(recipe.extendedIngredients),
-        totalEstimatedCost: estimateTotalCost(recipe.ingredients)
-    }))
-}
+  return recipeData.map((recipe: any) => ({
+    id: recipe.id,
+    image: recipe.image,
+    title: recipe.title,
+    servings: recipe.servings,
+    sourceUrl: recipe.sourceUrl,
+    vegetarian: recipe.vegetarian,
+    vegan: recipe.vegan,
+    glutenFree: recipe.glutenFree,
+    dairyFree: recipe.dairyFree,
+    ingredients: parseIngredients(recipe.extendedIngredients),
+    totalEstimatedCost: estimateTotalCost(recipe.ingredients),
+  }));
+};
 
 const parseIngredients = (ingredientsData: any) => {
-    return ingredientsData.map((ingredient: any) => ({
-        department: ingredient.aisle,
-        image: ingredient.image,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
-        estimatedCost: getIngredientCost(ingredient.name)
-    }))
-}
+  return ingredientsData.map((ingredient: any) => ({
+    department: ingredient.aisle,
+    image: ingredient.image,
+    name: ingredient.name,
+    amount: ingredient.amount,
+    unit: ingredient.unit,
+    estimatedCost: getIngredientCost(ingredient.name),
+  }));
+};
 
 const getIngredientCost = (ingredientName: string) => {
-    return 0;
-}
+  return 0;
+};
 
-const estimateTotalCost = (ingredients: IngredientData) => {
-    return 0;
-}
+const estimateTotalCost = (ingredients: GPIngredientDataTypes) => {
+  return 0;
+};
 
-const validateInput = (formData: RecipeAuthFormData) => {
+const validateInput = (formData: GPAuthFormDataTypes) => {
   if (!formData.email || !formData.password) {
     return { type: "error", text: "Email and password are required" };
   }
@@ -49,39 +53,49 @@ const validateInput = (formData: RecipeAuthFormData) => {
   return { type: "", text: "" };
 };
 
-const handleNewUser = async (newUser: RecipeUserAccountInfo) => {
-    try {
-      const response = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to create user");
-      }
-      const data = await response.json();
-    } catch (error) {
-      console.error(error);
+const handleNewUser = async (newUser: GPAccountInfoTypes) => {
+  try {
+    const response = await fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to create user");
     }
-  };
+    const data = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  const handleAuthInputChange = (event: React.ChangeEvent<HTMLInputElement>, setFormData: React.Dispatch<React.SetStateAction<RecipeAuthFormData>>) => {
-    const credential = event.target.dataset.credential as keyof RecipeAuthFormData
-    const value = event.target.value;
-    setFormData((prev) => ({ ...prev, [credential]: value }));
-  };
+const handleAuthInputChange = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  setFormData: React.Dispatch<React.SetStateAction<GPAuthFormDataTypes>>
+) => {
+  const credential = event.target.dataset
+    .credential as keyof GPAuthFormDataTypes;
+  const value = event.target.value;
+  setFormData((prev) => ({ ...prev, [credential]: value }));
+};
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-  };
+const GPModalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
 
-export { validateInput, handleNewUser, parseRecipeData, handleAuthInputChange, modalStyle };
+export {
+  validateInput,
+  handleNewUser,
+  parseRecipeData,
+  handleAuthInputChange,
+  GPModalStyle,
+};

@@ -1,10 +1,18 @@
 import React from "react";
-import type { UniversalIngredientProps } from "../utils/types";
 import "../styles/Homepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import type { GPIngredientDataTypes } from "../utils/types";
 
-const Ingredient: React.FC<UniversalIngredientProps> = ({
+interface GPIngredientProps {
+  ingredient: GPIngredientDataTypes;
+  groceryCheck: boolean;
+  presentExpiration: boolean;
+  presentButtons: boolean;
+  onEdit?: (ingredient: GPIngredientDataTypes) => void;
+}
+
+const Ingredient: React.FC<GPIngredientProps> = ({
   ingredient,
   groceryCheck,
   presentExpiration,
