@@ -1,5 +1,5 @@
 const Units = [
-  "unit",
+  "units",
   "cups",
   "Tbsp",
   "tsp",

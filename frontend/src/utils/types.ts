@@ -38,7 +38,7 @@ interface GPIngredientDataTypes {
   quantity: string;
   unit: string;
   estimatedCost: number;
-  expirationDate?: string;
+  expirationDate?: string | null;
 }
 
 interface GPCurrentUserTypes {
