@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
+import type { RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBarProps } from "../utils/types";
 import { handleNewUser } from "../utils/utils";
 import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
@@ -11,7 +11,7 @@ import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 
-const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const SignupForm: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();

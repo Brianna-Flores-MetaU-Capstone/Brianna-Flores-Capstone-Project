@@ -4,7 +4,11 @@ import "../styles/Homepage.css"
 import type { IngredientData } from "../utils/types";
 import { v4 as uuidv4 } from "uuid";
 
-const IngredientsPreview = ({ingredientsList}: {ingredientsList: IngredientData[]}) => {
+interface HomepageIngredientPreviewProps {
+    ingredientsList: IngredientData[]
+}
+
+const IngredientsPreview: React.FC<HomepageIngredientPreviewProps> = ({ingredientsList}) => {
     return (
         <div className="ingredient-preview">
             <h3>Ingredients on Hand</h3>

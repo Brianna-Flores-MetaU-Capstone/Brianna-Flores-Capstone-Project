@@ -3,34 +3,48 @@ import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
 import TextField from "@mui/material/TextField";
-import type { RecipeData, UserRequestFormData } from "../utils/types";
+import type {
+  RecipeData,
+  UserRequestFormData,
+  AddAnotherMealProps,
+} from "../utils/types";
 import { parseRecipeData } from "../utils/utils";
-import { GROUP_OF_DISPLAYED_CARDS, TOTAL_SEARCH_REQUESTS } from "../utils/constants";
-// import SharedInput from "./SharedInput";
+import {
+  GROUP_OF_DISPLAYED_CARDS,
+  TOTAL_SEARCH_REQUESTS,
+} from "../utils/constants";
 import Button from "@mui/material/Button";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
-interface AddAnotherMealTypes {
-    handleModalClose: () => void
-    onSelectRecipe: (data: RecipeData) => void
-}
-
-const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealTypes) => {
-  const [mealRequest, setMealRequest] = useState<UserRequestFormData>({ recipeName: "", servings: "" });
+const AddAnotherMealModal: React.FC<AddAnotherMealProps> = ({
+  handleModalClose,
+  onSelectRecipe,
+}) => {
+  const [mealRequest, setMealRequest] = useState<UserRequestFormData>({
+    recipeName: "",
+    servings: "",
+  });
   const [mealResults, setMealResults] = useState<RecipeData[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reciperequest = event.target.dataset.reciperequest as keyof UserRequestFormData
-    const value = event.target.value
+    const reciperequest = event.target.dataset
+      .reciperequest as keyof UserRequestFormData;
+    const value = event.target.value;
     setMealRequest((prev) => ({ ...prev, [reciperequest]: value }));
   };
 
   // fetch recipes from API dependent on user input
-  const fetchSearchRecipes = async ({ numToRequest, offset }: { numToRequest: number, offset: number }) => {
+  const fetchSearchRecipes = async ({
+    numToRequest,
+    offset,
+  }: {
+    numToRequest: number;
+    offset: number;
+  }) => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -40,13 +54,13 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
         throw new Error("Failed to fetch searched recipes");
       }
       const data = await response.json();
-      const parsedRecipes = parseRecipeData(data.results)
+      const parsedRecipes = parseRecipeData(data.results);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
-          setMealResults(parsedRecipes);
+        setMealResults(parsedRecipes);
       }
-      setLoading(false)
+      setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
       console.error(error);
@@ -78,17 +92,28 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
     const numToRequest = TOTAL_SEARCH_REQUESTS - numInDatabase;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
-        if (numToRequest % 3 === 0) {
-            fetchSearchRecipes({numToRequest: GROUP_OF_DISPLAYED_CARDS, offset: numInDatabase})
-            setNumInDatabase((prev) => prev + GROUP_OF_DISPLAYED_CARDS);
-        } else {
-            fetchSearchRecipes({numToRequest: (GROUP_OF_DISPLAYED_CARDS - (numInDatabase % 3)), offset: numInDatabase})
-            setNumInDatabase(
-                (prev) => prev + GROUP_OF_DISPLAYED_CARDS - (numInDatabase % 3)
-            );
-        }
+      if (numToRequest % GROUP_OF_DISPLAYED_CARDS === 0) {
+        fetchSearchRecipes({
+          numToRequest: GROUP_OF_DISPLAYED_CARDS,
+          offset: numInDatabase,
+        });
+        setNumInDatabase((prev) => prev + GROUP_OF_DISPLAYED_CARDS);
+      } else {
+        fetchSearchRecipes({
+          numToRequest:
+            GROUP_OF_DISPLAYED_CARDS -
+            (numInDatabase % GROUP_OF_DISPLAYED_CARDS),
+          offset: numInDatabase,
+        });
+        setNumInDatabase(
+          (prev) =>
+            prev +
+            GROUP_OF_DISPLAYED_CARDS -
+            (numInDatabase % GROUP_OF_DISPLAYED_CARDS)
+        );
+      }
     }
-  }
+  };
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -100,7 +125,7 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
   const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
     handleFetchRecipes();
     setSearchClicked(false);
-  }
+  };
 
   return (
     <section className="modal" id="meal-modal">
@@ -108,24 +133,48 @@ const AddAnotherMealModal = ({handleModalClose, onSelectRecipe}: AddAnotherMealT
         <button className="modal-close" onClick={handleModalClose}>
           &times;
         </button>
-        <Button loading={loading} onClick={fetchRandomRecipes}>Need Some Inspiration?</Button>
+        <Button loading={loading} onClick={fetchRandomRecipes}>
+          Need Some Inspiration?
+        </Button>
         <Button>I Have My Own Recipe</Button>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
-          {/* <SharedInput inputLabel="Recipe" inputType="text" fieldData="recipeName" handleInputChange={handleInputChange}/>
-          <SharedInput inputLabel="Servings" inputType="text" fieldData="servings" handleInputChange={handleInputChange}/> */}
-          <TextField required slotProps={{htmlInput: { "data-reciperequest": "recipeName"}}} onChange={handleInputChange} value={mealRequest.recipeName} label="Recipe" variant="standard" />
-          <TextField required slotProps={{htmlInput: { "data-reciperequest": "servings"}}} onChange={handleInputChange} value={mealRequest.servings} label="Servings" variant="standard" />
-          <Button type="submit" loading={loading} variant="outlined" loadingPosition="start">Find some Recipes!</Button>
+          <TextField
+            required
+            slotProps={{ htmlInput: { "data-reciperequest": "recipeName" } }}
+            onChange={handleInputChange}
+            value={mealRequest.recipeName}
+            label="Recipe"
+            variant="standard"
+          />
+          <TextField
+            required
+            slotProps={{ htmlInput: { "data-reciperequest": "servings" } }}
+            onChange={handleInputChange}
+            value={mealRequest.servings}
+            label="Servings"
+            variant="standard"
+          />
+          <Button
+            type="submit"
+            loading={loading}
+            variant="outlined"
+            loadingPosition="start"
+          >
+            Find some Recipes!
+          </Button>
         </form>
 
         <section className="result-cards">
-            {
-                mealResults.map((meal) => {
-                    return (
-                        <MealCard key={meal.id} onMealCardClick={() => event?.preventDefault()} parsedMealData={meal} onSelectRecipe={onSelectRecipe}/>
-                    )
-                })
-            }
+          {mealResults.map((meal) => {
+            return (
+              <MealCard
+                key={meal.id}
+                onMealCardClick={() => event?.preventDefault()}
+                parsedMealData={meal}
+                onSelectRecipe={onSelectRecipe}
+              />
+            );
+          })}
         </section>
 
         {/* if search clicked, add a generate more button */}

@@ -1,15 +1,15 @@
 import "../styles/IngredientsPage.css";
-import type { RecipeToggleNavBar } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from 'react'
 import {ingredients} from "../utils/sampleData"
 import Ingredient from "../components/Ingredient";
 import IngredientModal from "../components/IngredientModal";
-import type { IngredientData } from "../utils/types";
+import type { IngredientData, RecipeToggleNavBarProps } from "../utils/types";
 import Button from "@mui/material/Button";
+import { INGREDIENT_MODAL } from "../utils/constants";
 
-const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const IngredientsPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false)
   const [editIngredientData, setEditIngredientData] = useState<IngredientData>()
   const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false)
@@ -44,8 +44,8 @@ const IngredientsPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
           }
         </div>
       </section>
-      {addIngredientModalOpen && <IngredientModal modalFor="ingredients-page" onClose={addIngredientClick} />}
-      {editIngredientModalOpen && <IngredientModal modalFor="ingredients-page" ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
+      {addIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} onClose={addIngredientClick} />}
+      {editIngredientModalOpen && <IngredientModal modalFor={INGREDIENT_MODAL} ingredientData={editIngredientData} onClose={() => setEditIngredientModalOpen((prev) => !prev)} />}
 
     </div>
   );

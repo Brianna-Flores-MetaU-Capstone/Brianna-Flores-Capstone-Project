@@ -1,6 +1,6 @@
 import type { User } from "firebase/auth";
 
-interface RecipeToggleNavBar {
+interface RecipeToggleNavBarProps {
     navOpen: boolean;
     toggleNav: () => void 
 }
@@ -41,7 +41,7 @@ interface IngredientData {
     expirationDate?: string
 }
 
-interface RecipeAuthFormEvents {
+interface RecipeAuthFormEventProps {
     handleRegistrationSubmit?: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
     handleLoginSubmit?: (event: React.FormEvent) => void
     handleAuthInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -65,4 +65,33 @@ interface UserRequestFormData {
     servings: string
 }
 
-export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage, UserRequestFormData }
+interface AddAnotherMealProps {
+    handleModalClose: () => void
+    onSelectRecipe: (data: RecipeData) => void
+}
+
+interface PasswordAuthenticationProps {
+    handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+interface GroceryListDepartmentProps {
+    department: string
+    handleOpenModal: (ingredient: IngredientData) => void
+}
+
+interface UniversalIngredientProps {
+    ingredient: IngredientData
+    groceryCheck: boolean
+    presentExpiration: boolean
+    presentButtons: boolean
+    onEdit?: (ingredient: IngredientData) => void
+}
+
+interface UniversalIngredientModalProps {
+    modalFor: string
+    ingredientData?: IngredientData
+    onClose: () => void
+}
+
+export type {RecipeToggleNavBarProps, RecipeUserAccountInfo, RecipeAuthFormData, RecipeAuthFormEventProps, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage, UserRequestFormData, AddAnotherMealProps, PasswordAuthenticationProps, GroceryListDepartmentProps, UniversalIngredientProps, UniversalIngredientModalProps }

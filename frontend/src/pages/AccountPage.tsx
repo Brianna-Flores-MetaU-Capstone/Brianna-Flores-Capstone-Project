@@ -1,7 +1,7 @@
 import React from "react";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import type { RecipeToggleNavBar } from "../utils/types";
+import type { RecipeToggleNavBarProps } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
@@ -15,7 +15,7 @@ import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
 import TextField from "@mui/material/TextField";
 
-const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const AccountPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>()

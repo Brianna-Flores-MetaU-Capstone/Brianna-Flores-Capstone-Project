@@ -1,23 +1,21 @@
-import React from "react"
+import React from "react";
 import NavBar from "./NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {RecipeToggleNavBar} from "../utils/types"
+import type { RecipeToggleNavBarProps } from "../utils/types";
 
-import { auth } from "../utils/firebase"
+import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
-import "../styles/Homepage.css"
+import "../styles/Homepage.css";
 import Button from "@mui/material/Button";
 
-const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
+const AppHeader: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      
-    })
-  }
+    signOut(auth).catch((error) => {});
+  };
 
   const handleLogin = () => {
     if (navOpen) {

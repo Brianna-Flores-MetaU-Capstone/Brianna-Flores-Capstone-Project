@@ -1,12 +1,12 @@
 import "../styles/Homepage.css";
-import type { RecipeToggleNavBar } from "../utils/types";
+import type { RecipeToggleNavBarProps } from "../utils/types";
 import { groceryList, ingredients } from "../utils/sampleData";
 import NextRecipe from "../components/NextRecipe";
 import IngredientsPreview from "../components/IngredientsPreview";
 import GroceryPreview from "../components/GroceryPreview";
 import AppHeader from "../components/AppHeader";
 
-const Homepage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const Homepage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
     <div className="homepage-container">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

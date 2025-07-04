@@ -1,5 +1,5 @@
 import "../styles/NewListPage.css";
-import type { RecipeToggleNavBar, RecipeData } from "../utils/types";
+import type { RecipeToggleNavBarProps, RecipeData } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
 
-const NewListPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const NewListPage: React.FC<RecipeToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealOpen, setAddAnotherMealOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
   const [selectedMeals, setSelectedMeals] = useState<RecipeData[]>([]);
