@@ -1,14 +1,14 @@
 import React from "react";
-import "../styles/Meal.css";
 import { useState } from "react";
 import MealCard from "./MealCard";
-import TextField from "@mui/material/TextField";
-import type { GPRecipeDataTypes, GPRequestFormDataTypes } from "../utils/types";
-import { parseRecipeData, GPModalStyle } from "../utils/utils";
 import {
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
+import { parseRecipeData, GPModalStyle } from "../utils/utils";
+import type { GPRecipeDataTypes, GPRequestFormDataTypes } from "../utils/types";
+import "../styles/Meal.css";
+import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";

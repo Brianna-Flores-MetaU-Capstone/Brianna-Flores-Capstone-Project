@@ -1,6 +1,6 @@
 import "../styles/Homepage.css";
 import type { GPToggleNavBarProps } from "../utils/types";
-import { groceryList, ingredients } from "../utils/sampleData";
+import { ingredients } from "../utils/sampleData";
 import NextRecipe from "../components/NextRecipe";
 import AppHeader from "../components/AppHeader";
 import GenericList from "../components/GenericList";

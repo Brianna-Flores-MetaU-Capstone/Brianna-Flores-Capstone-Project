@@ -1,9 +1,7 @@
 import "../styles/IngredientsPage.css";
 import AppHeader from "../components/AppHeader";
-import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { ingredients } from "../utils/sampleData";
-import Ingredient from "../components/Ingredient";
 import IngredientModal from "../components/IngredientModal";
 import type {
   GPIngredientDataTypes,
