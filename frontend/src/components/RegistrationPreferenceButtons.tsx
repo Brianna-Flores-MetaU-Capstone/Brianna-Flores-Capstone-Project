@@ -1,12 +1,12 @@
 import React from "react";
 import "../styles/LoginPage.css";
 
-interface UserPreferenceButtonsProps {
+type UserPreferenceButtonsProps = {
   listName: string;
   listItems: string[];
   userList: string[];
   handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 const RegistrationPreferenceButtons: React.FC<UserPreferenceButtonsProps> = ({
   listName,

@@ -1,11 +1,11 @@
 import "../styles/Meal.css";
 import type { GPRecipeDataTypes } from "../utils/types";
 
-interface GPMealCardProps {
+type GPMealCardProps = {
   onMealCardClick: () => void;
   parsedMealData: GPRecipeDataTypes;
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
-}
+};
 
 const MealCard: React.FC<GPMealCardProps> = ({
   onMealCardClick,

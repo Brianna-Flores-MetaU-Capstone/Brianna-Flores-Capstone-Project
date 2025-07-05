@@ -1,16 +1,22 @@
-import type { GPCurrentUserTypes, GPAccountInfoTypes, GPErrorMessageTypes } from "./types";
+import type {
+  GPCurrentUserTypes,
+  GPAccountInfoTypes,
+  GPErrorMessageTypes,
+} from "./types";
 import type { User } from "firebase/auth";
 
-interface GPUpdateAccountHelperTypes extends GPCurrentUserTypes {
-    setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
-}
+type GPUpdateAccountHelperTypes = GPCurrentUserTypes & {
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
 
 const updateAccount = async ({
   user,
   userEmail,
   userIntolerances,
   userDiets,
-  setMessage
+  setMessage,
 }: GPUpdateAccountHelperTypes) => {
   const updatedUser = await fetch(`http://localhost:3000/account/${user.uid}`, {
     method: "PUT",
@@ -24,18 +30,20 @@ const updateAccount = async ({
     }),
   });
   if (!updatedUser.ok) {
-    setMessage({error: true, message: "Failed to update user"})
+    setMessage({ error: true, message: "Failed to update user" });
   }
   const data = await updatedUser.json();
   return data;
 };
 
-interface UserDataHelperTypes {
-  user: User,
-  setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
-}
+type UserDataHelperTypes = {
+  user: User;
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
 
-const getUserData = async ({user, setMessage}: UserDataHelperTypes) => {
+const getUserData = async ({ user, setMessage }: UserDataHelperTypes) => {
   try {
     const fetchedUserData = await fetch(
       `http://localhost:3000/account/${user.uid}`,
@@ -47,7 +55,7 @@ const getUserData = async ({user, setMessage}: UserDataHelperTypes) => {
       }
     );
     if (!fetchedUserData.ok) {
-      setMessage({error: true, message: "Failed to get user data"})
+      setMessage({ error: true, message: "Failed to get user data" });
     }
     const data = await fetchedUserData.json();
     const userDataObj: GPCurrentUserTypes = {
@@ -62,12 +70,14 @@ const getUserData = async ({user, setMessage}: UserDataHelperTypes) => {
   }
 };
 
-interface GPNewUserHelperTypes {
-  newUser: GPAccountInfoTypes,
-  setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
-}
+type GPNewUserHelperTypes = {
+  newUser: GPAccountInfoTypes;
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
 
-const handleNewUser = async ({newUser, setMessage}: GPNewUserHelperTypes) => {
+const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
   try {
     const response = await fetch("http://localhost:3000/signup", {
       method: "POST",
@@ -77,7 +87,7 @@ const handleNewUser = async ({newUser, setMessage}: GPNewUserHelperTypes) => {
       body: JSON.stringify(newUser),
     });
     if (!response.ok) {
-      setMessage({error: true, message: "Failed to add user to database"})
+      setMessage({ error: true, message: "Failed to add user to database" });
     }
     const data = await response.json();
   } catch (error) {

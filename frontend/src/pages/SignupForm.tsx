@@ -5,7 +5,7 @@ import type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
   GPToggleNavBarProps,
-  GPErrorMessageTypes
+  GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
@@ -13,6 +13,7 @@ import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
+import Box from "@mui/material/Box";
 
 const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -38,16 +39,16 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           intolerances: userIntolerances,
           diets: userDiets,
         };
-        handleNewUser({newUser, setMessage});
+        handleNewUser({ newUser, setMessage });
         setMessage({
           error: false,
-          message: "Registration successful!"
-        })
+          message: "Registration successful!",
+        });
       })
       .catch((error) => {
         setMessage({
           error: true,
-          message: error.code
+          message: error.code,
         });
       });
   }
@@ -55,7 +56,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
     <div className="login-page signup-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <section className="login-content">
+      <Box className="login-content">
         <AuthForm
           handleRegistrationSubmit={handleSubmit}
           handleAuthInputChange={(event) =>
@@ -63,8 +64,10 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           }
           formData={formData}
         />
-        {message && <ErrorState error={message.error} message={message.message} />}
-      </section>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
+      </Box>
     </div>
   );
 };

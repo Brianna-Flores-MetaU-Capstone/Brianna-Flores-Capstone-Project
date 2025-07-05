@@ -74,9 +74,4 @@ const GPModalStyle = {
   p: 4,
 };
 
-export {
-  validateInput,
-  parseRecipeData,
-  handleAuthInputChange,
-  GPModalStyle,
-};
+export { validateInput, parseRecipeData, handleAuthInputChange, GPModalStyle };

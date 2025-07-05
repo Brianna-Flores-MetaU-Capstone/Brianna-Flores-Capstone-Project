@@ -7,7 +7,7 @@ const ErrorState: React.FC<GPErrorMessageTypes> = ({ error, message }) => {
   const displayedMessage = errorCodes[message] ?? message;
   return (
     <div>
-        <Alert severity={error ? "error" : "success"}>{displayedMessage}</Alert>
+      <Alert severity={error ? "error" : "success"}>{displayedMessage}</Alert>
     </div>
   );
 };

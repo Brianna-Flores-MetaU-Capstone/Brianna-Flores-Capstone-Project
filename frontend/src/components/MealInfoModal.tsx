@@ -4,10 +4,10 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { GPModalStyle } from "../utils/utils";
 
-interface GPMealModalProps {
+type GPMealModalProps = {
   modalOpen: boolean;
   handleModalClose: () => void;
-}
+};
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
   handleModalClose,

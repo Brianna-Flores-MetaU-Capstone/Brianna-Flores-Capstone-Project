@@ -1,11 +1,11 @@
 import type { User } from "firebase/auth";
 
-interface GPToggleNavBarProps {
+type GPToggleNavBarProps = {
   navOpen: boolean;
   toggleNav: () => void;
-}
+};
 
-interface GPRecipeDataTypes {
+type GPRecipeDataTypes = {
   id: number;
   image: string;
   title: string;
@@ -17,21 +17,21 @@ interface GPRecipeDataTypes {
   dairyFree: boolean;
   ingredients: GPIngredientDataTypes[];
   totalEstimatedCost: number;
-}
+};
 
-interface GPAccountInfoTypes {
+type GPAccountInfoTypes = {
   firebaseId: string;
   email: string;
   intolerances: string[];
   diets: string[];
-}
+};
 
-interface GPAuthFormDataTypes {
+type GPAuthFormDataTypes = {
   email: string;
   password: string;
-}
+};
 
-interface GPIngredientDataTypes {
+type GPIngredientDataTypes = {
   department: string;
   image: string;
   name: string;
@@ -39,24 +39,24 @@ interface GPIngredientDataTypes {
   unit: string;
   estimatedCost: number;
   expirationDate?: string | null;
-}
+};
 
-interface GPCurrentUserTypes {
+type GPCurrentUserTypes = {
   user: User;
   userEmail: string;
   userIntolerances: string[];
   userDiets: string[];
-}
+};
 
-interface GPRequestFormDataTypes {
+type GPRequestFormDataTypes = {
   recipeName: string;
   servings: string;
-}
+};
 
-interface GPErrorMessageTypes {
-    error: boolean;
-    message: string;
-}
+type GPErrorMessageTypes = {
+  error: boolean;
+  message: string;
+};
 
 export type {
   GPToggleNavBarProps,
@@ -66,5 +66,5 @@ export type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPRequestFormDataTypes,
-  GPErrorMessageTypes
+  GPErrorMessageTypes,
 };

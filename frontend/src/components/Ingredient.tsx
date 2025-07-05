@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type { GPIngredientDataTypes } from "../utils/types";
 
-interface GPIngredientProps {
+type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
   groceryCheck: boolean;
   presentExpiration: boolean;
   presentButtons: boolean;
   onEdit?: (ingredient: GPIngredientDataTypes) => void;
-}
+};
 
 const Ingredient: React.FC<GPIngredientProps> = ({
   ingredient,

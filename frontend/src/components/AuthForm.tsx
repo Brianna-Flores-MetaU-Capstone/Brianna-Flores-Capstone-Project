@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import type { GPAuthFormDataTypes } from "../utils/types";
 
-interface GPAuthFormEventProps {
+type GPAuthFormEventProps = {
   handleRegistrationSubmit?: ({
     userIntolerances,
     userDiets,
@@ -22,7 +22,7 @@ interface GPAuthFormEventProps {
   handleLoginSubmit?: (event: React.FormEvent) => void;
   handleAuthInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   formData: GPAuthFormDataTypes;
-}
+};
 
 const AuthForm: React.FC<GPAuthFormEventProps> = ({
   handleRegistrationSubmit,

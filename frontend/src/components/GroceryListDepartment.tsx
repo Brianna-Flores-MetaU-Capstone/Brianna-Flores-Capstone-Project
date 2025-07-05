@@ -3,10 +3,10 @@ import { groceryList } from "../utils/sampleData";
 import type { GPIngredientDataTypes } from "../utils/types";
 import GenericList from "./GenericList";
 
-interface GPGroceryListDepartmentProps {
+type GPGroceryListDepartmentProps = {
   department: string;
   handleOpenModal: (ingredient: GPIngredientDataTypes) => void;
-}
+};
 
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   department,
@@ -19,14 +19,15 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   return (
     <div className="grocery-department">
       <GenericList
-          titles={[department]}
-          list={filteredGroceries} 
-          listConfig={() => ({
-            groceryCheck: true,
-            presentExpiration: false,
-            presentButtons: true,
-            onEdit: handleOpenModal
-          })}/>
+        titles={[department]}
+        list={filteredGroceries}
+        listConfig={() => ({
+          groceryCheck: true,
+          presentExpiration: false,
+          presentButtons: true,
+          onEdit: handleOpenModal,
+        })}
+      />
     </div>
   );
 };

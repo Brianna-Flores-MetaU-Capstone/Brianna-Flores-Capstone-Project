@@ -17,12 +17,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 
-interface GPIngredientModalProps {
+type GPIngredientModalProps = {
   modalFor: string;
   ingredientData?: GPIngredientDataTypes;
   onClose: () => void;
   modalOpen: boolean;
-}
+};
 
 const actions = {
   SET_INPUT: "setInput",
@@ -35,7 +35,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   onClose,
   modalOpen,
 }) => {
-
   // useReducer
   const initialIngredientState = ingredientData ?? {
     department: "",
@@ -75,11 +74,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
         <form className="ingredient-form">
           <TextField
             required
-            id="ingredient-name"
             name={ingredientDataFields.NAME}
             slotProps={{
               htmlInput: {
-                "data-ingredientfield": ingredientDataFields.NAME
+                "data-ingredientfield": ingredientDataFields.NAME,
               },
             }}
             onChange={(event) =>
@@ -97,11 +95,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           <Box display="flex" width="100%">
             <TextField
               required
-              id="ingredient-quantity"
               name={ingredientDataFields.QUANTITY}
               slotProps={{
                 htmlInput: {
-                  "data-ingredientfield": ingredientDataFields.QUANTITY
+                  "data-ingredientfield": ingredientDataFields.QUANTITY,
                 },
               }}
               type="number"
@@ -119,7 +116,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               variant="standard"
             />
             <Select
-              id={ingredientDataFields.UNIT}
               name={ingredientDataFields.UNIT}
               value={newIngredientData?.unit}
               onChange={(event) =>
@@ -161,7 +157,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           )}
           <InputLabel>Select a Department</InputLabel>
           <Select
-            id={ingredientDataFields.DEPARTMENT}
             name={ingredientDataFields.DEPARTMENT}
             value={newIngredientData?.department}
             onChange={(event) =>

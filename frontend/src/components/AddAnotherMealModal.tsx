@@ -6,7 +6,11 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData, GPModalStyle } from "../utils/utils";
-import type { GPRecipeDataTypes, GPRequestFormDataTypes, GPErrorMessageTypes } from "../utils/types";
+import type {
+  GPRecipeDataTypes,
+  GPRequestFormDataTypes,
+  GPErrorMessageTypes,
+} from "../utils/types";
 import "../styles/Meal.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -16,11 +20,11 @@ import ErrorState from "./ErrorState";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
-interface GPAddAnotherMealProps {
+type GPAddAnotherMealProps = {
   handleModalClose: () => void;
   onSelectRecipe: (data: GPRecipeDataTypes) => void;
   modalOpen: boolean;
-}
+};
 
 const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   handleModalClose,
@@ -58,8 +62,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
       );
       if (!response.ok) {
-        const errorResponse = await response.json()
-        setErrorMessage({error: true, message: `Error: ${errorResponse.message}`})
+        const errorResponse = await response.json();
+        setErrorMessage({
+          error: true,
+          message: `Error: ${errorResponse.message}`,
+        });
       }
       const data = await response.json();
       const parsedRecipes = parseRecipeData(data.results);
@@ -83,8 +90,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2`
       );
       if (!response.ok) {
-        const errorResponse = await response.json()
-        setErrorMessage({error: true, message: `Error: ${errorResponse.message}`})
+        const errorResponse = await response.json();
+        setErrorMessage({
+          error: true,
+          message: `Error: ${errorResponse.message}`,
+        });
       }
       const data = await response.json();
       // array of recipes
@@ -171,7 +181,12 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         </form>
 
         {/* Display error message if needed */}
-        {errorMessage && <ErrorState error={errorMessage.error} message={errorMessage.message} />}
+        {errorMessage && (
+          <ErrorState
+            error={errorMessage.error}
+            message={errorMessage.message}
+          />
+        )}
         <section className="result-cards">
           {mealResults.map((meal) => {
             return (
