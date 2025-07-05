@@ -74,3 +74,5 @@ const checkUserExists = async (firebaseId: string) => {
   })
   return user;
 }
+
+module.exports = router

@@ -38,6 +38,7 @@ model Ingredient {
   groceryList          GroceryList? @relation(fields: [groceryListId], references: [id])
   recipeId             Int
   recipe               Recipe       @relation(fields: [recipeId], references: [id])
+  @@unique(name: "uniqueIngredient", [ingredientName, quantity, unit, department, expiration])
 }
 
 // many to many relationship
