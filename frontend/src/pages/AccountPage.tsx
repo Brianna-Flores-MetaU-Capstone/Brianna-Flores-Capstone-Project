@@ -1,7 +1,7 @@
 import React from "react";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import type { GPToggleNavBarProps } from "../utils/types";
+import type { GPToggleNavBarProps, GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
@@ -30,7 +30,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userEmail, setUserEmail] = useState<string>();
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
-  const [message, setMessage] = useState<string>();
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -46,7 +46,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }, []);
 
   const setUserInfo = async (user: User) => {
-    const userData = await getUserData(user);
+    const userData = await getUserData({user, setMessage});
     if (userData) {
       setUserEmail(userData.userEmail);
       setUserIntolerances(userData.userIntolerances);
@@ -90,7 +90,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     event.preventDefault();
     event.currentTarget.reset();
     if (!userPassword) {
-      setMessage("auth/no-password");
+      setMessage({error: true, message: "auth/no-password"});
       return;
     }
 
@@ -109,19 +109,19 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
             if (user.email && userEmail && user.email !== userEmail) {
               // get credential by signing user in with email
               updateEmail(user, userEmail).catch((error) => {
-                setMessage(error.code);
+                setMessage({error: true, message: error.code});
               });
             }
             // then update account in database
-            updateAccount({ user, userEmail, userIntolerances, userDiets });
-            setMessage("success/profile-update");
+            updateAccount({ user, userEmail, userIntolerances, userDiets, setMessage });
+            setMessage({error: false, message:"success/profile-update"});
           })
           .catch((error) => {
-            setMessage(error.code);
+            setMessage({error: true, message: error.code});
             setUserPassword("");
           });
       } catch (error) {
-        setMessage("auth/operation-not-allowed");
+        setMessage({error: true, message: "auth/operation-not-allowed"});
       }
     }
   };
@@ -173,7 +173,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           handleAccountSubmit={handleAccountSubmit}
           handleInputChange={handleInputChange}
         />
-        {message && <ErrorState errorMessage={message} />}
+        {message && <ErrorState error={message.error} message={message.message} />}
       </div>
     </div>
   );

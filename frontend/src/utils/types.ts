@@ -53,6 +53,11 @@ interface GPRequestFormDataTypes {
   servings: string;
 }
 
+interface GPErrorMessageTypes {
+    error: boolean;
+    message: string;
+}
+
 export type {
   GPToggleNavBarProps,
   GPAccountInfoTypes,
@@ -61,4 +66,5 @@ export type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPRequestFormDataTypes,
+  GPErrorMessageTypes
 };

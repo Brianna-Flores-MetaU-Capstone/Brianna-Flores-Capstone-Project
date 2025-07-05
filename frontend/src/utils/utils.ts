@@ -53,24 +53,6 @@ const validateInput = (formData: GPAuthFormDataTypes) => {
   return { type: "", text: "" };
 };
 
-const handleNewUser = async (newUser: GPAccountInfoTypes) => {
-  try {
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to create user");
-    }
-    const data = await response.json();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
   setFormData: React.Dispatch<React.SetStateAction<GPAuthFormDataTypes>>
@@ -94,7 +76,6 @@ const GPModalStyle = {
 
 export {
   validateInput,
-  handleNewUser,
   parseRecipeData,
   handleAuthInputChange,
   GPModalStyle,

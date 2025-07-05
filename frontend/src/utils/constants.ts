@@ -28,11 +28,19 @@ const preview = {
     INGREDIENT: "Ingredients on Hand"
 }
 
+const severity = {
+  SUCCESS: "success",
+  INFO: "info",
+  WARNING: "warning",
+  ERROR: "error"
+}
+
 export {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
   ingredientDataFields,
   preview,
+  severity,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
   INGREDIENT_MODAL,

@@ -1,15 +1,13 @@
 import React from "react";
 import { errorCodes } from "../utils/firebase";
+import Alert from "@mui/material/Alert";
+import type { GPErrorMessageTypes } from "../utils/types";
 
-interface GPErrorDisplayProps {
-  errorMessage: string;
-}
-
-const ErrorState: React.FC<GPErrorDisplayProps> = ({ errorMessage }) => {
-  const displayedMessage = errorCodes[errorMessage];
+const ErrorState: React.FC<GPErrorMessageTypes> = ({ error, message }) => {
+  const displayedMessage = errorCodes[message] ?? message;
   return (
     <div>
-      <p className="error-message">{displayedMessage ?? "Try Again"}</p>
+        <Alert severity={error ? "error" : "success"}>{displayedMessage}</Alert>
     </div>
   );
 };

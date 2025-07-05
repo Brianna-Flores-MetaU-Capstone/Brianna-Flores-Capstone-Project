@@ -1,12 +1,17 @@
-import type { GPCurrentUserTypes } from "./types";
+import type { GPCurrentUserTypes, GPAccountInfoTypes, GPErrorMessageTypes } from "./types";
 import type { User } from "firebase/auth";
+
+interface GPUpdateAccountHelperTypes extends GPCurrentUserTypes {
+    setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
+}
 
 const updateAccount = async ({
   user,
   userEmail,
   userIntolerances,
   userDiets,
-}: GPCurrentUserTypes) => {
+  setMessage
+}: GPUpdateAccountHelperTypes) => {
   const updatedUser = await fetch(`http://localhost:3000/account/${user.uid}`, {
     method: "PUT",
     headers: {
@@ -19,13 +24,18 @@ const updateAccount = async ({
     }),
   });
   if (!updatedUser.ok) {
-    throw new Error("Failed to update user");
+    setMessage({error: true, message: "Failed to update user"})
   }
   const data = await updatedUser.json();
   return data;
 };
 
-const getUserData = async (user: User) => {
+interface UserDataHelperTypes {
+  user: User,
+  setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
+}
+
+const getUserData = async ({user, setMessage}: UserDataHelperTypes) => {
   try {
     const fetchedUserData = await fetch(
       `http://localhost:3000/account/${user.uid}`,
@@ -37,7 +47,7 @@ const getUserData = async (user: User) => {
       }
     );
     if (!fetchedUserData.ok) {
-      throw new Error("Failed to get user data");
+      setMessage({error: true, message: "Failed to get user data"})
     }
     const data = await fetchedUserData.json();
     const userDataObj: GPCurrentUserTypes = {
@@ -52,4 +62,27 @@ const getUserData = async (user: User) => {
   }
 };
 
-export { updateAccount, getUserData };
+interface GPNewUserHelperTypes {
+  newUser: GPAccountInfoTypes,
+  setMessage: (value: React.SetStateAction<GPErrorMessageTypes | undefined>) => void
+}
+
+const handleNewUser = async ({newUser, setMessage}: GPNewUserHelperTypes) => {
+  try {
+    const response = await fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+    if (!response.ok) {
+      setMessage({error: true, message: "Failed to add user to database"})
+    }
+    const data = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { updateAccount, getUserData, handleNewUser };
