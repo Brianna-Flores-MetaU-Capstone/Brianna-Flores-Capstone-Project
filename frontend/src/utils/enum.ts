@@ -1,4 +1,4 @@
-const Units = [
+const IngredientUnitOptions = [
   "units",
   "cups",
   "Tbsp",
@@ -58,4 +58,4 @@ const Departments = [
   "Tea and Coffee",
 ];
 
-export { Units, Intolerances, Diets, Departments };
+export { IngredientUnitOptions, Intolerances, Diets, Departments };

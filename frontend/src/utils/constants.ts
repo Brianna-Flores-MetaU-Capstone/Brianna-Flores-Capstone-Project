@@ -8,7 +8,7 @@ const AuthenticationFieldEnum = {
   PASSWORD: "password",
 };
 
-const ingredientDataFields = {
+const IngredientDataFields = {
   DEPARTMENT: "department",
   IMAGE: "image",
   NAME: "name",
@@ -23,24 +23,16 @@ const TOTAL_SEARCH_REQUESTS = 6;
 const INGREDIENT_MODAL = "ingredients-page";
 const GROCERY_MODAL = "grocery-page";
 
-const preview = {
+const PreviewConstants = {
   GROCERY: "Grocery List",
   INGREDIENT: "Ingredients on Hand",
-};
-
-const severity = {
-  SUCCESS: "success",
-  INFO: "info",
-  WARNING: "warning",
-  ERROR: "error",
 };
 
 export {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
-  ingredientDataFields,
-  preview,
-  severity,
+  IngredientDataFields,
+  PreviewConstants,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
   INGREDIENT_MODAL,

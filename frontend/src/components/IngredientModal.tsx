@@ -1,9 +1,9 @@
 import React from "react";
 import { useReducer } from "react";
 import "../styles/IngredientsPage.css";
-import { Units, Departments } from "../utils/enum";
+import { IngredientUnitOptions, Departments } from "../utils/enum";
 import type { GPIngredientDataTypes } from "../utils/types";
-import { ingredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
+import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -73,10 +73,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
         <form className="ingredient-form">
           <TextField
             required
-            name={ingredientDataFields.NAME}
+            name={IngredientDataFields.NAME}
             slotProps={{
               htmlInput: {
-                "data-ingredientfield": ingredientDataFields.NAME,
+                "data-ingredientfield": IngredientDataFields.NAME,
               },
             }}
             onChange={(event) =>
@@ -94,10 +94,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           <Box display="flex" width="100%">
             <TextField
               required
-              name={ingredientDataFields.QUANTITY}
+              name={IngredientDataFields.QUANTITY}
               slotProps={{
                 htmlInput: {
-                  "data-ingredientfield": ingredientDataFields.QUANTITY,
+                  "data-ingredientfield": IngredientDataFields.QUANTITY,
                 },
               }}
               type="number"
@@ -115,7 +115,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               variant="standard"
             />
             <Select
-              name={ingredientDataFields.UNIT}
+              name={IngredientDataFields.UNIT}
               value={newIngredientData?.unit}
               onChange={(event) =>
                 dispatch({
@@ -128,7 +128,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               autoWidth
               label="unit"
             >
-              {Units.map((unit) => (
+              {IngredientUnitOptions.map((unit) => (
                 <MenuItem key={unit} value={unit}>
                   {unit}
                 </MenuItem>
@@ -138,7 +138,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           {modalFor === INGREDIENT_MODAL && (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                name={ingredientDataFields.EXPIRATION_DATE}
+                name={IngredientDataFields.EXPIRATION_DATE}
                 label="Expiration Date"
                 value={
                   newIngredientData?.expirationDate
@@ -156,7 +156,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           )}
           <InputLabel>Select a Department</InputLabel>
           <Select
-            name={ingredientDataFields.DEPARTMENT}
+            name={IngredientDataFields.DEPARTMENT}
             value={newIngredientData?.department}
             onChange={(event) =>
               dispatch({
