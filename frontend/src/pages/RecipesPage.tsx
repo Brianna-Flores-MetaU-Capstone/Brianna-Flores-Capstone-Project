@@ -1,9 +1,9 @@
 import "../styles/RecipesPage.css";
 import { Outlet } from "react-router";
-import type { RecipeToggleNavBar } from "../utils/types";
+import type { GPToggleNavBarProps } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 
-const RecipesPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const RecipesPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

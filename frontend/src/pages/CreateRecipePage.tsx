@@ -1,12 +1,7 @@
-import '../styles/CreateRecipePage.css'
+import "../styles/CreateRecipePage.css";
 
 const CreateRecipePage = () => {
-
-    return (
-        <div>
-            CreateRecipePage
-        </div>
-    )
-}
+  return <div>CreateRecipePage</div>;
+};
 
 export default CreateRecipePage;

@@ -1,64 +1,61 @@
-const Units = [
-    "unit",
-    "cups",
-    "Tbsp",
-    "tsp",
-    "fl. oz",
-    "gal.",
-    "qt.",
-    "pt.",
-    "oz.",
-    "lb",
-    "g",
-    "kg",
-    "slice",
-    "piece",
-    "container/bag"
- ];
+const IngredientUnitOptions = [
+  "units",
+  "cups",
+  "Tbsp",
+  "tsp",
+  "fl. oz",
+  "gal.",
+  "qt.",
+  "pt.",
+  "oz.",
+  "lb",
+  "g",
+  "kg",
+  "slice",
+  "piece",
+  "container/bag",
+];
 
- const Intolerances = [
-    "Dairy",
-    "Nuts",
-    "Soy",
-    "Egg",
-    "Seafood",
-    "Gluten",
-    "Sesame", 
- ]
+const Intolerances = [
+  "Dairy",
+  "Egg",
+  "Gluten",
+  "Nuts",
+  "Seafood",
+  "Sesame",
+  "Soy",
+];
 
- const Diets = [
-    "Vegetarian",
-    "Vegan"
- ]
+const Diets = ["Vegetarian", "Vegan"];
 
- const Departments = [
-    "Baking",
-    "Health Foods",
-    "Spices and Seasonings",
-    'Pasta and Rice',
-    'Bakery/Bread',
-    'Refrigerated',
-    'Canned and Jarred',
-    'Frozen',
-    'Nut butters, Jams, and Honey',
-    'Oil, Vinegar, Salad Dressing',
-    'Condiments',
-    'Savory Snacks',
-    'Milk, Eggs, Other Dairy',
-    'Ethnic Foods',
-    'Tea and Coffee',
-    'Meat',
-    'Gourmet',
-    'Sweet Snacks',
-    'Gluten Free',
-    'Cereal',
-    'Nuts',
-    'Beverages',
-    'Produce',
-    'Seafood',
-    'Cheese',
-    'Dried Fruits',
-    'Bread',
- ]
- 
-export { Units, Intolerances, Diets, Departments }
+const Departments = [
+  "Bakery/Bread",
+  "Baking",
+  "Beverages",
+  "Bread",
+  "Canned and Jarred",
+  "Cereal",
+  "Cheese",
+  "Condiments",
+  "Dried Fruits",
+  "Ethnic Foods",
+  "Frozen",
+  "Gourmet",
+  "Gluten Free",
+  "Health Foods",
+  "Meat",
+  "Milk, Eggs, Other Dairy",
+  "Nut butters, Jams, and Honey",
+  "Nuts",
+  "Oil, Vinegar, Salad Dressing",
+  "Pasta and Rice",
+  "Produce",
+  "Refrigerated",
+  "Savory Snacks",
+  "Seafood",
+  "Spices and Seasonings",
+  "Sweet Snacks",
+  "Tea and Coffee",
+];
+
+export { IngredientUnitOptions, Intolerances, Diets, Departments };

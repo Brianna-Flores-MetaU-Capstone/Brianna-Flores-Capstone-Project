@@ -1,73 +1,70 @@
 import type { User } from "firebase/auth";
 
-interface RecipeToggleNavBar {
-    navOpen: boolean;
-    toggleNav: () => void 
-}
+type GPToggleNavBarProps = {
+  navOpen: boolean;
+  toggleNav: () => void;
+};
 
-interface RecipeData {
-    id: number
-    image: string
-    title: string
-    servings: number
-    sourceUrl: string
-    vegetarian: boolean
-    vegan: boolean
-    glutenFree: boolean
-    dairyFree: boolean
-    ingredients: IngredientData[]
-    totalEstimatedCost: number
-}
+type GPRecipeDataTypes = {
+  id: number;
+  image: string;
+  title: string;
+  servings: number;
+  sourceUrl: string;
+  vegetarian: boolean;
+  vegan: boolean;
+  glutenFree: boolean;
+  dairyFree: boolean;
+  ingredients: GPIngredientDataTypes[];
+  totalEstimatedCost: number;
+};
 
-interface RecipeUserAccountInfo {
-    firebaseId: string
-    email: string
-    intolerances: string[]
-    diets: string[]
-}
+type GPAccountInfoTypes = {
+  firebaseId: string;
+  email: string;
+  intolerances: string[];
+  diets: string[];
+};
 
-interface RecipeAuthFormData {
-    email: string
-    password: string
-}
+type GPAuthFormDataTypes = {
+  email: string;
+  password: string;
+};
 
-interface IngredientData {
-    department: string
-    image: string
-    name: string
-    quantity: string
-    unit: string
-    estimatedCost: number
-    expirationDate?: string
-}
+type GPIngredientDataTypes = {
+  department: string;
+  image: string;
+  name: string;
+  quantity: string;
+  unit: string;
+  estimatedCost: number;
+  expirationDate?: string | null;
+};
 
-interface RecipeRegistrationFormEvents {
-    handleSubmit: ({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    formData: RecipeAuthFormData
-}
+type GPCurrentUserTypes = {
+  user: User;
+  userEmail: string;
+  userIntolerances: string[];
+  userDiets: string[];
+};
 
-interface AuthFormResultMessage {
-    type: string
-    text: string
-}
+type GPRequestFormDataTypes = {
+  recipeName: string;
+  servings: string;
+};
 
-interface RecipeLoginFormEvents {
-    handleSubmit: (event: React.FormEvent) => void
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    formData: RecipeAuthFormData
-}
+type GPErrorMessageTypes = {
+  error: boolean;
+  message: string;
+};
 
-interface CurrentUserData {
-    user: User
-    userEmail: string,
-    userIntolerances: string[],
-    userDiets: string[]
-}
-
-interface AuthFormResultMessage {
-    type: string
-    text: string
-}
-
-export type {RecipeToggleNavBar, RecipeUserAccountInfo, RecipeAuthFormData, RecipeRegistrationFormEvents, RecipeLoginFormEvents, CurrentUserData, IngredientData, RecipeData, AuthFormResultMessage}
+export type {
+  GPToggleNavBarProps,
+  GPAccountInfoTypes,
+  GPAuthFormDataTypes,
+  GPCurrentUserTypes,
+  GPIngredientDataTypes,
+  GPRecipeDataTypes,
+  GPRequestFormDataTypes,
+  GPErrorMessageTypes,
+};

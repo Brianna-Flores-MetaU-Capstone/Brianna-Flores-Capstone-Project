@@ -1,28 +1,36 @@
 import React from "react";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import type { RecipeToggleNavBar } from "../utils/types";
+import type { GPToggleNavBarProps, GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
 import "../styles/LoginPage.css";
 import { auth } from "../utils/firebase";
-import { onAuthStateChanged, EmailAuthProvider, updateEmail, reauthenticateWithCredential } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  EmailAuthProvider,
+  updateEmail,
+  reauthenticateWithCredential,
+} from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
-import { PreferenceList, Authentication } from "../utils/constants";
+import {
+  PreferenceCategoryEnum,
+  AuthenticationFieldEnum,
+} from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
+import TextField from "@mui/material/TextField";
 
-const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
+const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>()
+  const [currentUser, setCurrentUser] = useState<User | null>();
   const [userEmail, setUserEmail] = useState<string>();
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
-  const [message, setMessage] = useState<string>();
-
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -38,41 +46,51 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
   }, []);
 
   const setUserInfo = async (user: User) => {
-    const userData = await getUserData(user);
+    const userData = await getUserData({ user, setMessage });
     if (userData) {
       setUserEmail(userData.userEmail);
       setUserIntolerances(userData.userIntolerances);
       setUserDiets(userData.userDiets);
     }
-  }
+  };
 
-  const handlePreferenceClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { name, value } = event.currentTarget
-    const setterFunction = name === PreferenceList.INTOLERANCES ? setUserIntolerances : setUserDiets;
-    const userList = name === PreferenceList.INTOLERANCES ? userIntolerances : userDiets;
-    if (userList.includes(value)) {
-      setterFunction((prev) =>
-        prev.filter((item) => item !== value)
-      );
-    } else {
-      setterFunction((prev) => [...prev, value]);
+  const handlePreferenceClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    const { category, selection } = (event.currentTarget as HTMLButtonElement)
+      .dataset;
+    const setPreferenceList =
+      category === PreferenceCategoryEnum.INTOLERANCES
+        ? setUserIntolerances
+        : setUserDiets;
+    const userList =
+      category === PreferenceCategoryEnum.INTOLERANCES
+        ? userIntolerances
+        : userDiets;
+    if (selection) {
+      if (userList.includes(selection)) {
+        setPreferenceList((prev) => prev.filter((item) => item !== selection));
+      } else {
+        setPreferenceList((prev) => [...prev, selection]);
+      }
     }
-  }
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === Authentication.EMAIL) {
+    const { credential } = (event.target as HTMLInputElement).dataset;
+    const { value } = event.target;
+    if (credential === AuthenticationFieldEnum.EMAIL) {
       setUserEmail(value);
-    } else if (name === Authentication.PASSWORD) {
+    } else if (credential === AuthenticationFieldEnum.PASSWORD) {
       setUserPassword(value);
     }
   };
 
   const handleAccountSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     event.currentTarget.reset();
     if (!userPassword) {
-      setMessage("auth/no-password");
+      setMessage({ error: true, message: "auth/no-password" });
       return;
     }
 
@@ -80,7 +98,10 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
     if (user && user.email && userEmail) {
       try {
         // validate credentials to update account
-        const credential = EmailAuthProvider.credential(user.email, userPassword);
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          userPassword
+        );
         // valdate credentials to update account
         reauthenticateWithCredential(user, credential)
           .then(() => {
@@ -88,24 +109,30 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
             if (user.email && userEmail && user.email !== userEmail) {
               // get credential by signing user in with email
               updateEmail(user, userEmail).catch((error) => {
-                  setMessage(error.code);
-                });
+                setMessage({ error: true, message: error.code });
+              });
             }
             // then update account in database
-            updateAccount({user, userEmail, userIntolerances, userDiets});
-            setMessage("success/profile-update")
-          }).catch((error) => {
-            setMessage(error.code)
-            setUserPassword("")
+            updateAccount({
+              user,
+              userEmail,
+              userIntolerances,
+              userDiets,
+              setMessage,
+            });
+            setMessage({ error: false, message: "success/profile-update" });
+          })
+          .catch((error) => {
+            setMessage({ error: true, message: error.code });
+            setUserPassword("");
           });
       } catch (error) {
-        setMessage("auth/operation-not-allowed")
+        setMessage({ error: true, message: "auth/operation-not-allowed" });
       }
     }
   };
 
-
-  if(!currentUser && !loadingData) {
+  if (!currentUser && !loadingData) {
     return (
       <div className="account-page">
         <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -120,20 +147,41 @@ const AccountPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">
-          <h3>Email</h3>
-          <input
-            name={Authentication.EMAIL}
-            id={Authentication.EMAIL}
-            value={userEmail ? userEmail : ""}
+          <TextField
+            required
+            id={AuthenticationFieldEnum.EMAIL}
+            slotProps={{
+              htmlInput: {
+                "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
+              },
+            }}
             onChange={handleInputChange}
+            value={userEmail ? userEmail : ""}
+            label="Email"
+            variant="standard"
           />
         </div>
         <h2>Selected Intolerances</h2>
-        <RegistrationPreferenceButtons listName={PreferenceList.INTOLERANCES} listItems={Intolerances} userList={userIntolerances} handleButtonClick={handlePreferenceClick}/>
+        <RegistrationPreferenceButtons
+          listName={PreferenceCategoryEnum.INTOLERANCES}
+          listItems={Intolerances}
+          userList={userIntolerances}
+          handleButtonClick={handlePreferenceClick}
+        />
         <h2>Selected Diets</h2>
-        <RegistrationPreferenceButtons listName={PreferenceList.DIETS} listItems={Diets} userList={userDiets} handleButtonClick={handlePreferenceClick}/>
-        <AuthenticatePassword handleAccountSubmit={handleAccountSubmit} handleInputChange={handleInputChange} />
-        { message && <ErrorState errorMessage={message} /> }
+        <RegistrationPreferenceButtons
+          listName={PreferenceCategoryEnum.DIETS}
+          listItems={Diets}
+          userList={userDiets}
+          handleButtonClick={handlePreferenceClick}
+        />
+        <AuthenticatePassword
+          handleAccountSubmit={handleAccountSubmit}
+          handleInputChange={handleInputChange}
+        />
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </div>
     </div>
   );

@@ -1,24 +1,22 @@
-import React from "react"
+import React from "react";
 import NavBar from "./NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import type {RecipeToggleNavBar} from "../utils/types"
-
-import { auth } from "../utils/firebase"
+import type { GPToggleNavBarProps } from "../utils/types";
+import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
-import "../styles/Homepage.css"
+import "../styles/Homepage.css";
+import Button from "@mui/material/Button";
 
-const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
+const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    signOut(auth).catch((error) => {
-      
-    })
-  }
+    signOut(auth);
+  };
 
-  const handleLoginClick = () => {
+  const handleLogin = () => {
     if (navOpen) {
       toggleNav();
     }
@@ -30,10 +28,11 @@ const AppHeader = ({navOpen, toggleNav}: RecipeToggleNavBar) => {
       <button className="nav-button" onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
       </button>
-      <h1>Grocery Buddy *make a better name lol*</h1>
+      {/* TODO make a better name */}
+      <h1>Grociplan</h1>
       <div className="auth-access-buttons">
-        <button className="login-button" onClick={handleLogout}>Logout</button>
-        <button className="login-button" onClick={handleLoginClick}>Login</button>
+        <Button onClick={handleLogout}>Logout</Button>
+        <Button onClick={handleLogin}>Login</Button>
       </div>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />
     </section>

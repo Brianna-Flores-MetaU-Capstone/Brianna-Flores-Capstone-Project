@@ -19,31 +19,7 @@
 
 .meal-card:hover,
 .meal-card:focus {
-    cursor: pointer;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background-color: #faf5f6;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 60%;
-  height: 500px;
-  position: relative;
-  overflow-y: scroll;
+  cursor: pointer;
 }
 
 .diets-and-intollerances {
@@ -54,26 +30,26 @@
   display: inline-block;
   margin-right: 5px;
   padding: 5px 10px 5px 10px;
-  background-color: #D9EDF8;
+  background-color: #d9edf8;
   font-size: 15px;
 }
 
 .meal-card .diets-and-intollerances li {
-    font-size: 10px;
+  font-size: 10px;
 }
 
 .modal-header {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .meal-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header .meal-img {
-    width: 50%;
+  width: 50%;
 }
 
 /* CSS for AddAnotherMealModal.tsx */

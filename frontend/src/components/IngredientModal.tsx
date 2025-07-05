@@ -1,60 +1,186 @@
-import React from 'react'
-import '../styles/IngredientsPage.css'
-import { Units, Departments } from "../utils/enum"
-import type { IngredientData } from '../utils/types'
-import { useState } from 'react'
+import React from "react";
+import { useReducer } from "react";
+import "../styles/IngredientsPage.css";
+import { IngredientUnitOptions, Departments } from "../utils/enum";
+import type { GPIngredientDataTypes } from "../utils/types";
+import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { GPModalStyle } from "../utils/utils";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
 
-const IngredientModal = ({modalFor, ingredientData, onClose}: {modalFor: string, ingredientData?: IngredientData, onClose: () => void}) => {
-    const [newIngredientData, setNewIngredientData] = useState<IngredientData>(ingredientData ?? {
-        department: "",
-        image: "",
-        name: "",
-        quantity: "",
-        unit: "",
-        estimatedCost: 0,
-        expirationDate: ""
-    })
-    
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = event.target;
-        setNewIngredientData((prev) => ({ ...prev, [name]: value }));
-    };
+type GPIngredientModalProps = {
+  modalFor: string;
+  ingredientData?: GPIngredientDataTypes;
+  onClose: () => void;
+  modalOpen: boolean;
+};
 
-    return (
-        <div className="modal" id="ingredient-modal">
-            <div className="modal-content">
-                <button className='modal-close' onClick={onClose}>&times;</button>
-                <form className="ingredient-form">
-                    <label htmlFor="ingredient-name">Ingredient Name</label>
-                    <input name="name" id="ingredient-name" value={newIngredientData?.name} onChange={handleInputChange} required/>
-                    <label htmlFor="ingredient-quantity">{modalFor === "ingredients-page" ? "Quantity on Hand" : "Quantity"}</label>
-                    <div className='ingredient-quantity'>
-                        <input type="number" name="quantity" id="ingredient-quantity" value={newIngredientData?.quantity} onChange={handleInputChange} required/>
-                        <select name="unit" value={newIngredientData?.unit} onChange={handleInputChange} required>
-                            {
-                                Units.map((unit) => (
-                                    <option key={unit} value={unit}>{unit}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
-                    { modalFor === "ingredients-page" && <label htmlFor="ingredient-expiration">Expiration Date</label> }
-                    { modalFor === "ingredients-page" && <input type="date" name="expirationDate" id="ingredient-expiration" value={newIngredientData?.expirationDate} onChange={handleInputChange} required/> }
-                    <label htmlFor="ingredient-department">Department</label>
-                    <select name="department" id="ingredient-department" value={newIngredientData?.department} onChange={handleInputChange}>
-                        {
-                            Departments.map((department: string) => {
-                                return (
-                                    <option>{department}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    {ingredientData? <button type="submit" className="add-button">Edit Ingredient!</button>: <button type="submit" className="add-button">Add Ingredient!</button>}
-                </form>
-            </div>
-        </div>
-    )
-}
+const actions = {
+  SET_INPUT: "setInput",
+  SET_DATE: "setDate",
+} as const;
 
-export default IngredientModal
+const IngredientModal: React.FC<GPIngredientModalProps> = ({
+  modalFor,
+  ingredientData,
+  onClose,
+  modalOpen,
+}) => {
+  const initialIngredientState = ingredientData ?? {
+    department: "",
+    image: "",
+    name: "",
+    quantity: "",
+    unit: "units",
+    estimatedCost: 0,
+    expirationDate: null,
+  };
+
+  type ACTIONTYPE =
+    | {
+        type: typeof actions.SET_INPUT;
+        ingredientField: keyof GPIngredientDataTypes;
+        value: string;
+      }
+    | { type: typeof actions.SET_DATE; value: string | undefined };
+
+  function reducer(state: GPIngredientDataTypes, action: ACTIONTYPE) {
+    switch (action.type) {
+      case "setInput":
+        return { ...state, [action.ingredientField]: action.value };
+      case "setDate":
+        return { ...state, expirationDate: action.value ?? null };
+    }
+  }
+
+  const [newIngredientData, dispatch] = useReducer(
+    reducer,
+    initialIngredientState
+  );
+
+  return (
+    <Modal open={modalOpen} onClose={onClose}>
+      <Box sx={GPModalStyle}>
+        <form className="ingredient-form">
+          <TextField
+            required
+            name={IngredientDataFields.NAME}
+            slotProps={{
+              htmlInput: {
+                "data-ingredientfield": IngredientDataFields.NAME,
+              },
+            }}
+            onChange={(event) =>
+              dispatch({
+                type: actions.SET_INPUT,
+                ingredientField: event?.target
+                  .name as keyof GPIngredientDataTypes,
+                value: event.target.value,
+              })
+            }
+            value={newIngredientData?.name}
+            label="Ingredient Name"
+            variant="standard"
+          />
+          <Box display="flex" width="100%">
+            <TextField
+              required
+              name={IngredientDataFields.QUANTITY}
+              slotProps={{
+                htmlInput: {
+                  "data-ingredientfield": IngredientDataFields.QUANTITY,
+                },
+              }}
+              type="number"
+              onChange={(event) =>
+                dispatch({
+                  type: actions.SET_INPUT,
+                  ingredientField: event?.target
+                    .name as keyof GPIngredientDataTypes,
+                  value: event.target.value,
+                })
+              }
+              value={newIngredientData?.quantity}
+              fullWidth
+              label="Quantity"
+              variant="standard"
+            />
+            <Select
+              name={IngredientDataFields.UNIT}
+              value={newIngredientData?.unit}
+              onChange={(event) =>
+                dispatch({
+                  type: actions.SET_INPUT,
+                  ingredientField: event?.target
+                    .name as keyof GPIngredientDataTypes,
+                  value: event.target.value,
+                })
+              }
+              autoWidth
+              label="unit"
+            >
+              {IngredientUnitOptions.map((unit) => (
+                <MenuItem key={unit} value={unit}>
+                  {unit}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+          {modalFor === INGREDIENT_MODAL && (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                name={IngredientDataFields.EXPIRATION_DATE}
+                label="Expiration Date"
+                value={
+                  newIngredientData?.expirationDate
+                    ? dayjs(newIngredientData?.expirationDate)
+                    : null
+                }
+                onChange={(newDate) =>
+                  dispatch({
+                    type: actions.SET_DATE,
+                    value: newDate?.format("YYYY-MM-DD"),
+                  })
+                }
+              />
+            </LocalizationProvider>
+          )}
+          <InputLabel>Select a Department</InputLabel>
+          <Select
+            name={IngredientDataFields.DEPARTMENT}
+            value={newIngredientData?.department}
+            onChange={(event) =>
+              dispatch({
+                type: actions.SET_INPUT,
+                ingredientField: event?.target
+                  .name as keyof GPIngredientDataTypes,
+                value: event.target.value,
+              })
+            }
+            label="Department"
+          >
+            {Departments.map((department) => (
+              <MenuItem key={department} value={department}>
+                {department}
+              </MenuItem>
+            ))}
+          </Select>
+          <Button type="submit" className="add-button">
+            {ingredientData ? "Edit Ingredient!" : "Add Ingredient!"}
+          </Button>
+        </form>
+      </Box>
+    </Modal>
+  );
+};
+
+export default IngredientModal;

@@ -8,7 +8,7 @@
 }
 
 .login-page .nav-button {
-    z-index: 1;
+  z-index: 1;
 }
 
 .login-page .app-header {
@@ -38,7 +38,6 @@
 }
 
 .login-info input {
-  margin-bottom: 2vh;
   width: 100%;
   height: 4vh;
   font-size: 2.5vh;
@@ -70,6 +69,7 @@
   justify-content: center;
   gap: 1vw;
   margin: 1vh;
+  flex-wrap: wrap;
 }
 
 .preference-not-selected:hover {

@@ -1,14 +1,36 @@
-import React from 'react'
-import { Authentication } from '../utils/constants'
+import React from "react";
+import { AuthenticationFieldEnum } from "../utils/constants";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-const AuthenticatePassword = ({handleAccountSubmit, handleInputChange}: {handleAccountSubmit: ((event: React.FormEvent<HTMLFormElement>) => void), handleInputChange: ((event: React.ChangeEvent<HTMLInputElement>) => void)}) => {
-    return (
-        <form className="confirm-password" onSubmit={handleAccountSubmit}>
-            <h3>Confirm Password</h3>
-            <input type="password" name={Authentication.PASSWORD} id={Authentication.PASSWORD} onChange={handleInputChange} required/>
-            <button className="submit-auth" type="submit">Submit</button>
-        </form>
-    )
-}
+type GPPasswordAuthenticationProps = {
+  handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
+  handleAccountSubmit,
+  handleInputChange,
+}) => {
+  return (
+    <form className="confirm-password" onSubmit={handleAccountSubmit}>
+      <TextField
+        required
+        slotProps={{
+          htmlInput: {
+            "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
+          },
+        }}
+        onChange={handleInputChange}
+        type="password"
+        label="Confirm Password"
+        variant="standard"
+      />
+      <Button type="submit" variant="outlined">
+        Submit
+      </Button>
+    </form>
+  );
+};
 
 export default AuthenticatePassword;

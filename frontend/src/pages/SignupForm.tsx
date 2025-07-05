@@ -1,55 +1,73 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type { RecipeUserAccountInfo, RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
-import { handleNewUser } from "../utils/utils";
+import type {
+  GPAccountInfoTypes,
+  GPAuthFormDataTypes,
+  GPToggleNavBarProps,
+  GPErrorMessageTypes,
+} from "../utils/types";
+import { handleNewUser } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
-import RegistrationForm from "../components/RegistrationForm";
+import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
+import { handleAuthInputChange } from "../utils/utils";
+import Box from "@mui/material/Box";
 
-const SignupForm = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  const [formData, setFormData] = useState<RecipeAuthFormData>({email: "", password: ""});
-  const [message, setMessage] = useState<string>();
-  const navigate = useNavigate();
-  const [success, setSuccess] = useState(false);
+const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+  const [formData, setFormData] = useState<GPAuthFormDataTypes>({
+    email: "",
+    password: "",
+  });
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  function handleSubmit({userIntolerances, userDiets}: {userIntolerances: string[], userDiets: string[]}) {
+  function handleSubmit({
+    userIntolerances,
+    userDiets,
+  }: {
+    userIntolerances: string[];
+    userDiets: string[];
+  }) {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        const newUser: RecipeUserAccountInfo = {
+        const newUser: GPAccountInfoTypes = {
           firebaseId: user.uid ? user.uid : "",
           email: user.email ? user.email : "",
           intolerances: userIntolerances,
-          diets: userDiets
+          diets: userDiets,
         };
-        handleNewUser(newUser);
-        setSuccess(true);
+        handleNewUser({ newUser, setMessage });
+        setMessage({
+          error: false,
+          message: "Registration successful!",
+        });
       })
       .catch((error) => {
-        setMessage(error.code);
-        setSuccess(false);
+        setMessage({
+          error: true,
+          message: error.code,
+        });
       });
   }
 
   return (
     <div className="login-page signup-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
-      <section className="login-content">
-         <RegistrationForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
-        {message && !success && <ErrorState errorMessage={message} />}
-        {success && (
-          <button className="submit-auth" onClick={() => navigate("/login")}>Take me to login!</button>
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <Box className="login-content">
+        <AuthForm
+          handleRegistrationSubmit={handleSubmit}
+          handleAuthInputChange={(event) =>
+            handleAuthInputChange(event, setFormData)
+          }
+          formData={formData}
+        />
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
         )}
-      </section>
+      </Box>
     </div>
   );
 };

@@ -3,52 +3,59 @@ import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
-import type { RecipeAuthFormData, RecipeToggleNavBar } from "../utils/types";
+import type {
+  GPAuthFormDataTypes,
+  GPToggleNavBarProps,
+  GPErrorMessageTypes,
+} from "../utils/types";
 import "../styles/LoginPage.css";
-import LoginForm from "../components/LoginForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
+import AuthForm from "../components/AuthForm";
+import { handleAuthInputChange } from "../utils/utils";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
-const LoginPage = ({ navOpen, toggleNav }: RecipeToggleNavBar) => {
-  const [formData, setFormData] = useState<RecipeAuthFormData>({
+const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+  const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState<string>();
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
   const navigate = useNavigate();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     signInWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
-        // Signed in
-        navigate("/"); // go back to homepage
+      .then(() => {
+        setMessage({ error: false, message: "Successfully logged in!" });
       })
       .catch((error) => {
-        setMessage(error.code);
+        setMessage({ error: true, message: error.code });
       });
   }
   return (
     <div className="login-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav}/>
+      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section className="login-page">
-        <div className="login-content">
-          <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
+        <Box className="login-content">
+          <AuthForm
+            handleLoginSubmit={handleSubmit}
+            handleAuthInputChange={(event) =>
+              handleAuthInputChange(event, setFormData)
+            }
+            formData={formData}
+          />
           {message && (
-            <ErrorState errorMessage={message} />
+            <ErrorState error={message.error} message={message.message} />
           )}
           <div className="new-user-section">
             <p>New User?</p>
-            <button className="submit-auth" onClick={() => navigate("/signup")}>
+            <Button className="submit-auth" onClick={() => navigate("/signup")}>
               Register for an Account!
-            </button>
+            </Button>
           </div>
-        </div>
+        </Box>
       </section>
     </div>
   );
