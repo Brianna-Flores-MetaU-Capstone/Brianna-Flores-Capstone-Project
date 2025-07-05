@@ -5,6 +5,8 @@ import NextRecipe from "../components/NextRecipe";
 import AppHeader from "../components/AppHeader";
 import GenericList from "../components/GenericList";
 import { preview } from "../utils/constants";
+import Ingredient from "../components/Ingredient";
+import { v4 as uuidv4 } from "uuid";
 
 const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
@@ -12,16 +14,38 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section className="quick-access-container">
         <NextRecipe />
-        <GenericList titles={[preview.INGREDIENT]} list={ingredients} listConfig={() => ({
-          groceryCheck: false,
-          presentExpiration: false,
-          presentButtons: false
-        })}/>
-        <GenericList titles={[preview.GROCERY]} list={ingredients} listConfig={() => ({
-          groceryCheck: true,
-          presentExpiration: false,
-          presentButtons: false
-        })}/>
+        <div className="item-list">
+          <GenericList
+            className="list-items"
+            headerList={[preview.INGREDIENT]}
+            list={ingredients}
+            renderItem={(ingredient) => (
+              <Ingredient
+                key={uuidv4()}
+                ingredient={ingredient}
+                groceryCheck={false}
+                presentExpiration={false}
+                presentButtons={false}
+              />
+            )}
+          />
+        </div>
+        <div className="item-list">
+          <GenericList
+            className="list-items"
+            headerList={[preview.GROCERY]}
+            list={ingredients}
+            renderItem={(item) => (
+              <Ingredient
+                key={uuidv4()}
+                ingredient={item}
+                groceryCheck={true}
+                presentExpiration={false}
+                presentButtons={false}
+              />
+            )}
+          />
+        </div>
       </section>
       <section className="upcoming-meals">
         <h3>Upcoming Meals</h3>

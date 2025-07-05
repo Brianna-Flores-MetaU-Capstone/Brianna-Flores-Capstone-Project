@@ -24,16 +24,16 @@ const INGREDIENT_MODAL = "ingredients-page";
 const GROCERY_MODAL = "grocery-page";
 
 const preview = {
-    GROCERY: "Grocery List",
-    INGREDIENT: "Ingredients on Hand"
-}
+  GROCERY: "Grocery List",
+  INGREDIENT: "Ingredients on Hand",
+};
 
 const severity = {
   SUCCESS: "success",
   INFO: "info",
   WARNING: "warning",
-  ERROR: "error"
-}
+  ERROR: "error",
+};
 
 export {
   PreferenceCategoryEnum,

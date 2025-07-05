@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/LoginPage.css";
+import GenericList from "./GenericList";
 
 type UserPreferenceButtonsProps = {
   listName: string;
@@ -15,27 +16,27 @@ const RegistrationPreferenceButtons: React.FC<UserPreferenceButtonsProps> = ({
   handleButtonClick,
 }) => {
   return (
-    <div className="preference-list">
-      {listItems.map((item) => {
-        return (
-          <button
-            key={item}
-            data-category={listName}
-            data-selection={item}
-            id={item}
-            className={
-              userList.includes(item)
-                ? "preference-selected"
-                : "preference-not-selected"
-            }
-            type="button"
-            onClick={handleButtonClick}
-          >
-            {item}
-          </button>
-        );
-      })}
-    </div>
+    <GenericList
+      className="preference-list"
+      list={listItems}
+      renderItem={(item) => (
+        <button
+          key={item}
+          data-category={listName}
+          data-selection={item}
+          id={item}
+          className={
+            userList.includes(item)
+              ? "preference-selected"
+              : "preference-not-selected"
+          }
+          type="button"
+          onClick={handleButtonClick}
+        >
+          {item}
+        </button>
+      )}
+    />
   );
 };
 

@@ -2,6 +2,8 @@ import React from "react";
 import { groceryList } from "../utils/sampleData";
 import type { GPIngredientDataTypes } from "../utils/types";
 import GenericList from "./GenericList";
+import Ingredient from "./Ingredient";
+import { v4 as uuidv4 } from "uuid";
 
 type GPGroceryListDepartmentProps = {
   department: string;
@@ -19,14 +21,19 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   return (
     <div className="grocery-department">
       <GenericList
-        titles={[department]}
+        className="grocery-department-items"
+        headerList={[department]}
         list={filteredGroceries}
-        listConfig={() => ({
-          groceryCheck: true,
-          presentExpiration: false,
-          presentButtons: true,
-          onEdit: handleOpenModal,
-        })}
+        renderItem={(ingredient) => (
+          <Ingredient
+            key={uuidv4()}
+            ingredient={ingredient}
+            groceryCheck={true}
+            presentExpiration={false}
+            presentButtons={true}
+            onEdit={handleOpenModal}
+          />
+        )}
       />
     </div>
   );

@@ -35,7 +35,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   onClose,
   modalOpen,
 }) => {
-  // useReducer
   const initialIngredientState = ingredientData ?? {
     department: "",
     image: "",

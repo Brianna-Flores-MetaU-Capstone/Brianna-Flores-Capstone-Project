@@ -17,6 +17,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import ErrorState from "./ErrorState";
+import GenericList from "./GenericList";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -187,19 +188,18 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             message={errorMessage.message}
           />
         )}
-        <section className="result-cards">
-          {mealResults.map((meal) => {
-            return (
-              <MealCard
-                key={meal.id}
-                onMealCardClick={() => event?.preventDefault()}
-                parsedMealData={meal}
-                onSelectRecipe={onSelectRecipe}
-              />
-            );
-          })}
-        </section>
-
+        <GenericList
+          className="result-cards"
+          list={mealResults}
+          renderItem={(meal) => (
+            <MealCard
+              key={meal.id}
+              onMealCardClick={() => event?.preventDefault()}
+              parsedMealData={meal}
+              onSelectRecipe={onSelectRecipe}
+            />
+          )}
+        />
         {/* if search clicked, add a generate more button */}
         {searchClicked && (
           <Button onClick={handleGenerateMore}>Generate More!</Button>

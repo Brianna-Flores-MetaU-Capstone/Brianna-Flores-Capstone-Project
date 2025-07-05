@@ -13,7 +13,7 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    signOut(auth)
+    signOut(auth);
   };
 
   const handleLogin = () => {

@@ -6,6 +6,7 @@ import MealInfoModal from "../components/MealInfoModal";
 import { useState } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
+import GenericList from "../components/GenericList";
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
@@ -19,18 +20,18 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   return (
     <div className="new-list-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <h1>Selected Meals</h1>
-      <section className="selected-meals-container">
-        {selectedMeals.map((meal) => {
-          return (
-            <MealCard
-              key={meal.id}
-              onMealCardClick={() => event?.preventDefault()}
-              parsedMealData={meal}
-            />
-          );
-        })}
-      </section>
+      <GenericList
+        className="selected-meals"
+        headerList={["Selected Meals"]}
+        list={selectedMeals}
+        renderItem={(meal) => (
+          <MealCard
+            key={meal.id}
+            onMealCardClick={() => event?.preventDefault()}
+            parsedMealData={meal}
+          />
+        )}
+      />
       <section>
         <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>
           Add Another Meal!

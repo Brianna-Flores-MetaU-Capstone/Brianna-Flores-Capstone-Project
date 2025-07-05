@@ -69,6 +69,7 @@
   justify-content: center;
   gap: 1vw;
   margin: 1vh;
+  flex-wrap: wrap;
 }
 
 .preference-not-selected:hover {

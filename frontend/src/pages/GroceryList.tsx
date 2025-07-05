@@ -9,6 +9,7 @@ import { departments } from "../utils/sampleData";
 import SearchBar from "../components/SearchBar";
 import Button from "@mui/material/Button";
 import { GROCERY_MODAL } from "../utils/constants";
+import GenericList from "../components/GenericList";
 
 const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [editGroceryItemData, setEditGroceryItemData] =
@@ -38,17 +39,17 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           Clear Purchased Items
         </Button>
 
-        <div className="grocery-departments">
-          {departments.map((department) => {
-            return (
-              <GroceryListDepartment
-                key={department}
-                department={department}
-                handleOpenModal={handleEditGrocery}
-              />
-            );
-          })}
-        </div>
+        <GenericList
+          className="grocery-departments"
+          list={departments}
+          renderItem={(department) => (
+            <GroceryListDepartment
+              key={department}
+              department={department}
+              handleOpenModal={handleEditGrocery}
+            />
+          )}
+        />
         <h3>Estimated Cost</h3>
         <h3>$x.xx</h3>
       </div>
