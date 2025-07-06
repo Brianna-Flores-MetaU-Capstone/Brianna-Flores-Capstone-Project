@@ -8,6 +8,7 @@ import type {
   GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
+import { validateUserToken } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
@@ -27,13 +28,31 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     signInWithEmailAndPassword(auth, formData.email, formData.password)
-      .then(() => {
-        setMessage({ error: false, message: "Successfully logged in!" });
+      .then(async () => {
+        // get the user currently signed in
+        const user = auth.currentUser;
+        if (user) {
+          const response = await validateUserToken(user)
+          if (response) {
+            setMessage({ error: false, message: "Successfully logged in!" });
+          }
+        } else {
+          setMessage({ error: true, message: "Account not found" });
+        }
       })
       .catch((error) => {
         setMessage({ error: true, message: error.code });
       });
   }
+
+  const checkSession = async () => {
+    const response = await fetch("http://localhost:3000/me", {
+      method: "GET",
+      credentials: "include",
+    });
+    const data = await response.json();
+  };
+
   return (
     <div className="login-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

@@ -28,6 +28,7 @@ const updateAccount = async ({
       intolerances: userIntolerances,
       diets: userDiets,
     }),
+    credentials: "include",
   });
   if (!updatedUser.ok) {
     setMessage({ error: true, message: "Failed to update user" });
@@ -52,6 +53,7 @@ const getUserData = async ({ user, setMessage }: UserDataHelperTypes) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     if (!fetchedUserData.ok) {
@@ -85,6 +87,7 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newUser),
+      credentials: "include",
     });
     if (!response.ok) {
       setMessage({ error: true, message: "Failed to add user to database" });
@@ -95,4 +98,21 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
   }
 };
 
-export { updateAccount, getUserData, handleNewUser };
+const validateUserToken = async(user: User) => {
+  const token = await user.getIdToken(true);
+  // Send token to your backend via HTTPS
+  const response = await fetch("http://localhost:3000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token }),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    return false;
+  }
+  return true;
+}
+
+export { updateAccount, getUserData, handleNewUser, validateUserToken };

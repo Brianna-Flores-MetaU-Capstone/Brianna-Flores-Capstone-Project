@@ -7,7 +7,7 @@ import type {
   GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
-import { handleNewUser } from "../utils/databaseHelpers";
+import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
@@ -30,7 +30,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     userDiets: string[];
   }) {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
         const newUser: GPAccountInfoTypes = {
@@ -40,10 +40,13 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           diets: userDiets,
         };
         handleNewUser({ newUser, setMessage });
-        setMessage({
-          error: false,
-          message: "Registration successful!",
-        });
+        const response = await validateUserToken(user)
+        if (response) {
+          setMessage({
+            error: false,
+            message: "Registration successful!",
+          });
+        }
       })
       .catch((error) => {
         setMessage({

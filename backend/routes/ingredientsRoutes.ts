@@ -1,9 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 const express = require("express");
 const router = express.Router();
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+
+// middleware to check if a user is authenticated
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: "You must be logged in to perform this action." })
+    }
+    next()
+}
 
 // retrieve all ingredients in the database
 router.get("/", async (req: Request, res: Response) => {
@@ -14,6 +22,25 @@ router.get("/", async (req: Request, res: Response) => {
     res.status(500).send("Server Error");
   }
 });
+
+// retrieve all ingredients for a given user
+router.get("/", isAuthenticated, async (req: Request, res: Response) => {
+    // check that user is authenticated
+    const userId = req.session.userId;
+    try {
+        const ingredients = await prisma.ingredientsOnHand.findMany({
+            where: {
+                userId: userId
+            },
+            include: {
+                ingredient: true
+            }
+        })
+        res.json(ingredients)
+    } catch(error) {
+        res.status(500).send("Server Error");
+    }
+})
 
 // Get a specific ingredient by the name
 router.get("/:ingredientName", async (req: Request, res: Response) => {
@@ -34,7 +61,7 @@ router.get("/:ingredientName", async (req: Request, res: Response) => {
 });
 
 // Add an ingredient to the list
-router.post("/:userId", async (req: Request, res: Response) => {
+router.post("/:userId", isAuthenticated, async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
   const { ingredientName, quantity, unit, department, expiration } = req.body;
   if (!ingredientName || !quantity || !unit || !department || !expiration) {

@@ -17,6 +17,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 
+import { getCurrentUserToken } from "../utils/firebase";
+
 type GPIngredientModalProps = {
   modalFor: string;
   ingredientData?: GPIngredientDataTypes;
@@ -36,13 +38,13 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   modalOpen,
 }) => {
   const initialIngredientState = ingredientData ?? {
-    department: "",
-    image: "",
     name: "",
     quantity: "",
     unit: "units",
-    estimatedCost: 0,
+    department: "",
     expirationDate: null,
+    image: "",
+    estimatedCost: 0,
   };
 
   type ACTIONTYPE =
@@ -67,10 +69,30 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     initialIngredientState
   );
 
+  // add an ingredient to the list of ingredients on hand
+  const addNewIngredient = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const userToken = getCurrentUserToken();
+    const response = await fetch("/ingredients/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+      body: JSON.stringify(newIngredientData),
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to create ingredient");
+    }
+    const data = await response.json();
+    return data;
+  };
+
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form className="ingredient-form">
+        <form className="ingredient-form" onSubmit={addNewIngredient}>
           <TextField
             required
             name={IngredientDataFields.NAME}
