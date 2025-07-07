@@ -1,8 +1,9 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import type { User } from "firebase/auth";
+import type { GPAccountInfoTypes } from "../utils/types";
 
 type GPAccountContextType = {
-    user: User | null
+    user: GPAccountInfoTypes | null
     setUser: React.Dispatch<React.SetStateAction<null>>
 };
 

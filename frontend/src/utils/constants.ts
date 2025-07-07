@@ -4,6 +4,7 @@ const PreferenceCategoryEnum = {
 };
 
 const AuthenticationFieldEnum = {
+  NAME: "name",
   EMAIL: "email",
   PASSWORD: "password",
 };

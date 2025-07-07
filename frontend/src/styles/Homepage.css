@@ -26,12 +26,6 @@
   margin: 1.75vw;
 }
 
-.auth-access-buttons {
-  display: flex;
-  flex-direction: column;
-  margin: 1vw;
-}
-
 .login-button {
   background: none;
   border: 2px solid black;

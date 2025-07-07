@@ -24,6 +24,7 @@ import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useUser } from "../contexts/UserContext";
 
 const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -33,6 +34,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const {user, setUser} = useUser()
 
   // TODO Implement useReducer to handle user data
 
@@ -148,6 +150,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         setMessage({ error: true, message: "Logout failed"})
         return;
       }
+      setUser(null)
       setMessage({ error: false, message: "Successfully logged out"})
     } catch (error) {
       setMessage({ error: true, message: "Error during logout"})
@@ -158,7 +161,9 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     return (
       <div className="account-page">
         <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-        <p className="not-signed-in">Sign in to edit account details</p>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </div>
     );
   }

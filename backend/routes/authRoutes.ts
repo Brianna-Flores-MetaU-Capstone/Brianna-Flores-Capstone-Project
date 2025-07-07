@@ -114,13 +114,11 @@ router.get("/me", async (req: Request, res: Response) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Not logged in" });
   }
-
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.User.findUnique({
       where: { id: req.session.userId },
     });
-
-    res.json({ id: req.session.userId });
+    res.json({ id: req.session.userId, userName: user.userName })
   } catch (error) {
     res.status(500).json({ error: "Error fetching user session data" });
   }
