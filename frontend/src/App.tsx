@@ -14,9 +14,16 @@ import NoMatchPage from "./pages/NoMatchPage";
 import GroceryList from "./pages/GroceryList";
 import SignupForm from "./pages/SignupForm";
 import AccountPage from "./pages/AccountPage";
+import WithAuth from "./components/WithAuth";
 
 function App() {
   const [navOpen, setNavOpen] = useState<boolean>(false);
+
+  const ProtectedNewListPage = WithAuth(NewListPage);
+  const ProtectedIngredientsList = WithAuth(IngredientsPage);
+  const ProtectedGroceryList = WithAuth(GroceryList);
+  const ProtectedAccountPage = WithAuth(AccountPage);
+
 
   return (
     <BrowserRouter>
@@ -33,7 +40,7 @@ function App() {
         <Route
           path="new-list"
           element={
-            <NewListPage
+            <ProtectedNewListPage
               navOpen={navOpen}
               toggleNav={() => setNavOpen((prev) => !prev)}
             />
@@ -42,7 +49,7 @@ function App() {
         <Route
           path="ingredients"
           element={
-            <IngredientsPage
+            <ProtectedIngredientsList
               navOpen={navOpen}
               toggleNav={() => setNavOpen((prev) => !prev)}
             />
@@ -62,7 +69,7 @@ function App() {
         <Route
           path="grocery-list"
           element={
-            <GroceryList
+            <ProtectedGroceryList
               navOpen={navOpen}
               toggleNav={() => setNavOpen((prev) => !prev)}
             />
@@ -98,7 +105,7 @@ function App() {
         <Route
           path="account"
           element={
-            <AccountPage
+            <ProtectedAccountPage
               navOpen={navOpen}
               toggleNav={() => setNavOpen((prev) => !prev)}
             />

@@ -27,7 +27,6 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       {/* TODO make a better name */}
       <h1>Grociplan</h1>
       <div className="auth-access-buttons">
-        {/* <Button onClick={handleLogout}>Logout</Button> */}
         <Button onClick={handleLogin}>Login</Button>
       </div>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />

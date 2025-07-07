@@ -5,6 +5,7 @@ import type {
 } from "./types";
 import type { User } from "firebase/auth";
 
+
 type GPUpdateAccountHelperTypes = GPCurrentUserTypes & {
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
@@ -94,6 +95,7 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
       setMessage({ error: true, message: "Failed to add user to database" });
     }
     const data = await response.json();
+    return data
   } catch (error) {
     // TODO use error state
     console.error(error);
