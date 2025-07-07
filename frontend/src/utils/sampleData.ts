@@ -15,7 +15,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Milk, Eggs, Other Dairy",
     image: "",
-    name: "milk",
+    ingredientName: "milk",
     quantity: "5",
     unit: "cups",
     estimatedCost: 4.0,
@@ -24,7 +24,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Milk, Eggs, Other Dairy",
     image: "",
-    name: "eggs",
+    ingredientName: "eggs",
     quantity: "7",
     unit: "units",
     estimatedCost: 4.0,
@@ -33,7 +33,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Milk, Eggs, Other Dairy",
     image: "",
-    name: "yogurt",
+    ingredientName: "yogurt",
     quantity: "3",
     unit: "container/bag",
     estimatedCost: 4.0,
@@ -42,7 +42,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Meat",
     image: "",
-    name: "chicken",
+    ingredientName: "chicken",
     quantity: "4",
     unit: "units",
     estimatedCost: 4.0,
@@ -51,7 +51,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Condiments",
     image: "",
-    name: "soy sauce",
+    ingredientName: "soy sauce",
     quantity: "1",
     unit: "cups",
     estimatedCost: 4.0,
@@ -60,7 +60,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Produce",
     image: "",
-    name: "bananas",
+    ingredientName: "bananas",
     quantity: "3",
     unit: "units",
     estimatedCost: 4.0,
@@ -69,7 +69,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Bakery/Bread",
     image: "",
-    name: "bread",
+    ingredientName: "bread",
     quantity: "12",
     unit: "slices",
     estimatedCost: 4.0,
@@ -78,7 +78,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Milk, Eggs, Other Dairy",
     image: "",
-    name: "cottage cheese",
+    ingredientName: "cottage cheese",
     quantity: "1",
     unit: "cups",
     estimatedCost: 4.0,
@@ -87,7 +87,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Canned and Jarred",
     image: "",
-    name: "beans",
+    ingredientName: "beans",
     quantity: "2",
     unit: "cups",
     estimatedCost: 4.0,
@@ -96,7 +96,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Cheese",
     image: "",
-    name: "cheese",
+    ingredientName: "cheese",
     quantity: "12",
     unit: "slice",
     estimatedCost: 4.0,
@@ -105,7 +105,7 @@ const ingredients: GPIngredientDataTypes[] = [
   {
     department: "Cereal",
     image: "",
-    name: "cereal",
+    ingredientName: "cereal",
     quantity: "3",
     unit: "cups",
     estimatedCost: 4.0,
@@ -117,7 +117,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Pasta and Rice",
     image: "",
-    name: "pasta",
+    ingredientName: "pasta",
     quantity: "5",
     unit: "cups",
     estimatedCost: 4.0,
@@ -125,7 +125,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Meat",
     image: "",
-    name: "ground beef",
+    ingredientName: "ground beef",
     quantity: "1",
     unit: "lb",
     estimatedCost: 4.0,
@@ -133,7 +133,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Sweet Snacks",
     image: "",
-    name: "chocolate",
+    ingredientName: "chocolate",
     quantity: "1",
     unit: "bag",
     estimatedCost: 4.0,
@@ -141,7 +141,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Frozen",
     image: "",
-    name: "ice cream",
+    ingredientName: "ice cream",
     quantity: "1",
     unit: "tub",
     estimatedCost: 4.0,
@@ -149,7 +149,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Produce",
     image: "",
-    name: "spinach",
+    ingredientName: "spinach",
     quantity: "5",
     unit: "oz",
     estimatedCost: 4.0,
@@ -157,7 +157,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Milk, Eggs, Other Dairy",
     image: "",
-    name: "milk",
+    ingredientName: "milk",
     quantity: "5",
     unit: "cups",
     estimatedCost: 4.0,
@@ -165,7 +165,7 @@ const groceryList: GPIngredientDataTypes[] = [
   {
     department: "Produce",
     image: "",
-    name: "bananas",
+    ingredientName: "bananas",
     quantity: "3",
     unit: "units",
     estimatedCost: 4.0,

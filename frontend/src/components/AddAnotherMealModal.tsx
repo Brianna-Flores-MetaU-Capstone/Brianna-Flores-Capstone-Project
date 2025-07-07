@@ -79,6 +79,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
+      // TODO use error state
       console.error(error);
     }
   };
@@ -104,6 +105,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       // TODO: check if recipes are in database (according to id), otherwise add to database
       // helper method (due to repeated code)
     } catch (error) {
+      // TODO use error state
       console.error(error);
     }
   };

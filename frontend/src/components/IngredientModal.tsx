@@ -17,6 +17,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 
+import { useState } from "react";
+import type { GPErrorMessageTypes } from "../utils/types";
+import ErrorState from "./ErrorState";
+
 import { getCurrentUserToken } from "../utils/firebase";
 
 type GPIngredientModalProps = {
@@ -37,8 +41,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   onClose,
   modalOpen,
 }) => {
+  const [message, setMessage] = useState<GPErrorMessageTypes>()
+
   const initialIngredientState = ingredientData ?? {
-    name: "",
+    ingredientName: "",
     quantity: "",
     unit: "units",
     department: "",
@@ -83,9 +89,12 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       credentials: "include",
     });
     if (!response.ok) {
-      throw new Error("Failed to create ingredient");
+      setMessage({error: true, message: "Failed to create ingredient"})
+      return;
     }
     const data = await response.json();
+    setMessage({error: false, message: "Sucessfully created ingredient"})
+    onClose();
     return data;
   };
 
@@ -109,7 +118,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 value: event.target.value,
               })
             }
-            value={newIngredientData?.name}
+            value={newIngredientData?.ingredientName}
             label="Ingredient Name"
             variant="standard"
           />
@@ -200,6 +209,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             {ingredientData ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </Box>
     </Modal>
   );

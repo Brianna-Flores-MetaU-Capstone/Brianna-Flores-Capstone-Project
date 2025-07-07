@@ -35,7 +35,7 @@ const getCurrentUserToken = async () => {
   
   if (!user) {
     // TODO User not logged in error state instead of throw error
-    throw new Error ("user not logged in")
+    throw new Error ("User not logged in")
   }
 
   const currentUserToken = await user.getIdToken()

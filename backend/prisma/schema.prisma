@@ -24,7 +24,6 @@ model User {
 }
 
 model IngredientsOnHand {
-  // id Int @id @default(autoincrement())
   userId       Int
   ingredientId Int
   user         User       @relation(fields: [userId], references: [id])
@@ -39,7 +38,7 @@ model Ingredient {
   quantity             Int
   unit                 String
   department           String
-  expiration           String?
+  expirationDate           String?
   estimatedCostPerUnit Decimal?
   productImage         String?
   estimatedCost        Decimal?
@@ -49,7 +48,7 @@ model Ingredient {
   recipeId             Int?
   recipe               Recipe?             @relation(fields: [recipeId], references: [id])
 
-  @@unique(name: "uniqueIngredient", [ingredientName, quantity, unit, department, expiration])
+  @@unique(name: "uniqueIngredient", [ingredientName, quantity, unit, department, expirationDate])
 }
 
 // many to many relationship

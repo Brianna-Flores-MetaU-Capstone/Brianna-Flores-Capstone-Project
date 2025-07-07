@@ -32,7 +32,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         // get the user currently signed in
         const user = auth.currentUser;
         if (user) {
-          const response = await validateUserToken(user)
+          const response = await validateUserToken(user);
           if (response) {
             setMessage({ error: false, message: "Successfully logged in!" });
           }

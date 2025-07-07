@@ -68,6 +68,7 @@ const getUserData = async ({ user, setMessage }: UserDataHelperTypes) => {
     };
     return userDataObj;
   } catch (error) {
+    // TODO use error state
     console.error(error);
   }
 };
@@ -94,6 +95,7 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
     }
     const data = await response.json();
   } catch (error) {
+    // TODO use error state
     console.error(error);
   }
 };

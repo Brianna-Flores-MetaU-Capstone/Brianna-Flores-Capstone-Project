@@ -11,7 +11,7 @@ const AuthenticationFieldEnum = {
 const IngredientDataFields = {
   DEPARTMENT: "department",
   IMAGE: "image",
-  NAME: "name",
+  NAME: "ingredientName",
   QUANTITY: "quantity",
   UNIT: "unit",
   ESTIMATED_COST: "estimatedCost",

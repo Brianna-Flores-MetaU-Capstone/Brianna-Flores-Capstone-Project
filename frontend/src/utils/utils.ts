@@ -24,7 +24,7 @@ const parseIngredients = (ingredientsData: any) => {
   return ingredientsData.map((ingredient: any) => ({
     department: ingredient.aisle,
     image: ingredient.image,
-    name: ingredient.name,
+    ingredientName: ingredient.ingredientName,
     amount: ingredient.amount,
     unit: ingredient.unit,
     estimatedCost: getIngredientCost(ingredient.name),
