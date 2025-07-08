@@ -21,12 +21,23 @@ const isAuthenticated = (
   next();
 };
 
+
+type IngredientOnHand = {
+  expirationDate: string
+  ingredient: {
+    department: string
+    ingredientName: string
+  }
+  ingredientId: number
+  quantity: number
+  unit: string
+}
 // retrieve all ingredients for a given user
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   // check that user is authenticated
   const userId = req.session.userId;
   try {
-    const ingredients = await prisma.ingredientsOnHand.findMany({
+    const ingredients = await prisma.IngredientsOnHand.findMany({
       where: {
         userId: userId,
       },
@@ -34,7 +45,16 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
         ingredient: true,
       },
     });
-    res.json(ingredients);
+    // use map function to format ingredients for frontend use
+    const parsedIngredients = ingredients.map((ingredient: IngredientOnHand) => ({
+      id: ingredient.ingredientId,
+      ingredientName: ingredient.ingredient.ingredientName,
+      quantity: ingredient.quantity,
+      unit: ingredient.unit,
+      department: ingredient.ingredient.department,
+      expirationDate: ingredient.expirationDate
+    }))
+    res.json(parsedIngredients);
   } catch (error) {
     res.status(500).send("Server Error");
   }
@@ -47,10 +67,7 @@ router.get("/:ingredientName", async (req: Request, res: Response) => {
   try {
     const ingredient = checkIngredientInDatabase({
       ingredientName,
-      quantity,
-      unit,
       department,
-      expirationDate,
     });
     res.json(ingredient);
   } catch (error) {
@@ -59,8 +76,7 @@ router.get("/:ingredientName", async (req: Request, res: Response) => {
 });
 
 // Add an ingredient to a users list
-// router.post("/:userId", isAuthenticated, async (req: Request, res: Response) => {
-router.post("/:userId", async (req: Request, res: Response) => {
+router.post("/:userId", isAuthenticated, async (req: Request, res: Response) => {
   const userId = parseInt(req.params.userId);
   const { ingredientName, quantity, unit, department, expirationDate } =
     req.body;
@@ -71,10 +87,7 @@ router.post("/:userId", async (req: Request, res: Response) => {
     // check to see if ingredient is in database
     let ingredient = await checkIngredientInDatabase({
       ingredientName,
-      quantity,
-      unit,
       department,
-      expirationDate,
     });
 
     // if ingredient not found, make it
@@ -82,21 +95,18 @@ router.post("/:userId", async (req: Request, res: Response) => {
       ingredient = await prisma.Ingredient.create({
         data: {
           ingredientName,
-          quantity: parseInt(quantity),
-          unit,
           department,
-          expirationDate,
         },
       });
     }
-
+    
     if (!ingredient) {
       return res.status(400).send("Error, failed to create ingredient");
     }
     // check if user has ingredient
     let ingredientInUsersPantry = await prisma.IngredientsOnHand.findUnique({
       where: {
-        IngredientsOnHandId: {
+        userId_ingredientId: {
           userId,
           ingredientId: ingredient.id,
         },
@@ -105,53 +115,88 @@ router.post("/:userId", async (req: Request, res: Response) => {
     // if the user already has the ingredient on hand, prevent user from adding ingredient and ask them to modify instead
     if (ingredientInUsersPantry) {
       return res
-        .status(400)
-        .send("Error, ingredient already in pantry, try to update :)");
+      .status(400)
+      .send("Error, ingredient already in pantry, try to update :)");
     }
 
     // create mapping in table from user to ingredient
     ingredientInUsersPantry = await prisma.IngredientsOnHand.create({
       data: {
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-        ingredient: {
-          connect: {
-            id: ingredient.id,
-          },
-        },
+        userId: userId,
+        ingredientId: ingredient.id,
+        quantity: parseInt(quantity),
+        unit,
+        expirationDate
+      },
+      include: {
+        ingredient: true,
       },
     });
-    res.json(ingredient);
+    const formattedIngredient = {
+      ingredientId: ingredientInUsersPantry.id,
+      ingredientName: ingredientInUsersPantry.ingredient.ingredientName,
+      department: ingredientInUsersPantry.ingredient.department,
+      quantity: ingredientInUsersPantry.quantity,
+      unit: ingredientInUsersPantry.unit,
+      expirationDate: ingredientInUsersPantry.expirationDate
+    }
+    res.json(formattedIngredient);
   } catch (error) {
     res.status(500).send("An error occurred while creating the ingredient");
   }
 });
 
+router.put("/:ingredientId", isAuthenticated, async (req: Request, res: Response) => {
+  const ingredientId = parseInt(req.params.ingredientId)
+  const userId = req.session.userId
+  const { quantity, unit, expirationDate } = req.body
+  try {
+    const ingredientOnHand = await prisma.ingredientsOnHand.findUnique({
+      where: {
+        userId_ingredientId: {
+          userId,
+          ingredientId,
+        }
+      }
+    })
+    if (!ingredientOnHand) {
+      return res.status(404).send(`Ingredient ${ingredientId} not found`)
+    }
+    if (ingredientOnHand.userId !== userId) {
+      return res.status(404).send(`Ingredient ${ingredientId} not in users database`)
+    }
+
+    const updatedIngredient = await prisma.ingredientsOnHand.update({
+      where: {
+        userId_ingredientId: {
+          userId,
+          ingredientId,
+      }},
+      data: {
+        quantity: parseInt(quantity),
+        unit: unit,
+        expirationDate: expirationDate,
+      }
+    })
+    res.json(updatedIngredient)
+  } catch (error) {
+    res.status(500).send("Failed to update ingredient")
+  }
+})
+
 type GPIngredientDatabaseTypes = {
   ingredientName: string;
-  quantity: string;
-  unit: string;
   department: string;
-  expirationDate: string;
 };
 
 const checkIngredientInDatabase = async ({
   ingredientName,
-  quantity,
-  unit,
   department,
-  expirationDate,
 }: GPIngredientDatabaseTypes) => {
   const ingredient = await prisma.Ingredient.findFirst({
     where: {
       ingredientName: ingredientName.toLowerCase(),
-      quantity: parseInt(quantity),
-      unit: unit.toString(),
       department: department.toString(),
-      expirationDate: expirationDate ? expirationDate.toString() : null,
     },
   });
   return ingredient;

@@ -23,16 +23,16 @@ import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import type { GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
-
-import { getCurrentUserToken } from "../utils/firebase";
 import { useUser } from "../contexts/UserContext";
 
 type GPIngredientModalProps = {
   modalFor: string;
+  isEditing: boolean;
   ingredientData?: GPIngredientDataTypes;
   onClose: () => void;
   modalOpen: boolean;
-  handleNewIngredient: (newIngredient: GPIngredientsOnHandTypes) => void;
+  handleNewIngredient: (newIngredient: GPIngredientDataTypes) => void;
+  handleUpdateIngredient: (newIngredient: GPIngredientDataTypes) => void;
 };
 
 const actions = {
@@ -42,15 +42,18 @@ const actions = {
 
 const IngredientModal: React.FC<GPIngredientModalProps> = ({
   modalFor,
+  isEditing,
   ingredientData,
   onClose,
   modalOpen,
   handleNewIngredient,
+  handleUpdateIngredient,
 }) => {
   const { user } = useUser();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const initialIngredientState = ingredientData ?? {
+    id: 0,
     ingredientName: "",
     quantity: "",
     unit: "units",
@@ -114,14 +117,52 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       ingredient: data,
       ingredientId: "1",
     };
-    handleNewIngredient(ingredientOnHand);
+    handleNewIngredient(data);
+    return ingredientOnHand;
+  };
+
+  const updateIngredient = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+
+    const userId = user.id;
+    const response = await fetch(
+      `http://localhost:3000/ingredients/${ingredientData?.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newIngredientData),
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      setMessage({ error: true, message: "Failed to update ingredient" });
+      return;
+    }
+    const data = await response.json();
+    setMessage({ error: false, message: "Sucessfully updated ingredient" });
+    onClose();
+    const ingredientOnHand: GPIngredientsOnHandTypes = {
+      userId: userId,
+      ingredient: data,
+      ingredientId: "1",
+    };
+    handleUpdateIngredient(data);
     return ingredientOnHand;
   };
 
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form className="ingredient-form" onSubmit={addNewIngredient}>
+        <form
+          className="ingredient-form"
+          onSubmit={isEditing ? updateIngredient: addNewIngredient}
+        >
           <TextField
             required
             name={IngredientDataFields.NAME}
@@ -226,7 +267,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             ))}
           </Select>
           <Button type="submit" className="add-button">
-            {ingredientData ? "Edit Ingredient!" : "Add Ingredient!"}
+            {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>
         {message && (

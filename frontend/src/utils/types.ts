@@ -32,6 +32,7 @@ type GPAuthFormDataTypes = {
 };
 
 type GPIngredientDataTypes = {
+  id: number
   ingredientName: string;
   quantity: string;
   unit: string;

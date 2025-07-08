@@ -27,6 +27,14 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     setEditGroceryItemModalOpen((prev) => !prev);
   };
 
+  const handleNewIngredient = () => {
+
+  }
+
+  const handleUpdateIngredient = () => {
+
+  }
+
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -56,16 +64,22 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       {addGroceryItemModalOpen && (
         <IngredientModal
           modalFor={GROCERY_MODAL}
+          isEditing={false}
           onClose={handleAddGrocery}
           modalOpen={addGroceryItemModalOpen}
+          handleNewIngredient={handleNewIngredient}
+          handleUpdateIngredient={handleUpdateIngredient}
         />
       )}
       {editGroceryItemModalOpen && (
         <IngredientModal
           modalFor={GROCERY_MODAL}
+          isEditing={true}
           ingredientData={editGroceryItemData}
           onClose={() => setEditGroceryItemModalOpen((prev) => !prev)}
           modalOpen={editGroceryItemModalOpen}
+          handleNewIngredient={handleNewIngredient}
+          handleUpdateIngredient={handleUpdateIngredient}
         />
       )}
     </div>

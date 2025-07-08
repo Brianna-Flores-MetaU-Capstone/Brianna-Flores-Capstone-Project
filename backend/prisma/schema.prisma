@@ -25,31 +25,29 @@ model User {
 }
 
 model IngredientsOnHand {
-  userId       Int
-  ingredientId Int
-  user         User       @relation(fields: [userId], references: [id])
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  userId         Int
+  ingredientId   Int
+  quantity       Int
+  unit           String
+  expirationDate String?
+  user           User       @relation(fields: [userId], references: [id])
+  ingredient     Ingredient @relation(fields: [ingredientId], references: [id])
 
-  @@id(name: "IngredientsOnHandId", [userId, ingredientId])
+  @@unique([userId, ingredientId])
 }
 
 model Ingredient {
   id                   Int                 @id @default(autoincrement())
   ingredientName       String
-  quantity             Int
-  unit                 String
   department           String
-  expirationDate       String?
   estimatedCostPerUnit Decimal?
   productImage         String?
   estimatedCost        Decimal?
-  groceryListId        Int?
   ingredientsOnHand    IngredientsOnHand[]
+  groceryListId        Int?
   groceryList          GroceryList?        @relation(fields: [groceryListId], references: [id])
   recipeId             Int?
   recipe               Recipe?             @relation(fields: [recipeId], references: [id])
-
-  @@unique([ingredientName, quantity, unit, department, expirationDate], name: "uniqueIngredient")
 }
 
 // many to many relationship

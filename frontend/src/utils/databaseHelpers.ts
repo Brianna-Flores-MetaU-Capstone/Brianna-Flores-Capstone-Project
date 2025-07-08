@@ -119,4 +119,33 @@ const validateUserToken = async(user: User) => {
   return true;
 }
 
-export { updateAccount, getUserData, handleNewUser, validateUserToken };
+type fetchUserIngredientsTypes = {
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
+
+  const fetchUserIngredients = async ({setMessage}: fetchUserIngredientsTypes) => {
+      try {
+        const response = await fetch("http://localhost:3000/ingredients", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!response.ok) {
+          setMessage({
+            error: true,
+            message: "Error displaying user ingredients",
+          });
+          return;
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        setMessage({
+          error: true,
+          message: "Error displaying user ingredients",
+        });
+      }
+    };
+
+export { updateAccount, getUserData, handleNewUser, validateUserToken, fetchUserIngredients };

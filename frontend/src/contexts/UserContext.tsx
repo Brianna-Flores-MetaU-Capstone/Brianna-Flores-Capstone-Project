@@ -1,13 +1,12 @@
 import { createContext, useState, useContext, useEffect } from "react";
 
-type UserAccountType = {
+type GPUserAccountType = {
   id: string;
   userName: string;
 };
 
 type GPAccountContextType = {
-  // user: GPAccountInfoTypes | null
-  user: UserAccountType | null;
+  user: GPUserAccountType | null;
   setUser: React.Dispatch<React.SetStateAction<null>>;
 };
 
