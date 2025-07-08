@@ -47,8 +47,8 @@ model Ingredient {
   ingredientsOnHand    IngredientsOnHand[]
   groceryListId        Int?
   groceryList          GroceryList?        @relation(fields: [groceryListId], references: [id])
-  recipeId             Int?
-  recipe               Recipe?             @relation(fields: [recipeId], references: [id])
+  // recipeId             Int?
+  // recipe               Recipe?             @relation(fields: [recipeId], references: [id])
 }
 
 // many to many relationship
@@ -56,29 +56,32 @@ model Ingredient {
 // recipe can be stored in what the user will make throughout the week, their "to make" list
 model Recipe {
   id                Int          @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
+  apiId             Int          @unique
   recipeTitle       String
-  previewImage      String? // if image not provided, generic image will be presented
+  previewImage      String // if image not provided, generic image will be presented
   servings          Int
-  ingredientsNeeded Ingredient[]
+  ingredientsNeeded String[]
   sourceUrl         String
-  totalCost         Decimal // total cost of ingredients to create for baseline servings
+  totalCost         Decimal? // total cost of ingredients to create for baseline servings
   instructions      String[]
-  // intollerences
-  containsDairy     Boolean?
-  containsPeanuts   Boolean?
-  containsSoy       Boolean?
-  containsEgg       Boolean?
-  containsSeafood   Boolean?
-  containsSulfite   Boolean?
-  containsGluten    Boolean?
-  containsSesame    Boolean?
-  containsTreeNut   Boolean?
-  containsGrain     Boolean?
-  containsShellfish Boolean?
-  containsWheat     Boolean?
-  // diets
-  isVegetarian      Boolean
-  isVegan           Boolean
+  intolerances String[]
+  diets String[]
+  // // intollerences
+  // containsDairy     Boolean?
+  // containsPeanuts   Boolean?
+  // containsSoy       Boolean?
+  // containsEgg       Boolean?
+  // containsSeafood   Boolean?
+  // containsSulfite   Boolean?
+  // containsGluten    Boolean?
+  // containsSesame    Boolean?
+  // containsTreeNut   Boolean?
+  // containsGrain     Boolean?
+  // containsShellfish Boolean?
+  // containsWheat     Boolean?
+  // // diets
+  // isVegetarian      Boolean
+  // isVegan           Boolean
   users             User[]
 }
 
