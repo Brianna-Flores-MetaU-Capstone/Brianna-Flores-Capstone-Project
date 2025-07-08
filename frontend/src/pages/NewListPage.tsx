@@ -1,20 +1,48 @@
 import "../styles/NewListPage.css";
-import type { GPToggleNavBarProps, GPRecipeDataTypes } from "../utils/types";
+import type {
+  GPToggleNavBarProps,
+  GPRecipeDataTypes,
+  GPErrorMessageTypes,
+} from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
 import GenericList from "../components/GenericList";
+import ErrorState from "../components/ErrorState";
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
   const [selectedMeals, setSelectedMeals] = useState<GPRecipeDataTypes[]>([]);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const handleSelectRecipe = (selectedRecipe: GPRecipeDataTypes) => {
     setSelectedMeals((prev) => [...prev, selectedRecipe]);
+  };
+
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
+
+  const fetchRecipes = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/recipes", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setMessage({ error: true, message: "Failed to fetch user recipes" });
+        return;
+      }
+      const data = await response.json();
+      setSelectedMeals(data);
+      return data;
+    } catch (error) {
+      setMessage({ error: true, message: "Failed to fetch user recipes" });
+    }
   };
 
   return (
@@ -32,6 +60,9 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           />
         )}
       />
+      {message && (
+        <ErrorState error={message.error} message={message.message} />
+      )}
       <section>
         <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>
           Add Another Meal!

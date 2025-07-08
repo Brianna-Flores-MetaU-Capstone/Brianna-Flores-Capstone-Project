@@ -31,6 +31,7 @@ type IngredientOnHand = {
   quantity: number;
   unit: string;
 };
+
 // retrieve all ingredients for a given user
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   // check that user is authenticated

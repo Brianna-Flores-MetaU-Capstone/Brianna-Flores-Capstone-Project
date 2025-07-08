@@ -22,6 +22,7 @@ model User {
   diets             String[]
   ingredientsOnHand IngredientsOnHand[]
   groceryList       GroceryList? // store the grocery list for a user
+  recipes           Recipe[]
 }
 
 model IngredientsOnHand {
@@ -61,7 +62,7 @@ model Recipe {
   ingredientsNeeded Ingredient[]
   sourceUrl         String
   totalCost         Decimal // total cost of ingredients to create for baseline servings
-  instructions      String[] // store json return of steps
+  instructions      String[]
   // intollerences
   containsDairy     Boolean?
   containsPeanuts   Boolean?
@@ -78,6 +79,7 @@ model Recipe {
   // diets
   isVegetarian      Boolean
   isVegan           Boolean
+  users             User[]
 }
 
 model GroceryList {

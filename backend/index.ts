@@ -39,6 +39,9 @@ app.use(express.json());
 const ingredientsRoutes = require("./routes/ingredientsRoutes");
 app.use("/ingredients", ingredientsRoutes);
 
+const recipeRoutes = require("./routes/recipeRoutes");
+app.use("/recipes", recipeRoutes);
+
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);
 
