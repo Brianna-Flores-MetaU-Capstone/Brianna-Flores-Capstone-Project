@@ -63,9 +63,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   function reducer(state: GPIngredientDataTypes, action: ACTIONTYPE) {
     switch (action.type) {
-      case "setInput":
+      case actions.SET_INPUT:
         return { ...state, [action.ingredientField]: action.value };
-      case "setDate":
+      case actions.SET_DATE:
         return { ...state, expirationDate: action.value ?? null };
     }
   }

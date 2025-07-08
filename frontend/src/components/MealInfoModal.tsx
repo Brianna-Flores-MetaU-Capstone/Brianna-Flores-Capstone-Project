@@ -26,8 +26,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
             <h2>Meal Title</h2>
             <p>Servings: X</p>
             <p>Estimated Cost: $X.XX</p>
-            {/* List out intollerances/diets this recipe qualifies for */}
-            <ul className="diets-and-intollerances">
+            {/* List out intolerances/diets this recipe qualifies for */}
+            <ul className="diets-and-intolerances">
               <li>Dairy Free</li>
               <li>Vegetarian</li>
             </ul>
