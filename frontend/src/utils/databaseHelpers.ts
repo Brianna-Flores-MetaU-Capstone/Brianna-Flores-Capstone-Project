@@ -207,31 +207,35 @@ const addIngredientDatabase = async ({
 };
 
 type GPUpdateIngredientTypes = {
-  ingredientId: number | undefined
-  newIngredientData: GPIngredientDataTypes
+  ingredientId: number | undefined;
+  newIngredientData: GPIngredientDataTypes;
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
-}
+};
 
-const updateIngredientDatabase = async ({ingredientId, newIngredientData, setMessage}: GPUpdateIngredientTypes) => {
+const updateIngredientDatabase = async ({
+  ingredientId,
+  newIngredientData,
+  setMessage,
+}: GPUpdateIngredientTypes) => {
   const response = await fetch(
-      `http://localhost:3000/ingredients/${ingredientId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newIngredientData),
-        credentials: "include",
-      }
-    );
-    if (!response.ok) {
-      setMessage({ error: true, message: "Failed to update ingredient" });
-      return;
+    `http://localhost:3000/ingredients/${ingredientId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newIngredientData),
+      credentials: "include",
     }
-    setMessage({ error: false, message: "Sucessfully updated ingredient" });
-}
+  );
+  if (!response.ok) {
+    setMessage({ error: true, message: "Failed to update ingredient" });
+    return;
+  }
+  setMessage({ error: false, message: "Sucessfully updated ingredient" });
+};
 
 export {
   updateAccount,
@@ -241,5 +245,5 @@ export {
   fetchUserIngredientsHelper,
   deleteIngredient,
   addIngredientDatabase,
-  updateIngredientDatabase
+  updateIngredientDatabase,
 };

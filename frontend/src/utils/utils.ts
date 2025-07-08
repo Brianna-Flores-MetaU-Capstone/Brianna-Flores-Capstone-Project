@@ -1,22 +1,21 @@
 import type {
-  GPAccountInfoTypes,
   GPAuthFormDataTypes,
   GPIngredientDataTypes,
 } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
   return recipeData.map((recipe: any) => ({
-    id: recipe.id,
-    image: recipe.image,
-    title: recipe.title,
+    apiId: recipe.id,
+    recipeTitle: recipe.title,
+    previewImage: recipe.image,
     servings: recipe.servings,
+    ingredients: parseIngredients(recipe.extendedIngredients),
     sourceUrl: recipe.sourceUrl,
     vegetarian: recipe.vegetarian,
     vegan: recipe.vegan,
     glutenFree: recipe.glutenFree,
     dairyFree: recipe.dairyFree,
-    ingredients: parseIngredients(recipe.extendedIngredients),
-    totalEstimatedCost: estimateTotalCost(recipe.ingredients),
+    totalCost: estimateTotalCost(recipe.ingredients),
   }));
 };
 

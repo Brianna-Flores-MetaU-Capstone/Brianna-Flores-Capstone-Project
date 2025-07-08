@@ -195,7 +195,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           list={mealResults}
           renderItem={(meal) => (
             <MealCard
-              key={meal.id}
+              key={meal.apiId}
               onMealCardClick={() => event?.preventDefault()}
               parsedMealData={meal}
               onSelectRecipe={onSelectRecipe}

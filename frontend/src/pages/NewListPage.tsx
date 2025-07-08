@@ -12,15 +12,38 @@ import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
 import GenericList from "../components/GenericList";
 import ErrorState from "../components/ErrorState";
+import { useUser } from "../contexts/UserContext";
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
   const [selectedMeals, setSelectedMeals] = useState<GPRecipeDataTypes[]>([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { user } = useUser();
 
-  const handleSelectRecipe = (selectedRecipe: GPRecipeDataTypes) => {
-    setSelectedMeals((prev) => [...prev, selectedRecipe]);
+  const handleSelectRecipe = async (selectedRecipe: GPRecipeDataTypes) => {
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:3000/recipes/${user.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedRecipe),
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setMessage({ error: true, message: "Failed to save recipe" });
+        return;
+      }
+      setMessage({ error: false, message: "Sucessfully saved recipe" });
+      fetchRecipes();
+    } catch (error) {
+      setMessage({ error: true, message: "Error adding recipe" });
+    }
   };
 
   useEffect(() => {
@@ -54,7 +77,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         list={selectedMeals}
         renderItem={(meal) => (
           <MealCard
-            key={meal.id}
+            key={meal.apiId}
             onMealCardClick={() => event?.preventDefault()}
             parsedMealData={meal}
           />

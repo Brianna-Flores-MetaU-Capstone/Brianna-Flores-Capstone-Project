@@ -6,17 +6,17 @@ type GPToggleNavBarProps = {
 };
 
 type GPRecipeDataTypes = {
-  id: number;
-  image: string;
-  title: string;
+  apiId: number;
+  recipeTitle: string;
+  previewImage: string;
   servings: number;
+  ingredients: GPIngredientDataTypes[];
   sourceUrl: string;
   vegetarian: boolean;
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
-  ingredients: GPIngredientDataTypes[];
-  totalEstimatedCost: number;
+  totalCost: number;
 };
 
 type GPAccountInfoTypes = {
