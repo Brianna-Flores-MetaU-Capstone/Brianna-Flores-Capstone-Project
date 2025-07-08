@@ -2,7 +2,10 @@ import React from "react";
 import { useReducer } from "react";
 import "../styles/IngredientsPage.css";
 import { IngredientUnitOptions, Departments } from "../utils/enum";
-import type { GPIngredientDataTypes } from "../utils/types";
+import type {
+  GPIngredientDataTypes,
+  GPIngredientsOnHandTypes,
+} from "../utils/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
@@ -22,12 +25,14 @@ import type { GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 
 import { getCurrentUserToken } from "../utils/firebase";
+import { useUser } from "../contexts/UserContext";
 
 type GPIngredientModalProps = {
   modalFor: string;
   ingredientData?: GPIngredientDataTypes;
   onClose: () => void;
   modalOpen: boolean;
+  handleNewIngredient: (newIngredient: GPIngredientsOnHandTypes) => void;
 };
 
 const actions = {
@@ -40,8 +45,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   ingredientData,
   onClose,
   modalOpen,
+  handleNewIngredient,
 }) => {
-  const [message, setMessage] = useState<GPErrorMessageTypes>()
+  const { user } = useUser();
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const initialIngredientState = ingredientData ?? {
     ingredientName: "",
@@ -78,24 +85,37 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   // add an ingredient to the list of ingredients on hand
   const addNewIngredient = async (event: React.FormEvent) => {
     event.preventDefault();
-    const userToken = getCurrentUserToken();
-    const response = await fetch("/ingredients/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userToken}`,
-      },
-      body: JSON.stringify(newIngredientData),
-      credentials: "include",
-    });
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+
+    const userId = user.id;
+    const response = await fetch(
+      `http://localhost:3000/ingredients/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newIngredientData),
+        credentials: "include",
+      }
+    );
     if (!response.ok) {
-      setMessage({error: true, message: "Failed to create ingredient"})
+      setMessage({ error: true, message: "Failed to create ingredient" });
       return;
     }
     const data = await response.json();
-    setMessage({error: false, message: "Sucessfully created ingredient"})
+    setMessage({ error: false, message: "Sucessfully created ingredient" });
     onClose();
-    return data;
+    const ingredientOnHand: GPIngredientsOnHandTypes = {
+      userId: userId,
+      ingredient: data,
+      ingredientId: "1",
+    };
+    handleNewIngredient(ingredientOnHand);
+    return ingredientOnHand;
   };
 
   return (

@@ -6,6 +6,7 @@ import type {
   GPIngredientDataTypes,
   GPToggleNavBarProps,
   GPErrorMessageTypes,
+  GPIngredientsOnHandTypes,
 } from "../utils/types";
 import Button from "@mui/material/Button";
 import { INGREDIENT_MODAL } from "../utils/constants";
@@ -13,12 +14,6 @@ import GenericList from "../components/GenericList";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
-
-type GPIngredientsOnHandTypes = {
-  userId: number;
-  ingredient: GPIngredientDataTypes;
-  ingredientId: number;
-};
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   navOpen,
@@ -69,6 +64,10 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
     setEditIngredientModalOpen((prev) => !prev);
   };
 
+  const handleNewIngredient = (newIngredient: GPIngredientsOnHandTypes) => {
+    setUserIngredients((prev) => [...prev, newIngredient]);
+  };
+
   return (
     <div className="ingredients-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -104,6 +103,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           modalFor={INGREDIENT_MODAL}
           onClose={addIngredientClick}
           modalOpen={addIngredientModalOpen}
+          handleNewIngredient={handleNewIngredient}
         />
       )}
       {editIngredientModalOpen && (
@@ -112,6 +112,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           ingredientData={editIngredientData}
           onClose={() => setEditIngredientModalOpen((prev) => !prev)}
           modalOpen={editIngredientModalOpen}
+          handleNewIngredient={handleNewIngredient}
         />
       )}
     </div>

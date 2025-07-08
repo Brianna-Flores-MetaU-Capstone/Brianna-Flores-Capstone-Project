@@ -39,7 +39,7 @@ model Ingredient {
   quantity             Int
   unit                 String
   department           String
-  expirationDate           String?
+  expirationDate       String?
   estimatedCostPerUnit Decimal?
   productImage         String?
   estimatedCost        Decimal?
@@ -49,7 +49,7 @@ model Ingredient {
   recipeId             Int?
   recipe               Recipe?             @relation(fields: [recipeId], references: [id])
 
-  @@unique(name: "uniqueIngredient", [ingredientName, quantity, unit, department, expirationDate])
+  @@unique([ingredientName, quantity, unit, department, expirationDate], name: "uniqueIngredient")
 }
 
 // many to many relationship

@@ -58,6 +58,12 @@ type GPErrorMessageTypes = {
   message: string;
 };
 
+type GPIngredientsOnHandTypes = {
+  userId: string;
+  ingredient: GPIngredientDataTypes;
+  ingredientId: string;
+};
+
 export type {
   GPToggleNavBarProps,
   GPAccountInfoTypes,
@@ -67,4 +73,5 @@ export type {
   GPRecipeDataTypes,
   GPRequestFormDataTypes,
   GPErrorMessageTypes,
+  GPIngredientsOnHandTypes,
 };

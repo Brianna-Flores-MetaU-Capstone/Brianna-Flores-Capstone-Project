@@ -1,18 +1,20 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import type { User } from "firebase/auth";
-import type { GPAccountInfoTypes } from "../utils/types";
 
-type GPAccountContextType = {
-    user: GPAccountInfoTypes | null
-    setUser: React.Dispatch<React.SetStateAction<null>>
+type UserAccountType = {
+  id: string;
+  userName: string;
 };
 
-
+type GPAccountContextType = {
+  // user: GPAccountInfoTypes | null
+  user: UserAccountType | null;
+  setUser: React.Dispatch<React.SetStateAction<null>>;
+};
 
 // sets up global state to access anywhere in app
 const UserContext = createContext<GPAccountContextType>({
-    user: null,
-    setUser: () => {}
+  user: null,
+  setUser: () => {},
 });
 
 // provider is used to store auth data and have components update it
