@@ -31,8 +31,7 @@ type GPIngredientModalProps = {
   ingredientData?: GPIngredientDataTypes;
   onClose: () => void;
   modalOpen: boolean;
-  handleNewIngredient: (newIngredient: GPIngredientDataTypes) => void;
-  handleUpdateIngredient: (newIngredient: GPIngredientDataTypes) => void;
+  updateUserIngredients: () => void;
 };
 
 const actions = {
@@ -46,8 +45,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   ingredientData,
   onClose,
   modalOpen,
-  handleNewIngredient,
-  handleUpdateIngredient,
+  updateUserIngredients,
 }) => {
   const { user } = useUser();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -117,7 +115,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       ingredient: data,
       ingredientId: "1",
     };
-    handleNewIngredient(data);
+    updateUserIngredients();
     return ingredientOnHand;
   };
 
@@ -152,7 +150,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       ingredient: data,
       ingredientId: "1",
     };
-    handleUpdateIngredient(data);
+    updateUserIngredients();
     return ingredientOnHand;
   };
 
@@ -161,9 +159,24 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       <Box sx={GPModalStyle}>
         <form
           className="ingredient-form"
-          onSubmit={isEditing ? updateIngredient: addNewIngredient}
+          onSubmit={isEditing ? updateIngredient : addNewIngredient}
         >
-          <TextField
+          {isEditing ? 
+          // prevent editing the ingredient name
+          (<TextField
+            disabled
+            required
+            name={IngredientDataFields.NAME}
+            slotProps={{
+              htmlInput: {
+                "data-ingredientfield": IngredientDataFields.NAME,
+              },
+            }}
+            value={newIngredientData?.ingredientName}
+            label="Ingredient Name"
+            variant="standard"
+          />) :
+          (<TextField
             required
             name={IngredientDataFields.NAME}
             slotProps={{
@@ -182,7 +195,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             value={newIngredientData?.ingredientName}
             label="Ingredient Name"
             variant="standard"
-          />
+          />)}
           <Box display="flex" width="100%">
             <TextField
               required
@@ -247,7 +260,21 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </LocalizationProvider>
           )}
           <InputLabel>Select a Department</InputLabel>
-          <Select
+          {isEditing ? 
+          // prevent edits to department (edits to direct ingredient)
+          (<Select
+            disabled
+            name={IngredientDataFields.DEPARTMENT}
+            value={newIngredientData?.department}
+            label="Department"
+          >
+            {Departments.map((department) => (
+              <MenuItem key={department} value={department}>
+                {department}
+              </MenuItem>
+            ))}
+          </Select>) :
+          (<Select
             name={IngredientDataFields.DEPARTMENT}
             value={newIngredientData?.department}
             onChange={(event) =>
@@ -256,7 +283,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 ingredientField: event?.target
                   .name as keyof GPIngredientDataTypes,
                 value: event.target.value,
-              })
+              }) 
             }
             label="Department"
           >
@@ -265,7 +292,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 {department}
               </MenuItem>
             ))}
-          </Select>
+          </Select>)}
           <Button type="submit" className="add-button">
             {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>

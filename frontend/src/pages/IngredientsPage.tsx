@@ -13,7 +13,7 @@ import GenericList from "../components/GenericList";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
-import { fetchUserIngredients } from "../utils/databaseHelpers";
+import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   navOpen,
@@ -30,8 +30,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
 
   // on mount, fetch ingredients
   useEffect(() => {
-    fetchUserIngredients({setMessage}).then((fetchedIngredients) =>
-    setUserIngredients(fetchedIngredients))
+    fetchUserIngredients()
   }, []);
 
   const addIngredientClick = () => {
@@ -43,16 +42,9 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
     setEditIngredientModalOpen((prev) => !prev);
   };
 
-  const handleNewIngredient = async (newIngredient: GPIngredientDataTypes) => {
-    setUserIngredients((prev) => [...prev, newIngredient]);
-  };
-  
-  const handleUpdateIngredient = (updatedIngredient: GPIngredientDataTypes) => {
-    setUserIngredients((prev) => 
-      prev.map((ingredient) => 
-        ingredient.id === updatedIngredient.id ? updatedIngredient: ingredient
-      )
-    )
+  const fetchUserIngredients = async () => {
+    const fetchedIngredients = await fetchUserIngredientsHelper({setMessage})
+    setUserIngredients(fetchedIngredients)
   }
 
   return (
@@ -91,8 +83,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           isEditing={false}
           onClose={addIngredientClick}
           modalOpen={addIngredientModalOpen}
-          handleNewIngredient={handleNewIngredient}
-          handleUpdateIngredient={handleUpdateIngredient}
+          updateUserIngredients={fetchUserIngredients}
         />
       )}
       {editIngredientModalOpen && (
@@ -102,8 +93,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           ingredientData={editIngredientData}
           onClose={() => setEditIngredientModalOpen((prev) => !prev)}
           modalOpen={editIngredientModalOpen}
-          handleNewIngredient={handleNewIngredient}
-          handleUpdateIngredient={handleUpdateIngredient}
+          updateUserIngredients={fetchUserIngredients}
         />
       )}
     </div>

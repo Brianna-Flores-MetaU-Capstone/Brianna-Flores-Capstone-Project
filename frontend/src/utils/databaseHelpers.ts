@@ -125,7 +125,7 @@ type fetchUserIngredientsTypes = {
   ) => void;
 };
 
-  const fetchUserIngredients = async ({setMessage}: fetchUserIngredientsTypes) => {
+  const fetchUserIngredientsHelper = async ({setMessage}: fetchUserIngredientsTypes) => {
       try {
         const response = await fetch("http://localhost:3000/ingredients", {
           method: "GET",
@@ -148,4 +148,4 @@ type fetchUserIngredientsTypes = {
       }
     };
 
-export { updateAccount, getUserData, handleNewUser, validateUserToken, fetchUserIngredients };
+export { updateAccount, getUserData, handleNewUser, validateUserToken, fetchUserIngredientsHelper };
