@@ -4,9 +4,17 @@ import "../styles/IngredientsPage.css";
 import { IngredientUnitOptions, Departments } from "../utils/enum";
 import type {
   GPIngredientDataTypes,
-  GPIngredientsOnHandTypes,
+  GPErrorMessageTypes,
 } from "../utils/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
+import { GPModalStyle } from "../utils/utils";
+import { useState } from "react";
+import ErrorState from "./ErrorState";
+import { useUser } from "../contexts/UserContext";
+import {
+  addIngredientDatabase,
+  updateIngredientDatabase,
+} from "../utils/databaseHelpers";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -14,16 +22,10 @@ import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { GPModalStyle } from "../utils/utils";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
-
-import { useState } from "react";
-import type { GPErrorMessageTypes } from "../utils/types";
-import ErrorState from "./ErrorState";
-import { useUser } from "../contexts/UserContext";
 
 type GPIngredientModalProps = {
   modalFor: string;
@@ -83,61 +85,27 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     initialIngredientState
   );
 
-  // add an ingredient to the list of ingredients on hand
-  const addNewIngredient = async (event: React.FormEvent) => {
+  const handleModalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;
     }
-
-    const userId = user.id;
-    const response = await fetch(
-      `http://localhost:3000/ingredients/${userId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newIngredientData),
-        credentials: "include",
+    if (isEditing) {
+      if (ingredientData) {
+        const ingredientId = ingredientData.id;
+        await updateIngredientDatabase({
+          ingredientId,
+          newIngredientData,
+          setMessage,
+        });
+      } else {
+        setMessage({ error: true, message: "No ingredient to update" });
       }
-    );
-    if (!response.ok) {
-      setMessage({ error: true, message: "Failed to create ingredient" });
-      return;
+    } else {
+      const userId = user.id;
+      await addIngredientDatabase({ userId, newIngredientData, setMessage });
     }
-    const data = await response.json();
-    setMessage({ error: false, message: "Sucessfully created ingredient" });
-    onClose();
-    fetchUserIngredients();
-  };
-
-  const updateIngredient = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!user) {
-      setMessage({ error: true, message: "Error user not signed in" });
-      return;
-    }
-
-    const userId = user.id;
-    const response = await fetch(
-      `http://localhost:3000/ingredients/${ingredientData?.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newIngredientData),
-        credentials: "include",
-      }
-    );
-    if (!response.ok) {
-      setMessage({ error: true, message: "Failed to update ingredient" });
-      return;
-    }
-    const data = await response.json();
-    setMessage({ error: false, message: "Sucessfully updated ingredient" });
     onClose();
     fetchUserIngredients();
   };
@@ -147,7 +115,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       <Box sx={GPModalStyle}>
         <form
           className="ingredient-form"
-          onSubmit={isEditing ? updateIngredient : addNewIngredient}
+          onSubmit={handleModalSubmit}
         >
           {isEditing ? (
             // prevent editing the ingredient name
