@@ -10,6 +10,7 @@ type GPIngredientProps = {
   presentExpiration: boolean;
   presentButtons: boolean;
   onEdit?: (ingredient: GPIngredientDataTypes) => void;
+  onDelete?: (ingredient: GPIngredientDataTypes) => void;
 };
 
 const Ingredient: React.FC<GPIngredientProps> = ({
@@ -18,6 +19,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   presentExpiration,
   presentButtons,
   onEdit,
+  onDelete
 }) => {
   return (
     <div className="list-ingredient">
@@ -34,7 +36,10 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             className="ingredient-button"
             onClick={() => onEdit?.(ingredient)}
           />
-          <FontAwesomeIcon icon={faTrash} className="ingredient-button" />
+          <FontAwesomeIcon 
+            icon={faTrash} 
+            className="ingredient-button"
+            onClick={() => onDelete?.(ingredient)} />
         </div>
       )}
     </div>

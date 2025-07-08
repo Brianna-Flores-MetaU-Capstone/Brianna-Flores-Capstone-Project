@@ -2,6 +2,7 @@ import type {
   GPCurrentUserTypes,
   GPAccountInfoTypes,
   GPErrorMessageTypes,
+  GPIngredientDataTypes,
 } from "./types";
 import type { User } from "firebase/auth";
 
@@ -148,4 +149,29 @@ type fetchUserIngredientsTypes = {
       }
     };
 
-export { updateAccount, getUserData, handleNewUser, validateUserToken, fetchUserIngredientsHelper };
+    type DeleteUserIngredientTypes = {
+      setMessage: (
+        value: React.SetStateAction<GPErrorMessageTypes | undefined>
+      ) => void;
+      ingredient: GPIngredientDataTypes
+    }
+    const deleteIngredient = async ({setMessage, ingredient}: DeleteUserIngredientTypes) => {
+      const response = await fetch(
+        `http://localhost:3000/ingredients/${ingredient.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      if (!response.ok) {
+        setMessage({ error: true, message: "Failed to delete ingredient" });
+        return;
+      }
+      // const data = await response.json();
+      setMessage({ error: false, message: "Sucessfully deleted ingredient" });
+    }
+
+export { updateAccount, getUserData, handleNewUser, validateUserToken, fetchUserIngredientsHelper, deleteIngredient };

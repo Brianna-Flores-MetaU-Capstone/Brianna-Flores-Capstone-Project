@@ -31,7 +31,7 @@ type GPIngredientModalProps = {
   ingredientData?: GPIngredientDataTypes;
   onClose: () => void;
   modalOpen: boolean;
-  updateUserIngredients: () => void;
+  fetchUserIngredients: () => void;
 };
 
 const actions = {
@@ -45,7 +45,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   ingredientData,
   onClose,
   modalOpen,
-  updateUserIngredients,
+  fetchUserIngredients,
 }) => {
   const { user } = useUser();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -110,13 +110,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     const data = await response.json();
     setMessage({ error: false, message: "Sucessfully created ingredient" });
     onClose();
-    const ingredientOnHand: GPIngredientsOnHandTypes = {
-      userId: userId,
-      ingredient: data,
-      ingredientId: "1",
-    };
-    updateUserIngredients();
-    return ingredientOnHand;
+    fetchUserIngredients();
   };
 
   const updateIngredient = async (event: React.FormEvent) => {
@@ -145,13 +139,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     const data = await response.json();
     setMessage({ error: false, message: "Sucessfully updated ingredient" });
     onClose();
-    const ingredientOnHand: GPIngredientsOnHandTypes = {
-      userId: userId,
-      ingredient: data,
-      ingredientId: "1",
-    };
-    updateUserIngredients();
-    return ingredientOnHand;
+    fetchUserIngredients();
   };
 
   return (
@@ -161,41 +149,43 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           className="ingredient-form"
           onSubmit={isEditing ? updateIngredient : addNewIngredient}
         >
-          {isEditing ? 
-          // prevent editing the ingredient name
-          (<TextField
-            disabled
-            required
-            name={IngredientDataFields.NAME}
-            slotProps={{
-              htmlInput: {
-                "data-ingredientfield": IngredientDataFields.NAME,
-              },
-            }}
-            value={newIngredientData?.ingredientName}
-            label="Ingredient Name"
-            variant="standard"
-          />) :
-          (<TextField
-            required
-            name={IngredientDataFields.NAME}
-            slotProps={{
-              htmlInput: {
-                "data-ingredientfield": IngredientDataFields.NAME,
-              },
-            }}
-            onChange={(event) =>
-              dispatch({
-                type: actions.SET_INPUT,
-                ingredientField: event?.target
-                  .name as keyof GPIngredientDataTypes,
-                value: event.target.value,
-              })
-            }
-            value={newIngredientData?.ingredientName}
-            label="Ingredient Name"
-            variant="standard"
-          />)}
+          {isEditing ? (
+            // prevent editing the ingredient name
+            <TextField
+              disabled
+              required
+              name={IngredientDataFields.NAME}
+              slotProps={{
+                htmlInput: {
+                  "data-ingredientfield": IngredientDataFields.NAME,
+                },
+              }}
+              value={newIngredientData?.ingredientName}
+              label="Ingredient Name"
+              variant="standard"
+            />
+          ) : (
+            <TextField
+              required
+              name={IngredientDataFields.NAME}
+              slotProps={{
+                htmlInput: {
+                  "data-ingredientfield": IngredientDataFields.NAME,
+                },
+              }}
+              onChange={(event) =>
+                dispatch({
+                  type: actions.SET_INPUT,
+                  ingredientField: event?.target
+                    .name as keyof GPIngredientDataTypes,
+                  value: event.target.value,
+                })
+              }
+              value={newIngredientData?.ingredientName}
+              label="Ingredient Name"
+              variant="standard"
+            />
+          )}
           <Box display="flex" width="100%">
             <TextField
               required
@@ -260,39 +250,41 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </LocalizationProvider>
           )}
           <InputLabel>Select a Department</InputLabel>
-          {isEditing ? 
-          // prevent edits to department (edits to direct ingredient)
-          (<Select
-            disabled
-            name={IngredientDataFields.DEPARTMENT}
-            value={newIngredientData?.department}
-            label="Department"
-          >
-            {Departments.map((department) => (
-              <MenuItem key={department} value={department}>
-                {department}
-              </MenuItem>
-            ))}
-          </Select>) :
-          (<Select
-            name={IngredientDataFields.DEPARTMENT}
-            value={newIngredientData?.department}
-            onChange={(event) =>
-              dispatch({
-                type: actions.SET_INPUT,
-                ingredientField: event?.target
-                  .name as keyof GPIngredientDataTypes,
-                value: event.target.value,
-              }) 
-            }
-            label="Department"
-          >
-            {Departments.map((department) => (
-              <MenuItem key={department} value={department}>
-                {department}
-              </MenuItem>
-            ))}
-          </Select>)}
+          {isEditing ? (
+            // prevent edits to department (edits to direct ingredient)
+            <Select
+              disabled
+              name={IngredientDataFields.DEPARTMENT}
+              value={newIngredientData?.department}
+              label="Department"
+            >
+              {Departments.map((department) => (
+                <MenuItem key={department} value={department}>
+                  {department}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <Select
+              name={IngredientDataFields.DEPARTMENT}
+              value={newIngredientData?.department}
+              onChange={(event) =>
+                dispatch({
+                  type: actions.SET_INPUT,
+                  ingredientField: event?.target
+                    .name as keyof GPIngredientDataTypes,
+                  value: event.target.value,
+                })
+              }
+              label="Department"
+            >
+              {Departments.map((department) => (
+                <MenuItem key={department} value={department}>
+                  {department}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
           <Button type="submit" className="add-button">
             {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>

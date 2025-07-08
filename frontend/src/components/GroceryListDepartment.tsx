@@ -18,6 +18,10 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
     (item) => item.department === department
   );
 
+  const handleDeleteIngredient = async (
+    ingredient: GPIngredientDataTypes
+  ) => {};
+
   return (
     <div className="grocery-department">
       <GenericList
@@ -32,6 +36,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentExpiration={false}
             presentButtons={true}
             onEdit={handleOpenModal}
+            onDelete={handleDeleteIngredient}
           />
         )}
       />

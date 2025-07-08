@@ -27,9 +27,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     setEditGroceryItemModalOpen((prev) => !prev);
   };
 
-  const updateUserIngredients = async () => {
-    
-  }
+  const fetchUserIngredients = async () => {};
 
   return (
     <div>
@@ -63,7 +61,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           isEditing={false}
           onClose={handleAddGrocery}
           modalOpen={addGroceryItemModalOpen}
-          updateUserIngredients={updateUserIngredients}
+          fetchUserIngredients={fetchUserIngredients}
         />
       )}
       {editGroceryItemModalOpen && (
@@ -73,7 +71,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           ingredientData={editGroceryItemData}
           onClose={() => setEditGroceryItemModalOpen((prev) => !prev)}
           modalOpen={editGroceryItemModalOpen}
-          updateUserIngredients={updateUserIngredients}
+          fetchUserIngredients={fetchUserIngredients}
         />
       )}
     </div>
