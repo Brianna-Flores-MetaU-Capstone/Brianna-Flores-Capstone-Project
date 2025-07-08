@@ -1,7 +1,4 @@
-import type {
-  GPAuthFormDataTypes,
-  GPIngredientDataTypes,
-} from "./types";
+import type { GPAuthFormDataTypes, GPIngredientDataTypes } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
   return recipeData.map((recipe: any) => ({

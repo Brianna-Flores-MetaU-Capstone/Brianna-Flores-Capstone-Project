@@ -13,7 +13,10 @@ import GenericList from "../components/GenericList";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
-import { fetchUserIngredientsHelper, deleteIngredient } from "../utils/databaseHelpers";
+import {
+  fetchUserIngredientsHelper,
+  deleteIngredient,
+} from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
@@ -54,7 +57,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
       setMessage({ error: true, message: "Error user not signed in" });
       return;
     }
-    await deleteIngredient({setMessage, ingredient});
+    await deleteIngredient({ setMessage, ingredient });
     fetchUserIngredients();
   };
 

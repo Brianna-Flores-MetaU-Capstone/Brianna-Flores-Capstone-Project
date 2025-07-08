@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import GenericList from "../components/GenericList";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
+import { fetchRecipes, updateUserRecipes } from "../utils/databaseHelpers";
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
@@ -27,46 +28,17 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:3000/recipes/${user.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(selectedRecipe),
-        credentials: "include",
-      });
-      if (!response.ok) {
-        setMessage({ error: true, message: "Failed to save recipe" });
-        return;
-      }
-      setMessage({ error: false, message: "Sucessfully saved recipe" });
-      fetchRecipes();
+      const userId = user.id;
+      await updateUserRecipes({ userId, selectedRecipe, setMessage });
+      await fetchRecipes({ setMessage, setSelectedMeals });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
   };
 
   useEffect(() => {
-    fetchRecipes();
+    fetchRecipes({ setMessage, setSelectedMeals });
   }, []);
-
-  const fetchRecipes = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/recipes", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        setMessage({ error: true, message: "Failed to fetch user recipes" });
-        return;
-      }
-      const data = await response.json();
-      setSelectedMeals(data);
-      return data;
-    } catch (error) {
-      setMessage({ error: true, message: "Failed to fetch user recipes" });
-    }
-  };
 
   return (
     <div className="new-list-page">
