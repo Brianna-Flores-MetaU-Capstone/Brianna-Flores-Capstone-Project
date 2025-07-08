@@ -29,7 +29,6 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     event.preventDefault();
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async () => {
-        // get the user currently signed in
         const user = auth.currentUser;
         if (user) {
           const response = await validateUserToken(user);

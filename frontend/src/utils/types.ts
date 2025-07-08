@@ -11,6 +11,7 @@ type GPRecipeDataTypes = {
   previewImage: string;
   servings: number;
   ingredients: GPIngredientDataTypes[];
+  instructions: string[]
   sourceUrl: string;
   vegetarian: boolean;
   vegan: boolean;
@@ -37,7 +38,6 @@ type GPIngredientDataTypes = {
   quantity: string;
   unit: string;
   department: string;
-  image: string;
   estimatedCost: number;
   expirationDate?: string | null;
 };

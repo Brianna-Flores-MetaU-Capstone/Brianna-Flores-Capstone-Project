@@ -3,15 +3,18 @@ import "../styles/Meal.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { GPModalStyle } from "../utils/utils";
+import type { GPRecipeDataTypes } from "../utils/types";
 
 type GPMealModalProps = {
   modalOpen: boolean;
   handleModalClose: () => void;
+  recipeInfo: GPRecipeDataTypes | undefined
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
   handleModalClose,
   modalOpen,
+  recipeInfo
 }) => {
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
@@ -20,30 +23,38 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         <div className="modal-header">
           <img
             className="meal-img"
-            src="https://images.pexels.com/photos/3969253/pexels-photo-3969253.jpeg"
+            src={recipeInfo?.previewImage}
           />
           <div className="meal-info">
-            <h2>Meal Title</h2>
-            <p>Servings: X</p>
-            <p>Estimated Cost: $X.XX</p>
-            {/* List out intolerances/diets this recipe qualifies for */}
+            <h2>{recipeInfo?.recipeTitle}</h2>
+            <p>Servings: {recipeInfo?.servings}</p>
+            <p>Estimated Cost: ${recipeInfo?.totalCost}</p>
             <ul className="diets-and-intolerances">
-              <li>Dairy Free</li>
-              <li>Vegetarian</li>
+              {recipeInfo?.dairyFree && <li>Dairy Free</li>}
+              {recipeInfo?.glutenFree && <li>Gluten Free</li>}
+              {recipeInfo?.vegetarian && <li>Vegetarian</li>}
+              {recipeInfo?.vegan && <li>Vegan</li>}
             </ul>
           </div>
         </div>
-        <h4>Missing Ingredients</h4>
-        <ul>
-          <li>Ingredient 1</li>
-          <li>3 Chicken Breasts</li>
-        </ul>
-        <h4>Ingredients on Hand</h4>
-        <ul>
-          {/* say recipe will use 5 chicken breasts and 2 on hand, still need 3 more  */}
-          <li>Ingredient 1</li>
-          <li>2 Chicken Breasts</li>
-        </ul>
+        <h4>Ingredients</h4>
+        {recipeInfo?.ingredients.map((ingredient) => {
+          return (
+            <div className="recipe-modal-ingredient" key={ingredient.id}>
+              <p>{ingredient.ingredientName}</p>
+              <p>{ingredient.quantity}</p>
+              <p>{ingredient.unit}</p>
+            </div>
+          )
+        })}
+        <h4>Instructions</h4>
+        <ol>
+        {recipeInfo?.instructions.map((step) => {
+          return (
+            <li>{step}</li>
+          )
+        })}
+        </ol>
       </Box>
     </Modal>
   );

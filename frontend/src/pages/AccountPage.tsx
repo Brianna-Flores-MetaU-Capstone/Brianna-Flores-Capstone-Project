@@ -108,17 +108,14 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           user.email,
           userPassword
         );
-        // valdate credentials to update account
         reauthenticateWithCredential(user, credential)
           .then(() => {
             //if the users email was changed, update on firebase side too
             if (user.email && userEmail && user.email !== userEmail) {
-              // get credential by signing user in with email
               updateEmail(user, userEmail).catch((error) => {
                 setMessage({ error: true, message: error.code });
               });
             }
-            // then update account in database
             updateAccount({
               user,
               userEmail,

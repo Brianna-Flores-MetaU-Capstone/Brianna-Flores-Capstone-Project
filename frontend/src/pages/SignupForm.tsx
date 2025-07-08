@@ -33,7 +33,6 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }) {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async (userCredential) => {
-        // Signed up
         const user = userCredential.user;
         const newUser: GPAccountInfoTypes = {
           firebaseId: user.uid ? user.uid : "",

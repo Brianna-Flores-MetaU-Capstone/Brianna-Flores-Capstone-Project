@@ -33,7 +33,6 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
 
-  // on mount, fetch ingredients
   useEffect(() => {
     fetchUserIngredients();
   }, []);

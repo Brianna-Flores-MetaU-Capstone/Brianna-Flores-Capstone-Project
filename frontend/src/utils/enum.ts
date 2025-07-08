@@ -1,6 +1,6 @@
 const IngredientUnitOptions = [
   "units",
-  "cups",
+  "cup",
   "Tbsp",
   "tsp",
   "fl. oz",

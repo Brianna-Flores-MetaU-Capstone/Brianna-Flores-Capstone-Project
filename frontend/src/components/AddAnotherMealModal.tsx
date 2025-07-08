@@ -60,7 +60,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
+        // `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=1&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
       );
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -71,6 +72,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       }
       const data = await response.json();
       const parsedRecipes = parseRecipeData(data.results);
+      console.log(parsedRecipes);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {

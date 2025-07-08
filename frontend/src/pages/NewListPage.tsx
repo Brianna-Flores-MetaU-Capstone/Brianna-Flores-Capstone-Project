@@ -18,6 +18,7 @@ import { fetchRecipes, updateUserRecipes } from "../utils/databaseHelpers";
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
   const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
+  const [mealInfoModalInfo, setMealInfoModalInfo] = useState<GPRecipeDataTypes>()
   const [selectedMeals, setSelectedMeals] = useState<GPRecipeDataTypes[]>([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
@@ -40,9 +41,20 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     fetchRecipes({ setMessage, setSelectedMeals });
   }, []);
 
+  const handleMealCardClick = (recipe: GPRecipeDataTypes) => {
+    setMealInfoModalOpen((prev) => !prev)
+    setMealInfoModalInfo(recipe)
+  }
+
   return (
     <div className="new-list-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <section>
+        <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>
+          Add Another Meal!
+        </Button>
+        <Button>Make My List</Button>
+      </section>
       <GenericList
         className="selected-meals"
         headerList={["Selected Meals"]}
@@ -50,7 +62,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         renderItem={(meal) => (
           <MealCard
             key={meal.apiId}
-            onMealCardClick={() => event?.preventDefault()}
+            onMealCardClick={() => handleMealCardClick(meal)}
             parsedMealData={meal}
           />
         )}
@@ -58,12 +70,6 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
-      <section>
-        <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>
-          Add Another Meal!
-        </Button>
-        <Button>Make My List</Button>
-      </section>
       <AddAnotherMealModal
         handleModalClose={() => setAddAnotherMealModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
@@ -72,6 +78,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <MealInfoModal
         handleModalClose={() => setMealInfoModalOpen((prev) => !prev)}
         modalOpen={mealInfoModalOpen}
+        recipeInfo={mealInfoModalInfo}
       />
     </div>
   );

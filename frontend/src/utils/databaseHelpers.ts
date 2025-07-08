@@ -98,7 +98,6 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
 
 const validateUserToken = async (user: User) => {
   const token = await user.getIdToken(true);
-  // Send token to your backend via HTTPS
   const response = await fetch("http://localhost:3000/login", {
     method: "POST",
     headers: {

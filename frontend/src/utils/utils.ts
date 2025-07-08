@@ -7,6 +7,7 @@ const parseRecipeData = (recipeData: any) => {
     previewImage: recipe.image,
     servings: recipe.servings,
     ingredients: parseIngredients(recipe.extendedIngredients),
+    instructions: parseInstructions(recipe.analyzedInstructions[0].steps),
     sourceUrl: recipe.sourceUrl,
     vegetarian: recipe.vegetarian,
     vegan: recipe.vegan,
@@ -18,14 +19,20 @@ const parseRecipeData = (recipeData: any) => {
 
 const parseIngredients = (ingredientsData: any) => {
   return ingredientsData.map((ingredient: any) => ({
+    id: ingredient.id,
+    ingredientName: ingredient.name,
     department: ingredient.aisle,
-    image: ingredient.image,
-    ingredientName: ingredient.ingredientName,
-    amount: ingredient.amount,
+    quantity: ingredient.amount,
     unit: ingredient.unit,
     estimatedCost: getIngredientCost(ingredient.name),
   }));
 };
+
+const parseInstructions = (steps: any) => {
+  if (steps) {
+    return steps.map((step: any) => step.step)
+  }
+}
 
 const getIngredientCost = (ingredientName: string) => {
   return 0;
@@ -64,10 +71,12 @@ const GPModalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "50%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  maxHeight: "70%", 
+  overflow: "auto"
 };
 
 export { validateInput, parseRecipeData, handleAuthInputChange, GPModalStyle };
