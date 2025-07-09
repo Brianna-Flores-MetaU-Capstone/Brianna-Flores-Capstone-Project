@@ -5,6 +5,7 @@ const unitConversions: Record<string, string> = {
     miligrams: "mg", 
 
     g: 'g', 
+    gr: 'g', 
     'g.': 'g', 
     gram: 'g', 
     grams: 'g', 
