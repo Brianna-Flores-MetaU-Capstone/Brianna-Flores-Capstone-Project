@@ -4,8 +4,10 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
+  GPRecipeIngredientTypes,
 } from "./types";
 import type { User } from "firebase/auth";
+import { parseGroceryListDepartments } from "./utils";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -254,6 +256,39 @@ const updateUserRecipes = async ({
   setMessage({ error: false, message: "Sucessfully saved recipe" });
 };
 
+type GPFetchGroceryListTypes = GPSetMessageType & {
+  setUserGroceryList:  (
+    value: React.SetStateAction<GPRecipeIngredientTypes[]>
+  ) => void
+  setGroceryDepartments: (
+    value: React.SetStateAction<string[]>
+  ) => void
+};
+const fetchGroceryList = async ({setMessage, setUserGroceryList, setGroceryDepartments}: GPFetchGroceryListTypes) => {
+    try {
+      const response = await fetch(`${databaseUrl}/generateList`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setMessage({
+          error: true,
+          message: "Error failed to fetch user grocery list",
+        });
+        return
+      }
+      const data = await response.json();
+      setUserGroceryList(data);
+      const departments = parseGroceryListDepartments(data)
+      setGroceryDepartments(departments)
+    } catch (error) {
+      setMessage({
+        error: true,
+        message: "Error failed to fetch user grocery list",
+      });
+    }
+  };
+
 export {
   updateAccount,
   getUserData,
@@ -265,4 +300,5 @@ export {
   updateIngredientDatabase,
   fetchRecipes,
   updateUserRecipes,
+  fetchGroceryList
 };

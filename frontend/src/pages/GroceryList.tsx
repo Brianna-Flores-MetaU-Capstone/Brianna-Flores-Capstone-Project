@@ -14,8 +14,7 @@ import Button from "@mui/material/Button";
 import { GROCERY_MODAL } from "../utils/constants";
 import GenericList from "../components/GenericList";
 import ErrorState from "../components/ErrorState";
-
-const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import { fetchGroceryList } from "../utils/databaseHelpers";
 
 const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [editGroceryItemData, setEditGroceryItemData] =
@@ -39,45 +38,8 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   };
 
   useEffect(() => {
-    fetchGroceryList();
+    fetchGroceryList({ setMessage, setUserGroceryList, setGroceryDepartments });
   }, []);
-
-  const fetchGroceryList = async () => {
-    try {
-      const response = await fetch(`${databaseUrl}/generateList`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        setMessage({
-          error: true,
-          message: "Error failed to fetch user grocery list",
-        });
-      }
-      const data = await response.json();
-      setUserGroceryList(data);
-      parseGroceryListDepartments(data);
-    } catch (error) {
-      setMessage({
-        error: true,
-        message: "Error failed to fetch user grocery list",
-      });
-      return [];
-    }
-  };
-
-  const parseGroceryListDepartments = (
-    groceryList: GPRecipeIngredientTypes[]
-  ) => {
-    let departments: string[] = [];
-    for (const grocery of groceryList) {
-      if (!departments.includes(grocery.department)) {
-        departments = [...departments, grocery.department];
-      }
-    }
-    setGroceryDepartments(departments);
-    return departments;
-  };
 
   return (
     <div>
@@ -112,7 +74,13 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           isEditing={false}
           onClose={handleAddGrocery}
           modalOpen={addGroceryItemModalOpen}
-          fetchUserIngredients={fetchGroceryList}
+          fetchUserIngredients={() =>
+            fetchGroceryList({
+              setMessage,
+              setUserGroceryList,
+              setGroceryDepartments,
+            })
+          }
         />
       )}
       {editGroceryItemModalOpen && (
@@ -122,12 +90,18 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           ingredientData={editGroceryItemData}
           onClose={() => setEditGroceryItemModalOpen((prev) => !prev)}
           modalOpen={editGroceryItemModalOpen}
-          fetchUserIngredients={fetchGroceryList}
+          fetchUserIngredients={() =>
+            fetchGroceryList({
+              setMessage,
+              setUserGroceryList,
+              setGroceryDepartments,
+            })
+          }
         />
       )}
       {message && (
-          <ErrorState error={message.error} message={message.message} />
-        )}
+        <ErrorState error={message.error} message={message.message} />
+      )}
     </div>
   );
 };

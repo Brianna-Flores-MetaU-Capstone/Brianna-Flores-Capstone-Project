@@ -99,7 +99,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         });
       }
       const data = await response.json();
-      // array of recipes
       setMealResults(data);
       setLoading(false);
       // TODO: check if recipes are in database (according to id), otherwise add to database

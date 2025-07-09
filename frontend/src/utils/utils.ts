@@ -1,4 +1,4 @@
-import type { GPAuthFormDataTypes, GPIngredientDataTypes } from "./types";
+import type { GPAuthFormDataTypes, GPIngredientDataTypes, GPRecipeIngredientTypes } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
   return recipeData.map((recipe: any) => ({
@@ -66,6 +66,18 @@ const handleAuthInputChange = (
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };
 
+  const parseGroceryListDepartments = (
+    groceryList: GPRecipeIngredientTypes[]
+  ) => {
+    let departments: string[] = [];
+    for (const grocery of groceryList) {
+      if (!departments.includes(grocery.department)) {
+        departments = [...departments, grocery.department];
+      }
+    }
+    return departments;
+  };
+
 const GPModalStyle = {
   position: "absolute",
   top: "50%",
@@ -79,4 +91,4 @@ const GPModalStyle = {
   overflow: "auto",
 };
 
-export { validateInput, parseRecipeData, handleAuthInputChange, GPModalStyle };
+export { validateInput, parseRecipeData, handleAuthInputChange, parseGroceryListDepartments, GPModalStyle };
