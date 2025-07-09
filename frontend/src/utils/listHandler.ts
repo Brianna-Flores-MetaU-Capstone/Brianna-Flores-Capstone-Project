@@ -6,8 +6,13 @@ type GPCreateGroceryListType = {
 }
 
 const createGroceryList = ({selectedRecipes, ingredientsOnHand}: GPCreateGroceryListType) => {
-    const selectedRecipe = selectedRecipes
-    const ingredients = ingredientsOnHand
+    const groceriesToBuy = [];
+    const groceriesOnHand = selectedRecipes.map((recipe) => {
+        return (
+            recipe.ingredients.map((ingredient => !ingredientsOnHand.includes(ingredient)))
+        )
+    })
+    console.log(groceriesOnHand)
 }
 
 export { createGroceryList }
