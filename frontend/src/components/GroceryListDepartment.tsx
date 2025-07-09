@@ -1,11 +1,14 @@
 import React from "react";
-import type { GPIngredientDataTypes, GPRecipeIngredientTypes } from "../utils/types";
+import type {
+  GPIngredientDataTypes,
+  GPRecipeIngredientTypes,
+} from "../utils/types";
 import GenericList from "./GenericList";
 import Ingredient from "./Ingredient";
 import { v4 as uuidv4 } from "uuid";
 
 type GPGroceryListDepartmentProps = {
-  groceryList: GPRecipeIngredientTypes[]
+  groceryList: GPRecipeIngredientTypes[];
   department: string;
   handleOpenModal: (ingredient: GPIngredientDataTypes) => void;
 };

@@ -1,7 +1,10 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-import type { GPRecipeIngredientTypes, GPIngredientDataTypes } from "../../frontend/src/utils/types";
+import type {
+  GPRecipeIngredientTypes,
+  GPIngredientDataTypes,
+} from "../../frontend/src/utils/types";
 import { unitConversions } from "./constants";
 import convert from "convert-units";
 
@@ -162,5 +165,10 @@ const createGroceryList = ({
   return ingredientsToPurchase;
 };
 
-
-export { checkUserExists, convertUnits, getTotalQuantity, quantityNeeded, createGroceryList };
+export {
+  checkUserExists,
+  convertUnits,
+  getTotalQuantity,
+  quantityNeeded,
+  createGroceryList,
+};

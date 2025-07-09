@@ -1,3 +1,5 @@
+// Signature generation code from Walmart API Documentation
+// https://walmart.io/docs/walmart-identity/v1/supporting-information
 import * as crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
