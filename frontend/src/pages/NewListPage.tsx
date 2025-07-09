@@ -3,6 +3,7 @@ import type {
   GPToggleNavBarProps,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
+  GPRecipeIngredientTypes
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -18,7 +19,6 @@ import {
   updateUserRecipes,
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
-import { createGroceryList } from "../utils/listHandler";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -32,6 +32,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [groceryList, setGroceryList] = useState<GPRecipeIngredientTypes[]>([])
   const { user } = useUser();
 
   const handleSelectRecipe = async (selectedRecipe: GPRecipeDataTypes) => {
@@ -74,10 +75,31 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     }
     await fetchRecipes({ setMessage, setSelectedRecipes });
   };
+  
+  const getRecipeIngredients = (recipes: GPRecipeDataTypes[]) => {
+    let recipeIngredients: GPRecipeIngredientTypes[] = []
+    for (const recipe of recipes) {
+      recipeIngredients = [...recipeIngredients, ...recipe.ingredients]
+    }
+    return recipeIngredients
+  }
 
   const handleGenerateList = async () => {
     const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
-    createGroceryList({ selectedRecipes, ingredientsOnHand });
+    const recipeIngredients = getRecipeIngredients(selectedRecipes)
+    const response = await fetch(`${databaseUrl}/generateList/${user?.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ingredientsOnHand, recipeIngredients}),
+      credentials: "include",
+    })
+    if (!response.ok) {
+      setMessage({ error: true, message: "Failed to generate grocery list" });
+    }
+    const data = await response.json()
+    setGroceryList(data)
   };
 
   return (

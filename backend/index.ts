@@ -42,8 +42,12 @@ app.use("/ingredients", ingredientsRoutes);
 const recipeRoutes = require("./routes/recipeRoutes");
 app.use("/recipes", recipeRoutes);
 
+const groceryListRoutes = require("./routes/groceryListRoutes");
+app.use("/generateList", groceryListRoutes);
+
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

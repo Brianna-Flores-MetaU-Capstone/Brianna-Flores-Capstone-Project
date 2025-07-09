@@ -1,8 +1,6 @@
+import admin from "firebase-admin";
 import dotenv from "dotenv";
 dotenv.config();
-
-// firebase admin for token verifiation
-import admin from "firebase-admin";
 
 const fromEnvFile = process.env.FIREBASE_ADMIN_KEY;
 if (!fromEnvFile) {

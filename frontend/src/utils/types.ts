@@ -65,6 +65,15 @@ type GPIngredientsOnHandTypes = {
   ingredientId: string;
 };
 
+type GPRecipeIngredientTypes = {
+  id: number;
+  unit: string;
+  quantity: string;
+  department: string;
+  estimatedCost: number;
+  ingredientName: string;
+};
+
 export type {
   GPToggleNavBarProps,
   GPAccountInfoTypes,
@@ -75,4 +84,5 @@ export type {
   GPRequestFormDataTypes,
   GPErrorMessageTypes,
   GPIngredientsOnHandTypes,
+  GPRecipeIngredientTypes,
 };
