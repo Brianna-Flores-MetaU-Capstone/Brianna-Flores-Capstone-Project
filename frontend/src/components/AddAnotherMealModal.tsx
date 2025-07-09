@@ -111,7 +111,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   };
 
   const handleFetchRecipes = (firstSearch: boolean) => {
-    const recipesOnHand = firstSearch ? 0 : numInDatabase
+    const recipesOnHand = firstSearch ? 0 : numInDatabase;
     const numToRequest = TOTAL_SEARCH_REQUESTS - recipesOnHand;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
@@ -140,8 +140,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setNumInDatabase(0)
-    setSearchClicked(false)
+    setNumInDatabase(0);
+    setSearchClicked(false);
     setMealResults([]);
     // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
     handleFetchRecipes(true);

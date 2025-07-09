@@ -9,23 +9,20 @@ import { v4 as uuidv4 } from "uuid";
 type GPMealModalProps = {
   modalOpen: boolean;
   handleModalClose: () => void;
-  recipeInfo: GPRecipeDataTypes | undefined
+  recipeInfo: GPRecipeDataTypes | undefined;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
   handleModalClose,
   modalOpen,
-  recipeInfo
+  recipeInfo,
 }) => {
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal open={modalOpen} onClose={handleModalClose}>
       <Box sx={GPModalStyle}>
         <div className="modal-header">
-          <img
-            className="meal-img"
-            src={recipeInfo?.previewImage}
-          />
+          <img className="meal-img" src={recipeInfo?.previewImage} />
           <div className="meal-info">
             <h2>{recipeInfo?.recipeTitle}</h2>
             <p>Servings: {recipeInfo?.servings}</p>
@@ -46,15 +43,13 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
               <p>{ingredient.quantity}</p>
               <p>{ingredient.unit}</p>
             </div>
-          )
+          );
         })}
         <h4>Instructions</h4>
         <ol>
-        {recipeInfo?.instructions.map((step) => {
-          return (
-            <li key={uuidv4()}>{step}</li>
-          )
-        })}
+          {recipeInfo?.instructions.map((step) => {
+            return <li key={uuidv4()}>{step}</li>;
+          })}
         </ol>
       </Box>
     </Modal>

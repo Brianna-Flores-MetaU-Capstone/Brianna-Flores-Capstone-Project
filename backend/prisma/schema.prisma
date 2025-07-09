@@ -38,7 +38,7 @@ model IngredientsOnHand {
 }
 
 model Ingredient {
-  id                   Int                   @id @default(autoincrement())
+  id                   Int                 @id @default(autoincrement())
   ingredientName       String
   department           String
   estimatedCostPerUnit Decimal?
@@ -46,16 +46,15 @@ model Ingredient {
   estimatedCost        Decimal?
   ingredientsOnHand    IngredientsOnHand[]
   groceryListId        Int?
-  groceryList          GroceryList?          @relation(fields: [groceryListId], references: [id])
+  groceryList          GroceryList?        @relation(fields: [groceryListId], references: [id])
 }
-
 
 // many to many relationship
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations
 // recipe can be stored in what the user will make throughout the week, their "to make" list
 model Recipe {
-  id           Int                   @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
-  apiId        Int                   @unique
+  id           Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
+  apiId        Int      @unique
   recipeTitle  String
   previewImage String // if image not provided, generic image will be presented
   servings     Int

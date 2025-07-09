@@ -1,18 +1,16 @@
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "./types"
+import type { GPIngredientDataTypes, GPRecipeDataTypes } from "./types";
 
 type GPCreateGroceryListType = {
-    selectedRecipes: GPRecipeDataTypes[]
-    ingredientsOnHand: GPIngredientDataTypes[]
-}
+  selectedRecipes: GPRecipeDataTypes[];
+  ingredientsOnHand: GPIngredientDataTypes[];
+};
 
-const createGroceryList = ({selectedRecipes, ingredientsOnHand}: GPCreateGroceryListType) => {
-    const groceriesToBuy = [];
-    const groceriesOnHand = selectedRecipes.map((recipe) => {
-        return (
-            recipe.ingredients.map((ingredient => !ingredientsOnHand.includes(ingredient)))
-        )
-    })
-    console.log(groceriesOnHand)
-}
+const createGroceryList = ({
+  selectedRecipes,
+  ingredientsOnHand,
+}: GPCreateGroceryListType) => {
+  const selected = selectedRecipes;
+  const onHand = ingredientsOnHand;
+};
 
-export { createGroceryList }
+export { createGroceryList };

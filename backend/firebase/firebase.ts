@@ -1,5 +1,5 @@
-import dotenv from  "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 // firebase admin for token verifiation
 import admin from "firebase-admin";
@@ -10,7 +10,7 @@ if (!fromEnvFile) {
 }
 const buffer = Buffer.from(fromEnvFile, "base64");
 const jsonAsString = buffer.toString("utf-8");
-const firebaseAdminKey = JSON.parse(jsonAsString)
+const firebaseAdminKey = JSON.parse(jsonAsString);
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -18,4 +18,4 @@ if (!admin.apps.length) {
   });
 }
 
-export default admin
+export default admin;

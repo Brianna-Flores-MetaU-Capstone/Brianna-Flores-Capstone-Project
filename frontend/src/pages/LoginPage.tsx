@@ -16,6 +16,7 @@ import AuthForm from "../components/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -45,7 +46,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }
 
   const checkSession = async () => {
-    const response = await fetch("http://localhost:3000/me", {
+    const response = await fetch(`${databaseUrl}/me`, {
       method: "GET",
       credentials: "include",
     });

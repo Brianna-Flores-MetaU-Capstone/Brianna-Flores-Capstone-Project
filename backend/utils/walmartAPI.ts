@@ -39,11 +39,10 @@ const searchWalmart = async (searchQuery: string) => {
     );
 
     if (!response.ok) {
-      console.log("Error fetching data");
+      console.error("Error fetching data");
       return;
     }
     const data = await response.json();
-    console.log(data);
   }
 };
 

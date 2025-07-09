@@ -13,8 +13,14 @@ import Button from "@mui/material/Button";
 import GenericList from "../components/GenericList";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
-import { fetchRecipes, updateUserRecipes, fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import {
+  fetchRecipes,
+  updateUserRecipes,
+  fetchUserIngredientsHelper,
+} from "../utils/databaseHelpers";
 import { createGroceryList } from "../utils/listHandler";
+
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -54,7 +60,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
     // take the current recipes we have
     const updatedUser = await fetch(
-      `http://localhost:3000/recipes/${deletedRecipe.apiId}`,
+      `${databaseUrl}/recipes/${deletedRecipe.apiId}`,
       {
         method: "PUT",
         headers: {
@@ -66,13 +72,13 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     if (!updatedUser.ok) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }
-    await fetchRecipes({ setMessage, setSelectedRecipes })
+    await fetchRecipes({ setMessage, setSelectedRecipes });
   };
 
   const handleGenerateList = async () => {
-    const ingredientsOnHand = await fetchUserIngredientsHelper({setMessage})
-    createGroceryList({selectedRecipes, ingredientsOnHand})
-  }
+    const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
+    createGroceryList({ selectedRecipes, ingredientsOnHand });
+  };
 
   return (
     <div className="new-list-page">

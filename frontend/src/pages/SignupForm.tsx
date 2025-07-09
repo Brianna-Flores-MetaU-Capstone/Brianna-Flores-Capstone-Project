@@ -22,7 +22,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     password: "",
   });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const { setUser } = useUser(); // Access global user state
+  const { setUser } = useUser();
 
   function handleSubmit({
     userIntolerances,

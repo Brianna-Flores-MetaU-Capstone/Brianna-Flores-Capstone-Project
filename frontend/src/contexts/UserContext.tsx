@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 type GPUserAccountType = {
   id: string;
@@ -21,7 +22,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/me", { credentials: "include" })
+    fetch(`${databaseUrl}/me`, { credentials: "include" })
       .then((response) => response.json())
       .then((data) => {
         if (data.id) {

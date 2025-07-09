@@ -14,7 +14,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onMealCardClick,
   parsedMealData,
   onSelectRecipe,
-  onDeleteRecipe
+  onDeleteRecipe,
 }) => {
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
@@ -34,8 +34,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
           icon={faTrash}
           className="ingredient-button"
           onClick={(event) => {
-            event.stopPropagation()
-            onDeleteRecipe?.(parsedMealData)}}
+            event.stopPropagation();
+            onDeleteRecipe?.(parsedMealData);
+          }}
         />
       )}
       {onSelectRecipe && (

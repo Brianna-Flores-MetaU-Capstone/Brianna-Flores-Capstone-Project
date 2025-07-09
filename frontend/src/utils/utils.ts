@@ -30,9 +30,9 @@ const parseIngredients = (ingredientsData: any) => {
 
 const parseInstructions = (steps: any) => {
   if (steps) {
-    return steps.map((step: any) => step.step)
+    return steps.map((step: any) => step.step);
   }
-}
+};
 
 const getIngredientCost = (ingredientName: string) => {
   return 0;
@@ -75,8 +75,8 @@ const GPModalStyle = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  maxHeight: "70%", 
-  overflow: "auto"
+  maxHeight: "70%",
+  overflow: "auto",
 };
 
 export { validateInput, parseRecipeData, handleAuthInputChange, GPModalStyle };

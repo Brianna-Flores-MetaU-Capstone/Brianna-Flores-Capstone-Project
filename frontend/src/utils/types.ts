@@ -11,7 +11,7 @@ type GPRecipeDataTypes = {
   previewImage: string;
   servings: number;
   ingredients: GPIngredientDataTypes[];
-  instructions: string[]
+  instructions: string[];
   sourceUrl: string;
   vegetarian: boolean;
   vegan: boolean;
@@ -33,7 +33,7 @@ type GPAuthFormDataTypes = {
 };
 
 type GPIngredientDataTypes = {
-  id: number
+  id: number;
   ingredientName: string;
   quantity: string;
   unit: string;

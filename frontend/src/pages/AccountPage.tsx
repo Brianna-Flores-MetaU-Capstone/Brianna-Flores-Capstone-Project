@@ -25,6 +25,7 @@ import ErrorState from "../components/ErrorState";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useUser } from "../contexts/UserContext";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -138,7 +139,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch(`${databaseUrl}/logout`, {
         method: "POST",
         credentials: "include",
       });
