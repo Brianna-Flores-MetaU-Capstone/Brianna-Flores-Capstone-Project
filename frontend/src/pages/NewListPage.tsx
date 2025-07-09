@@ -19,6 +19,7 @@ import {
   updateUserRecipes,
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
+import { useNavigate } from "react-router";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -33,6 +34,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   const handleSelectRecipe = async (selectedRecipe: GPRecipeDataTypes) => {
     if (!user) {
@@ -98,6 +100,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       setMessage({ error: true, message: "Failed to generate grocery list" });
     }
     const data = await response.json()
+    navigate("/grocery-list")
   };
 
   return (
