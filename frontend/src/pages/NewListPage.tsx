@@ -32,7 +32,6 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const [groceryList, setGroceryList] = useState<GPRecipeIngredientTypes[]>([])
   const { user } = useUser();
 
   const handleSelectRecipe = async (selectedRecipe: GPRecipeDataTypes) => {
@@ -99,7 +98,6 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       setMessage({ error: true, message: "Failed to generate grocery list" });
     }
     const data = await response.json()
-    setGroceryList(data)
   };
 
   return (

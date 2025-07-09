@@ -21,7 +21,7 @@ model User {
   intolerances      String[]
   diets             String[]
   ingredientsOnHand IngredientsOnHand[]
-  groceryList       GroceryList? // store the grocery list for a user
+  groceryList       Json?
   recipes           Recipe[]
 }
 
@@ -45,8 +45,6 @@ model Ingredient {
   productImage         String?
   estimatedCost        Decimal?
   ingredientsOnHand    IngredientsOnHand[]
-  groceryListId        Int?
-  groceryList          GroceryList?        @relation(fields: [groceryListId], references: [id])
 }
 
 // many to many relationship
@@ -67,14 +65,4 @@ model Recipe {
   glutenFree   Boolean
   dairyFree    Boolean
   users        User[]
-}
-
-model GroceryList {
-  id        Int          @id @default(autoincrement())
-  listName  String
-  startDate DateTime
-  endDate   DateTime
-  toBuy     Ingredient[]
-  userId    Int          @unique
-  user      User         @relation(fields: [userId], references: [id])
 }
