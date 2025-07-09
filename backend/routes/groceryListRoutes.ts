@@ -29,6 +29,20 @@ const isAuthenticated = (
   next();
 };
 
+router.get("/", isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.session.userId;
+  try {
+    const userData = await prisma.User.findUnique({
+        where: {
+            id: userId
+        }
+    })
+    res.json(userData.groceryList)
+  } catch (error) {
+    res.status(500).send("Error fetching user groceries")
+  }
+});
+
 router.post(
   "/:userId",
   isAuthenticated,
