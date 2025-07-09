@@ -23,7 +23,6 @@ const isAuthenticated = (
 };
 
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
-  // check that user is authenticated
   const userId = req.session.userId;
   try {
     // get the user data
@@ -35,6 +34,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
         recipes: true,
       },
     });
+    // return the users recipes
     res.json(userData.recipes);
   } catch (error) {
     res.status(500).send("Server Error");
@@ -118,5 +118,26 @@ router.post(
     }
   }
 );
+
+// update user to remove recipe
+router.put("/:apiId", async (req: Request, res: Response) => {
+    const userId = req.session.userId
+    const recipeApiId = parseInt(req.params.apiId)
+    try {
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                recipes: {
+                    disconnect: { apiId: recipeApiId }
+                }
+            }
+        })
+        res.json(updatedUser)
+    } catch (error) {
+        res.status(500).send("Failed to remove recipe from users list")
+    }
+})
 
 module.exports = router;

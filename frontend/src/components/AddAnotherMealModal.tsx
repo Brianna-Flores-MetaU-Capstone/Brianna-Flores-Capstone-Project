@@ -60,8 +60,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     try {
       setLoading(true);
       const response = await fetch(
-        // `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=1&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
       );
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -72,7 +71,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       }
       const data = await response.json();
       const parsedRecipes = parseRecipeData(data.results);
-      console.log(parsedRecipes);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
@@ -91,7 +89,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2`
+        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2&instructionsRequired=true`
       );
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -112,28 +110,29 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   };
 
-  const handleFetchRecipes = () => {
-    const numToRequest = TOTAL_SEARCH_REQUESTS - numInDatabase;
+  const handleFetchRecipes = (firstSearch: boolean) => {
+    const recipesOnHand = firstSearch ? 0 : numInDatabase
+    const numToRequest = TOTAL_SEARCH_REQUESTS - recipesOnHand;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
       if (numToRequest % GROUP_OF_DISPLAYED_CARDS === 0) {
         fetchSearchRecipes({
           numToRequest: GROUP_OF_DISPLAYED_CARDS,
-          offset: numInDatabase,
+          offset: recipesOnHand,
         });
         setNumInDatabase((prev) => prev + GROUP_OF_DISPLAYED_CARDS);
       } else {
         fetchSearchRecipes({
           numToRequest:
             GROUP_OF_DISPLAYED_CARDS -
-            (numInDatabase % GROUP_OF_DISPLAYED_CARDS),
-          offset: numInDatabase,
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS),
+          offset: recipesOnHand,
         });
         setNumInDatabase(
           (prev) =>
             prev +
             GROUP_OF_DISPLAYED_CARDS -
-            (numInDatabase % GROUP_OF_DISPLAYED_CARDS)
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS)
         );
       }
     }
@@ -141,13 +140,16 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setNumInDatabase(0)
+    setSearchClicked(false)
+    setMealResults([]);
     // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
-    handleFetchRecipes();
+    handleFetchRecipes(true);
     setSearchClicked(true);
   };
 
   const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
-    handleFetchRecipes();
+    handleFetchRecipes(false);
     setSearchClicked(false);
   };
 

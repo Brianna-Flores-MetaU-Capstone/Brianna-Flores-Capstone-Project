@@ -13,13 +13,18 @@ import Button from "@mui/material/Button";
 import GenericList from "../components/GenericList";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
-import { fetchRecipes, updateUserRecipes } from "../utils/databaseHelpers";
+import { fetchRecipes, updateUserRecipes, fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import { createGroceryList } from "../utils/listHandler";
 
 const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
-  const [addAnotherMealModalOpen, setAddAnotherMealModalOpen] = useState(false);
-  const [mealInfoModalOpen, setMealInfoModalOpen] = useState(false);
-  const [mealInfoModalInfo, setMealInfoModalInfo] = useState<GPRecipeDataTypes>()
-  const [selectedMeals, setSelectedMeals] = useState<GPRecipeDataTypes[]>([]);
+  const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
+    useState(false);
+  const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
+    useState<GPRecipeDataTypes>();
+  const [selectedRecipes, setSelectedRecipes] = useState<GPRecipeDataTypes[]>(
+    []
+  );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
 
@@ -31,39 +36,63 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     try {
       const userId = user.id;
       await updateUserRecipes({ userId, selectedRecipe, setMessage });
-      await fetchRecipes({ setMessage, setSelectedMeals });
+      await fetchRecipes({ setMessage, setSelectedRecipes });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
   };
 
   useEffect(() => {
-    fetchRecipes({ setMessage, setSelectedMeals });
+    fetchRecipes({ setMessage, setSelectedRecipes });
   }, []);
 
-  const handleMealCardClick = (recipe: GPRecipeDataTypes) => {
-    setMealInfoModalOpen((prev) => !prev)
-    setMealInfoModalInfo(recipe)
+  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+    setRecipeInfoModalOpen((prev) => !prev);
+    setRecipeInfoModalInfo(recipe);
+  };
+
+  const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
+    // take the current recipes we have
+    const updatedUser = await fetch(
+      `http://localhost:3000/recipes/${deletedRecipe.apiId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    if (!updatedUser.ok) {
+      setMessage({ error: true, message: "Failed to delete recipe" });
+    }
+    await fetchRecipes({ setMessage, setSelectedRecipes })
+  };
+
+  const handleGenerateList = async () => {
+    const ingredientsOnHand = await fetchUserIngredientsHelper({setMessage})
+    createGroceryList({selectedRecipes, ingredientsOnHand})
   }
 
   return (
     <div className="new-list-page">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section>
-        <Button onClick={() => setAddAnotherMealModalOpen((prev) => !prev)}>
+        <Button onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}>
           Add Another Meal!
         </Button>
-        <Button>Make My List</Button>
+        <Button onClick={handleGenerateList}>Make My List</Button>
       </section>
       <GenericList
         className="selected-meals"
         headerList={["Selected Meals"]}
-        list={selectedMeals}
+        list={selectedRecipes}
         renderItem={(meal) => (
           <MealCard
             key={meal.apiId}
-            onMealCardClick={() => handleMealCardClick(meal)}
+            onMealCardClick={() => handleRecipeCardClick(meal)}
             parsedMealData={meal}
+            onDeleteRecipe={handleDeleteRecipe}
           />
         )}
       />
@@ -71,14 +100,14 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         <ErrorState error={message.error} message={message.message} />
       )}
       <AddAnotherMealModal
-        handleModalClose={() => setAddAnotherMealModalOpen((prev) => !prev)}
+        handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
-        modalOpen={addAnotherMealModalOpen}
+        modalOpen={addAnotherRecipeModalOpen}
       />
       <MealInfoModal
-        handleModalClose={() => setMealInfoModalOpen((prev) => !prev)}
-        modalOpen={mealInfoModalOpen}
-        recipeInfo={mealInfoModalInfo}
+        handleModalClose={() => setRecipeInfoModalOpen((prev) => !prev)}
+        modalOpen={recipeInfoModalOpen}
+        recipeInfo={recipeInfoModalInfo}
       />
     </div>
   );

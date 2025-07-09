@@ -212,11 +212,11 @@ const updateIngredientDatabase = async ({
 };
 
 type GPFetchRecipeTypes = GPSetMessageType & {
-  setSelectedMeals: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
+  setSelectedRecipes: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
 };
 const fetchRecipes = async ({
   setMessage,
-  setSelectedMeals,
+  setSelectedRecipes,
 }: GPFetchRecipeTypes) => {
   try {
     const response = await fetch("http://localhost:3000/recipes", {
@@ -228,7 +228,7 @@ const fetchRecipes = async ({
       return;
     }
     const data = await response.json();
-    setSelectedMeals(data);
+    setSelectedRecipes(data);
     return data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to fetch user recipes" });

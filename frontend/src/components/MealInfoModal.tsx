@@ -4,6 +4,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { GPModalStyle } from "../utils/utils";
 import type { GPRecipeDataTypes } from "../utils/types";
+import { v4 as uuidv4 } from "uuid";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -51,7 +52,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         <ol>
         {recipeInfo?.instructions.map((step) => {
           return (
-            <li>{step}</li>
+            <li key={uuidv4()}>{step}</li>
           )
         })}
         </ol>
