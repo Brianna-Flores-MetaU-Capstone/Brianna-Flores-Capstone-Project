@@ -38,7 +38,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             ingredient={ingredient}
             groceryCheck={true}
             presentExpiration={false}
-            presentButtons={true}
+            presentButtons={false}
             onEdit={handleOpenModal}
             onDelete={handleDeleteIngredient}
           />
