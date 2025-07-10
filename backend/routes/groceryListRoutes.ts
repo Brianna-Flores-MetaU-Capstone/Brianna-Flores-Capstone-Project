@@ -35,12 +35,14 @@ router.post(
       recipeIngredients,
       ingredientsOnHand,
     });
-    const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
-    res.json(estimatedPrice);
+    try {
+      const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
+      res.json(estimatedPrice);
+    } catch (error) {
+      res.status(500).send("Error approximating ingredients cost");
+    }
   }
 );
-
-
 
 router.post(
   "/:userId",

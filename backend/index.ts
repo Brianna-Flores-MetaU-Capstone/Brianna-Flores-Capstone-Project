@@ -24,7 +24,7 @@ let sessionConfig = {
   name: "sessionId",
   secret: sessionSecret,
   cookie: {
-    maxAge: 1000 * 60 * 5,
+    maxAge: 1000 * 60 * 60 * 24, // 24 hours
     secure: process.env.RENDER ? true : false,
     httpOnly: false,
   },
@@ -47,7 +47,6 @@ app.use("/generateList", groceryListRoutes);
 
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

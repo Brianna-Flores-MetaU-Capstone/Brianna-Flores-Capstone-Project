@@ -23,7 +23,7 @@ type GPConvertUnitsType = {
 const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
   let convertToUnit = unitConversions[convertTo.unit.toLowerCase()];
   let convertingUnit = unitConversions[converting.unit.toLowerCase()];
-  let convertingQuantity = parseInt(converting.quantity);
+  let convertingQuantity = converting.quantity;
   if (convertToUnit && convertingUnit) {
     // ingredient units converted to convert-unit library compatible format
     try {
@@ -33,7 +33,7 @@ const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
       convertingUnit = convertToUnit;
     } catch (error) {
       // TODO handle errors in type conversion better
-      convertingQuantity = parseInt(converting.quantity);
+      convertingQuantity = converting.quantity;
       convertingUnit = convertingUnit;
     }
   }
@@ -72,7 +72,7 @@ const getTotalQuantity = ({
         });
         totalQuantity += converted.converted.quantity;
       } else {
-        totalQuantity += parseInt(ingredient.quantity);
+        totalQuantity += ingredient.quantity;
       }
     }
   }
@@ -89,7 +89,7 @@ const quantityNeeded = ({
   recipeIngredient,
 }: GPQuantityNeededTypes) => {
   let ingredientOnHandQuantity = ingredientOnHand.quantity;
-  let recipeIngredientQuantity = parseInt(recipeIngredient.quantity);
+  let recipeIngredientQuantity = recipeIngredient.quantity;
   if (
     unitConversions[ingredientOnHand.unit.toLowerCase()] !==
     unitConversions[recipeIngredient.unit.toLowerCase()]
@@ -101,10 +101,10 @@ const quantityNeeded = ({
     });
     recipeIngredientQuantity = converted.converted.quantity;
   }
-  if (recipeIngredientQuantity <= parseInt(ingredientOnHandQuantity)) {
+  if (recipeIngredientQuantity <= ingredientOnHandQuantity) {
     return 0;
   }
-  return recipeIngredientQuantity - parseInt(ingredientOnHandQuantity);
+  return recipeIngredientQuantity - ingredientOnHandQuantity;
 };
 
 type GPCreateGroceryListType = {
@@ -135,7 +135,7 @@ const getListOfMissingIngredients = ({
       });
       const updatedIngredient =
         totalQuantity > 0
-          ? { ...recipeIngredient, quantity: totalQuantity.toFixed(2) }
+          ? { ...recipeIngredient, quantity: totalQuantity }
           : recipeIngredient;
       if (
         ingredientsOnHandNames.indexOf(
@@ -157,7 +157,7 @@ const getListOfMissingIngredients = ({
         if (quantityUserNeeds > 0) {
           ingredientsToPurchase = [
             ...ingredientsToPurchase,
-            { ...updatedIngredient, quantity: quantityUserNeeds.toString() },
+            { ...updatedIngredient, quantity: quantityUserNeeds },
           ];
         }
       }
@@ -167,41 +167,49 @@ const getListOfMissingIngredients = ({
 };
 
 type GPEstimateListCostTypes = {
-  ingredientsToPurchase: GPRecipeIngredientTypes[]
-}
+  ingredientsToPurchase: GPRecipeIngredientTypes[];
+};
 
 type GPIngredientPriceInfoTypes = {
-  ingredient: GPRecipeIngredientTypes
-  ingredientApiInfo: {ingredientPrice: number,
-    ingredientAmount: string
-  }
-}
-const estimateListCost = async ({ingredientsToPurchase}: GPEstimateListCostTypes) => {
-  let ingredientPriceInfo: GPIngredientPriceInfoTypes[] = []
+  ingredient: GPRecipeIngredientTypes;
+  ingredientApiInfo: { ingredientPrice: number; ingredientAmount: number };
+};
+const estimateListCost = async ({
+  ingredientsToPurchase,
+}: GPEstimateListCostTypes) => {
+  let ingredientPriceInfo: GPIngredientPriceInfoTypes[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
-    const ingredientApiInfo = await getPriceForAmountOfIngredient({ingredient})
-    const ingredientPrice = ingredientApiInfo.ingredientPrice
-    estimatedCost += ingredientPrice
-    ingredientPriceInfo = [...ingredientPriceInfo, {
-      ingredient, ingredientApiInfo
-    }]
+    const ingredientApiInfo = await getPriceForAmountOfIngredient({
+      ingredient,
+    });
+    const ingredientPrice = ingredientApiInfo.ingredientPrice;
+    estimatedCost += ingredientPrice;
+    ingredientPriceInfo = [
+      ...ingredientPriceInfo,
+      {
+        ingredient,
+        ingredientApiInfo,
+      },
+    ];
   }
-  return {ingredientPriceInfo, estimatedCost};
-}
+  return { ingredientPriceInfo, estimatedCost };
+};
 
 type GPGetItemPriceType = {
-  ingredient: GPRecipeIngredientTypes
-}
+  ingredient: GPRecipeIngredientTypes;
+};
 
-const getPriceForAmountOfIngredient = async ({ingredient}: GPGetItemPriceType) => {
-  const searchResults = await searchWalmart(ingredient.ingredientName)
+const getPriceForAmountOfIngredient = async ({
+  ingredient,
+}: GPGetItemPriceType) => {
+  const searchResults = await searchWalmart(ingredient.ingredientName);
   // get the price of the first result (most rellevant)
-  const ingredientPrice = searchResults.items[0].salePrice
-  const ingredientAmount = searchResults.items[0].size
+  const ingredientPrice = searchResults?.items[0].salePrice ?? 0.0;
+  const ingredientAmount = searchResults?.items[0]?.size ?? "Not Found";
   // TODO implement check for item[0].size of item using convert quantity
-  return {ingredientPrice, ingredientAmount};
-}
+  return { ingredientPrice, ingredientAmount };
+};
 
 export {
   checkUserExists,
@@ -209,5 +217,6 @@ export {
   getTotalQuantity,
   quantityNeeded,
   getListOfMissingIngredients,
-  estimateListCost
+  estimateListCost,
+  type GPIngredientPriceInfoTypes,
 };
