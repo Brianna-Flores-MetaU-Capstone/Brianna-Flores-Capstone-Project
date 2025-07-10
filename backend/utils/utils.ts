@@ -112,7 +112,7 @@ type GPCreateGroceryListType = {
   ingredientsOnHand: GPIngredientDataTypes[];
 };
 
-const createGroceryList = ({
+const getListOfMissingIngredients = ({
   recipeIngredients,
   ingredientsOnHand,
 }: GPCreateGroceryListType) => {
@@ -170,25 +170,37 @@ type GPEstimateListCostTypes = {
   ingredientsToPurchase: GPRecipeIngredientTypes[]
 }
 
+type GPIngredientPriceInfoTypes = {
+  ingredient: GPRecipeIngredientTypes
+  ingredientApiInfo: {ingredientPrice: number,
+    ingredientAmount: string
+  }
+}
 const estimateListCost = async ({ingredientsToPurchase}: GPEstimateListCostTypes) => {
+  let ingredientPriceInfo: GPIngredientPriceInfoTypes[] = []
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
-    const ingredientPrice = await getPriceOfIngredient({ingredient})
+    const ingredientApiInfo = await getPriceForAmountOfIngredient({ingredient})
+    const ingredientPrice = ingredientApiInfo.ingredientPrice
     estimatedCost += ingredientPrice
+    ingredientPriceInfo = [...ingredientPriceInfo, {
+      ingredient, ingredientApiInfo
+    }]
   }
-  return estimatedCost;
+  return {ingredientPriceInfo, estimatedCost};
 }
 
 type GPGetItemPriceType = {
   ingredient: GPRecipeIngredientTypes
 }
 
-const getPriceOfIngredient = async ({ingredient}: GPGetItemPriceType) => {
+const getPriceForAmountOfIngredient = async ({ingredient}: GPGetItemPriceType) => {
   const searchResults = await searchWalmart(ingredient.ingredientName)
   // get the price of the first result (most rellevant)
   const ingredientPrice = searchResults.items[0].salePrice
+  const ingredientAmount = searchResults.items[0].size
   // TODO implement check for item[0].size of item using convert quantity
-  return ingredientPrice;
+  return {ingredientPrice, ingredientAmount};
 }
 
 export {
@@ -196,6 +208,6 @@ export {
   convertUnits,
   getTotalQuantity,
   quantityNeeded,
-  createGroceryList,
+  getListOfMissingIngredients,
   estimateListCost
 };

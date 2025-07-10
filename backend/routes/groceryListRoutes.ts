@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createGroceryList, estimateListCost } from "../utils/utils";
+import { getListOfMissingIngredients, estimateListCost } from "../utils/utils";
 
 const express = require("express");
 const router = express.Router();
@@ -27,12 +27,28 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
 });
 
 router.post(
+  "/estimatePrice",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const { recipeIngredients, ingredientsOnHand } = req.body;
+    const ingredientsToPurchase = getListOfMissingIngredients({
+      recipeIngredients,
+      ingredientsOnHand,
+    });
+    const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
+    res.json(estimatedPrice);
+  }
+);
+
+
+
+router.post(
   "/:userId",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     const { recipeIngredients, ingredientsOnHand } = req.body;
-    const ingredientsToPurchase = createGroceryList({
+    const ingredientsToPurchase = getListOfMissingIngredients({
       recipeIngredients,
       ingredientsOnHand,
     });
@@ -52,7 +68,7 @@ router.post(
         },
         data: {
           groceryList: ingredientsToPurchase,
-          groceryListPrice: estimatedPrice,
+          groceryListPrice: estimatedPrice.estimatedCost,
         },
       });
       res.json(updatedUser);

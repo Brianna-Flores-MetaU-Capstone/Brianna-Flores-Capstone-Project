@@ -18,6 +18,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import ErrorState from "./ErrorState";
 import GenericList from "./GenericList";
+import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import { v4 as uuidv4 } from "uuid";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -57,6 +59,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     numToRequest: number;
     offset: number;
   }) => {
+    const ingredientsOnHand = await fetchUserIngredientsHelper({setMessage: setErrorMessage})
     try {
       setLoading(true);
       const response = await fetch(
@@ -70,7 +73,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         });
       }
       const data = await response.json();
-      const parsedRecipes = parseRecipeData(data.results);
+      const parsedRecipes = await parseRecipeData(ingredientsOnHand, data.results);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
@@ -198,7 +201,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           list={mealResults}
           renderItem={(meal) => (
             <MealCard
-              key={meal.apiId}
+              key={uuidv4()}
               onMealCardClick={() => event?.preventDefault()}
               parsedMealData={meal}
               onSelectRecipe={onSelectRecipe}

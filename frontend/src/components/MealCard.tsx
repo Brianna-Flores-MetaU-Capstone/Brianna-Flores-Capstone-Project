@@ -22,7 +22,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       <img className="meal-img" src={parsedMealData.previewImage} />
       <p className="meal-title">{parsedMealData.recipeTitle}</p>
       <p>Servings: {parsedMealData.servings}</p>
-      <p>Estimated Price: ${parsedMealData.totalCost}</p>
+      {onSelectRecipe && <p>Estimated Price: ${parsedMealData.totalCost}</p>}
       <ul className="diets-and-intolerances">
         {parsedMealData.dairyFree && <li>Dairy Free</li>}
         {parsedMealData.glutenFree && <li>Gluten Free</li>}
@@ -39,6 +39,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
           }}
         />
       )}
+      {onSelectRecipe && <button>See Pricing Details</button>}
       {onSelectRecipe && (
         <button onClick={() => onSelectRecipe(parsedMealData)}>
           Select Recipe

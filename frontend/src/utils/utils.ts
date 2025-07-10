@@ -1,20 +1,40 @@
-import type { GPAuthFormDataTypes, GPIngredientDataTypes, GPRecipeIngredientTypes } from "./types";
+import type {
+  GPAuthFormDataTypes,
+  GPIngredientDataTypes,
+  GPRecipeIngredientTypes,
+} from "./types";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const parseRecipeData = (recipeData: any) => {
-  return recipeData.map((recipe: any) => ({
-    apiId: recipe.id,
-    recipeTitle: recipe.title,
-    previewImage: recipe.image,
-    servings: recipe.servings,
-    ingredients: parseIngredients(recipe.extendedIngredients),
-    instructions: parseInstructions(recipe.analyzedInstructions[0].steps),
-    sourceUrl: recipe.sourceUrl,
-    vegetarian: recipe.vegetarian,
-    vegan: recipe.vegan,
-    glutenFree: recipe.glutenFree,
-    dairyFree: recipe.dairyFree,
-    totalCost: estimateTotalCost(recipe.ingredients),
-  }));
+const parseRecipeData = async (
+  ingredientsOnHand: GPIngredientDataTypes,
+  recipeData: any
+) => {
+  return await Promise.all(
+    recipeData.map(async (recipe: any) => {
+      const parsedIngredinets = parseIngredients(recipe.extendedIngredients);
+      const parsedInstructions = parseInstructions(
+        recipe.analyzedInstructions[0].steps
+      );
+      const estimatedRecipeCost = await estimateRecipeCost({
+        ingredientsOnHand,
+        recipeIngredients: parsedIngredinets,
+      });
+      return {
+        apiId: recipe.id,
+        recipeTitle: recipe.title,
+        previewImage: recipe.image,
+        servings: recipe.servings,
+        ingredients: parsedIngredinets,
+        instructions: parsedInstructions,
+        sourceUrl: recipe.sourceUrl,
+        vegetarian: recipe.vegetarian,
+        vegan: recipe.vegan,
+        glutenFree: recipe.glutenFree,
+        dairyFree: recipe.dairyFree,
+        totalCost: estimatedRecipeCost.toFixed(2),
+      };
+    })
+  );
 };
 
 const parseIngredients = (ingredientsData: any) => {
@@ -38,8 +58,29 @@ const getIngredientCost = (ingredientName: string) => {
   return 0;
 };
 
-const estimateTotalCost = (ingredients: GPIngredientDataTypes) => {
-  return 0;
+type GPEstimateRecipeCostTypes = {
+  recipeIngredients: GPRecipeIngredientTypes;
+  ingredientsOnHand: GPIngredientDataTypes;
+};
+
+const estimateRecipeCost = async ({
+  ingredientsOnHand,
+  recipeIngredients,
+}: GPEstimateRecipeCostTypes) => {
+  const response = await fetch(`${databaseUrl}/generateList/estimatePrice`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ingredientsOnHand, recipeIngredients }),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    console.error("Error estimating cost");
+    return;
+  }
+  const data = await response.json();
+  return data.estimatedCost;
 };
 
 const validateInput = (formData: GPAuthFormDataTypes) => {
@@ -66,17 +107,17 @@ const handleAuthInputChange = (
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };
 
-  const parseGroceryListDepartments = (
-    groceryList: GPRecipeIngredientTypes[]
-  ) => {
-    let departments: string[] = [];
-    for (const grocery of groceryList) {
-      if (!departments.includes(grocery.department)) {
-        departments = [...departments, grocery.department];
-      }
+const parseGroceryListDepartments = (
+  groceryList: GPRecipeIngredientTypes[]
+) => {
+  let departments: string[] = [];
+  for (const grocery of groceryList) {
+    if (!departments.includes(grocery.department)) {
+      departments = [...departments, grocery.department];
     }
-    return departments;
-  };
+  }
+  return departments;
+};
 
 const GPModalStyle = {
   position: "absolute",
@@ -91,4 +132,10 @@ const GPModalStyle = {
   overflow: "auto",
 };
 
-export { validateInput, parseRecipeData, handleAuthInputChange, parseGroceryListDepartments, GPModalStyle };
+export {
+  validateInput,
+  parseRecipeData,
+  handleAuthInputChange,
+  parseGroceryListDepartments,
+  GPModalStyle,
+};
