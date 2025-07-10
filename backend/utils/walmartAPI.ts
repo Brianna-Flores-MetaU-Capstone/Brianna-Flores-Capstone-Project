@@ -29,7 +29,7 @@ const searchWalmart = async (searchQuery: string) => {
   const { keyVersion, consumerId, timestamp, signature } = getSign();
   if (consumerId) {
     const response = await fetch(
-      `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=milk`,
+      `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=3`,
       {
         headers: {
           "WM_SEC.KEY_VERSION": keyVersion,
@@ -45,6 +45,7 @@ const searchWalmart = async (searchQuery: string) => {
       return;
     }
     const data = await response.json();
+    return data;
   }
 };
 

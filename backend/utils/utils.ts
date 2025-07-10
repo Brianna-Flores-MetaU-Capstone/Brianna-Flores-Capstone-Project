@@ -7,6 +7,7 @@ import type {
 } from "../../frontend/src/utils/types";
 import { unitConversions } from "./constants";
 import convert from "convert-units";
+import { searchWalmart } from "./walmartAPI";
 
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.User.findUnique({
@@ -165,10 +166,36 @@ const createGroceryList = ({
   return ingredientsToPurchase;
 };
 
+type GPEstimateListCostTypes = {
+  ingredientsToPurchase: GPRecipeIngredientTypes[]
+}
+
+const estimateListCost = async ({ingredientsToPurchase}: GPEstimateListCostTypes) => {
+  let estimatedCost = 0;
+  for (const ingredient of ingredientsToPurchase) {
+    const ingredientPrice = await getPriceOfIngredient({ingredient})
+    estimatedCost += ingredientPrice
+  }
+  return estimatedCost;
+}
+
+type GPGetItemPriceType = {
+  ingredient: GPRecipeIngredientTypes
+}
+
+const getPriceOfIngredient = async ({ingredient}: GPGetItemPriceType) => {
+  const searchResults = await searchWalmart(ingredient.ingredientName)
+  // get the price of the first result (most rellevant)
+  const ingredientPrice = searchResults.items[0].salePrice
+  // TODO implement check for item[0].size of item using convert quantity
+  return ingredientPrice;
+}
+
 export {
   checkUserExists,
   convertUnits,
   getTotalQuantity,
   quantityNeeded,
   createGroceryList,
+  estimateListCost
 };

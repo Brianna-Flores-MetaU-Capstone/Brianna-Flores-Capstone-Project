@@ -261,11 +261,13 @@ type GPFetchGroceryListTypes = GPSetMessageType & {
     value: React.SetStateAction<GPRecipeIngredientTypes[]>
   ) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
+  setGroceryListPrice?: (value: React.SetStateAction<number>) => void;
 };
 const fetchGroceryList = async ({
   setMessage,
   setUserGroceryList,
   setGroceryDepartments,
+  setGroceryListPrice
 }: GPFetchGroceryListTypes) => {
   try {
     const response = await fetch(`${databaseUrl}/generateList`, {
@@ -280,10 +282,13 @@ const fetchGroceryList = async ({
       return;
     }
     const data = await response.json();
-    setUserGroceryList(data);
+    setUserGroceryList(data.groceryList);
     if (setGroceryDepartments) {
-      const departments = parseGroceryListDepartments(data);
+      const departments = parseGroceryListDepartments(data.groceryList);
       setGroceryDepartments(departments);
+    }
+    if (setGroceryListPrice) {
+      setGroceryListPrice(data.groceryListPrice)
     }
   } catch (error) {
     setMessage({

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createGroceryList } from "../utils/utils";
+import { createGroceryList, estimateListCost } from "../utils/utils";
 
 const express = require("express");
 const router = express.Router();
@@ -17,7 +17,10 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
         id: userId,
       },
     });
-    res.json(userData.groceryList);
+    res.json({
+      groceryList: userData.groceryList,
+      groceryListPrice: userData.groceryListPrice,
+    });
   } catch (error) {
     res.status(500).send("Error fetching user groceries");
   }
@@ -33,6 +36,7 @@ router.post(
       recipeIngredients,
       ingredientsOnHand,
     });
+    const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
     try {
       const user = await prisma.User.findUnique({
         where: {
@@ -48,6 +52,7 @@ router.post(
         },
         data: {
           groceryList: ingredientsToPurchase,
+          groceryListPrice: estimatedPrice,
         },
       });
       res.json(updatedUser);

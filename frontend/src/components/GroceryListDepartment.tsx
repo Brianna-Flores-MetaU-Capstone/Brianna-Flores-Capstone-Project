@@ -10,13 +10,11 @@ import { v4 as uuidv4 } from "uuid";
 type GPGroceryListDepartmentProps = {
   groceryList: GPRecipeIngredientTypes[];
   department: string;
-  handleOpenModal: (ingredient: GPIngredientDataTypes) => void;
 };
 
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,
   department,
-  handleOpenModal,
 }) => {
   const filteredGroceries = groceryList.filter(
     (item) => item.department === department
@@ -39,7 +37,6 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             groceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            onEdit={handleOpenModal}
             onDelete={handleDeleteIngredient}
           />
         )}
