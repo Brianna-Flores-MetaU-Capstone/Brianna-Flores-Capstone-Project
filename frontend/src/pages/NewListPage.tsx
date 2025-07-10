@@ -20,6 +20,7 @@ import {
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
 import { useNavigate } from "react-router";
+import LoadingModal from "../components/LoadingModal";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -33,6 +34,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [loadingList, setLoadingList] = useState(false)
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -86,6 +88,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }
 
   const handleGenerateList = async () => {
+    setLoadingList(true)
     const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
     const recipeIngredients = getRecipeIngredients(selectedRecipes)
     const response = await fetch(`${databaseUrl}/generateList/${user?.id}`, {
@@ -138,6 +141,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
+      <LoadingModal modalOpen={loadingList} />
     </div>
   );
 };
