@@ -6,11 +6,7 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData, GPModalStyle } from "../utils/utils";
-import type {
-  GPRecipeDataTypes,
-  GPRequestFormDataTypes,
-  GPErrorMessageTypes,
-} from "../utils/types";
+import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import "../styles/Meal.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -34,21 +30,16 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   onSelectRecipe,
   modalOpen,
 }) => {
-  const [mealRequest, setMealRequest] = useState<GPRequestFormDataTypes>({
-    recipeName: "",
-    servings: "",
-  });
+  const [recipeRequest, setRecipeRequest] = useState("");
   const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reciperequest = event.target.dataset
-      .reciperequest as keyof GPRequestFormDataTypes;
-    const value = event.target.value;
-    setMealRequest((prev) => ({ ...prev, [reciperequest]: value }));
+  const handleRequestChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newRecipeRequest = event.target.value;
+    setRecipeRequest(newRecipeRequest);
   };
 
   // fetch recipes from API dependent on user input
@@ -59,11 +50,13 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     numToRequest: number;
     offset: number;
   }) => {
-    const ingredientsOnHand = await fetchUserIngredientsHelper({setMessage: setErrorMessage})
+    const ingredientsOnHand = await fetchUserIngredientsHelper({
+      setMessage: setErrorMessage,
+    });
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
       );
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -73,7 +66,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         });
       }
       const data = await response.json();
-      const parsedRecipes = await parseRecipeData(ingredientsOnHand, data.results);
+      const parsedRecipes = await parseRecipeData(
+        ingredientsOnHand,
+        data.results
+      );
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
@@ -166,17 +162,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           <TextField
             required
             slotProps={{ htmlInput: { "data-reciperequest": "recipeName" } }}
-            onChange={handleInputChange}
-            value={mealRequest.recipeName}
+            onChange={handleRequestChange}
+            value={recipeRequest}
             label="Recipe"
-            variant="standard"
-          />
-          <TextField
-            required
-            slotProps={{ htmlInput: { "data-reciperequest": "servings" } }}
-            onChange={handleInputChange}
-            value={mealRequest.servings}
-            label="Servings"
             variant="standard"
           />
           <Button

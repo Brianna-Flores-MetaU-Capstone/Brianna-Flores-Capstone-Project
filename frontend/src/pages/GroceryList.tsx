@@ -26,7 +26,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     GPRecipeIngredientTypes[]
   >([]);
   const [groceryDepartments, setGroceryDepartments] = useState<string[]>([]);
-  const [groceryListPrice, setGroceryListPrice] = useState(0.00);
+  const [groceryListPrice, setGroceryListPrice] = useState(0.0);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const handleAddGrocery = () => {
@@ -39,7 +39,12 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   };
 
   useEffect(() => {
-    fetchGroceryList({ setMessage, setUserGroceryList, setGroceryDepartments, setGroceryListPrice });
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListPrice,
+    });
   }, []);
 
   return (
@@ -66,7 +71,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           )}
         />
         <h3>Estimated Cost</h3>
-        <h3>${groceryListPrice}</h3>
+        <h3>${Number(groceryListPrice).toFixed(2)}</h3>
       </div>
       {addGroceryItemModalOpen && (
         <IngredientModal
@@ -79,7 +84,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               setMessage,
               setUserGroceryList,
               setGroceryDepartments,
-              setGroceryListPrice
+              setGroceryListPrice,
             })
           }
         />
@@ -96,7 +101,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               setMessage,
               setUserGroceryList,
               setGroceryDepartments,
-              setGroceryListPrice
+              setGroceryListPrice,
             })
           }
         />

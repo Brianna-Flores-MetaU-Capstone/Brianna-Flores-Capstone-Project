@@ -55,7 +55,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   const initialIngredientState = ingredientData ?? {
     id: 0,
     ingredientName: "",
-    quantity: "",
+    quantity: 0,
     unit: "units",
     department: "",
     expirationDate: null,

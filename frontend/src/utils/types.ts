@@ -1,4 +1,5 @@
 import type { User } from "firebase/auth";
+import type { GPIngredientPriceInfoTypes } from "../../../backend/utils/utils";
 
 type GPToggleNavBarProps = {
   navOpen: boolean;
@@ -17,6 +18,7 @@ type GPRecipeDataTypes = {
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
+  ingredientPriceInfo: GPIngredientPriceInfoTypes[];
   totalCost: number;
 };
 
@@ -35,7 +37,7 @@ type GPAuthFormDataTypes = {
 type GPIngredientDataTypes = {
   id: number;
   ingredientName: string;
-  quantity: string;
+  quantity: number;
   unit: string;
   department: string;
   estimatedCost: number;
@@ -47,11 +49,6 @@ type GPCurrentUserTypes = {
   userEmail: string;
   userIntolerances: string[];
   userDiets: string[];
-};
-
-type GPRequestFormDataTypes = {
-  recipeName: string;
-  servings: string;
 };
 
 type GPErrorMessageTypes = {
@@ -68,7 +65,7 @@ type GPIngredientsOnHandTypes = {
 type GPRecipeIngredientTypes = {
   id: number;
   unit: string;
-  quantity: string;
+  quantity: number;
   department: string;
   estimatedCost: number;
   ingredientName: string;
@@ -81,7 +78,6 @@ export type {
   GPCurrentUserTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-  GPRequestFormDataTypes,
   GPErrorMessageTypes,
   GPIngredientsOnHandTypes,
   GPRecipeIngredientTypes,

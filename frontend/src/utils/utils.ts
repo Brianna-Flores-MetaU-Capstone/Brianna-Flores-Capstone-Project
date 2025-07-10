@@ -15,7 +15,7 @@ const parseRecipeData = async (
       const parsedInstructions = parseInstructions(
         recipe.analyzedInstructions[0].steps
       );
-      const estimatedRecipeCost = await estimateRecipeCost({
+      const estimatedRecipeCostInfo = await estimateRecipeCost({
         ingredientsOnHand,
         recipeIngredients: parsedIngredinets,
       });
@@ -31,7 +31,8 @@ const parseRecipeData = async (
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
         dairyFree: recipe.dairyFree,
-        totalCost: estimatedRecipeCost.toFixed(2),
+        ingredientPriceInfo: estimatedRecipeCostInfo.ingredientPriceInfo,
+        totalCost: estimatedRecipeCostInfo.estimatedCost,
       };
     })
   );
@@ -76,11 +77,11 @@ const estimateRecipeCost = async ({
     credentials: "include",
   });
   if (!response.ok) {
-    console.error("Error estimating cost");
+    console.error("Error estimating cost, send default cost");
     return;
   }
   const data = await response.json();
-  return data.estimatedCost;
+  return data;
 };
 
 const validateInput = (formData: GPAuthFormDataTypes) => {
