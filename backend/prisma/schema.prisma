@@ -22,7 +22,7 @@ model User {
   diets             String[]
   ingredientsOnHand IngredientsOnHand[]
   groceryList       Json?
-  groceryListPrice  Decimal             
+  groceryListPrice  Decimal             @default(0.00)
   recipes           Recipe[]
 }
 
