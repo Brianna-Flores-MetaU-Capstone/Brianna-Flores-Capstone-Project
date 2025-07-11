@@ -10,10 +10,12 @@ import { v4 as uuidv4 } from "uuid";
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientWithCostInfoTypes[];
   department: string;
+  onGroceryCheck: (ingredientName: string) => void
 };
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,
   department,
+  onGroceryCheck,
 }) => {
   const filteredGroceries = groceryList.filter(
     (item) => item.ingredient.department === department
@@ -37,6 +39,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentExpiration={false}
             presentButtons={false}
             ingredientCost={itemInfo.ingredientApiInfo}
+            onGroceryCheck={onGroceryCheck}
             onDelete={handleDeleteIngredient}
           />
         )}

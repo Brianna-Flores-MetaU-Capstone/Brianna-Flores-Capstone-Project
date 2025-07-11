@@ -37,6 +37,7 @@ const parseRecipeData = async (
         dairyFree: recipe.dairyFree,
         ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
         totalCost: estimatedRecipeCostInfo.estimatedCost,
+        isChecked: false
       };
     })
   );

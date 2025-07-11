@@ -13,6 +13,9 @@ import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { fetchGroceryList } from "../utils/databaseHelpers";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
 
 const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
@@ -35,6 +38,27 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       setGroceryListCost,
     });
   }, []);
+
+  const toggleGroceryCheck = async (groceryItem: string) => {
+    await axios.put(`${databaseUrl}/generateList/check`, {ingredientName: groceryItem}, axiosConfig)
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListCost,
+    });
+  }
+
+  const handleClearGroceries = async() => {
+    await axios.put(`${databaseUrl}/generateList/clear`, {}, axiosConfig)
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListCost,
+    });
+  }
+
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
@@ -42,7 +66,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         <Button className="add-button" onClick={handleAddGrocery}>
           Add Item
         </Button>
-        <Button className="add-button" onClick={handleAddGrocery}>
+        <Button className="add-button" onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
 
@@ -54,6 +78,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               key={department}
               groceryList={userGroceryList}
               department={department}
+              onGroceryCheck={toggleGroceryCheck}
             />
           )}
         />

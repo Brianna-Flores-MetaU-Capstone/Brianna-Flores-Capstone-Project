@@ -41,6 +41,7 @@ type GPIngredientDataTypes = {
   unit: string;
   department: string;
   expirationDate?: string | null;
+  isChecked: boolean
 };
 
 type GPCurrentUserTypes = {
@@ -67,6 +68,7 @@ type GPRecipeIngredientTypes = {
   quantity: number;
   department: string;
   ingredientName: string;
+  isChecked: boolean
 };
 
 type GPIngredientWithCostInfoTypes = {

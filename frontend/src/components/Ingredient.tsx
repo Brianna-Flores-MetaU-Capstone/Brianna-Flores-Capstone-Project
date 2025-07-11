@@ -13,6 +13,7 @@ type GPIngredientProps = {
   presentExpiration: boolean;
   presentButtons: boolean;
   ingredientCost?: GPIngredientApiInfoType;
+  onGroceryCheck?: (ingredientName: string) => void;
   onEdit?: (ingredient: GPIngredientDataTypes) => void;
   onDelete?: (ingredient: GPIngredientDataTypes) => void;
 };
@@ -23,12 +24,13 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   presentExpiration,
   ingredientCost,
   presentButtons,
+  onGroceryCheck,
   onEdit,
   onDelete,
 }) => {
   return (
     <div className="list-ingredient">
-      {presentGroceryCheck && <input type="checkbox" />}
+      {presentGroceryCheck && <input type="checkbox" checked={ingredient.isChecked} onChange={() => onGroceryCheck?.(ingredient.ingredientName)} />}
       <p className="ingredient-name">{ingredient.ingredientName}</p>
       {/* Quantity goes to 2 decimal places only if decimal */}
       <p className="ingredient-amount">{`${

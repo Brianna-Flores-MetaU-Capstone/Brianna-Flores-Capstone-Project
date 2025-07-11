@@ -60,7 +60,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     department: "",
     expirationDate: null,
     image: "",
-    estimatedCost: 0,
+    isChecked: false
   };
 
   type ACTIONTYPE =

@@ -188,7 +188,9 @@ const estimateListCost = async ({
     ingredientCostInfo = [
       ...ingredientCostInfo,
       {
-        ingredient,
+        ingredient: {...ingredient,
+          isChecked: false,
+        },
         ingredientApiInfo,
       },
     ];
