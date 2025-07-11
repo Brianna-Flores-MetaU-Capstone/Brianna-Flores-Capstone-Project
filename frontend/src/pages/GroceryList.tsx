@@ -2,7 +2,7 @@ import "../styles/GroceryList.css";
 import type {
   GPErrorMessageTypes,
   GPToggleNavBarProps,
-  GPIngredientWithCostInfoTypes
+  GPIngredientWithCostInfoTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
@@ -34,7 +34,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       setGroceryDepartments,
       setGroceryListCost,
     });
-  }, []);  
+  }, []);
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />

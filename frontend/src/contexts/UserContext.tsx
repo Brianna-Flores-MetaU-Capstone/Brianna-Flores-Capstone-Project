@@ -23,15 +23,16 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    axios.get(`${databaseUrl}/me`, { withCredentials: true })
-      .then(function(response) {
+    axios
+      .get(`${databaseUrl}/me`, { withCredentials: true })
+      .then(function (response) {
         if (response.data.id) {
-          setUser(response.data)
+          setUser(response.data);
         }
       })
-      .catch(function(error) {
-        setUser(null)
-      })
+      .catch(function (error) {
+        setUser(null);
+      });
   }, []);
 
   return (

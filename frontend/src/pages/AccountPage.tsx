@@ -139,10 +139,14 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      await axios.post(`${databaseUrl}/logout`, {}, {
-        withCredentials: true
-      })
+      await signOut(auth);
+      await axios.post(
+        `${databaseUrl}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       setUser(null);
       setMessage({ error: false, message: "Successfully logged out" });
     } catch (error) {

@@ -2,7 +2,7 @@ import type {
   GPAuthFormDataTypes,
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes
+  GPIngredientWithCostInfoTypes,
 } from "./types";
 import axios from "axios";
 import { axiosConfig } from "./databaseHelpers";
@@ -73,8 +73,12 @@ const estimateRecipeCost = async ({
   recipeIngredients,
 }: GPEstimateRecipeCostTypes) => {
   try {
-    const response = await axios.post(`${databaseUrl}/generateList/estimateCost`, { ingredientsOnHand, recipeIngredients }, axiosConfig)
-    return response.data
+    const response = await axios.post(
+      `${databaseUrl}/generateList/estimateCost`,
+      { ingredientsOnHand, recipeIngredients },
+      axiosConfig
+    );
+    return response.data;
   } catch (error) {
     console.error("Error estimating cost, send default cost");
     return;

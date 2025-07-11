@@ -3,7 +3,6 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import { ModalDialog } from "@mui/joy";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import GenericList from "./GenericList";
 import IngredientCost from "./IngredientCost";

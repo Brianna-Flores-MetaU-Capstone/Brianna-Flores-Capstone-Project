@@ -1,8 +1,7 @@
 import React from "react";
 import type {
   GPIngredientDataTypes,
-  GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes
+  GPIngredientWithCostInfoTypes,
 } from "../utils/types";
 import GenericList from "./GenericList";
 import Ingredient from "./Ingredient";

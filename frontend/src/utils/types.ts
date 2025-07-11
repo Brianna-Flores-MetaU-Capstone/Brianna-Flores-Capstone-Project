@@ -40,7 +40,6 @@ type GPIngredientDataTypes = {
   quantity: number;
   unit: string;
   department: string;
-  estimatedCost: number;
   expirationDate?: string | null;
 };
 
@@ -67,20 +66,18 @@ type GPRecipeIngredientTypes = {
   unit: string;
   quantity: number;
   department: string;
-  estimatedCost: number;
   ingredientName: string;
 };
 
 type GPIngredientWithCostInfoTypes = {
-  ingredient: GPRecipeIngredientTypes
+  ingredient: GPRecipeIngredientTypes;
   ingredientApiInfo: GPIngredientApiInfoType;
-}
+};
 
 type GPIngredientApiInfoType = {
-  ingredientCost: number; 
-  ingredientAmount: number
-}
-
+  ingredientCost: number;
+  ingredientAmount: number;
+};
 
 export type {
   GPToggleNavBarProps,
@@ -93,5 +90,5 @@ export type {
   GPIngredientsOnHandTypes,
   GPRecipeIngredientTypes,
   GPIngredientWithCostInfoTypes,
-  GPIngredientApiInfoType
+  GPIngredientApiInfoType,
 };

@@ -3,7 +3,7 @@ import type {
   GPToggleNavBarProps,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
-  GPRecipeIngredientTypes
+  GPRecipeIngredientTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -36,7 +36,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const [loadingList, setLoadingList] = useState(false)
+  const [loadingList, setLoadingList] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -65,29 +65,37 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
     try {
-      await axios.put(`${databaseUrl}/recipes/${deletedRecipe.apiId}`, {}, axiosConfig)
+      await axios.put(
+        `${databaseUrl}/recipes/${deletedRecipe.apiId}`,
+        {},
+        axiosConfig
+      );
       await fetchRecipes({ setMessage, setSelectedRecipes });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }
   };
-  
+
   const getRecipeIngredients = (recipes: GPRecipeDataTypes[]) => {
-    let recipeIngredients: GPRecipeIngredientTypes[] = []
+    let recipeIngredients: GPRecipeIngredientTypes[] = [];
     for (const recipe of recipes) {
-      recipeIngredients = [...recipeIngredients, ...recipe.ingredients]
+      recipeIngredients = [...recipeIngredients, ...recipe.ingredients];
     }
-    return recipeIngredients
-  }
+    return recipeIngredients;
+  };
 
   const handleGenerateList = async () => {
-    setLoadingList(true)
+    setLoadingList(true);
     const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
-    const recipeIngredients = getRecipeIngredients(selectedRecipes)
+    const recipeIngredients = getRecipeIngredients(selectedRecipes);
 
     try {
-      await axios.post(`${databaseUrl}/generateList/${user?.id}`, {ingredientsOnHand, recipeIngredients}, axiosConfig)
-      navigate("/grocery-list")
+      await axios.post(
+        `${databaseUrl}/generateList/${user?.id}`,
+        { ingredientsOnHand, recipeIngredients },
+        axiosConfig
+      );
+      navigate("/grocery-list");
     } catch (error) {
       setMessage({ error: true, message: "Failed to generate grocery list" });
     }

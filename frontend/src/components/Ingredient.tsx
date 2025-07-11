@@ -2,7 +2,10 @@ import React from "react";
 import "../styles/Homepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import type { GPIngredientApiInfoType, GPIngredientDataTypes } from "../utils/types";
+import type {
+  GPIngredientApiInfoType,
+  GPIngredientDataTypes,
+} from "../utils/types";
 
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
@@ -36,7 +39,11 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       {presentExpiration && (
         <p className="ingredient-expiration">{ingredient.expirationDate}</p>
       )}
-      {ingredientCost && <p className="ingredient-cost">Est. ${ingredientCost.ingredientCost.toFixed(2)}</p>}
+      {ingredientCost && (
+        <p className="ingredient-cost">
+          Est. ${ingredientCost.ingredientCost?.toFixed(2)}
+        </p>
+      )}
       {presentButtons && (
         <div className="ingredient-buttons-container">
           <FontAwesomeIcon

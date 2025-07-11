@@ -11,7 +11,7 @@ const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
       <div className="list-ingredient">
         <p>{ingredientCostInfo.ingredient.ingredientName}</p>
         <p>
-          ${ingredientCostInfo.ingredientApiInfo.ingredientCost.toFixed(2)}
+          ${ingredientCostInfo.ingredientApiInfo.ingredientCost?.toFixed(2)}
         </p>
         <p>{ingredientCostInfo.ingredientApiInfo.ingredientAmount}</p>
       </div>

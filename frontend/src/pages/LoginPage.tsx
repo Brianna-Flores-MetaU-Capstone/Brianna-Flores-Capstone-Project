@@ -17,7 +17,6 @@ import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useUser } from "../contexts/UserContext";
-const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -26,7 +25,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const navigate = useNavigate();
-  const { setUser } = useUser()
+  const { setUser } = useUser();
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -36,7 +35,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         if (user) {
           const userData = await validateUserToken(user);
           if (userData) {
-            setUser(userData)
+            setUser(userData);
             setMessage({ error: false, message: "Successfully logged in!" });
           }
         } else {

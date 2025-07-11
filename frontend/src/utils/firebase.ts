@@ -1,7 +1,6 @@
 // initialize firebase in app and create object
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import type { GPErrorMessageTypes } from "./types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAwJpgjoL6ujOP8xrUM0HQNg5Q8k9fN_A",

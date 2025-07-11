@@ -4,8 +4,7 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-  GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes
+  GPIngredientWithCostInfoTypes,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
@@ -72,7 +71,11 @@ type GPNewUserHelperTypes = GPSetMessageType & {
 };
 const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
   try {
-    const response = await axios.post(`${databaseUrl}/signup`, newUser, axiosConfig);
+    const response = await axios.post(
+      `${databaseUrl}/signup`,
+      newUser,
+      axiosConfig
+    );
     return response.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to add user to database" });
@@ -82,8 +85,12 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
 const validateUserToken = async (user: User) => {
   const token = await user.getIdToken(true);
   try {
-    const response = await axios.post(`${databaseUrl}/login`, { token }, axiosConfig);
-    return response.data
+    const response = await axios.post(
+      `${databaseUrl}/login`,
+      { token },
+      axiosConfig
+    );
+    return response.data;
   } catch (error) {
     return null;
   }
@@ -109,7 +116,10 @@ const deleteIngredient = async ({
   ingredient,
 }: GPDeleteUserIngredientTypes) => {
   try {
-    await axios.delete(`${databaseUrl}/ingredients/${ingredient.id}`, axiosConfig);
+    await axios.delete(
+      `${databaseUrl}/ingredients/${ingredient.id}`,
+      axiosConfig
+    );
     setMessage({ error: false, message: "Sucessfully deleted ingredient" });
   } catch (error) {
     setMessage({ error: true, message: "Failed to delete ingredient" });
@@ -212,7 +222,10 @@ const fetchGroceryList = async ({
   setGroceryListCost,
 }: GPFetchGroceryListTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/generateList`, axiosConfig);
+    const response = await axios.get(
+      `${databaseUrl}/generateList`,
+      axiosConfig
+    );
     setUserGroceryList(response.data.groceryList);
     if (setGroceryDepartments) {
       const departments = parseGroceryListDepartments(
@@ -243,5 +256,5 @@ export {
   fetchRecipes,
   updateUserRecipes,
   fetchGroceryList,
-  axiosConfig
+  axiosConfig,
 };

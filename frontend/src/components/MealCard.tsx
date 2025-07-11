@@ -19,8 +19,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onSelectRecipe,
   onDeleteRecipe,
 }) => {
-  const [ingredientCostModalOpen, setIngredientCostModalOpen] =
-    useState(false);
+  const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
 
   const toggleModal = () => {
     setIngredientCostModalOpen((prev) => !prev);

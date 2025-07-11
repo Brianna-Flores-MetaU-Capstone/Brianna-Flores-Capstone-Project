@@ -40,7 +40,11 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           return (
             <div className="recipe-modal-ingredient" key={ingredient.id}>
               <p>{ingredient.ingredientName}</p>
-              <p>{ingredient.quantity % 1 === 0 ? ingredient.quantity : ingredient.quantity.toFixed(2)}</p>
+              <p>
+                {ingredient.quantity % 1 === 0
+                  ? ingredient.quantity
+                  : ingredient.quantity.toFixed(2)}
+              </p>
               <p>{ingredient.unit}</p>
             </div>
           );
