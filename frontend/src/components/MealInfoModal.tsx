@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemContent,
   Box,
+  AspectRatio,
 } from "@mui/joy";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 
@@ -33,40 +34,56 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet variant="outlined" sx={GPModalStyle}>
-        <Box className="modal-header">
-          <img className="meal-img" src={recipeInfo?.previewImage} />
-          <Box className="meal-info">
+        <Box sx={{ display: "flex" }}>
+          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md"}}>
+            <img src={recipeInfo?.previewImage} />
+          </AspectRatio>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              textAlign: "center",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             <Typography>Servings: {recipeInfo?.servings}</Typography>
-            <DietsAndIntolerances recipeInfo={recipeInfo}/>
+            <DietsAndIntolerances recipeInfo={recipeInfo} />
           </Box>
         </Box>
-        <Typography level="h3">Ingredients</Typography>
-        <List marker="circle">
-          {recipeInfo?.ingredients.map((ingredient) => {
-            return (
-              <ListItem className="recipe-modal-ingredient" key={ingredient.id}>
-                <ListItemContent
-                  sx={{ display: "flex", justifyContent: "space-between" }}
+        <Box>
+          <Typography level="h3">Ingredients</Typography>
+          <List marker="circle">
+            {recipeInfo?.ingredients.map((ingredient) => {
+              return (
+                <ListItem
+                  className="recipe-modal-ingredient"
+                  key={ingredient.id}
                 >
-                  <Typography>{ingredient.ingredientName}</Typography>
-                  <Typography>
-                    {ingredient.quantity % 1 === 0
-                      ? ingredient.quantity
-                      : ingredient.quantity.toFixed(2)}{" "}
-                    {ingredient.unit}
-                  </Typography>
-                </ListItemContent>
-              </ListItem>
-            );
-          })}
-        </List>
-        <Typography level="h3">Instructions</Typography>
-        <List component="ol" marker="decimal">
-          {recipeInfo?.instructions.map((step) => {
-            return <ListItem key={uuidv4()}>{step}</ListItem>;
-          })}
-        </List>
+                  <ListItemContent
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography>{ingredient.ingredientName}</Typography>
+                    <Typography>
+                      {ingredient.quantity % 1 === 0
+                        ? ingredient.quantity
+                        : ingredient.quantity.toFixed(2)}{" "}
+                      {ingredient.unit}
+                    </Typography>
+                  </ListItemContent>
+                </ListItem>
+              );
+            })}
+          </List>
+          <Typography level="h3">Instructions</Typography>
+          <List component="ol" marker="decimal">
+            {recipeInfo?.instructions.map((step) => {
+              return <ListItem key={uuidv4()}>{step}</ListItem>;
+            })}
+          </List>
+        </Box>
       </Sheet>
     </Modal>
   );
