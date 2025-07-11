@@ -63,9 +63,6 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <div className="grocery-list-container">
-        <Button className="add-button" onClick={handleAddGrocery}>
-          Add Item
-        </Button>
         <Button className="add-button" onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
