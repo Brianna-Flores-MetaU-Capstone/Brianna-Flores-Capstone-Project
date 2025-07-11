@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import ErrorState from "./ErrorState";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
@@ -151,7 +151,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             message={errorMessage.message}
           />
         )}
-        <GenericList
+        <TitledListView
           className="result-cards"
           list={mealResults}
           renderItem={(meal) => (

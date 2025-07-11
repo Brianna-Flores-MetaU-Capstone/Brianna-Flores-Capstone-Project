@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
 import Button from "@mui/material/Button";
 import { GROCERY_MODAL } from "../utils/constants";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { fetchGroceryList } from "../utils/databaseHelpers";
 
@@ -46,7 +46,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           Clear Purchased Items
         </Button>
 
-        <GenericList
+        <TitledListView
           className="grocery-departments"
           list={groceryDepartments}
           renderItem={(department) => (

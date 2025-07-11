@@ -3,7 +3,7 @@ import type {
   GPIngredientDataTypes,
   GPIngredientWithCostInfoTypes,
 } from "../utils/types";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { v4 as uuidv4 } from "uuid";
 
@@ -25,7 +25,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
 
   return (
     <div className="grocery-department">
-      <GenericList
+      <TitledListView
         className="grocery-department-items"
         headerList={[department]}
         list={filteredGroceries}

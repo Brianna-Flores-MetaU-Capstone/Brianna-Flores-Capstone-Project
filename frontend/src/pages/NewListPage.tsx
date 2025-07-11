@@ -11,7 +11,7 @@ import MealInfoModal from "../components/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -110,7 +110,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         </Button>
         <Button onClick={handleGenerateList}>Make My List</Button>
       </section>
-      <GenericList
+      <TitledListView
         className="selected-meals"
         headerList={["Selected Meals"]}
         list={selectedRecipes}

@@ -7,7 +7,7 @@ import type {
 } from "../utils/types";
 import NextRecipe from "../components/NextRecipe";
 import AppHeader from "../components/AppHeader";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import { PreviewConstants } from "../utils/constants";
 import Ingredient from "../components/Ingredient";
 import { v4 as uuidv4 } from "uuid";
@@ -46,7 +46,7 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <section className="quick-access-container">
         <NextRecipe />
         <div className="item-list">
-          <GenericList
+          <TitledListView
             className="list-items"
             headerList={[PreviewConstants.INGREDIENT]}
             list={userIngredientList}
@@ -62,7 +62,7 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           />
         </div>
         <div className="item-list">
-          <GenericList
+          <TitledListView
             className="list-items"
             headerList={[PreviewConstants.GROCERY]}
             list={userGroceryList}

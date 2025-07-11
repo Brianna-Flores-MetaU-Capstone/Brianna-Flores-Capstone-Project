@@ -4,7 +4,7 @@ import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
 import IngredientCost from "./IngredientCost";
 import { v4 as uuidv4 } from "uuid";
 import "../styles/NewListPage.css";
@@ -53,7 +53,7 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
-        <GenericList
+        <TitledListView
           className="ingredient-cost-info"
           headerList={["Ingredient", "Cost", "for Amount"]}
           list={ingredientsCostInformation}
