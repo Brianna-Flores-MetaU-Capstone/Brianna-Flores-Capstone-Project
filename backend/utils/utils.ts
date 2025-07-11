@@ -109,16 +109,16 @@ const quantityNeeded = ({
 
 type GPMissingIngredientsListType = {
   recipeIngredients: GPRecipeIngredientTypes[];
-  ingredientsOnHand: GPIngredientDataTypes[];
+  ownedIngredients: GPIngredientDataTypes[];
 };
 
 const getListOfMissingIngredients = ({
   recipeIngredients,
-  ingredientsOnHand,
+  ownedIngredients,
 }: GPMissingIngredientsListType) => {
   let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
-  const ingredientsOnHandNames = ingredientsOnHand.map((ingredient) =>
+  const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
     ingredient.ingredientName.toLowerCase()
   );
 
@@ -138,7 +138,7 @@ const getListOfMissingIngredients = ({
           ? { ...recipeIngredient, quantity: totalQuantity }
           : recipeIngredient;
       if (
-        ingredientsOnHandNames.indexOf(
+        ownedIngredientsNames.indexOf(
           recipeIngredient.ingredientName.toLowerCase()
         ) === -1
       ) {
@@ -147,8 +147,8 @@ const getListOfMissingIngredients = ({
       } else {
         // user has ingredient, check if they have enough
         const ingredientOnHand =
-          ingredientsOnHand[
-            ingredientsOnHandNames.indexOf(recipeIngredient.ingredientName)
+          ownedIngredients[
+            ownedIngredientsNames.indexOf(recipeIngredient.ingredientName)
           ];
         const quantityUserNeeds = quantityNeeded({
           ingredientOnHand,
@@ -188,9 +188,7 @@ const estimateListCost = async ({
     ingredientCostInfo = [
       ...ingredientCostInfo,
       {
-        ingredient: {...ingredient,
-          isChecked: false,
-        },
+        ingredient: { ...ingredient, isChecked: false },
         ingredientApiInfo,
       },
     ];

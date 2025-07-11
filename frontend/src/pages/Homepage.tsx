@@ -6,7 +6,6 @@ import type {
   GPIngredientWithCostInfoTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
-import NextRecipe from "../components/NextRecipe";
 import AppHeader from "../components/AppHeader";
 import TitledListView from "../components/TitledListView";
 import { PreviewConstants } from "../utils/constants";
@@ -16,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import {
   fetchGroceryList,
   fetchUserIngredientsHelper,
-  fetchRecipes
+  fetchRecipes,
 } from "../utils/databaseHelpers";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
@@ -87,17 +86,17 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       </section>
       <section className="upcoming-meals">
         <TitledListView
-        className="selected-meals"
-        headerList={["Upcoming Meals"]}
-        list={selectedRecipes}
-        renderItem={(meal) => (
-          <MealCard
-            key={meal.apiId}
-            onMealCardClick={() => event?.preventDefault()}
-            parsedMealData={meal}
-          />
-        )}
-      />
+          className="selected-meals"
+          headerList={["Upcoming Meals"]}
+          list={selectedRecipes}
+          renderItem={(meal) => (
+            <MealCard
+              key={meal.apiId}
+              onMealCardClick={() => event?.preventDefault()}
+              parsedMealData={meal}
+            />
+          )}
+        />
       </section>
     </div>
   );

@@ -114,7 +114,12 @@ router.get("/me", async (req: Request, res: Response) => {
     const user = await prisma.User.findUnique({
       where: { id: req.session.userId },
     });
-    res.json({ id: req.session.userId, userName: user.userName });
+    res.json({
+      id: req.session.userId,
+      userName: user.userName,
+      intolerances: user.intolerances,
+      diets: user.diets,
+    });
   } catch (error) {
     res.status(500).json({ error: "Error fetching user session data" });
   }

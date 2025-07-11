@@ -17,6 +17,10 @@ import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { useUser } from "../contexts/UserContext";
+import Switch from "@mui/joy/Switch";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -37,6 +41,16 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
+  const [usePreferences, setUsePreferences] = useState(false);
+  const { user } = useUser();
+
+  const parsePreferenceList = (preferenceList: string[]) => {
+    let parsedPreferences = "";
+    for (const preference of preferenceList) {
+      parsedPreferences += preference.toLowerCase() + ",";
+    }
+    return parsedPreferences;
+  };
 
   const handleRequestChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newRecipeRequest = event.target.value;
@@ -51,16 +65,19 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     numToRequest: number;
     offset: number;
   }) => {
-    const ingredientsOnHand = await fetchUserIngredientsHelper({
+    const ownedIngredients = await fetchUserIngredientsHelper({
       setMessage: setErrorMessage,
     });
+    const userDiets = parsePreferenceList(user?.diets ?? []);
+    const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
+    const recipeUrl = usePreferences
+      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
-      );
+      const response = await axios.get(recipeUrl);
       const parsedRecipes = await parseRecipeData(
-        ingredientsOnHand,
+        ownedIngredients,
         response.data.results
       );
       if (searchClicked) {
@@ -125,6 +142,30 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     <Modal open={modalOpen} onClose={handleModalClose}>
       <Box sx={GPModalStyle}>
         <Button>I Have My Own Recipe</Button>
+        {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+        <FormControl
+          orientation="horizontal"
+          sx={{ width: "20%", justifyContent: "space-between" }}
+        >
+          <div>
+            <FormLabel>Use Dietary Preferences</FormLabel>
+          </div>
+          <Switch
+            checked={usePreferences}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setUsePreferences(event.target.checked)
+            }
+            variant={usePreferences ? "solid" : "outlined"}
+            endDecorator={usePreferences ? "On" : "Off"}
+            slotProps={{
+              endDecorator: {
+                sx: {
+                  minWidth: 24,
+                },
+              },
+            }}
+          />
+        </FormControl>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
           <TextField
             required

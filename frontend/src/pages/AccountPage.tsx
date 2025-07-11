@@ -36,7 +36,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const { user, setUser } = useUser();
+  const { setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
 

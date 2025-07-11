@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientWithCostInfoTypes[];
   department: string;
-  onGroceryCheck: (ingredientName: string) => void
+  onGroceryCheck: (ingredientName: string) => void;
 };
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,

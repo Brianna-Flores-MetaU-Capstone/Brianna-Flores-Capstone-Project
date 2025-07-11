@@ -86,13 +86,13 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   const handleGenerateList = async () => {
     setLoadingList(true);
-    const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
+    const ownedIngredients = await fetchUserIngredientsHelper({ setMessage });
     const recipeIngredients = getRecipeIngredients(selectedRecipes);
 
     try {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
-        { ingredientsOnHand, recipeIngredients },
+        { ownedIngredients, recipeIngredients },
         axiosConfig
       );
       navigate("/grocery-list");

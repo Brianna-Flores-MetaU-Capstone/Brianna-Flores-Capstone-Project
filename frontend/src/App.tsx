@@ -8,7 +8,6 @@ import Homepage from "./pages/Homepage";
 import NewListPage from "./pages/NewListPage";
 import IngredientsPage from "./pages/IngredientsPage";
 import LoginPage from "./pages/LoginPage";
-import CreateRecipePage from "./pages/CreateRecipePage";
 import NoMatchPage from "./pages/NoMatchPage";
 import GroceryList from "./pages/GroceryList";
 import SignupForm from "./pages/SignupForm";

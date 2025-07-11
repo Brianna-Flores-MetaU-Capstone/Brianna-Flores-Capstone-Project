@@ -5,6 +5,8 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 type GPUserAccountType = {
   id: string;
   userName: string;
+  intolerances: string[];
+  diets: string[];
 };
 
 type GPAccountContextType = {

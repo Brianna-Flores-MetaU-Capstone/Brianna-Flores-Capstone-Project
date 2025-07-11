@@ -95,10 +95,10 @@ router.post(
   "/estimateCost",
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const { recipeIngredients, ingredientsOnHand } = req.body;
+    const { recipeIngredients, ownedIngredients } = req.body;
     const ingredientsToPurchase = getListOfMissingIngredients({
       recipeIngredients,
-      ingredientsOnHand,
+      ownedIngredients,
     });
     try {
       const estimatedCost = await estimateListCost({ ingredientsToPurchase });
@@ -114,10 +114,10 @@ router.post(
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
-    const { recipeIngredients, ingredientsOnHand } = req.body;
+    const { recipeIngredients, ownedIngredients } = req.body;
     const ingredientsToPurchase = getListOfMissingIngredients({
       recipeIngredients,
-      ingredientsOnHand,
+      ownedIngredients,
     });
     const estimatedCost = await estimateListCost({ ingredientsToPurchase });
     try {

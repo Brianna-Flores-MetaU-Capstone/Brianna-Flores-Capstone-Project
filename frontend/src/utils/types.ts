@@ -41,7 +41,7 @@ type GPIngredientDataTypes = {
   unit: string;
   department: string;
   expirationDate?: string | null;
-  isChecked: boolean
+  isChecked: boolean;
 };
 
 type GPCurrentUserTypes = {
@@ -56,7 +56,7 @@ type GPErrorMessageTypes = {
   message: string;
 };
 
-type GPIngredientsOnHandTypes = {
+type GPOwnedIngredientsTypes = {
   userId: string;
   ingredient: GPIngredientDataTypes;
   ingredientId: string;
@@ -68,7 +68,7 @@ type GPRecipeIngredientTypes = {
   quantity: number;
   department: string;
   ingredientName: string;
-  isChecked: boolean
+  isChecked: boolean;
 };
 
 type GPIngredientWithCostInfoTypes = {
@@ -89,7 +89,7 @@ export type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
-  GPIngredientsOnHandTypes,
+  GPOwnedIngredientsTypes,
   GPRecipeIngredientTypes,
   GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
