@@ -1,22 +1,22 @@
 import React from "react";
 import "../styles/LoginPage.css";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
 
-type UserPreferenceButtonsProps = {
+type GPUserPreferenceButtonsProps = {
   listName: string;
   listItems: string[];
   userList: string[];
   handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-const RegistrationPreferenceButtons: React.FC<UserPreferenceButtonsProps> = ({
+const RegistrationPreferenceButtons: React.FC<GPUserPreferenceButtonsProps> = ({
   listName,
   listItems,
   userList,
   handleButtonClick,
 }) => {
   return (
-    <GenericList
+    <TitledListView
       className="preference-list"
       list={listItems}
       renderItem={(item) => (

@@ -88,3 +88,11 @@
   text-align: center;
   text-wrap: none;
 }
+
+.ingredient-columns {
+  text-align: center;
+}
+
+.upcoming-meals .ingredient-columns {
+  font-size: xx-large;
+}

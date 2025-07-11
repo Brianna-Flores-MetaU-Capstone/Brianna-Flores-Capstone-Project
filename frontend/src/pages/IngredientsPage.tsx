@@ -9,11 +9,14 @@ import type {
 } from "../utils/types";
 import Button from "@mui/material/Button";
 import { INGREDIENT_MODAL } from "../utils/constants";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
-import { fetchUserIngredientsHelper, deleteIngredient } from "../utils/databaseHelpers";
+import {
+  fetchUserIngredientsHelper,
+  deleteIngredient,
+} from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
@@ -30,7 +33,6 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
 
-  // on mount, fetch ingredients
   useEffect(() => {
     fetchUserIngredients();
   }, []);
@@ -54,7 +56,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
       setMessage({ error: true, message: "Error user not signed in" });
       return;
     }
-    await deleteIngredient({setMessage, ingredient});
+    await deleteIngredient({ setMessage, ingredient });
     fetchUserIngredients();
   };
 
@@ -69,7 +71,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
         >
           Add Ingredient
         </Button>
-        <GenericList
+        <TitledListView
           className="list-items"
           headerList={["Ingredient", "Quantity", "Expiration"]}
           list={userIngredients}
@@ -77,7 +79,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
             <Ingredient
               key={uuidv4()}
               ingredient={ingredient}
-              groceryCheck={false}
+              presentGroceryCheck={false}
               presentExpiration={true}
               presentButtons={true}
               onEdit={handleEditClick}

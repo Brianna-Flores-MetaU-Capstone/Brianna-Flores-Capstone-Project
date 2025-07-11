@@ -6,20 +6,7 @@ const router = express.Router();
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-
-// middleware to check if a user is authenticated
-const isAuthenticated = (
-  req: includeSession,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.session.userId) {
-    return res
-      .status(401)
-      .json({ error: "You must be logged in to perform this action." });
-  }
-  next();
-};
+import { isAuthenticated } from "../utils/authMiddleware";
 
 type IngredientOnHand = {
   expirationDate: string;
@@ -31,12 +18,13 @@ type IngredientOnHand = {
   quantity: number;
   unit: string;
 };
+
 // retrieve all ingredients for a given user
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   // check that user is authenticated
   const userId = req.session.userId;
   try {
-    const ingredients = await prisma.IngredientsOnHand.findMany({
+    const ingredients = await prisma.OwnedIngredient.findMany({
       where: {
         userId: userId,
       },
@@ -114,7 +102,7 @@ router.post(
         return res.status(400).send("Error, failed to create ingredient");
       }
       // check if user has ingredient
-      let ingredientInUsersPantry = await prisma.IngredientsOnHand.findUnique({
+      let ingredientInUsersPantry = await prisma.OwnedIngredient.findUnique({
         where: {
           userId_ingredientId: {
             userId,
@@ -130,7 +118,7 @@ router.post(
       }
 
       // create mapping in table from user to ingredient
-      ingredientInUsersPantry = await prisma.IngredientsOnHand.create({
+      ingredientInUsersPantry = await prisma.OwnedIngredient.create({
         data: {
           userId: userId,
           ingredientId: ingredient.id,
@@ -165,7 +153,7 @@ router.put(
     const userId = req.session.userId;
     const { quantity, unit, expirationDate } = req.body;
     try {
-      const ingredientOnHand = await prisma.ingredientsOnHand.findUnique({
+      const ingredientOnHand = await prisma.OwnedIngredient.findUnique({
         where: {
           userId_ingredientId: {
             userId,
@@ -182,7 +170,7 @@ router.put(
           .send(`Ingredient ${ingredientId} not in users database`);
       }
 
-      const updatedIngredient = await prisma.ingredientsOnHand.update({
+      const updatedIngredient = await prisma.OwnedIngredient.update({
         where: {
           userId_ingredientId: {
             userId,
@@ -209,7 +197,7 @@ router.delete(
     const ingredientId = parseInt(req.params.ingredientId);
     const userId = req.session.userId;
     try {
-      const ingredientOnHand = await prisma.ingredientsOnHand.findUnique({
+      const ingredientOnHand = await prisma.OwnedIngredient.findUnique({
         where: {
           userId_ingredientId: {
             userId,
@@ -226,7 +214,7 @@ router.delete(
           .send(`Ingredient ${ingredientId} not in users database`);
       }
 
-      const deletedIngredient = await prisma.ingredientsOnHand.delete({
+      const deletedIngredient = await prisma.OwnedIngredient.delete({
         where: {
           userId_ingredientId: {
             userId,

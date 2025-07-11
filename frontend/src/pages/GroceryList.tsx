@@ -1,59 +1,89 @@
 import "../styles/GroceryList.css";
-import type { GPToggleNavBarProps } from "../utils/types";
+import type {
+  GPErrorMessageTypes,
+  GPToggleNavBarProps,
+  GPIngredientWithCostInfoTypes,
+} from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
-import type { GPIngredientDataTypes } from "../utils/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import { departments } from "../utils/sampleData";
-import SearchBar from "../components/SearchBar";
 import Button from "@mui/material/Button";
 import { GROCERY_MODAL } from "../utils/constants";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
+import ErrorState from "../components/ErrorState";
+import { fetchGroceryList } from "../utils/databaseHelpers";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
 
 const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
-  const [editGroceryItemData, setEditGroceryItemData] =
-    useState<GPIngredientDataTypes>();
-  const [editGroceryItemModalOpen, setEditGroceryItemModalOpen] =
-    useState(false);
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
+  const [userGroceryList, setUserGroceryList] = useState<
+    GPIngredientWithCostInfoTypes[]
+  >([]);
+  const [groceryDepartments, setGroceryDepartments] = useState<string[]>([]);
+  const [groceryListCost, setGroceryListCost] = useState(0.0);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const handleAddGrocery = () => {
     setAddGroceryItemModalOpen((prev) => !prev);
   };
 
-  const handleEditGrocery = (ingredient: GPIngredientDataTypes) => {
-    setEditGroceryItemData(ingredient);
-    setEditGroceryItemModalOpen((prev) => !prev);
-  };
+  useEffect(() => {
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListCost,
+    });
+  }, []);
 
-  const fetchUserIngredients = async () => {};
+  const toggleGroceryCheck = async (groceryItem: string) => {
+    await axios.put(`${databaseUrl}/generateList/check`, {ingredientName: groceryItem}, axiosConfig)
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListCost,
+    });
+  }
+
+  const handleClearGroceries = async() => {
+    await axios.put(`${databaseUrl}/generateList/clear`, {}, axiosConfig)
+    fetchGroceryList({
+      setMessage,
+      setUserGroceryList,
+      setGroceryDepartments,
+      setGroceryListCost,
+    });
+  }
 
   return (
     <div>
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <div className="grocery-list-container">
-        <SearchBar />
         <Button className="add-button" onClick={handleAddGrocery}>
           Add Item
         </Button>
-        <Button className="add-button" onClick={handleAddGrocery}>
+        <Button className="add-button" onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
 
-        <GenericList
+        <TitledListView
           className="grocery-departments"
-          list={departments}
+          list={groceryDepartments}
           renderItem={(department) => (
             <GroceryListDepartment
               key={department}
+              groceryList={userGroceryList}
               department={department}
-              handleOpenModal={handleEditGrocery}
+              onGroceryCheck={toggleGroceryCheck}
             />
           )}
         />
         <h3>Estimated Cost</h3>
-        <h3>$x.xx</h3>
+        <h3>${Number(groceryListCost).toFixed(2)}</h3>
       </div>
       {addGroceryItemModalOpen && (
         <IngredientModal
@@ -61,18 +91,18 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           isEditing={false}
           onClose={handleAddGrocery}
           modalOpen={addGroceryItemModalOpen}
-          fetchUserIngredients={fetchUserIngredients}
+          fetchUserIngredients={() =>
+            fetchGroceryList({
+              setMessage,
+              setUserGroceryList,
+              setGroceryDepartments,
+              setGroceryListCost,
+            })
+          }
         />
       )}
-      {editGroceryItemModalOpen && (
-        <IngredientModal
-          modalFor={GROCERY_MODAL}
-          isEditing={true}
-          ingredientData={editGroceryItemData}
-          onClose={() => setEditGroceryItemModalOpen((prev) => !prev)}
-          modalOpen={editGroceryItemModalOpen}
-          fetchUserIngredients={fetchUserIngredients}
-        />
+      {message && (
+        <ErrorState error={message.error} message={message.message} />
       )}
     </div>
   );

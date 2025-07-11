@@ -16,6 +16,7 @@ import AuthForm from "../components/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { useUser } from "../contexts/UserContext";
 
 const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -24,16 +25,17 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async () => {
-        // get the user currently signed in
         const user = auth.currentUser;
         if (user) {
-          const response = await validateUserToken(user);
-          if (response) {
+          const userData = await validateUserToken(user);
+          if (userData) {
+            setUser(userData);
             setMessage({ error: false, message: "Successfully logged in!" });
           }
         } else {
@@ -44,14 +46,6 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         setMessage({ error: true, message: error.code });
       });
   }
-
-  const checkSession = async () => {
-    const response = await fetch("http://localhost:3000/me", {
-      method: "GET",
-      credentials: "include",
-    });
-    const data = await response.json();
-  };
 
   return (
     <div className="login-page">

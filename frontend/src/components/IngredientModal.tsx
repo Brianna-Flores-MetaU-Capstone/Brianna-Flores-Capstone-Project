@@ -25,7 +25,7 @@ import Box from "@mui/material/Box";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 type GPIngredientModalProps = {
   modalFor: string;
@@ -55,12 +55,12 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   const initialIngredientState = ingredientData ?? {
     id: 0,
     ingredientName: "",
-    quantity: "",
+    quantity: 0,
     unit: "units",
     department: "",
     expirationDate: null,
     image: "",
-    estimatedCost: 0,
+    isChecked: false
   };
 
   type ACTIONTYPE =
@@ -113,10 +113,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form
-          className="ingredient-form"
-          onSubmit={handleModalSubmit}
-        >
+        <form className="ingredient-form" onSubmit={handleModalSubmit}>
           {isEditing ? (
             // prevent editing the ingredient name
             <TextField

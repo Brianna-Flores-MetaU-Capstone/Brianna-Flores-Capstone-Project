@@ -8,7 +8,6 @@ declare module "express-session" {
   }
 }
 
-// extend type of request to include session
 export interface includeSession extends Request {
   session: session.Session & {
     userId: string;

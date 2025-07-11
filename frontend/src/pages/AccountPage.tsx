@@ -25,6 +25,8 @@ import ErrorState from "../components/ErrorState";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useUser } from "../contexts/UserContext";
+import axios from "axios";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -34,7 +36,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const { user, setUser } = useUser();
+  const { setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
 
@@ -108,17 +110,14 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           user.email,
           userPassword
         );
-        // valdate credentials to update account
         reauthenticateWithCredential(user, credential)
           .then(() => {
-            //if the users email was changed, update on firebase side too
+            // if the users email was changed, update on firebase side too
             if (user.email && userEmail && user.email !== userEmail) {
-              // get credential by signing user in with email
               updateEmail(user, userEmail).catch((error) => {
                 setMessage({ error: true, message: error.code });
               });
             }
-            // then update account in database
             updateAccount({
               user,
               userEmail,
@@ -141,19 +140,17 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      const response = await fetch("http://localhost:3000/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        setMessage({ error: true, message: "Logout failed" });
-        return;
-      }
+      await axios.post(
+        `${databaseUrl}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       setUser(null);
       setMessage({ error: false, message: "Successfully logged out" });
     } catch (error) {
-      setMessage({ error: true, message: "Error during logout" });
+      setMessage({ error: true, message: "Logout failed" });
     }
   };
 

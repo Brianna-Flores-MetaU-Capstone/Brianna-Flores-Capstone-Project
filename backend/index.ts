@@ -24,7 +24,7 @@ let sessionConfig = {
   name: "sessionId",
   secret: sessionSecret,
   cookie: {
-    maxAge: 1000 * 60 * 5,
+    maxAge: 1000 * 60 * 60 * 24, // 24 hours
     secure: process.env.RENDER ? true : false,
     httpOnly: false,
   },
@@ -38,6 +38,12 @@ app.use(express.json());
 
 const ingredientsRoutes = require("./routes/ingredientsRoutes");
 app.use("/ingredients", ingredientsRoutes);
+
+const recipeRoutes = require("./routes/recipeRoutes");
+app.use("/recipes", recipeRoutes);
+
+const groceryListRoutes = require("./routes/groceryListRoutes");
+app.use("/generateList", groceryListRoutes);
 
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);

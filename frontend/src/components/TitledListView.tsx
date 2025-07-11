@@ -2,19 +2,19 @@ import React from "react";
 import "../styles/Homepage.css";
 import { v4 as uuidv4 } from "uuid";
 
-type GPGenericListProps<T> = {
+type GPTitledListViewProps<T> = {
   className: string;
   list: T[];
   renderItem: (item: T) => React.ReactNode;
   headerList?: string[];
 };
 
-const GenericList = <T,>({
+const TitledListView = <T,>({
   className,
   list,
   renderItem,
   headerList,
-}: GPGenericListProps<T>) => {
+}: GPTitledListViewProps<T>) => {
   return (
     <>
       {headerList && (
@@ -29,4 +29,4 @@ const GenericList = <T,>({
   );
 };
 
-export default GenericList;
+export default TitledListView;

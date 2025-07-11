@@ -1,8 +1,12 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import axios from "axios";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 type GPUserAccountType = {
   id: string;
   userName: string;
+  intolerances: string[];
+  diets: string[];
 };
 
 type GPAccountContextType = {
@@ -20,14 +24,16 @@ const UserContext = createContext<GPAccountContextType>({
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
-  // check if session exists when app starts
   useEffect(() => {
-    fetch("http://localhost:3000/me", { credentials: "include" })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.id) {
-          setUser(data); // Persist login state
+    axios
+      .get(`${databaseUrl}/me`, { withCredentials: true })
+      .then(function (response) {
+        if (response.data.id) {
+          setUser(response.data);
         }
+      })
+      .catch(function (error) {
+        setUser(null);
       });
   }, []);
 

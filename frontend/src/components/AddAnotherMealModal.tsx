@@ -6,18 +6,21 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData, GPModalStyle } from "../utils/utils";
-import type {
-  GPRecipeDataTypes,
-  GPRequestFormDataTypes,
-  GPErrorMessageTypes,
-} from "../utils/types";
+import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import "../styles/Meal.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import ErrorState from "./ErrorState";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
+import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { useUser } from "../contexts/UserContext";
+import Switch from "@mui/joy/Switch";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -32,21 +35,26 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   onSelectRecipe,
   modalOpen,
 }) => {
-  const [mealRequest, setMealRequest] = useState<GPRequestFormDataTypes>({
-    recipeName: "",
-    servings: "",
-  });
+  const [recipeRequest, setRecipeRequest] = useState("");
   const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
+  const [usePreferences, setUsePreferences] = useState(false);
+  const { user } = useUser();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reciperequest = event.target.dataset
-      .reciperequest as keyof GPRequestFormDataTypes;
-    const value = event.target.value;
-    setMealRequest((prev) => ({ ...prev, [reciperequest]: value }));
+  const parsePreferenceList = (preferenceList: string[]) => {
+    let parsedPreferences = "";
+    for (const preference of preferenceList) {
+      parsedPreferences += preference.toLowerCase() + ",";
+    }
+    return parsedPreferences;
+  };
+
+  const handleRequestChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newRecipeRequest = event.target.value;
+    setRecipeRequest(newRecipeRequest);
   };
 
   // fetch recipes from API dependent on user input
@@ -57,20 +65,21 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     numToRequest: number;
     offset: number;
   }) => {
+    const ownedIngredients = await fetchUserIngredientsHelper({
+      setMessage: setErrorMessage,
+    });
+    const userDiets = parsePreferenceList(user?.diets ?? []);
+    const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
+    const recipeUrl = usePreferences
+      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${mealRequest.recipeName}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}`
+      const response = await axios.get(recipeUrl);
+      const parsedRecipes = await parseRecipeData(
+        ownedIngredients,
+        response.data.results
       );
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        setErrorMessage({
-          error: true,
-          message: `Error: ${errorResponse.message}`,
-        });
-      }
-      const data = await response.json();
-      const parsedRecipes = parseRecipeData(data.results);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
@@ -79,59 +88,36 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
-      // TODO use error state
-      console.error(error);
+      setErrorMessage({
+        error: true,
+        message: `Error fetching from api`,
+      });
     }
   };
 
-  const fetchRandomRecipes = async () => {
-    // TODO take into account user ingredients
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2`
-      );
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        setErrorMessage({
-          error: true,
-          message: `Error: ${errorResponse.message}`,
-        });
-      }
-      const data = await response.json();
-      // array of recipes
-      setMealResults(data);
-      setLoading(false);
-      // TODO: check if recipes are in database (according to id), otherwise add to database
-      // helper method (due to repeated code)
-    } catch (error) {
-      // TODO use error state
-      console.error(error);
-    }
-  };
-
-  const handleFetchRecipes = () => {
-    const numToRequest = TOTAL_SEARCH_REQUESTS - numInDatabase;
+  const handleFetchRecipes = (firstSearch: boolean) => {
+    const recipesOnHand = firstSearch ? 0 : numInDatabase;
+    const numToRequest = TOTAL_SEARCH_REQUESTS - recipesOnHand;
     // calculate offset; assume recipes in database are first n from database, offset by that number
     if (numToRequest > 0) {
       if (numToRequest % GROUP_OF_DISPLAYED_CARDS === 0) {
         fetchSearchRecipes({
           numToRequest: GROUP_OF_DISPLAYED_CARDS,
-          offset: numInDatabase,
+          offset: recipesOnHand,
         });
         setNumInDatabase((prev) => prev + GROUP_OF_DISPLAYED_CARDS);
       } else {
         fetchSearchRecipes({
           numToRequest:
             GROUP_OF_DISPLAYED_CARDS -
-            (numInDatabase % GROUP_OF_DISPLAYED_CARDS),
-          offset: numInDatabase,
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS),
+          offset: recipesOnHand,
         });
         setNumInDatabase(
           (prev) =>
             prev +
             GROUP_OF_DISPLAYED_CARDS -
-            (numInDatabase % GROUP_OF_DISPLAYED_CARDS)
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS)
         );
       }
     }
@@ -139,38 +125,54 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setNumInDatabase(0);
+    setSearchClicked(false);
+    setMealResults([]);
     // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
-    handleFetchRecipes();
+    handleFetchRecipes(true);
     setSearchClicked(true);
   };
 
   const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
-    handleFetchRecipes();
+    handleFetchRecipes(false);
     setSearchClicked(false);
   };
 
   return (
     <Modal open={modalOpen} onClose={handleModalClose}>
       <Box sx={GPModalStyle}>
-        <Button loading={loading} onClick={fetchRandomRecipes}>
-          Need Some Inspiration?
-        </Button>
         <Button>I Have My Own Recipe</Button>
+        {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+        <FormControl
+          orientation="horizontal"
+          sx={{ width: "20%", justifyContent: "space-between" }}
+        >
+          <div>
+            <FormLabel>Use Dietary Preferences</FormLabel>
+          </div>
+          <Switch
+            checked={usePreferences}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setUsePreferences(event.target.checked)
+            }
+            variant={usePreferences ? "solid" : "outlined"}
+            endDecorator={usePreferences ? "On" : "Off"}
+            slotProps={{
+              endDecorator: {
+                sx: {
+                  minWidth: 24,
+                },
+              },
+            }}
+          />
+        </FormControl>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
           <TextField
             required
             slotProps={{ htmlInput: { "data-reciperequest": "recipeName" } }}
-            onChange={handleInputChange}
-            value={mealRequest.recipeName}
+            onChange={handleRequestChange}
+            value={recipeRequest}
             label="Recipe"
-            variant="standard"
-          />
-          <TextField
-            required
-            slotProps={{ htmlInput: { "data-reciperequest": "servings" } }}
-            onChange={handleInputChange}
-            value={mealRequest.servings}
-            label="Servings"
             variant="standard"
           />
           <Button
@@ -190,12 +192,12 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             message={errorMessage.message}
           />
         )}
-        <GenericList
+        <TitledListView
           className="result-cards"
           list={mealResults}
           renderItem={(meal) => (
             <MealCard
-              key={meal.id}
+              key={uuidv4()}
               onMealCardClick={() => event?.preventDefault()}
               parsedMealData={meal}
               onSelectRecipe={onSelectRecipe}
