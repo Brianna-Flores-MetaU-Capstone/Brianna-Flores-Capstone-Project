@@ -1,5 +1,5 @@
 import "../styles/Homepage.css";
-import type { GPErrorMessageTypes, GPIngredientDataTypes, GPRecipeIngredientTypes, GPToggleNavBarProps } from "../utils/types";
+import type { GPErrorMessageTypes, GPIngredientDataTypes, GPRecipeIngredientTypes, GPToggleNavBarProps, GPIngredientWithCostInfoTypes } from "../utils/types";
 import NextRecipe from "../components/NextRecipe";
 import AppHeader from "../components/AppHeader";
 import GenericList from "../components/GenericList";
@@ -12,19 +12,19 @@ import { useUser } from "../contexts/UserContext";
 
 const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [message, setMessage] = useState<GPErrorMessageTypes>()
-  const [userGroceryList, setUserGroceryList] = useState<GPRecipeIngredientTypes[]>([])
+  const [userGroceryList, setUserGroceryList] = useState<GPIngredientWithCostInfoTypes[]>([])
   const [userIngredientList, setUserIngredientList] = useState<GPIngredientDataTypes[]>([])
   const { user } = useUser()
 
   useEffect(() => {
-    const setLists = async () => {
+    const setUserListPreviews = async () => {
       if (user) {
         fetchGroceryList({setMessage, setUserGroceryList});
         const userIngredients = await fetchUserIngredientsHelper({setMessage})
         setUserIngredientList(userIngredients)
       }
     }
-    setLists();
+    setUserListPreviews();
   }, [])
   return (
     <div className="homepage-container">
@@ -40,7 +40,7 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               <Ingredient
                 key={uuidv4()}
                 ingredient={ingredient}
-                groceryCheck={false}
+                presentGroceryCheck={false}
                 presentExpiration={false}
                 presentButtons={false}
               />
@@ -55,8 +55,8 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
             renderItem={(item) => (
               <Ingredient
                 key={uuidv4()}
-                ingredient={item}
-                groceryCheck={true}
+                ingredient={item.ingredient}
+                presentGroceryCheck={true}
                 presentExpiration={false}
                 presentButtons={false}
               />

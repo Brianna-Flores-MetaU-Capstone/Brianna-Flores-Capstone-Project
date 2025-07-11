@@ -5,6 +5,7 @@ import type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPRecipeIngredientTypes,
+  GPIngredientWithCostInfoTypes
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
@@ -199,16 +200,16 @@ const updateUserRecipes = async ({
 
 type GPFetchGroceryListTypes = GPSetMessageType & {
   setUserGroceryList: (
-    value: React.SetStateAction<GPRecipeIngredientTypes[]>
+    value: React.SetStateAction<GPIngredientWithCostInfoTypes[]>
   ) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
-  setGroceryListPrice?: (value: React.SetStateAction<number>) => void;
+  setGroceryListCost?: (value: React.SetStateAction<number>) => void;
 };
 const fetchGroceryList = async ({
   setMessage,
   setUserGroceryList,
   setGroceryDepartments,
-  setGroceryListPrice,
+  setGroceryListCost,
 }: GPFetchGroceryListTypes) => {
   try {
     const response = await axios.get(`${databaseUrl}/generateList`, axiosConfig);
@@ -219,8 +220,8 @@ const fetchGroceryList = async ({
       );
       setGroceryDepartments(departments);
     }
-    if (setGroceryListPrice) {
-      setGroceryListPrice(response.data.groceryListPrice);
+    if (setGroceryListCost) {
+      setGroceryListCost(response.data.groceryListCost);
     }
   } catch (error) {
     setMessage({

@@ -22,7 +22,7 @@ model User {
   diets             String[]
   ingredientsOnHand IngredientsOnHand[]
   groceryList       Json?
-  groceryListPrice  Decimal             @default(0.00)
+  groceryListCost   Decimal             @default(0.00)
   recipes           Recipe[]
 }
 
@@ -39,13 +39,11 @@ model IngredientsOnHand {
 }
 
 model Ingredient {
-  id                   Int                 @id @default(autoincrement())
-  ingredientName       String
-  department           String
-  estimatedCostPerUnit Decimal?
-  productImage         String?
-  estimatedCost        Decimal?
-  ingredientsOnHand    IngredientsOnHand[]
+  id                Int                 @id @default(autoincrement())
+  ingredientName    String
+  department        String
+  productImage      String?
+  ingredientsOnHand IngredientsOnHand[]
 }
 
 // many to many relationship

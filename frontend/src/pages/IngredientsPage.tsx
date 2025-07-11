@@ -79,7 +79,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
             <Ingredient
               key={uuidv4()}
               ingredient={ingredient}
-              groceryCheck={false}
+              presentGroceryCheck={false}
               presentExpiration={true}
               presentButtons={true}
               onEdit={handleEditClick}

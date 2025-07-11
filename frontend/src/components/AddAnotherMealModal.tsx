@@ -78,24 +78,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   };
 
-  const fetchRandomRecipes = async () => {
-    // TODO take into account user ingredients
-    try {
-      setLoading(true);
-      const response = await axios.get(`https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2&instructionsRequired=true`)
-      setMealResults(response.data);
-      setLoading(false);
-      // TODO: check if recipes are in database (according to id), otherwise add to database
-      // helper method (due to repeated code)
-    } catch (error) {
-      // TODO use error state
-      setErrorMessage({
-          error: true,
-          message: "Error fetching recipes",
-        });
-    }
-  };
-
   const handleFetchRecipes = (firstSearch: boolean) => {
     const recipesOnHand = firstSearch ? 0 : numInDatabase;
     const numToRequest = TOTAL_SEARCH_REQUESTS - recipesOnHand;
@@ -142,9 +124,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   return (
     <Modal open={modalOpen} onClose={handleModalClose}>
       <Box sx={GPModalStyle}>
-        <Button loading={loading} onClick={fetchRandomRecipes}>
-          Need Some Inspiration?
-        </Button>
         <Button>I Have My Own Recipe</Button>
         <form className="meal-form" onSubmit={handleSearchSubmit}>
           <TextField

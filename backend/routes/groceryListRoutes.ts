@@ -19,7 +19,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
     });
     res.json({
       groceryList: userData.groceryList,
-      groceryListPrice: userData.groceryListPrice,
+      groceryListCost: userData.groceryListCost,
     });
   } catch (error) {
     res.status(500).send("Error fetching user groceries");
@@ -27,7 +27,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
 });
 
 router.post(
-  "/estimatePrice",
+  "/estimateCost",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const { recipeIngredients, ingredientsOnHand } = req.body;
@@ -36,8 +36,8 @@ router.post(
       ingredientsOnHand,
     });
     try {
-      const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
-      res.json(estimatedPrice);
+      const estimatedCost = await estimateListCost({ ingredientsToPurchase });
+      res.json(estimatedCost);
     } catch (error) {
       res.status(500).send("Error approximating ingredients cost");
     }
@@ -54,7 +54,7 @@ router.post(
       recipeIngredients,
       ingredientsOnHand,
     });
-    const estimatedPrice = await estimateListCost({ ingredientsToPurchase });
+    const estimatedCost = await estimateListCost({ ingredientsToPurchase });
     try {
       const user = await prisma.User.findUnique({
         where: {
@@ -69,8 +69,8 @@ router.post(
           id: userId,
         },
         data: {
-          groceryList: ingredientsToPurchase,
-          groceryListPrice: estimatedPrice.estimatedCost,
+          groceryList: estimatedCost.ingredientCostInfo,
+          groceryListCost: estimatedCost.estimatedCost,
         },
       });
       res.json(updatedUser);

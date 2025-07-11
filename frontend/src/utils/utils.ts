@@ -2,6 +2,7 @@ import type {
   GPAuthFormDataTypes,
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
+  GPIngredientWithCostInfoTypes
 } from "./types";
 import axios from "axios";
 import { axiosConfig } from "./databaseHelpers";
@@ -34,7 +35,7 @@ const parseRecipeData = async (
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
         dairyFree: recipe.dairyFree,
-        ingredientPriceInfo: estimatedRecipeCostInfo.ingredientPriceInfo,
+        ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
         totalCost: estimatedRecipeCostInfo.estimatedCost,
       };
     })
@@ -72,7 +73,7 @@ const estimateRecipeCost = async ({
   recipeIngredients,
 }: GPEstimateRecipeCostTypes) => {
   try {
-    const response = await axios.post(`${databaseUrl}/generateList/estimatePrice`, { ingredientsOnHand, recipeIngredients }, axiosConfig)
+    const response = await axios.post(`${databaseUrl}/generateList/estimateCost`, { ingredientsOnHand, recipeIngredients }, axiosConfig)
     return response.data
   } catch (error) {
     console.error("Error estimating cost, send default cost");
@@ -105,12 +106,12 @@ const handleAuthInputChange = (
 };
 
 const parseGroceryListDepartments = (
-  groceryList: GPRecipeIngredientTypes[]
+  groceryList: GPIngredientWithCostInfoTypes[]
 ) => {
   let departments: string[] = [];
   for (const grocery of groceryList) {
-    if (!departments.includes(grocery.department)) {
-      departments = [...departments, grocery.department];
+    if (!departments.includes(grocery.ingredient.department)) {
+      departments = [...departments, grocery.ingredient.department];
     }
   }
   return departments;

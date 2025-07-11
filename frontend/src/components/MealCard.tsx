@@ -19,11 +19,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onSelectRecipe,
   onDeleteRecipe,
 }) => {
-  const [ingredientPriceModalOpen, setIngredientPriceModalOpen] =
+  const [ingredientCostModalOpen, setIngredientCostModalOpen] =
     useState(false);
 
   const toggleModal = () => {
-    setIngredientPriceModalOpen((prev) => !prev);
+    setIngredientCostModalOpen((prev) => !prev);
   };
 
   return (
@@ -33,7 +33,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       <p className="meal-title">{parsedMealData.recipeTitle}</p>
       <p>Servings: {parsedMealData.servings}</p>
       {onSelectRecipe && (
-        <p>Estimated Price: ${parsedMealData.totalCost.toFixed(2)}</p>
+        <p>Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}</p>
       )}
       <ul className="diets-and-intolerances">
         {parsedMealData.dairyFree && <li>Dairy Free</li>}
@@ -59,10 +59,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
           Select Recipe
         </Button>
       )}
-      {ingredientPriceModalOpen && (
+      {ingredientCostModalOpen && (
         <RecipeCostModal
-          ingredientsPriceInformation={parsedMealData.ingredientPriceInfo}
-          modalOpen={ingredientPriceModalOpen}
+          ingredientsCostInformation={parsedMealData.ingredientCostInfo}
+          modalOpen={ingredientCostModalOpen}
           onClose={toggleModal}
         />
       )}

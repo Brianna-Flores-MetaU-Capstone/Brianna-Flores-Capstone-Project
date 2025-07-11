@@ -107,7 +107,7 @@ const quantityNeeded = ({
   return recipeIngredientQuantity - ingredientOnHandQuantity;
 };
 
-type GPCreateGroceryListType = {
+type GPMissingIngredientsListType = {
   recipeIngredients: GPRecipeIngredientTypes[];
   ingredientsOnHand: GPIngredientDataTypes[];
 };
@@ -115,7 +115,7 @@ type GPCreateGroceryListType = {
 const getListOfMissingIngredients = ({
   recipeIngredients,
   ingredientsOnHand,
-}: GPCreateGroceryListType) => {
+}: GPMissingIngredientsListType) => {
   let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
   const ingredientsOnHandNames = ingredientsOnHand.map((ingredient) =>
@@ -170,45 +170,45 @@ type GPEstimateListCostTypes = {
   ingredientsToPurchase: GPRecipeIngredientTypes[];
 };
 
-type GPIngredientPriceInfoTypes = {
+type GPIngredientCostInfoTypes = {
   ingredient: GPRecipeIngredientTypes;
-  ingredientApiInfo: { ingredientPrice: number; ingredientAmount: number };
+  ingredientApiInfo: { ingredientCost: number; ingredientAmount: number };
 };
 const estimateListCost = async ({
   ingredientsToPurchase,
 }: GPEstimateListCostTypes) => {
-  let ingredientPriceInfo: GPIngredientPriceInfoTypes[] = [];
+  let ingredientCostInfo: GPIngredientCostInfoTypes[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
-    const ingredientApiInfo = await getPriceForAmountOfIngredient({
+    const ingredientApiInfo = await getCostForAmountOfIngredient({
       ingredient,
     });
-    const ingredientPrice = ingredientApiInfo.ingredientPrice;
-    estimatedCost += ingredientPrice;
-    ingredientPriceInfo = [
-      ...ingredientPriceInfo,
+    const ingredientCost = ingredientApiInfo.ingredientCost;
+    estimatedCost += ingredientCost;
+    ingredientCostInfo = [
+      ...ingredientCostInfo,
       {
         ingredient,
         ingredientApiInfo,
       },
     ];
   }
-  return { ingredientPriceInfo, estimatedCost };
+  return { ingredientCostInfo, estimatedCost };
 };
 
-type GPGetItemPriceType = {
+type GPGetItemCostType = {
   ingredient: GPRecipeIngredientTypes;
 };
 
-const getPriceForAmountOfIngredient = async ({
+const getCostForAmountOfIngredient = async ({
   ingredient,
-}: GPGetItemPriceType) => {
+}: GPGetItemCostType) => {
   const searchResults = await searchWalmart(ingredient.ingredientName);
-  // get the price of the first result (most rellevant)
-  const ingredientPrice = searchResults?.items[0].salePrice ?? 0.0;
+  // get the cost of the first result (most rellevant)
+  const ingredientCost = searchResults?.items[0].saleCost ?? 0.0;
   const ingredientAmount = searchResults?.items[0]?.size ?? "Not Found";
   // TODO implement check for item[0].size of item using convert quantity
-  return { ingredientPrice, ingredientAmount };
+  return { ingredientCost, ingredientAmount };
 };
 
 export {
@@ -218,5 +218,5 @@ export {
   quantityNeeded,
   getListOfMissingIngredients,
   estimateListCost,
-  type GPIngredientPriceInfoTypes,
+  type GPIngredientCostInfoTypes,
 };

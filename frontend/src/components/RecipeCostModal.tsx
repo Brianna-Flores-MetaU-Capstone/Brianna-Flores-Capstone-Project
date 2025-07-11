@@ -4,19 +4,19 @@ import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import { ModalDialog } from "@mui/joy";
-import type { GPIngredientPriceInfoTypes } from "../../../backend/utils/utils";
+import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import GenericList from "./GenericList";
-import IngredientPrice from "./IngredientPrice";
+import IngredientCost from "./IngredientCost";
 import { v4 as uuidv4 } from "uuid";
 import "../styles/NewListPage.css";
 
 type GPLoadingModalTypes = {
-  ingredientsPriceInformation: GPIngredientPriceInfoTypes[];
+  ingredientsCostInformation: GPIngredientCostInfoTypes[];
   modalOpen: boolean;
   onClose: () => void;
 };
 const RecipeCostModal = ({
-  ingredientsPriceInformation,
+  ingredientsCostInformation,
   modalOpen,
   onClose,
 }: GPLoadingModalTypes) => {
@@ -52,16 +52,16 @@ const RecipeCostModal = ({
           textColor="inherit"
           sx={{ fontWeight: "lg", mb: 1 }}
         >
-          Ingredient Price Information
+          Ingredient Cost Information
         </Typography>
         <GenericList
-          className="ingredient-price-info"
-          headerList={["Ingredient", "Price", "for Amount"]}
-          list={ingredientsPriceInformation}
+          className="ingredient-cost-info"
+          headerList={["Ingredient", "Cost", "for Amount"]}
+          list={ingredientsCostInformation}
           renderItem={(ingredientInfo) => (
-            <IngredientPrice
+            <IngredientCost
               key={uuidv4()}
-              ingredientPriceInfo={ingredientInfo}
+              ingredientCostInfo={ingredientInfo}
             />
           )}
         />

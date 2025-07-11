@@ -1,6 +1,7 @@
 // initialize firebase in app and create object
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import type { GPErrorMessageTypes } from "./types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAwJpgjoL6ujOP8xrUM0HQNg5Q8k9fN_A",
@@ -29,16 +30,4 @@ const errorCodes: { [errorMessage: string]: string } = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const getCurrentUserToken = async () => {
-  const user = auth.currentUser;
-
-  if (!user) {
-    // TODO User not logged in error state instead of throw error
-    throw new Error("User not logged in");
-  }
-
-  const currentUserToken = await user.getIdToken();
-  return currentUserToken;
-};
-
-export { auth, errorCodes, getCurrentUserToken };
+export { auth, errorCodes };
