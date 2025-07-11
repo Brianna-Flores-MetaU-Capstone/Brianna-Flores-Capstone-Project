@@ -7,13 +7,14 @@ import type {
   GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
-import { handleNewUser } from "../utils/databaseHelpers";
+import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
 import Box from "@mui/material/Box";
+import { useUser } from "../contexts/UserContext";
 
 const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -21,6 +22,8 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     password: "",
   });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { setUser } = useUser(); // Access global user state
+
 
   function handleSubmit({
     userIntolerances,
@@ -30,7 +33,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     userDiets: string[];
   }) {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
         const newUser: GPAccountInfoTypes = {
@@ -39,11 +42,15 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           intolerances: userIntolerances,
           diets: userDiets,
         };
-        handleNewUser({ newUser, setMessage });
-        setMessage({
-          error: false,
-          message: "Registration successful!",
-        });
+        const newUserData = await handleNewUser({ newUser, setMessage });
+        const response = await validateUserToken(user)
+        if (response) {
+          setMessage({
+            error: false,
+            message: "Registration successful!",
+          });
+          setUser(newUserData);
+        }
       })
       .catch((error) => {
         setMessage({

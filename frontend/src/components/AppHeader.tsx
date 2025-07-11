@@ -8,13 +8,13 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 import "../styles/Homepage.css";
 import Button from "@mui/material/Button";
+import { useUser } from "../contexts/UserContext";
+import { useLocation } from 'react-router'
 
 const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+  const { user } = useUser()
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    signOut(auth);
-  };
+  const location = useLocation();
 
   const handleLogin = () => {
     if (navOpen) {
@@ -22,6 +22,7 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     }
     navigate("/login");
   };
+
 
   return (
     <section className="app-header">
@@ -31,8 +32,11 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       {/* TODO make a better name */}
       <h1>Grociplan</h1>
       <div className="auth-access-buttons">
-        <Button onClick={handleLogout}>Logout</Button>
-        <Button onClick={handleLogin}>Login</Button>
+        {
+          user ? 
+          (<p>Welcome</p>) :
+          (location.pathname !== "/login" && <Button onClick={handleLogin}>Login</Button>)
+        }
       </div>
       <NavBar toggleNav={toggleNav} navOpen={navOpen} />
     </section>

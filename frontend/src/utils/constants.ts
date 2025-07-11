@@ -4,6 +4,7 @@ const PreferenceCategoryEnum = {
 };
 
 const AuthenticationFieldEnum = {
+  NAME: "name",
   EMAIL: "email",
   PASSWORD: "password",
 };
@@ -11,7 +12,7 @@ const AuthenticationFieldEnum = {
 const IngredientDataFields = {
   DEPARTMENT: "department",
   IMAGE: "image",
-  NAME: "name",
+  NAME: "ingredientName",
   QUANTITY: "quantity",
   UNIT: "unit",
   ESTIMATED_COST: "estimatedCost",

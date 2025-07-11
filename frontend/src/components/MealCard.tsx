@@ -19,7 +19,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       <p className="meal-title">{parsedMealData.title}</p>
       <p>Servings: {parsedMealData.servings}</p>
       <p>Estimated Price: ${parsedMealData.totalEstimatedCost}</p>
-      <ul className="diets-and-intollerances">
+      <ul className="diets-and-intolerances">
         {parsedMealData.dairyFree && <li>Dairy Free</li>}
         {parsedMealData.glutenFree && <li>Gluten Free</li>}
         {parsedMealData.vegetarian && <li>Vegetarian</li>}

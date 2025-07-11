@@ -17,6 +17,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 
+import { useState } from "react";
+import type { GPErrorMessageTypes } from "../utils/types";
+import ErrorState from "./ErrorState";
+
+import { getCurrentUserToken } from "../utils/firebase";
+
 type GPIngredientModalProps = {
   modalFor: string;
   ingredientData?: GPIngredientDataTypes;
@@ -35,14 +41,16 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   onClose,
   modalOpen,
 }) => {
+  const [message, setMessage] = useState<GPErrorMessageTypes>()
+
   const initialIngredientState = ingredientData ?? {
-    department: "",
-    image: "",
-    name: "",
+    ingredientName: "",
     quantity: "",
     unit: "units",
-    estimatedCost: 0,
+    department: "",
     expirationDate: null,
+    image: "",
+    estimatedCost: 0,
   };
 
   type ACTIONTYPE =
@@ -55,9 +63,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   function reducer(state: GPIngredientDataTypes, action: ACTIONTYPE) {
     switch (action.type) {
-      case "setInput":
+      case actions.SET_INPUT:
         return { ...state, [action.ingredientField]: action.value };
-      case "setDate":
+      case actions.SET_DATE:
         return { ...state, expirationDate: action.value ?? null };
     }
   }
@@ -67,10 +75,33 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     initialIngredientState
   );
 
+  // add an ingredient to the list of ingredients on hand
+  const addNewIngredient = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const userToken = getCurrentUserToken();
+    const response = await fetch("/ingredients/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+      body: JSON.stringify(newIngredientData),
+      credentials: "include",
+    });
+    if (!response.ok) {
+      setMessage({error: true, message: "Failed to create ingredient"})
+      return;
+    }
+    const data = await response.json();
+    setMessage({error: false, message: "Sucessfully created ingredient"})
+    onClose();
+    return data;
+  };
+
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form className="ingredient-form">
+        <form className="ingredient-form" onSubmit={addNewIngredient}>
           <TextField
             required
             name={IngredientDataFields.NAME}
@@ -87,7 +118,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 value: event.target.value,
               })
             }
-            value={newIngredientData?.name}
+            value={newIngredientData?.ingredientName}
             label="Ingredient Name"
             variant="standard"
           />
@@ -178,6 +209,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             {ingredientData ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </Box>
     </Modal>
   );

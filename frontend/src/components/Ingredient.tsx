@@ -22,7 +22,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   return (
     <div className="list-ingredient">
       {groceryCheck && <input type="checkbox" />}
-      <p className="ingredient-name">{ingredient.name}</p>
+      <p className="ingredient-name">{ingredient.ingredientName}</p>
       <p className="ingredient-amount">{`${ingredient.quantity} ${ingredient.unit}`}</p>
       {presentExpiration && (
         <p className="ingredient-expiration">{ingredient.expirationDate}</p>

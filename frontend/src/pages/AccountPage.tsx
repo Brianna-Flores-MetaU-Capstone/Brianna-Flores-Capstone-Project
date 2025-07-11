@@ -12,6 +12,7 @@ import {
   EmailAuthProvider,
   updateEmail,
   reauthenticateWithCredential,
+  signOut
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
@@ -22,6 +23,8 @@ import {
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { useUser } from "../contexts/UserContext";
 
 const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
@@ -31,6 +34,9 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const {user, setUser} = useUser()
+
+  // TODO Implement useReducer to handle user data
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -132,11 +138,32 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      const response = await fetch("http://localhost:3000/logout", {
+        method: "POST",
+        credentials: "include"
+      })
+      if (!response.ok) {
+        const error = await response.json()
+        setMessage({ error: true, message: "Logout failed"})
+        return;
+      }
+      setUser(null)
+      setMessage({ error: false, message: "Successfully logged out"})
+    } catch (error) {
+      setMessage({ error: true, message: "Error during logout"})
+    }
+  };
+
   if (!currentUser && !loadingData) {
     return (
       <div className="account-page">
         <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-        <p className="not-signed-in">Sign in to edit account details</p>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </div>
     );
   }
@@ -182,6 +209,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
+        <Button onClick={handleLogout}>Logout</Button>
       </div>
     </div>
   );

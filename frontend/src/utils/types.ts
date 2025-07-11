@@ -32,11 +32,11 @@ type GPAuthFormDataTypes = {
 };
 
 type GPIngredientDataTypes = {
-  department: string;
-  image: string;
-  name: string;
+  ingredientName: string;
   quantity: string;
   unit: string;
+  department: string;
+  image: string;
   estimatedCost: number;
   expirationDate?: string | null;
 };

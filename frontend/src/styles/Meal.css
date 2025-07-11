@@ -22,11 +22,11 @@
   cursor: pointer;
 }
 
-.diets-and-intollerances {
+.diets-and-intolerances {
   list-style-type: none;
 }
 
-.diets-and-intollerances li {
+.diets-and-intolerances li {
   display: inline-block;
   margin-right: 5px;
   padding: 5px 10px 5px 10px;
@@ -34,7 +34,7 @@
   font-size: 15px;
 }
 
-.meal-card .diets-and-intollerances li {
+.meal-card .diets-and-intolerances li {
   font-size: 10px;
 }
 

@@ -30,4 +30,16 @@ const errorCodes: { [errorMessage: string]: string } = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export { auth, errorCodes };
+const getCurrentUserToken = async () => {
+  const user = auth.currentUser
+  
+  if (!user) {
+    // TODO User not logged in error state instead of throw error
+    throw new Error ("User not logged in")
+  }
+
+  const currentUserToken = await user.getIdToken()
+  return currentUserToken;
+}
+
+export { auth, errorCodes, getCurrentUserToken };

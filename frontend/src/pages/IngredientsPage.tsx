@@ -1,17 +1,24 @@
 import "../styles/IngredientsPage.css";
 import AppHeader from "../components/AppHeader";
-import { useState } from "react";
-import { ingredients } from "../utils/sampleData";
+import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
 import type {
   GPIngredientDataTypes,
   GPToggleNavBarProps,
+  GPErrorMessageTypes,
 } from "../utils/types";
 import Button from "@mui/material/Button";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import GenericList from "../components/GenericList";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
+import ErrorState from "../components/ErrorState";
+
+type GPIngredientsOnHandTypes = {
+  userId: number;
+  ingredient: GPIngredientDataTypes;
+  ingredientId: number;
+};
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   navOpen,
@@ -21,6 +28,37 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   const [editIngredientData, setEditIngredientData] =
     useState<GPIngredientDataTypes>();
   const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false);
+  const [userIngredients, setUserIngredients] = useState<
+    GPIngredientsOnHandTypes[]
+  >([]);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+
+  // on mount, fetch ingredients
+  useEffect(() => {
+    const fetchUserIngredients = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/ingredients", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!response.ok) {
+          setMessage({
+            error: true,
+            message: "Error displaying user ingredients",
+          });
+          return;
+        }
+        const data = await response.json();
+        setUserIngredients(data);
+      } catch (error) {
+        setMessage({
+          error: true,
+          message: "Error displaying user ingredients",
+        });
+      }
+    };
+    fetchUserIngredients();
+  }, []);
 
   const addIngredientClick = () => {
     setAddIngredientModalOpen((prev) => !prev);
@@ -45,11 +83,11 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
         <GenericList
           className="list-items"
           headerList={["Ingredient", "Quantity", "Expiration"]}
-          list={ingredients}
-          renderItem={(ingredient) => (
+          list={userIngredients}
+          renderItem={(link) => (
             <Ingredient
               key={uuidv4()}
-              ingredient={ingredient}
+              ingredient={link.ingredient}
               groceryCheck={false}
               presentExpiration={true}
               presentButtons={true}
@@ -57,6 +95,9 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
             />
           )}
         />
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
       </section>
       {addIngredientModalOpen && (
         <IngredientModal
