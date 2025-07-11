@@ -73,7 +73,6 @@ router.put("/account/:firebaseId", async (req: Request, res: Response) => {
 
 // validate a user after login using token
 router.post("/login", async (req: includeSession, res: Response) => {
-  // returns decoded ID token, can extract uid from there
   const idToken = req.body.token;
   if (!idToken) {
     return res.status(401).send("Missing token");
@@ -83,9 +82,7 @@ router.post("/login", async (req: includeSession, res: Response) => {
     .auth()
     .verifyIdToken(idToken)
     .then(async (decodedToken) => {
-      // get users firebase id
       const uid = decodedToken.uid;
-      // look for token in database (firebaseId)
       const user = await prisma.user.findUnique({
         where: { firebaseId: uid },
       });
@@ -94,7 +91,6 @@ router.post("/login", async (req: includeSession, res: Response) => {
       res.send("Successfully logged in");
     })
     .catch((error) => {
-      // Handle error
       res.status(500).send("Error durring login");
     });
 });
@@ -104,12 +100,11 @@ router.post("/logout", (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({ error: "Failed to log out" });
     }
-    res.clearCookie("sessionId"); // Clear session cookie
+    res.clearCookie("sessionId");
     res.json({ message: "Logged out successfully" });
   });
 });
 
-// Check if user is logged in
 router.get("/me", async (req: Request, res: Response) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Not logged in" });

@@ -113,10 +113,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form
-          className="ingredient-form"
-          onSubmit={handleModalSubmit}
-        >
+        <form className="ingredient-form" onSubmit={handleModalSubmit}>
           {isEditing ? (
             // prevent editing the ingredient name
             <TextField

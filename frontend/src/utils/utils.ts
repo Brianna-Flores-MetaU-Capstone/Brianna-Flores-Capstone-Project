@@ -1,34 +1,37 @@
-import type {
-  GPAccountInfoTypes,
-  GPAuthFormDataTypes,
-  GPIngredientDataTypes,
-} from "./types";
+import type { GPAuthFormDataTypes, GPIngredientDataTypes, GPRecipeIngredientTypes } from "./types";
 
 const parseRecipeData = (recipeData: any) => {
   return recipeData.map((recipe: any) => ({
-    id: recipe.id,
-    image: recipe.image,
-    title: recipe.title,
+    apiId: recipe.id,
+    recipeTitle: recipe.title,
+    previewImage: recipe.image,
     servings: recipe.servings,
+    ingredients: parseIngredients(recipe.extendedIngredients),
+    instructions: parseInstructions(recipe.analyzedInstructions[0].steps),
     sourceUrl: recipe.sourceUrl,
     vegetarian: recipe.vegetarian,
     vegan: recipe.vegan,
     glutenFree: recipe.glutenFree,
     dairyFree: recipe.dairyFree,
-    ingredients: parseIngredients(recipe.extendedIngredients),
-    totalEstimatedCost: estimateTotalCost(recipe.ingredients),
+    totalCost: estimateTotalCost(recipe.ingredients),
   }));
 };
 
 const parseIngredients = (ingredientsData: any) => {
   return ingredientsData.map((ingredient: any) => ({
+    id: ingredient.id,
+    ingredientName: ingredient.name,
     department: ingredient.aisle,
-    image: ingredient.image,
-    ingredientName: ingredient.ingredientName,
-    amount: ingredient.amount,
+    quantity: ingredient.amount,
     unit: ingredient.unit,
     estimatedCost: getIngredientCost(ingredient.name),
   }));
+};
+
+const parseInstructions = (steps: any) => {
+  if (steps) {
+    return steps.map((step: any) => step.step);
+  }
 };
 
 const getIngredientCost = (ingredientName: string) => {
@@ -63,15 +66,29 @@ const handleAuthInputChange = (
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };
 
+  const parseGroceryListDepartments = (
+    groceryList: GPRecipeIngredientTypes[]
+  ) => {
+    let departments: string[] = [];
+    for (const grocery of groceryList) {
+      if (!departments.includes(grocery.department)) {
+        departments = [...departments, grocery.department];
+      }
+    }
+    return departments;
+  };
+
 const GPModalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "50%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  maxHeight: "70%",
+  overflow: "auto",
 };
 
-export { validateInput, parseRecipeData, handleAuthInputChange, GPModalStyle };
+export { validateInput, parseRecipeData, handleAuthInputChange, parseGroceryListDepartments, GPModalStyle };

@@ -1,0 +1,10 @@
+.recipe-modal-ingredient {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.selected-meals {
+    display: flex;
+    gap: 5%;
+    justify-content: center;
+}
