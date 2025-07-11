@@ -3,6 +3,9 @@ import type {
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
 } from "./types";
+import axios from "axios";
+import { axiosConfig } from "./databaseHelpers";
+
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const parseRecipeData = async (
@@ -68,20 +71,13 @@ const estimateRecipeCost = async ({
   ingredientsOnHand,
   recipeIngredients,
 }: GPEstimateRecipeCostTypes) => {
-  const response = await fetch(`${databaseUrl}/generateList/estimatePrice`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ ingredientsOnHand, recipeIngredients }),
-    credentials: "include",
-  });
-  if (!response.ok) {
+  try {
+    const response = await axios.post(`${databaseUrl}/generateList/estimatePrice`, { ingredientsOnHand, recipeIngredients }, axiosConfig)
+    return response.data
+  } catch (error) {
     console.error("Error estimating cost, send default cost");
     return;
   }
-  const data = await response.json();
-  return data;
 };
 
 const validateInput = (formData: GPAuthFormDataTypes) => {

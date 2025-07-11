@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 type GPUserAccountType = {
@@ -22,13 +23,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`${databaseUrl}/me`, { credentials: "include" })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.id) {
-          setUser(data);
+    axios.get(`${databaseUrl}/me`, { withCredentials: true })
+      .then(function(response) {
+        if (response.data.id) {
+          setUser(response.data)
         }
-      });
+      })
+      .catch(function(error) {
+        setUser(null)
+      })
   }, []);
 
   return (

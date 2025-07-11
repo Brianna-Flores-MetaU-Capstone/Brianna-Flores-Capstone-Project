@@ -26,7 +26,6 @@ const errorCodes: { [errorMessage: string]: string } = {
   "success/profile-update": "Successfully updated profile",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 

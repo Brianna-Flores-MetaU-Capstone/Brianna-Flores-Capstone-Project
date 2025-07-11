@@ -8,16 +8,21 @@ import Ingredient from "../components/Ingredient";
 import { v4 as uuidv4 } from "uuid";
 import { fetchGroceryList, fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 import { useState, useEffect } from "react";
+import { useUser } from "../contexts/UserContext";
 
 const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [message, setMessage] = useState<GPErrorMessageTypes>()
   const [userGroceryList, setUserGroceryList] = useState<GPRecipeIngredientTypes[]>([])
   const [userIngredientList, setUserIngredientList] = useState<GPIngredientDataTypes[]>([])
+  const { user } = useUser()
+
   useEffect(() => {
     const setLists = async () => {
-      fetchGroceryList({setMessage, setUserGroceryList});
-      const userIngredients = await fetchUserIngredientsHelper({setMessage})
-      setUserIngredientList(userIngredients)
+      if (user) {
+        fetchGroceryList({setMessage, setUserGroceryList});
+        const userIngredients = await fetchUserIngredientsHelper({setMessage})
+        setUserIngredientList(userIngredients)
+      }
     }
     setLists();
   }, [])

@@ -88,7 +88,8 @@ router.post("/login", async (req: includeSession, res: Response) => {
       });
       // store the user id to establish a session
       req.session.userId = user.id;
-      res.send("Successfully logged in");
+      const userAccount = { id: user.id, userName: user.userName };
+      res.json(userAccount);
     })
     .catch((error) => {
       res.status(500).send("Error durring login");

@@ -16,6 +16,7 @@ import ErrorState from "./ErrorState";
 import GenericList from "./GenericList";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -55,20 +56,12 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     });
     try {
       setLoading(true);
-      const response = await fetch(
+      const response = await axios.get(
         `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`
       );
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        setErrorMessage({
-          error: true,
-          message: `Error: ${errorResponse.message}`,
-        });
-      }
-      const data = await response.json();
       const parsedRecipes = await parseRecipeData(
         ingredientsOnHand,
-        data.results
+        response.data.results
       );
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
@@ -78,8 +71,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
-      // TODO use error state
-      console.error(error);
+      setErrorMessage({
+        error: true,
+        message: `Error fetching from api`,
+      });
     }
   };
 
@@ -87,24 +82,17 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     // TODO take into account user ingredients
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2&instructionsRequired=true`
-      );
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        setErrorMessage({
-          error: true,
-          message: `Error: ${errorResponse.message}`,
-        });
-      }
-      const data = await response.json();
-      setMealResults(data);
+      const response = await axios.get(`https://api.spoonacular.com/recipes/findByIngredients?apiKey=${API_KEY}&ingredients=bread,cheese,pasta,spinach,tomato&number=3&ranking=2&instructionsRequired=true`)
+      setMealResults(response.data);
       setLoading(false);
       // TODO: check if recipes are in database (according to id), otherwise add to database
       // helper method (due to repeated code)
     } catch (error) {
       // TODO use error state
-      console.error(error);
+      setErrorMessage({
+          error: true,
+          message: "Error fetching recipes",
+        });
     }
   };
 

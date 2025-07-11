@@ -12,6 +12,13 @@ import axios from "axios";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
+const axiosConfig = {
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+};
+
 type GPSetMessageType = {
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
@@ -32,12 +39,7 @@ const updateAccount = async ({
       intolerances: userIntolerances,
       diets: userDiets,
     };
-    await axios.put(`${databaseUrl}/account/${user.uid}`, body, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    await axios.put(`${databaseUrl}/account/${user.uid}`, body, axiosConfig);
   } catch (error) {
     setMessage({ error: true, message: "Failed to update user" });
   }
@@ -48,12 +50,10 @@ type GPUserDataHelperTypes = GPSetMessageType & {
 };
 const getUserData = async ({ user, setMessage }: GPUserDataHelperTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/account/${user.uid}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `${databaseUrl}/account/${user.uid}`,
+      axiosConfig
+    );
     const userDataObj: GPCurrentUserTypes = {
       user,
       userEmail: response.data.email,
@@ -71,12 +71,7 @@ type GPNewUserHelperTypes = GPSetMessageType & {
 };
 const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
   try {
-    const response = await axios.post(`${databaseUrl}/signup`, newUser, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const response = await axios.post(`${databaseUrl}/signup`, newUser, axiosConfig);
     return response.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to add user to database" });
@@ -86,27 +81,16 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
 const validateUserToken = async (user: User) => {
   const token = await user.getIdToken(true);
   try {
-    await axios.post(
-      `${databaseUrl}/login`,
-      { token },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    return true;
+    const response = await axios.post(`${databaseUrl}/login`, { token }, axiosConfig);
+    return response.data
   } catch (error) {
-    return false;
+    return null;
   }
 };
 
 const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
   try {
-    const response = await axios.get(`${databaseUrl}/ingredients`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${databaseUrl}/ingredients`, axiosConfig);
     return response.data;
   } catch (error) {
     setMessage({
@@ -124,12 +108,7 @@ const deleteIngredient = async ({
   ingredient,
 }: GPDeleteUserIngredientTypes) => {
   try {
-    await axios.delete(`${databaseUrl}/ingredients/${ingredient.id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    await axios.delete(`${databaseUrl}/ingredients/${ingredient.id}`, axiosConfig);
     setMessage({ error: false, message: "Sucessfully deleted ingredient" });
   } catch (error) {
     setMessage({ error: true, message: "Failed to delete ingredient" });
@@ -150,12 +129,7 @@ const addIngredientDatabase = async ({
     await axios.post(
       `${databaseUrl}/ingredients/${userId}`,
       newIngredientData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
+      axiosConfig
     );
     setMessage({ error: false, message: "Sucessfully created ingredient" });
   } catch (error) {
@@ -176,12 +150,7 @@ const updateIngredientDatabase = async ({
     await axios.put(
       `${databaseUrl}/ingredients/${ingredientId}`,
       newIngredientData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
+      axiosConfig
     );
     setMessage({ error: false, message: "Sucessfully updated ingredient" });
   } catch (error) {
@@ -199,9 +168,7 @@ const fetchRecipes = async ({
   setSelectedRecipes,
 }: GPFetchRecipeTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/recipes`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${databaseUrl}/recipes`, axiosConfig);
     setSelectedRecipes(response.data);
     return response.data;
   } catch (error) {
@@ -219,12 +186,11 @@ const updateUserRecipes = async ({
   setMessage,
 }: GPUpdateUserRecipesTypes) => {
   try {
-    await axios.post(`${databaseUrl}/recipes/${userId}`, selectedRecipe, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    await axios.post(
+      `${databaseUrl}/recipes/${userId}`,
+      selectedRecipe,
+      axiosConfig
+    );
     setMessage({ error: false, message: "Sucessfully saved recipe" });
   } catch (error) {
     setMessage({ error: true, message: "Failed to save recipe" });
@@ -245,9 +211,7 @@ const fetchGroceryList = async ({
   setGroceryListPrice,
 }: GPFetchGroceryListTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/generateList`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${databaseUrl}/generateList`, axiosConfig);
     setUserGroceryList(response.data.groceryList);
     if (setGroceryDepartments) {
       const departments = parseGroceryListDepartments(
@@ -278,4 +242,5 @@ export {
   fetchRecipes,
   updateUserRecipes,
   fetchGroceryList,
+  axiosConfig
 };

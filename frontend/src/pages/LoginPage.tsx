@@ -16,6 +16,7 @@ import AuthForm from "../components/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { useUser } from "../contexts/UserContext";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
@@ -25,6 +26,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const navigate = useNavigate();
+  const { setUser } = useUser()
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -32,8 +34,9 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       .then(async () => {
         const user = auth.currentUser;
         if (user) {
-          const response = await validateUserToken(user);
-          if (response) {
+          const userData = await validateUserToken(user);
+          if (userData) {
+            setUser(userData)
             setMessage({ error: false, message: "Successfully logged in!" });
           }
         } else {
@@ -44,14 +47,6 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         setMessage({ error: true, message: error.code });
       });
   }
-
-  const checkSession = async () => {
-    const response = await fetch(`${databaseUrl}/me`, {
-      method: "GET",
-      credentials: "include",
-    });
-    const data = await response.json();
-  };
 
   return (
     <div className="login-page">

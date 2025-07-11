@@ -25,7 +25,8 @@ const Ingredient: React.FC<GPIngredientProps> = ({
     <div className="list-ingredient">
       {groceryCheck && <input type="checkbox" />}
       <p className="ingredient-name">{ingredient.ingredientName}</p>
-      <p className="ingredient-amount">{`${ingredient.quantity} ${ingredient.unit}`}</p>
+      {/* Quantity goes to 2 decimal places only if decimal */}
+      <p className="ingredient-amount">{`${ingredient.quantity % 1 === 0 ? ingredient.quantity : ingredient.quantity.toFixed(2)} ${ingredient.unit}`}</p>
       {presentExpiration && (
         <p className="ingredient-expiration">{ingredient.expirationDate}</p>
       )}

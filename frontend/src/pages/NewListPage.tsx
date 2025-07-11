@@ -21,6 +21,8 @@ import {
 } from "../utils/databaseHelpers";
 import { useNavigate } from "react-router";
 import LoadingModal from "../components/LoadingModal";
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -62,21 +64,12 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   };
 
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
-    // take the current recipes we have
-    const updatedUser = await fetch(
-      `${databaseUrl}/recipes/${deletedRecipe.apiId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!updatedUser.ok) {
+    try {
+      await axios.put(`${databaseUrl}/recipes/${deletedRecipe.apiId}`, {}, axiosConfig)
+      await fetchRecipes({ setMessage, setSelectedRecipes });
+    } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }
-    await fetchRecipes({ setMessage, setSelectedRecipes });
   };
   
   const getRecipeIngredients = (recipes: GPRecipeDataTypes[]) => {
@@ -91,19 +84,13 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     setLoadingList(true)
     const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
     const recipeIngredients = getRecipeIngredients(selectedRecipes)
-    const response = await fetch(`${databaseUrl}/generateList/${user?.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ingredientsOnHand, recipeIngredients}),
-      credentials: "include",
-    })
-    if (!response.ok) {
+
+    try {
+      await axios.post(`${databaseUrl}/generateList/${user?.id}`, {ingredientsOnHand, recipeIngredients}, axiosConfig)
+      navigate("/grocery-list")
+    } catch (error) {
       setMessage({ error: true, message: "Failed to generate grocery list" });
     }
-    const data = await response.json()
-    navigate("/grocery-list")
   };
 
   return (

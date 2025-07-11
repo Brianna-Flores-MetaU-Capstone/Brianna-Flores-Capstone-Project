@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useUser } from "../contexts/UserContext";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
 
 const WithAuth = <T extends object>(
   WrappedComponent: React.ComponentType<T>
@@ -12,17 +14,15 @@ const WithAuth = <T extends object>(
 
     useEffect(() => {
       if (!user) {
-        fetch(`${databaseUrl}/me`, { credentials: "include" })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.id) {
-              // Ensure the response contains the user id
-              setUser(data); // Set the user in context
-            } else {
-              navigate("/login");
+        axios
+          .get(`${databaseUrl}/me`, axiosConfig)
+          .then(function (response) {
+            // handle success
+            if (response.data.id) {
+              setUser(response.data);
             }
           })
-          .catch(() => {
+          .catch(function (error) {
             navigate("/login");
           });
       }
