@@ -29,12 +29,12 @@ const RecipeCostModal = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
+        className="recipe-cost-modal"
         variant="outlined"
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 3,
           width: "70%",
           maxWidth: 700,
           borderRadius: "md",
@@ -47,7 +47,7 @@ const RecipeCostModal = ({
         <Typography
           component="h2"
           id="modal-title"
-          level="h4"
+          level="h2"
           textColor="inherit"
           sx={{ fontWeight: "lg", mb: 1 }}
         >

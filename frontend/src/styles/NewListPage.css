@@ -11,6 +11,18 @@
 
 .ingredient-cost-info {
   width: 100%;
-  height: 150px;
   overflow-y: auto;
+}
+
+.recipe-cost-modal .ingredient-columns,
+.recipe-cost-modal .list-ingredient {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.recipe-cost-modal .ingredient-columns {
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
