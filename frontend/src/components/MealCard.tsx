@@ -3,7 +3,7 @@ import type { GPRecipeDataTypes } from "../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { Button, Box, Typography } from "@mui/joy";
+import { AspectRatio, Button, Card, Link, Typography } from "@mui/joy";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 
@@ -28,20 +28,23 @@ const MealCard: React.FC<GPMealCardProps> = ({
 
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
-    <Box className="meal-card" onClick={() => onMealCardClick()}>
-      <img className="meal-img" src={parsedMealData.previewImage} />
-      <Typography className="meal-title">{parsedMealData.recipeTitle}</Typography>
-      <Typography>Servings: {parsedMealData.servings}</Typography>
+    <Card variant="outlined" sx={{justifyContent: "space-between", width: 200}} onClick={() => onMealCardClick()}>
+      <AspectRatio minHeight="120px" ratio="1">
+        <img src={parsedMealData.previewImage} />
+      </AspectRatio>
+      <Typography textAlign="center" level="h4">{parsedMealData.recipeTitle}</Typography>
+      <Typography textAlign="center">Servings: {parsedMealData.servings}</Typography>
+      <Link overlay underline="none"></Link>
       {onSelectRecipe && (
         <Typography>Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}</Typography>
       )}
       <DietsAndIntolerances recipeInfo={parsedMealData} />
       {onDeleteRecipe && (
         <Button onClick={(event) => {
-          event.stopPropagation
+          event.stopPropagation()
           onDeleteRecipe?.(parsedMealData)
         }}
-        sx={{textAlign: "right"}}>
+        sx={{alignItems: "right"}}>
         <FontAwesomeIcon
           icon={faTrash}
         />
@@ -62,7 +65,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
           onClose={toggleModal}
         />
       )}
-    </Box>
+    </Card>
   );
 };
 
