@@ -3,8 +3,9 @@ import type { GPRecipeDataTypes } from "../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import Button from "@mui/joy/Button";
+import { Button, Box, Typography } from "@mui/joy";
 import RecipeCostModal from "./RecipeCostModal";
+import DietsAndIntolerances from "./DietsAndIntolerances";
 
 type GPMealCardProps = {
   onMealCardClick: () => void;
@@ -27,28 +28,24 @@ const MealCard: React.FC<GPMealCardProps> = ({
 
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
-    <div className="meal-card" onClick={() => onMealCardClick()}>
+    <Box className="meal-card" onClick={() => onMealCardClick()}>
       <img className="meal-img" src={parsedMealData.previewImage} />
-      <p className="meal-title">{parsedMealData.recipeTitle}</p>
-      <p>Servings: {parsedMealData.servings}</p>
+      <Typography className="meal-title">{parsedMealData.recipeTitle}</Typography>
+      <Typography>Servings: {parsedMealData.servings}</Typography>
       {onSelectRecipe && (
-        <p>Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}</p>
+        <Typography>Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}</Typography>
       )}
-      <ul className="diets-and-intolerances">
-        {parsedMealData.dairyFree && <li>Dairy Free</li>}
-        {parsedMealData.glutenFree && <li>Gluten Free</li>}
-        {parsedMealData.vegetarian && <li>Vegetarian</li>}
-        {parsedMealData.vegan && <li>Vegan</li>}
-      </ul>
+      <DietsAndIntolerances recipeInfo={parsedMealData} />
       {onDeleteRecipe && (
+        <Button onClick={(event) => {
+          event.stopPropagation
+          onDeleteRecipe?.(parsedMealData)
+        }}
+        sx={{textAlign: "right"}}>
         <FontAwesomeIcon
           icon={faTrash}
-          className="ingredient-button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onDeleteRecipe?.(parsedMealData);
-          }}
         />
+        </Button>
       )}
       {onSelectRecipe && (
         <Button onClick={toggleModal}>See Pricing Details</Button>
@@ -65,7 +62,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
           onClose={toggleModal}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -12,6 +12,7 @@ import {
   ListItemContent,
   Box,
 } from "@mui/joy";
+import DietsAndIntolerances from "./DietsAndIntolerances";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -24,15 +25,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   modalOpen,
   recipeInfo,
 }) => {
-  const listItemStyle = {
-    m: 1,
-    p: 1,
-    backgroundColor: "#d9edf8",
-    width: "50%",
-    borderRadius: "md",
-    textAlign: "center",
-  };
-
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
@@ -46,12 +38,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <Box className="meal-info">
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             <Typography>Servings: {recipeInfo?.servings}</Typography>
-            <Box sx={{ display: "flex"}}>
-              {recipeInfo?.dairyFree && <Typography sx={listItemStyle}>Dairy Free</Typography>}
-              {recipeInfo?.glutenFree && <Typography sx={listItemStyle}>Gluten Free</Typography>}
-              {recipeInfo?.vegetarian && <Typography sx={listItemStyle}>Vegetarian</Typography>}
-              {recipeInfo?.vegan && <Typography sx={listItemStyle}>Vegan</Typography>}
-            </Box>
+            <DietsAndIntolerances recipeInfo={recipeInfo}/>
           </Box>
         </Box>
         <Typography level="h3">Ingredients</Typography>

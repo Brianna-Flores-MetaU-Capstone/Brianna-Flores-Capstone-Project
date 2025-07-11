@@ -34,7 +34,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       <p className="ingredient-name">{ingredient.ingredientName}</p>
       {/* Quantity goes to 2 decimal places only if decimal */}
       <p className="ingredient-amount">{`${
-        ingredient.quantity % 1 === 0
+        parseInt(ingredient.quantity.toString()) % 1 === 0
           ? ingredient.quantity
           : ingredient.quantity.toFixed(2)
       } ${ingredient.unit}`}</p>
