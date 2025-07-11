@@ -129,10 +129,11 @@ const GPModalStyle = {
   transform: "translate(-50%, -50%)",
   width: "50%",
   bgcolor: "background.paper",
-  boxShadow: 24,
+  boxShadow: "lg",
   p: 4,
   maxHeight: "70%",
   overflow: "auto",
+  borderRadius: "md",
 };
 
 export {

@@ -239,7 +239,7 @@ const fetchGroceryList = async ({
   } catch (error) {
     setMessage({
       error: true,
-      message: "Error failed to fetch user grocery list",
+      message: "Grocery list not yet generated",
     });
   }
 };

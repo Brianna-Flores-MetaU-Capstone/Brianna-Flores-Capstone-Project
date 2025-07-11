@@ -24,7 +24,7 @@ const TitledListView = <T,>({
           ))}
         </div>
       )}
-      <div className={className}>{list.map(renderItem)}</div>
+      <div className={className}>{list && list.map(renderItem)}</div>
     </>
   );
 };

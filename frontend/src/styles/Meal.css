@@ -22,22 +22,6 @@
   cursor: pointer;
 }
 
-.diets-and-intolerances {
-  list-style-type: none;
-}
-
-.diets-and-intolerances li {
-  display: inline-block;
-  margin-right: 5px;
-  padding: 5px 10px 5px 10px;
-  background-color: #d9edf8;
-  font-size: 15px;
-}
-
-.meal-card .diets-and-intolerances li {
-  font-size: 10px;
-}
-
 .modal-header {
   display: flex;
   width: 100%;
