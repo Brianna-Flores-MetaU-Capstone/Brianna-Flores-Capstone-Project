@@ -12,7 +12,7 @@ import {
   EmailAuthProvider,
   updateEmail,
   reauthenticateWithCredential,
-  signOut
+  signOut,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { updateAccount, getUserData } from "../utils/databaseHelpers";
@@ -34,7 +34,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const {user, setUser} = useUser()
+  const { user, setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
 
@@ -143,17 +143,17 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       await signOut(auth);
       const response = await fetch("http://localhost:3000/logout", {
         method: "POST",
-        credentials: "include"
-      })
+        credentials: "include",
+      });
       if (!response.ok) {
-        const error = await response.json()
-        setMessage({ error: true, message: "Logout failed"})
+        const error = await response.json();
+        setMessage({ error: true, message: "Logout failed" });
         return;
       }
-      setUser(null)
-      setMessage({ error: false, message: "Successfully logged out"})
+      setUser(null);
+      setMessage({ error: false, message: "Successfully logged out" });
     } catch (error) {
-      setMessage({ error: true, message: "Error during logout"})
+      setMessage({ error: true, message: "Error during logout" });
     }
   };
 

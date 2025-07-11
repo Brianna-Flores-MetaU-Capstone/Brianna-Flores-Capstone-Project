@@ -24,7 +24,6 @@ function App() {
   const ProtectedGroceryList = WithAuth(GroceryList);
   const ProtectedAccountPage = WithAuth(AccountPage);
 
-
   return (
     <BrowserRouter>
       <Routes>

@@ -13,12 +13,8 @@ import GenericList from "../components/GenericList";
 import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
-
-type GPIngredientsOnHandTypes = {
-  userId: number;
-  ingredient: GPIngredientDataTypes;
-  ingredientId: number;
-};
+import { fetchUserIngredientsHelper, deleteIngredient } from "../utils/databaseHelpers";
+import { useUser } from "../contexts/UserContext";
 
 const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   navOpen,
@@ -29,34 +25,13 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
     useState<GPIngredientDataTypes>();
   const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false);
   const [userIngredients, setUserIngredients] = useState<
-    GPIngredientsOnHandTypes[]
+    GPIngredientDataTypes[]
   >([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { user } = useUser();
 
   // on mount, fetch ingredients
   useEffect(() => {
-    const fetchUserIngredients = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/ingredients", {
-          method: "GET",
-          credentials: "include",
-        });
-        if (!response.ok) {
-          setMessage({
-            error: true,
-            message: "Error displaying user ingredients",
-          });
-          return;
-        }
-        const data = await response.json();
-        setUserIngredients(data);
-      } catch (error) {
-        setMessage({
-          error: true,
-          message: "Error displaying user ingredients",
-        });
-      }
-    };
     fetchUserIngredients();
   }, []);
 
@@ -67,6 +42,20 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   const handleEditClick = (ingredient: GPIngredientDataTypes) => {
     setEditIngredientData(ingredient);
     setEditIngredientModalOpen((prev) => !prev);
+  };
+
+  const fetchUserIngredients = async () => {
+    const fetchedIngredients = await fetchUserIngredientsHelper({ setMessage });
+    setUserIngredients(fetchedIngredients);
+  };
+
+  const handleDeleteIngredient = async (ingredient: GPIngredientDataTypes) => {
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+    await deleteIngredient({setMessage, ingredient});
+    fetchUserIngredients();
   };
 
   return (
@@ -84,14 +73,15 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           className="list-items"
           headerList={["Ingredient", "Quantity", "Expiration"]}
           list={userIngredients}
-          renderItem={(link) => (
+          renderItem={(ingredient) => (
             <Ingredient
               key={uuidv4()}
-              ingredient={link.ingredient}
+              ingredient={ingredient}
               groceryCheck={false}
               presentExpiration={true}
               presentButtons={true}
               onEdit={handleEditClick}
+              onDelete={() => handleDeleteIngredient(ingredient)}
             />
           )}
         />
@@ -102,16 +92,20 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
       {addIngredientModalOpen && (
         <IngredientModal
           modalFor={INGREDIENT_MODAL}
+          isEditing={false}
           onClose={addIngredientClick}
           modalOpen={addIngredientModalOpen}
+          fetchUserIngredients={fetchUserIngredients}
         />
       )}
       {editIngredientModalOpen && (
         <IngredientModal
           modalFor={INGREDIENT_MODAL}
+          isEditing={true}
           ingredientData={editIngredientData}
           onClose={() => setEditIngredientModalOpen((prev) => !prev)}
           modalOpen={editIngredientModalOpen}
+          fetchUserIngredients={fetchUserIngredients}
         />
       )}
     </div>

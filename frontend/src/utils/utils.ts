@@ -58,7 +58,7 @@ const handleAuthInputChange = (
   setFormData: React.Dispatch<React.SetStateAction<GPAuthFormDataTypes>>
 ) => {
   const credential = event.target.dataset
-  .credential as keyof GPAuthFormDataTypes;
+    .credential as keyof GPAuthFormDataTypes;
   const value = event.target.value;
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };

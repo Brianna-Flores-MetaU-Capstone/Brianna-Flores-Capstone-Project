@@ -13,6 +13,7 @@ const departments: string[] = [
 
 const ingredients: GPIngredientDataTypes[] = [
   {
+    id: 18,
     department: "Milk, Eggs, Other Dairy",
     image: "",
     ingredientName: "milk",
@@ -22,6 +23,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 17,
     department: "Milk, Eggs, Other Dairy",
     image: "",
     ingredientName: "eggs",
@@ -31,6 +33,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 16,
     department: "Milk, Eggs, Other Dairy",
     image: "",
     ingredientName: "yogurt",
@@ -40,6 +43,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 15,
     department: "Meat",
     image: "",
     ingredientName: "chicken",
@@ -49,6 +53,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 14,
     department: "Condiments",
     image: "",
     ingredientName: "soy sauce",
@@ -58,6 +63,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 13,
     department: "Produce",
     image: "",
     ingredientName: "bananas",
@@ -67,6 +73,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 12,
     department: "Bakery/Bread",
     image: "",
     ingredientName: "bread",
@@ -76,6 +83,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 11,
     department: "Milk, Eggs, Other Dairy",
     image: "",
     ingredientName: "cottage cheese",
@@ -85,6 +93,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 1,
     department: "Canned and Jarred",
     image: "",
     ingredientName: "beans",
@@ -94,6 +103,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 2,
     department: "Cheese",
     image: "",
     ingredientName: "cheese",
@@ -103,6 +113,7 @@ const ingredients: GPIngredientDataTypes[] = [
     expirationDate: "2025-07-24",
   },
   {
+    id: 3,
     department: "Cereal",
     image: "",
     ingredientName: "cereal",
@@ -115,6 +126,7 @@ const ingredients: GPIngredientDataTypes[] = [
 
 const groceryList: GPIngredientDataTypes[] = [
   {
+    id: 4,
     department: "Pasta and Rice",
     image: "",
     ingredientName: "pasta",
@@ -123,6 +135,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 5,
     department: "Meat",
     image: "",
     ingredientName: "ground beef",
@@ -131,6 +144,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 6,
     department: "Sweet Snacks",
     image: "",
     ingredientName: "chocolate",
@@ -139,6 +153,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 7,
     department: "Frozen",
     image: "",
     ingredientName: "ice cream",
@@ -147,6 +162,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 8,
     department: "Produce",
     image: "",
     ingredientName: "spinach",
@@ -155,6 +171,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 9,
     department: "Milk, Eggs, Other Dairy",
     image: "",
     ingredientName: "milk",
@@ -163,6 +180,7 @@ const groceryList: GPIngredientDataTypes[] = [
     estimatedCost: 4.0,
   },
   {
+    id: 10,
     department: "Produce",
     image: "",
     ingredientName: "bananas",

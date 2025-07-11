@@ -100,13 +100,13 @@ router.post("/login", async (req: includeSession, res: Response) => {
 });
 
 router.post("/logout", (req: Request, res: Response) => {
-    req.session.destroy((err) => {
-        if (err) {
-          return res.status(500).json({ error: "Failed to log out" });
-        }
-        res.clearCookie("sessionId"); // Clear session cookie
-        res.json({ message: "Logged out successfully" });
-    });
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to log out" });
+    }
+    res.clearCookie("sessionId"); // Clear session cookie
+    res.json({ message: "Logged out successfully" });
+  });
 });
 
 // Check if user is logged in
@@ -118,7 +118,7 @@ router.get("/me", async (req: Request, res: Response) => {
     const user = await prisma.User.findUnique({
       where: { id: req.session.userId },
     });
-    res.json({ id: req.session.userId, userName: user.userName })
+    res.json({ id: req.session.userId, userName: user.userName });
   } catch (error) {
     res.status(500).json({ error: "Error fetching user session data" });
   }

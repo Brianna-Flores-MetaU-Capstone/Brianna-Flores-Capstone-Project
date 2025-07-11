@@ -32,6 +32,7 @@ type GPAuthFormDataTypes = {
 };
 
 type GPIngredientDataTypes = {
+  id: number
   ingredientName: string;
   quantity: string;
   unit: string;
@@ -58,6 +59,12 @@ type GPErrorMessageTypes = {
   message: string;
 };
 
+type GPIngredientsOnHandTypes = {
+  userId: string;
+  ingredient: GPIngredientDataTypes;
+  ingredientId: string;
+};
+
 export type {
   GPToggleNavBarProps,
   GPAccountInfoTypes,
@@ -67,4 +74,5 @@ export type {
   GPRecipeDataTypes,
   GPRequestFormDataTypes,
   GPErrorMessageTypes,
+  GPIngredientsOnHandTypes,
 };

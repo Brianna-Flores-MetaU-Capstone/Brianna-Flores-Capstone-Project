@@ -2,9 +2,9 @@ import type {
   GPCurrentUserTypes,
   GPAccountInfoTypes,
   GPErrorMessageTypes,
+  GPIngredientDataTypes,
 } from "./types";
 import type { User } from "firebase/auth";
-
 
 type GPUpdateAccountHelperTypes = GPCurrentUserTypes & {
   setMessage: (
@@ -95,14 +95,14 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
       setMessage({ error: true, message: "Failed to add user to database" });
     }
     const data = await response.json();
-    return data
+    return data;
   } catch (error) {
     // TODO use error state
     console.error(error);
   }
 };
 
-const validateUserToken = async(user: User) => {
+const validateUserToken = async (user: User) => {
   const token = await user.getIdToken(true);
   // Send token to your backend via HTTPS
   const response = await fetch("http://localhost:3000/login", {
@@ -117,6 +117,129 @@ const validateUserToken = async(user: User) => {
     return false;
   }
   return true;
+};
+
+type fetchUserIngredientsTypes = {
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
+
+const fetchUserIngredientsHelper = async ({
+  setMessage,
+}: fetchUserIngredientsTypes) => {
+  try {
+    const response = await fetch("http://localhost:3000/ingredients", {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      setMessage({
+        error: true,
+        message: "Error displaying user ingredients",
+      });
+      return;
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    setMessage({
+      error: true,
+      message: "Error displaying user ingredients",
+    });
+  }
+};
+
+type DeleteUserIngredientTypes = {
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+  ingredient: GPIngredientDataTypes;
+};
+const deleteIngredient = async ({
+  setMessage,
+  ingredient,
+}: DeleteUserIngredientTypes) => {
+  const response = await fetch(
+    `http://localhost:3000/ingredients/${ingredient.id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  if (!response.ok) {
+    setMessage({ error: true, message: "Failed to delete ingredient" });
+    return;
+  }
+  // const data = await response.json();
+  setMessage({ error: false, message: "Sucessfully deleted ingredient" });
+};
+
+type GPAddIngredientTypes = {
+  userId: string;
+  newIngredientData: GPIngredientDataTypes;
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+};
+
+const addIngredientDatabase = async ({
+  userId,
+  newIngredientData,
+  setMessage,
+}: GPAddIngredientTypes) => {
+  const response = await fetch(`http://localhost:3000/ingredients/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newIngredientData),
+    credentials: "include",
+  });
+  if (!response.ok) {
+    setMessage({ error: true, message: "Failed to create ingredient" });
+    return;
+  }
+  setMessage({ error: false, message: "Sucessfully created ingredient" });
+};
+
+type GPUpdateIngredientTypes = {
+  ingredientId: number | undefined
+  newIngredientData: GPIngredientDataTypes
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
 }
 
-export { updateAccount, getUserData, handleNewUser, validateUserToken };
+const updateIngredientDatabase = async ({ingredientId, newIngredientData, setMessage}: GPUpdateIngredientTypes) => {
+  const response = await fetch(
+      `http://localhost:3000/ingredients/${ingredientId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newIngredientData),
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      setMessage({ error: true, message: "Failed to update ingredient" });
+      return;
+    }
+    setMessage({ error: false, message: "Sucessfully updated ingredient" });
+}
+
+export {
+  updateAccount,
+  getUserData,
+  handleNewUser,
+  validateUserToken,
+  fetchUserIngredientsHelper,
+  deleteIngredient,
+  addIngredientDatabase,
+  updateIngredientDatabase
+};

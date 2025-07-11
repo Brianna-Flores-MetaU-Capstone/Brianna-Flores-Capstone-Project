@@ -24,7 +24,6 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { setUser } = useUser(); // Access global user state
 
-
   function handleSubmit({
     userIntolerances,
     userDiets,
@@ -43,7 +42,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           diets: userDiets,
         };
         const newUserData = await handleNewUser({ newUser, setMessage });
-        const response = await validateUserToken(user)
+        const response = await validateUserToken(user);
         if (response) {
           setMessage({
             error: false,
