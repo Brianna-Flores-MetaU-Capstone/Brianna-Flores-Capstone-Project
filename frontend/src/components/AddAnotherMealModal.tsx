@@ -8,7 +8,6 @@ import {
 import { parseRecipeData } from "../utils/utils";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import "../styles/Meal.css";
-import TextField from "@mui/material/TextField";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
@@ -24,6 +23,7 @@ import {
   FormLabel,
   ModalDialog,
   DialogContent,
+  Input,
 } from "@mui/joy";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -174,16 +174,18 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
               />
             </FormControl>
             <form className="meal-form" onSubmit={handleSearchSubmit}>
-              <TextField
-                required
-                slotProps={{
-                  htmlInput: { "data-reciperequest": "recipeName" },
-                }}
-                onChange={handleRequestChange}
-                value={recipeRequest}
-                label="Recipe"
-                variant="standard"
-              />
+              <FormControl>
+                <FormLabel>Recipe</FormLabel>
+                <Input
+                  slotProps={{
+                    input: { "data-reciperequest": "recipeName" },
+                  }}
+                  onChange={handleRequestChange}
+                  value={recipeRequest}
+                  variant="plain"
+                  required
+                />
+              </FormControl>
               <Button
                 type="submit"
                 loading={loading}

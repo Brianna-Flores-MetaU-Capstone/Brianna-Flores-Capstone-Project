@@ -1,7 +1,6 @@
 import React from "react";
 import { AuthenticationFieldEnum } from "../utils/constants";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, FormControl, FormLabel, Input } from "@mui/joy";
 
 type GPPasswordAuthenticationProps = {
   handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -14,18 +13,20 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
 }) => {
   return (
     <form className="confirm-password" onSubmit={handleAccountSubmit}>
-      <TextField
-        required
-        slotProps={{
-          htmlInput: {
-            "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
-          },
-        }}
-        onChange={handleInputChange}
-        type="password"
-        label="Confirm Password"
-        variant="standard"
-      />
+      <FormControl>
+        <FormLabel>Confirm Password</FormLabel>
+        <Input
+          required
+          slotProps={{
+            input: {
+              "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
+            },
+          }}
+          onChange={handleInputChange}
+          type="password"
+          variant="plain"
+        />
+      </FormControl>
       <Button type="submit" variant="outlined">
         Submit
       </Button>

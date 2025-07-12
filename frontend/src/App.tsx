@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { CssVarsProvider } from "@mui/joy";
+import { theme } from "./utils/UIStyle";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useState } from "react";
 
@@ -23,82 +25,84 @@ function App() {
   const ProtectedAccountPage = WithAuth(AccountPage);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path=""
-          element={
-            <Homepage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="new-list"
-          element={
-            <ProtectedNewListPage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="ingredients"
-          element={
-            <ProtectedIngredientsList
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="grocery-list"
-          element={
-            <ProtectedGroceryList
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <NoMatchPage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="login"
-          element={
-            <LoginPage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <SignupForm
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-        <Route
-          path="account"
-          element={
-            <ProtectedAccountPage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <CssVarsProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path=""
+            element={
+              <Homepage
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="new-list"
+            element={
+              <ProtectedNewListPage
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="ingredients"
+            element={
+              <ProtectedIngredientsList
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="grocery-list"
+            element={
+              <ProtectedGroceryList
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <NoMatchPage
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="login"
+            element={
+              <LoginPage
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <SignupForm
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route
+            path="account"
+            element={
+              <ProtectedAccountPage
+                navOpen={navOpen}
+                toggleNav={() => setNavOpen((prev) => !prev)}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </CssVarsProvider>
   );
 }
 

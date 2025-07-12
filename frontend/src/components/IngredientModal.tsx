@@ -15,13 +15,14 @@ import {
   addIngredientDatabase,
   updateIngredientDatabase,
 } from "../utils/databaseHelpers";
-import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+
+import { FormControl, FormLabel, Input } from "@mui/joy";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -60,7 +61,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     department: "",
     expirationDate: null,
     image: "",
-    isChecked: false
+    isChecked: false,
   };
 
   type ACTIONTYPE =
@@ -116,64 +117,70 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
         <form className="ingredient-form" onSubmit={handleModalSubmit}>
           {isEditing ? (
             // prevent editing the ingredient name
-            <TextField
-              disabled
-              required
-              name={IngredientDataFields.NAME}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.NAME,
-                },
-              }}
-              value={newIngredientData?.ingredientName}
-              label="Ingredient Name"
-              variant="standard"
-            />
+            <FormControl>
+              <FormLabel>Ingredient Name</FormLabel>
+              <Input
+                disabled
+                required
+                name={IngredientDataFields.NAME}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.NAME,
+                  },
+                }}
+                value={newIngredientData?.ingredientName}
+                variant="plain"
+              />
+            </FormControl>
           ) : (
-            <TextField
-              required
-              name={IngredientDataFields.NAME}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.NAME,
-                },
-              }}
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              value={newIngredientData?.ingredientName}
-              label="Ingredient Name"
-              variant="standard"
-            />
+            <FormControl>
+              <FormLabel>Ingredient Name</FormLabel>
+              <Input
+                required
+                name={IngredientDataFields.NAME}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.NAME,
+                  },
+                }}
+                onChange={(event) =>
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
+                  })
+                }
+                value={newIngredientData?.ingredientName}
+                variant="plain"
+              />
+            </FormControl>
           )}
           <Box display="flex" width="100%">
-            <TextField
-              required
-              name={IngredientDataFields.QUANTITY}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.QUANTITY,
-                },
-              }}
-              type="number"
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              value={newIngredientData?.quantity}
-              fullWidth
-              label="Quantity"
-              variant="standard"
-            />
+            <FormControl>
+              <FormLabel>Quantity</FormLabel>
+              <Input
+                required
+                name={IngredientDataFields.QUANTITY}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.QUANTITY,
+                  },
+                }}
+                type="number"
+                onChange={(event) =>
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
+                  })
+                }
+                value={newIngredientData?.quantity}
+                fullWidth
+                variant="plain"
+              />
+            </FormControl>
             <Select
               name={IngredientDataFields.UNIT}
               value={newIngredientData?.unit}

@@ -7,8 +7,7 @@ import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
 } from "../utils/constants";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, Input, FormControl, FormLabel } from "@mui/joy";
 import type { GPAuthFormDataTypes } from "../utils/types";
 
 type GPAuthFormEventProps = {
@@ -66,32 +65,36 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
 
   return (
     <form className="login-info" onSubmit={onRegistrationSubmit}>
-      <TextField
-        required
-        id={AuthenticationFieldEnum.EMAIL}
-        type="text"
-        value={formData.email}
-        slotProps={{
-          htmlInput: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
-        }}
-        onChange={handleAuthInputChange}
-        label="Enter Email"
-        variant="standard"
-      />
-      <TextField
-        required
-        id={AuthenticationFieldEnum.PASSWORD}
-        type="password"
-        slotProps={{
-          htmlInput: {
-            "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
-          },
-        }}
-        value={formData.password}
-        onChange={handleAuthInputChange}
-        label="Enter Password"
-        variant="standard"
-      />
+      <FormControl>
+        <FormLabel>Enter Email</FormLabel>
+        <Input
+          required
+          id={AuthenticationFieldEnum.EMAIL}
+          type="text"
+          value={formData.email}
+          slotProps={{
+            input: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
+          }}
+          onChange={handleAuthInputChange}
+          variant="plain"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Enter Password</FormLabel>
+        <Input
+          required
+          id={AuthenticationFieldEnum.PASSWORD}
+          type="password"
+          slotProps={{
+            input: {
+              "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
+            },
+          }}
+          value={formData.password}
+          onChange={handleAuthInputChange}
+          variant="plain"
+        />
+      </FormControl>
       {handleRegistrationSubmit && (
         <div>
           <label htmlFor="intolerances">Intolerances</label>
