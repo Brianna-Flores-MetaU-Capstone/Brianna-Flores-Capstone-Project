@@ -182,7 +182,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   }}
                   onChange={handleRequestChange}
                   value={recipeRequest}
-                  variant="plain"
+                  variant="outlined"
                   required
                 />
               </FormControl>

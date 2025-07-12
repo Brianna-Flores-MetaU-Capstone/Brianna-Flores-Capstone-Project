@@ -1,7 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { CssVarsProvider } from "@mui/joy";
-import { theme } from "./utils/UIStyle";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useState } from "react";
 
@@ -25,7 +23,6 @@ function App() {
   const ProtectedAccountPage = WithAuth(AccountPage);
 
   return (
-    <CssVarsProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -102,7 +99,6 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </CssVarsProvider>
   );
 }
 

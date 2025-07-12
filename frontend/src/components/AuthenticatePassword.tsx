@@ -24,7 +24,7 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
           }}
           onChange={handleInputChange}
           type="password"
-          variant="plain"
+          variant="outlined"
         />
       </FormControl>
       <Button type="submit" variant="outlined">

@@ -129,7 +129,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   },
                 }}
                 value={newIngredientData?.ingredientName}
-                variant="plain"
+                variant="outlined"
               />
             </FormControl>
           ) : (
@@ -152,7 +152,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   })
                 }
                 value={newIngredientData?.ingredientName}
-                variant="plain"
+                variant="outlined"
               />
             </FormControl>
           )}
@@ -178,7 +178,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 }
                 value={newIngredientData?.quantity}
                 fullWidth
-                variant="plain"
+                variant="outlined"
               />
             </FormControl>
             <Select
