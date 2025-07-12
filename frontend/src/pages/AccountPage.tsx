@@ -22,8 +22,7 @@ import {
 } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, Input, FormControl, FormLabel } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -171,19 +170,21 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">
-          <TextField
-            required
-            id={AuthenticationFieldEnum.EMAIL}
-            slotProps={{
-              htmlInput: {
-                "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
-              },
-            }}
-            onChange={handleInputChange}
-            value={userEmail ? userEmail : ""}
-            label="Email"
-            variant="standard"
-          />
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              required
+              id={AuthenticationFieldEnum.EMAIL}
+              slotProps={{
+                input: {
+                  "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
+                },
+              }}
+              onChange={handleInputChange}
+              value={userEmail ? userEmail : ""}
+              variant="outlined"
+            />
+          </FormControl>
         </div>
         <h2>Selected Intolerances</h2>
         <RegistrationPreferenceButtons
