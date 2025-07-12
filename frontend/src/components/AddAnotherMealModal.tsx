@@ -145,76 +145,78 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   return (
     <Modal open={modalOpen} onClose={handleModalClose}>
       <ModalDialog layout="fullscreen">
-        <ModalClose/>
+        <ModalClose />
         <DialogContent>
           <div>
-          <Button variant="outlined">I Have My Own Recipe</Button>
-          {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
-          <FormControl
-            orientation="horizontal"
-            sx={{ width: "20%", justifyContent: "space-between" }}
-          >
-            <div>
-              <FormLabel>Use Dietary Preferences</FormLabel>
-            </div>
-            <Switch
-              checked={usePreferences}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setUsePreferences(event.target.checked)
-              }
-              variant={usePreferences ? "solid" : "outlined"}
-              endDecorator={usePreferences ? "On" : "Off"}
-              slotProps={{
-                endDecorator: {
-                  sx: {
-                    minWidth: 24,
-                  },
-                },
-              }}
-            />
-          </FormControl>
-          <form className="meal-form" onSubmit={handleSearchSubmit}>
-            <TextField
-              required
-              slotProps={{ htmlInput: { "data-reciperequest": "recipeName" } }}
-              onChange={handleRequestChange}
-              value={recipeRequest}
-              label="Recipe"
-              variant="standard"
-            />
-            <Button
-              type="submit"
-              loading={loading}
-              variant="outlined"
-              loadingPosition="start"
+            <Button variant="outlined">I Have My Own Recipe</Button>
+            {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+            <FormControl
+              orientation="horizontal"
+              sx={{ width: "20%", justifyContent: "space-between" }}
             >
-              Find some Recipes!
-            </Button>
-          </form>
+              <div>
+                <FormLabel>Use Dietary Preferences</FormLabel>
+              </div>
+              <Switch
+                checked={usePreferences}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setUsePreferences(event.target.checked)
+                }
+                variant={usePreferences ? "solid" : "outlined"}
+                endDecorator={usePreferences ? "On" : "Off"}
+                slotProps={{
+                  endDecorator: {
+                    sx: {
+                      minWidth: 24,
+                    },
+                  },
+                }}
+              />
+            </FormControl>
+            <form className="meal-form" onSubmit={handleSearchSubmit}>
+              <TextField
+                required
+                slotProps={{
+                  htmlInput: { "data-reciperequest": "recipeName" },
+                }}
+                onChange={handleRequestChange}
+                value={recipeRequest}
+                label="Recipe"
+                variant="standard"
+              />
+              <Button
+                type="submit"
+                loading={loading}
+                variant="outlined"
+                loadingPosition="start"
+              >
+                Find some Recipes!
+              </Button>
+            </form>
 
-          {/* Display error message if needed */}
-          {errorMessage && (
-            <ErrorState
-              error={errorMessage.error}
-              message={errorMessage.message}
-            />
-          )}
-          <TitledListView
-            className="result-cards"
-            list={mealResults}
-            renderItem={(meal) => (
-              <MealCard
-                key={uuidv4()}
-                onMealCardClick={() => event?.preventDefault()}
-                parsedMealData={meal}
-                onSelectRecipe={onSelectRecipe}
+            {/* Display error message if needed */}
+            {errorMessage && (
+              <ErrorState
+                error={errorMessage.error}
+                message={errorMessage.message}
               />
             )}
-          />
-          {/* if search clicked, add a generate more button */}
-          {searchClicked && (
-            <Button onClick={handleGenerateMore}>Generate More!</Button>
-          )}
+            <TitledListView
+              className="result-cards"
+              list={mealResults}
+              renderItem={(meal) => (
+                <MealCard
+                  key={uuidv4()}
+                  onMealCardClick={() => event?.preventDefault()}
+                  parsedMealData={meal}
+                  onSelectRecipe={onSelectRecipe}
+                />
+              )}
+            />
+            {/* if search clicked, add a generate more button */}
+            {searchClicked && (
+              <Button onClick={handleGenerateMore}>Generate More!</Button>
+            )}
           </div>
         </DialogContent>
       </ModalDialog>

@@ -37,26 +37,29 @@ const MealCard: React.FC<GPMealCardProps> = ({
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
-    <Card
-      variant="outlined"
-      sx={{ minHeight: "280px", width: 320 }}
-      onClick={() => onMealCardClick()}
-    >
-      <CardCover>
-        <img src={parsedMealData.previewImage} />
-      </CardCover>
-      <CardCover
-        sx={{
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
-        }}
-      />
-        <CardContent sx={{ justifyContent: 'flex-end' }}>
-          {onSelectRecipe && <DietsAndIntolerances recipeInfo={parsedMealData} />}
+    {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
+      <Card
+        variant="outlined"
+        sx={{ minHeight: "280px", width: 320 }}
+        onClick={() => onMealCardClick()}
+      >
+        <CardCover>
+          <img src={parsedMealData.previewImage} />
+        </CardCover>
+        <CardCover
+          sx={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
+          }}
+        />
+        <CardContent sx={{ justifyContent: "flex-end" }}>
+          {onSelectRecipe && (
+            <DietsAndIntolerances recipeInfo={parsedMealData} />
+          )}
           <Typography textColor="#fff" level="h4">
             {parsedMealData.recipeTitle}
           </Typography>
-          <Box sx={{display: "flex", justifyContent: "space-between"}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography textColor="neutral.300">
               Servings: {parsedMealData.servings}
             </Typography>
@@ -73,23 +76,23 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
             )}
-          {onSelectRecipe && (
-            <Typography textColor="neutral.300">
-              Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
-            </Typography>
-          )}
+            {onSelectRecipe && (
+              <Typography textColor="neutral.300">
+                Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
+              </Typography>
+            )}
           </Box>
           <Link overlay underline="none"></Link>
-      {onSelectRecipe && (
-        <Button onClick={toggleModal}>See Pricing Details</Button>
-      )}
-      {onSelectRecipe && (
-        <Button onClick={() => onSelectRecipe(parsedMealData)}>
-          Select Recipe
-        </Button>
-      )}
-      </CardContent>
-    </Card>
+          {onSelectRecipe && (
+            <Button onClick={toggleModal}>See Pricing Details</Button>
+          )}
+          {onSelectRecipe && (
+            <Button onClick={() => onSelectRecipe(parsedMealData)}>
+              Select Recipe
+            </Button>
+          )}
+        </CardContent>
+      </Card>
       {ingredientCostModalOpen && (
         <RecipeCostModal
           ingredientsCostInformation={parsedMealData.ingredientCostInfo}
