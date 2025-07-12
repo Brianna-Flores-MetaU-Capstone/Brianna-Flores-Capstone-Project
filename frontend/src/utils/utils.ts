@@ -122,24 +122,9 @@ const parseGroceryListDepartments = (
   return departments;
 };
 
-const GPModalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "50%",
-  bgcolor: "background.paper",
-  boxShadow: "lg",
-  p: 4,
-  maxHeight: "70%",
-  overflow: "auto",
-  borderRadius: "md",
-};
-
 export {
   validateInput,
   parseRecipeData,
   handleAuthInputChange,
   parseGroceryListDepartments,
-  GPModalStyle,
 };
