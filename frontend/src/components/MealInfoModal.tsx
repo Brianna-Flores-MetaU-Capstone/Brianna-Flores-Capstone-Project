@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/Meal.css";
-import { GPModalStyle } from "../utils/utils";
+import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -14,6 +14,7 @@ import {
   AspectRatio,
 } from "@mui/joy";
 import DietsAndIntolerances from "./DietsAndIntolerances";
+import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -39,14 +40,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
             <img src={recipeInfo?.previewImage} />
           </AspectRatio>
           <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              textAlign: "center",
-              alignItems: "center",
-              gap: 3,
-            }}
+            sx={GPCenteredBoxStyle}
           >
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             <Typography>Servings: {recipeInfo?.servings}</Typography>

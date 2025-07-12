@@ -5,7 +5,8 @@ import {
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
-import { parseRecipeData, GPModalStyle } from "../utils/utils";
+import { parseRecipeData } from "../utils/utils";
+import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import "../styles/Meal.css";
 import TextField from "@mui/material/TextField";

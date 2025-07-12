@@ -14,15 +14,15 @@ const DietsAndIntolerances = ({recipeInfo}: {recipeInfo: GPRecipeDataTypes | und
   return (
     <Box sx={{ display: "flex" }}>
       {recipeInfo?.dairyFree && (
-        <Typography sx={listItemStyle}>Dairy Free</Typography>
+        <Typography level="body-xs" sx={listItemStyle}>Dairy Free</Typography>
       )}
       {recipeInfo?.glutenFree && (
-        <Typography sx={listItemStyle}>Gluten Free</Typography>
+        <Typography level="body-xs" sx={listItemStyle}>Gluten Free</Typography>
       )}
       {recipeInfo?.vegetarian && (
-        <Typography sx={listItemStyle}>Vegetarian</Typography>
+        <Typography level="body-xs" sx={listItemStyle}>Vegetarian</Typography>
       )}
-      {recipeInfo?.vegan && <Typography sx={listItemStyle}>Vegan</Typography>}
+      {recipeInfo?.vegan && <Typography level="body-xs" sx={listItemStyle}>Vegan</Typography>}
     </Box>
   );
 };

@@ -7,7 +7,7 @@ import type {
   GPErrorMessageTypes,
 } from "../utils/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
-import { GPModalStyle } from "../utils/utils";
+import { GPModalStyle } from "../utils/UIStyle";
 import { useState } from "react";
 import ErrorState from "./ErrorState";
 import { useUser } from "../contexts/UserContext";
