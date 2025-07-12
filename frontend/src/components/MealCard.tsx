@@ -37,10 +37,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
-    {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
+      {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card
         variant="outlined"
-        sx={{ minHeight: "280px", width: 320 }}
+        sx={{ minHeight: "280px", width: 420 }}
         onClick={() => onMealCardClick()}
       >
         <CardCover>
@@ -66,7 +66,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
             {onDeleteRecipe && (
               <Button
                 variant="plain"
-                size="sm"
+                size="lg"
                 onClick={(event) => {
                   event.stopPropagation();
                   onDeleteRecipe?.(parsedMealData);
@@ -83,14 +83,20 @@ const MealCard: React.FC<GPMealCardProps> = ({
             )}
           </Box>
           <Link overlay underline="none"></Link>
-          {onSelectRecipe && (
-            <Button onClick={toggleModal}>See Pricing Details</Button>
-          )}
-          {onSelectRecipe && (
-            <Button onClick={() => onSelectRecipe(parsedMealData)}>
-              Select Recipe
-            </Button>
-          )}
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            {onSelectRecipe && (
+              <Button onClick={toggleModal}>
+                See Pricing Details
+              </Button>
+            )}
+            {onSelectRecipe && (
+              <Button
+                onClick={() => onSelectRecipe(parsedMealData)}
+              >
+                Select Recipe
+              </Button>
+            )}
+          </Box>
         </CardContent>
       </Card>
       {ingredientCostModalOpen && (
