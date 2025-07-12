@@ -52,6 +52,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
         }}
       />
         <CardContent sx={{ justifyContent: 'flex-end' }}>
+          {onSelectRecipe && <DietsAndIntolerances recipeInfo={parsedMealData} />}
           <Typography textColor="#fff" level="h4">
             {parsedMealData.recipeTitle}
           </Typography>
@@ -72,14 +73,13 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
             )}
-          </Box>
-          <Link overlay underline="none"></Link>
           {onSelectRecipe && (
-            <Typography>
+            <Typography textColor="neutral.300">
               Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
             </Typography>
           )}
-          {onSelectRecipe && <DietsAndIntolerances recipeInfo={parsedMealData} />}
+          </Box>
+          <Link overlay underline="none"></Link>
       {onSelectRecipe && (
         <Button onClick={toggleModal}>See Pricing Details</Button>
       )}
