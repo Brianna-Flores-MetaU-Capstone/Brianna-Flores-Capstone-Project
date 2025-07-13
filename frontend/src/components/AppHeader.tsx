@@ -2,10 +2,9 @@ import React from "react";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router";
 import "../styles/Homepage.css";
-import Button from "@mui/joy/Button";
 import { useUser } from "../contexts/UserContext";
 import { useLocation } from "react-router";
-import { Box, Typography } from "@mui/joy";
+import { Button, Box, Grid, Typography } from "@mui/joy";
 
 const AppHeader = () => {
   const { user } = useUser();
@@ -13,19 +12,25 @@ const AppHeader = () => {
   const location = useLocation();
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 3, bgcolor: "primary.300"}}>
-      <NavBar />
-      <Typography level="h1">Grociplan</Typography>
-      <Box>
+    <Grid container sx={{ p: 3, bgcolor: "primary.300", alignItems: "center" }}>
+      <Grid xs={1}>
+        <NavBar />
+      </Grid>
+      <Grid xs={10} textAlign="center">
+        <Typography level="h1">Grociplan</Typography>
+      </Grid>
+      <Grid xs={1}>
         {user ? (
           <Typography>Welcome</Typography>
         ) : (
           location.pathname !== "/login" && (
-            <Button onClick={() => navigate("/login")}>Login</Button>
+            <Button color="neutral" onClick={() => navigate("/login")}>
+              Login
+            </Button>
           )
         )}
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 };
 

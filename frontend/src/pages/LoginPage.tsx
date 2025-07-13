@@ -13,7 +13,7 @@ import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import AuthForm from "../components/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
-import { Button, Box } from "@mui/joy";
+import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
 const LoginPage = () => {
@@ -46,10 +46,13 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="login-page">
+    // <Box className="login-page">
+    <Box>
       <AppHeader />
-      <section className="login-page">
-        <Box className="login-content">
+      {/* <Box className="login-page"> */}
+      {/* <Box sx={{height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}> */}
+      <Box>
+      <Card sx={{mt: 30, mx: "auto", width: 400}} variant="soft" color="primary">
           <AuthForm
             handleLoginSubmit={handleSubmit}
             handleAuthInputChange={(event) =>
@@ -60,15 +63,15 @@ const LoginPage = () => {
           {message && (
             <ErrorState error={message.error} message={message.message} />
           )}
-          <div className="new-user-section">
-            <p>New User?</p>
+          <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <Typography>New User?</Typography>
             <Button onClick={() => navigate("/signup")}>
               Register for an Account!
             </Button>
-          </div>
         </Box>
-      </section>
-    </div>
+      </Card>
+      </Box>
+    </Box>
   );
 };
 

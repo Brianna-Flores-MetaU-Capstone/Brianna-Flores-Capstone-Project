@@ -7,7 +7,7 @@ import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
 } from "../utils/constants";
-import { Button, Input, FormControl, FormLabel } from "@mui/joy";
+import { Button, Box, Input, FormControl, FormLabel } from "@mui/joy";
 import type { GPAuthFormDataTypes } from "../utils/types";
 
 type GPAuthFormEventProps = {
