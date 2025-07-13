@@ -163,17 +163,17 @@ const AccountPage = () => {
 
   if (!currentUser && !loadingData) {
     return (
-      <div className="account-page">
+      <Box>
         <AppHeader />
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </div>
+      </Box>
     );
   }
 
   return (
-    <Box className="account-page">
+    <Box>
       <AppHeader />
       <Card
         sx={{

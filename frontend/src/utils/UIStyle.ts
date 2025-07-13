@@ -100,14 +100,14 @@ const theme = extendTheme({
     JoyCard: {
       styleOverrides: {
         root: {
-          width: 450
-        }
+          width: 450,
+        },
       },
       defaultProps: {
-         variant: "soft",
-          color: "primary"
-      }
-    }
+        variant: "outlined",
+        color: "primary",
+      },
+    },
   },
 });
 

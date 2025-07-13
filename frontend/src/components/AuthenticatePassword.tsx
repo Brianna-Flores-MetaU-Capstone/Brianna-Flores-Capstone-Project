@@ -12,7 +12,7 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
   handleInputChange,
 }) => {
   return (
-    <form className="confirm-password" onSubmit={handleAccountSubmit}>
+    <form onSubmit={handleAccountSubmit}>
       <FormControl>
         <FormLabel>Confirm Password</FormLabel>
         <Input
@@ -26,7 +26,7 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
           type="password"
         />
       </FormControl>
-      <Button type="submit">
+      <Button sx={{display: "block", mx: "auto", mt: 1}} type="submit">
         Update Account!
       </Button>
     </form>
