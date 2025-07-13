@@ -7,7 +7,7 @@ import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import { Button, Box } from "@mui/joy";
+import { Button, Box, Grid, Typography } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
@@ -61,11 +61,11 @@ const GroceryList = () => {
   return (
     <Box>
       <AppHeader />
-      <Box className="grocery-list-container">
-        <Button className="add-button" onClick={handleClearGroceries}>
+      <Box sx={{m: 3}}>
+        <Button onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
-
+        <Box sx={{my: 3}}>
         <TitledListView
           list={groceryDepartments}
           renderItem={(department) => (
@@ -76,9 +76,11 @@ const GroceryList = () => {
               onGroceryCheck={toggleGroceryCheck}
             />
           )}
+          flexDirectionRow={true}
         />
-        <h3>Estimated Cost</h3>
-        <h3>${Number(groceryListCost).toFixed(2)}</h3>
+        </Box>
+        <Typography level="h3">Estimated Cost</Typography>
+        <Typography level="h4">${Number(groceryListCost).toFixed(2)}</Typography>
       </Box>
       {addGroceryItemModalOpen && (
         <IngredientModal

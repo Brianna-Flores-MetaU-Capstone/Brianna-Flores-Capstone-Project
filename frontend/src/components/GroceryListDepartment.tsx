@@ -27,7 +27,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   ) => {};
 
   return (
-    <Box sx={{p: 2, borderRadius: "md", border: "2px solid", borderColor: "primary.300"}}>
+    <Box sx={{p: 2, width: 500, borderRadius: "md", border: "2px solid", borderColor: "primary.300"}}>
       <TitledListView
         headerList={[{title: department, spacing: 12}]}
         list={filteredGroceries}
