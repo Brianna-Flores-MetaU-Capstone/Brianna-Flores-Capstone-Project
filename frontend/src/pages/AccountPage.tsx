@@ -30,7 +30,7 @@ import {
   FormLabel,
   Typography,
 } from "@mui/joy";
-import InfoOutlined from "@mui/icons-material/InfoOutlined"
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -44,7 +44,7 @@ const AccountPage = () => {
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [emailInputError, setEmailInputError] = useState(false);
-  const [passwordInuptError, setPasswordInputError] = useState(false)
+  const [passwordInuptError, setPasswordInputError] = useState(false);
   const { setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
@@ -97,10 +97,10 @@ const AccountPage = () => {
     const { credential } = (event.target as HTMLInputElement).dataset;
     const { value } = event.target;
     if (credential === AuthenticationFieldEnum.EMAIL) {
-      setEmailInputError(value === "")
+      setEmailInputError(value === "");
       setUserEmail(value);
     } else if (credential === AuthenticationFieldEnum.PASSWORD) {
-      setPasswordInputError(value === "")
+      setPasswordInputError(value === "");
       setUserPassword(value);
     }
   };
@@ -202,10 +202,12 @@ const AccountPage = () => {
             onChange={handleInputChange}
             value={userEmail ? userEmail : ""}
           />
-          {emailInputError && <FormHelperText>
-          <InfoOutlined />
-          Must enter an email
-        </FormHelperText>}
+          {emailInputError && (
+            <FormHelperText>
+              <InfoOutlined />
+              Must enter an email
+            </FormHelperText>
+          )}
         </FormControl>
         <Typography level="h4">Selected Intolerances</Typography>
         <RegistrationPreferenceButtons
