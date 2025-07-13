@@ -54,8 +54,7 @@ const RecipeCostModal = ({
           Ingredient Cost Information
         </Typography>
         <TitledListView
-          className="ingredient-cost-info"
-          headerList={["Ingredient", "Cost", "for Amount"]}
+          headerList={[{title: "Ingredient", spacing: 4}, {title: "Cost", spacing: 3}, {title: "for Amount", spacing: 3}]}
           list={ingredientsCostInformation}
           renderItem={(ingredientInfo) => (
             <IngredientCost

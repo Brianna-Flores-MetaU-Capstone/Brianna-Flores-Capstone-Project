@@ -110,8 +110,7 @@ const NewListPage = () => {
         <Button onClick={handleGenerateList}>Make My List</Button>
       </section>
       <TitledListView
-        className="selected-meals"
-        headerList={["Selected Meals"]}
+        headerList={[{title: "Selected Meals", spacing: 1}]}
         list={selectedRecipes}
         renderItem={(meal) => (
           <MealCard

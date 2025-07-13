@@ -41,8 +41,8 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       ? ingredient.quantity
       : ingredient.quantity.toFixed(2);
   return (
-    <Box sx={{m: 3}}>
-      <Grid container alignItems="center" justifyContent="space-between" spacing={2} sx={{ flexGrow: 1 }}>
+    <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
+      <Grid container alignItems="center" spacing={2}>
         {presentGroceryCheck && (
           <Grid xs={1}>
             <Checkbox
@@ -73,7 +73,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
           </Grid>
         )}
         {presentButtons && (
-          <Grid>
+          <Grid xs={2}>
             <ButtonGroup>
               <IconButton onClick={() => onEdit?.(ingredient)}>
                 <FontAwesomeIcon icon={faPenToSquare} />

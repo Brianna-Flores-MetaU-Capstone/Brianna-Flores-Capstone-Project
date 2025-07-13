@@ -67,7 +67,6 @@ const GroceryList = () => {
         </Button>
 
         <TitledListView
-          className="grocery-departments"
           list={groceryDepartments}
           renderItem={(department) => (
             <GroceryListDepartment

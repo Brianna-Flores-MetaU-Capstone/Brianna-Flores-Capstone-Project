@@ -52,8 +52,7 @@ const Homepage = () => {
       <section className="quick-access-container">
         <div className="item-list">
           <TitledListView
-            className="list-items"
-            headerList={[PreviewConstants.INGREDIENT]}
+            headerList={[{title: PreviewConstants.INGREDIENT, spacing: 1}]}
             list={userIngredientList}
             renderItem={(ingredient) => (
               <Ingredient
@@ -68,8 +67,7 @@ const Homepage = () => {
         </div>
         <div className="item-list">
           <TitledListView
-            className="list-items"
-            headerList={[PreviewConstants.GROCERY]}
+            headerList={[{title: PreviewConstants.GROCERY, spacing: 1}]}
             list={userGroceryList}
             renderItem={(item) => (
               <Ingredient
@@ -85,8 +83,7 @@ const Homepage = () => {
       </section>
       <section className="upcoming-meals">
         <TitledListView
-          className="selected-meals"
-          headerList={["Upcoming Meals"]}
+          headerList={[{title: "Upcoming Meals", spacing: 1}]}
           list={selectedRecipes}
           renderItem={(meal) => (
             <MealCard

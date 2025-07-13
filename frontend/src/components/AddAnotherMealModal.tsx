@@ -204,7 +204,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
               />
             )}
             <TitledListView
-              className="result-cards"
               list={mealResults}
               renderItem={(meal) => (
                 <MealCard

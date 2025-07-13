@@ -1,31 +1,37 @@
 import React from "react";
 import "../styles/Homepage.css";
 import { v4 as uuidv4 } from "uuid";
+import { Box, Grid, Typography } from "@mui/joy";
+
+type GPHeaderListType = {
+title: string 
+spacing: number
+}
 
 type GPTitledListViewProps<T> = {
-  className: string;
   list: T[];
   renderItem: (item: T) => React.ReactNode;
-  headerList?: string[];
+  headerList?: GPHeaderListType[];
 };
 
 const TitledListView = <T,>({
-  className,
   list,
   renderItem,
   headerList,
 }: GPTitledListViewProps<T>) => {
   return (
-    <>
+    <Box>
       {headerList && (
-        <div className="ingredient-columns">
+        <Grid container spacing={2} sx={{ flexGrow: 1, px: 2, py: 1, bgcolor: "primary.300", borderRadius: "md", my: 2}}>
           {headerList.map((header) => (
-            <h3 key={uuidv4()}>{header}</h3>
+            <Grid xs={header.spacing}>
+            <Typography level="h4" key={uuidv4()}>{header.title}</Typography>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
-      <div className={className}>{list && list.map(renderItem)}</div>
-    </>
+      <Box sx={{display: "flex", flexDirection: "column", gap: 3}}>{list && list.map(renderItem)}</Box>
+    </Box>
   );
 };
 
