@@ -7,7 +7,7 @@ import type {
   GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import { v4 as uuidv4 } from "uuid";
