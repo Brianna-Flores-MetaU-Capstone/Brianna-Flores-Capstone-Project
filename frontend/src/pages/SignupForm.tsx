@@ -32,9 +32,14 @@ const SignupForm = () => {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async (userCredential) => {
         const user = userCredential.user;
+        if (!user.uid || !user.email) {
+          setMessage({error: true, message: "Unable to create account, missing required information"})
+          return;
+        }
+
         const newUser: GPAccountInfoTypes = {
-          firebaseId: user.uid ? user.uid : "",
-          email: user.email ? user.email : "",
+          firebaseId: user.uid,
+          email: user.email,
           intolerances: userIntolerances,
           diets: userDiets,
         };
