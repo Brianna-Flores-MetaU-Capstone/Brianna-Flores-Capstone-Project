@@ -18,6 +18,7 @@ import {
 } from "../utils/databaseHelpers";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
+import { Box, Grid } from "@mui/joy";
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -47,54 +48,58 @@ const Homepage = () => {
     setUserListPreviews();
   }, []);
   return (
-    <div className="homepage-container">
+    <Box>
       <AppHeader />
-      <section className="quick-access-container">
-        <div className="item-list">
-          <TitledListView
-            headerList={[{title: PreviewConstants.INGREDIENT, spacing: 1}]}
-            list={userIngredientList}
-            renderItem={(ingredient) => (
-              <Ingredient
-                key={uuidv4()}
-                ingredient={ingredient}
-                presentGroceryCheck={false}
-                presentExpiration={false}
-                presentButtons={false}
-              />
-            )}
-          />
-        </div>
-        <div className="item-list">
-          <TitledListView
-            headerList={[{title: PreviewConstants.GROCERY, spacing: 1}]}
-            list={userGroceryList}
-            renderItem={(item) => (
-              <Ingredient
-                key={uuidv4()}
-                ingredient={item?.ingredient}
-                presentGroceryCheck={true}
-                presentExpiration={false}
-                presentButtons={false}
-              />
-            )}
-          />
-        </div>
-      </section>
-      <section className="upcoming-meals">
-        <TitledListView
-          headerList={[{title: "Upcoming Meals", spacing: 1}]}
-          list={selectedRecipes}
-          renderItem={(meal) => (
-            <MealCard
-              key={meal.apiId}
-              onMealCardClick={() => event?.preventDefault()}
-              parsedMealData={meal}
+      <Box sx={{ m: 2 }}>
+        <Grid container spacing={2}>
+          <Grid xs={6} sx={{ border: "2px solid"}}>
+            <TitledListView
+              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: 12 }]}
+              list={userIngredientList}
+              renderItem={(ingredient) => (
+                <Ingredient
+                  key={uuidv4()}
+                  ingredient={ingredient}
+                  presentGroceryCheck={false}
+                  presentExpiration={false}
+                  presentButtons={false}
+                />
+              )}
+              listHeight={300}
             />
-          )}
-        />
-      </section>
-    </div>
+          </Grid>
+          <Grid xs={6}>
+            <TitledListView
+              headerList={[{ title: PreviewConstants.GROCERY, spacing: 12 }]}
+              list={userGroceryList}
+              renderItem={(item) => (
+                <Ingredient
+                  key={uuidv4()}
+                  ingredient={item?.ingredient}
+                  presentGroceryCheck={true}
+                  presentExpiration={false}
+                  presentButtons={false}
+                />
+              )}
+              listHeight={300}
+            />
+          </Grid>
+        </Grid>
+        <Box className="upcoming-meals">
+          <TitledListView
+            headerList={[{ title: "Upcoming Meals", spacing: 1 }]}
+            list={selectedRecipes}
+            renderItem={(meal) => (
+              <MealCard
+                key={meal.apiId}
+                onMealCardClick={() => event?.preventDefault()}
+                parsedMealData={meal}
+              />
+            )}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

@@ -26,7 +26,6 @@ const RecipeCostModal = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        className="recipe-cost-modal"
         variant="outlined"
         sx={{
           display: "flex",
