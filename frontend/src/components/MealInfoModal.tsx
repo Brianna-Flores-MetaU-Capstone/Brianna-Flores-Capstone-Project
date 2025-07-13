@@ -53,7 +53,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
             {recipeInfo?.ingredients.map((ingredient) => {
               return (
                 <ListItem
-                  className="recipe-modal-ingredient"
                   key={ingredient.id}
                 >
                   <ListItemContent

@@ -147,35 +147,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     <Modal open={modalOpen} onClose={handleModalClose}>
       <ModalDialog layout="fullscreen">
         <ModalClose />
-        <DialogContent>
-          <div>
-            <Button>I Have My Own Recipe</Button>
-            {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
-            <FormControl
-              orientation="horizontal"
-              sx={{ width: "20%", justifyContent: "space-between" }}
-            >
-              <div>
-                <FormLabel>Use Dietary Preferences</FormLabel>
-              </div>
-              <Switch
-                checked={usePreferences}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setUsePreferences(event.target.checked)
-                }
-                variant={usePreferences ? "solid" : "outlined"}
-                endDecorator={usePreferences ? "On" : "Off"}
-                slotProps={{
-                  endDecorator: {
-                    sx: {
-                      minWidth: 24,
-                    },
-                  },
-                }}
-              />
-            </FormControl>
-            <Box>
-            <form className="meal-form" onSubmit={handleSearchSubmit}>
+        <DialogContent sx={{ my: 3 }}>
+          <Box>
+            <form onSubmit={handleSearchSubmit}>
               <FormControl>
                 <FormLabel>Recipe</FormLabel>
                 <Input
@@ -187,38 +161,60 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   required
                 />
               </FormControl>
-              <Button
-                type="submit"
-                loading={loading}
-                loadingPosition="start"
+              <Box
+                sx={{ my: 3, display: "flex", justifyContent: "space-between" }}
               >
-                Find some Recipes!
-              </Button>
+                {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+                <FormControl
+                  orientation="horizontal"
+                  sx={{ width: "20%", justifyContent: "space-between" }}
+                >
+                  <FormLabel>Use Dietary Preferences</FormLabel>
+                  <Switch
+                    checked={usePreferences}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      setUsePreferences(event.target.checked)
+                    }
+                    variant={usePreferences ? "solid" : "outlined"}
+                    endDecorator={usePreferences ? "On" : "Off"}
+                    slotProps={{
+                      endDecorator: {
+                        sx: {
+                          minWidth: 24,
+                        },
+                      },
+                    }}
+                  />
+                </FormControl>
+                <Button type="submit" loading={loading} loadingPosition="start">
+                  Find Recipes!
+                </Button>
+              </Box>
             </form>
-            </Box>
-            {/* Display error message if needed */}
-            {errorMessage && (
-              <ErrorState
-                error={errorMessage.error}
-                message={errorMessage.message}
+            <Button>I Have My Own Recipe</Button>
+          </Box>
+          {/* Display error message if needed */}
+          {errorMessage && (
+            <ErrorState
+              error={errorMessage.error}
+              message={errorMessage.message}
+            />
+          )}
+          <TitledListView
+            list={mealResults}
+            renderItem={(meal) => (
+              <MealCard
+                key={uuidv4()}
+                onMealCardClick={() => event?.preventDefault()}
+                parsedMealData={meal}
+                onSelectRecipe={onSelectRecipe}
               />
             )}
-            <TitledListView
-              list={mealResults}
-              renderItem={(meal) => (
-                <MealCard
-                  key={uuidv4()}
-                  onMealCardClick={() => event?.preventDefault()}
-                  parsedMealData={meal}
-                  onSelectRecipe={onSelectRecipe}
-                />
-              )}
-            />
-            {/* if search clicked, add a generate more button */}
-            {searchClicked && (
-              <Button onClick={handleGenerateMore}>Generate More!</Button>
-            )}
-          </div>
+          />
+          {/* if search clicked, add a generate more button */}
+          {searchClicked && (
+            <Button onClick={handleGenerateMore}>Generate More!</Button>
+          )}
         </DialogContent>
       </ModalDialog>
     </Modal>
