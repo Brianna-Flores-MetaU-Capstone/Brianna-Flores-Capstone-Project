@@ -15,11 +15,16 @@ import {
   addIngredientDatabase,
   updateIngredientDatabase,
 } from "../utils/databaseHelpers";
-import { Button, Box, Modal, FormControl, FormLabel, Input, Select, Option } from "@mui/joy";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
+import {
+  Button,
+  Box,
+  Modal,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Option,
+} from "@mui/joy";
 
 type GPIngredientModalProps = {
   modalFor: string;
@@ -147,7 +152,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               />
             </FormControl>
           )}
-          <Box sx={{display: "flex", justifyContent: "space-between"}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <FormControl>
               <FormLabel>Quantity</FormLabel>
               <Input
@@ -200,24 +205,29 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </FormControl>
           </Box>
           {modalFor === INGREDIENT_MODAL && (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{mt: 1.5, mb: 1.5, width: "100%"}}
+            <FormControl>
+              <FormLabel>Expiration Date</FormLabel>
+              <Input
+                sx={{ mt: 1.5, mb: 1.5, width: "100%" }}
+                type="date"
+                slotProps={{
+                  input: {
+                    "data-ingredientfield":
+                      IngredientDataFields.EXPIRATION_DATE,
+                  },
+                }}
                 name={IngredientDataFields.EXPIRATION_DATE}
-                label="Expiration Date"
-                value={
-                  newIngredientData?.expirationDate
-                    ? dayjs(newIngredientData?.expirationDate)
-                    : null
-                }
-                onChange={(newDate) =>
+                value={newIngredientData?.expirationDate ?? ""}
+                onChange={(event) =>
                   dispatch({
-                    type: actions.SET_DATE,
-                    value: newDate?.format("YYYY-MM-DD"),
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
                   })
                 }
               />
-            </LocalizationProvider>
+            </FormControl>
           )}
           {isEditing ? (
             <FormControl>
@@ -252,7 +262,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   dispatch({
                     type: actions.SET_INPUT,
                     ingredientField: "department",
-                    value: newValue ?? ""
+                    value: newValue ?? "",
                   })
                 }
                 slotProps={{
