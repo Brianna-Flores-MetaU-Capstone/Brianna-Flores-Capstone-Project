@@ -19,6 +19,9 @@ import {
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { Box, Grid } from "@mui/joy";
+import { useNavigate } from "react-router";
+
+const LIST_HEIGHT = 250
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -33,20 +36,20 @@ const Homepage = () => {
   );
 
   const { user } = useUser();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const setUserListPreviews = async () => {
-      if (user) {
         fetchGroceryList({ setMessage, setUserGroceryList });
         const userIngredients = await fetchUserIngredientsHelper({
           setMessage,
         });
         setUserIngredientList(userIngredients);
         await fetchRecipes({ setMessage, setSelectedRecipes });
-      }
     };
     setUserListPreviews();
   }, []);
+
   return (
     <Box>
       <AppHeader />
@@ -65,7 +68,7 @@ const Homepage = () => {
                   presentButtons={false}
                 />
               )}
-              listHeight={300}
+              listHeight={LIST_HEIGHT}
             />
           </Grid>
           <Grid xs={6}>
@@ -81,7 +84,7 @@ const Homepage = () => {
                   presentButtons={false}
                 />
               )}
-              listHeight={300}
+              listHeight={LIST_HEIGHT}
             />
           </Grid>
         </Grid>
@@ -92,7 +95,7 @@ const Homepage = () => {
             renderItem={(meal) => (
               <MealCard
                 key={meal.apiId}
-                onMealCardClick={() => event?.preventDefault()}
+                onMealCardClick={() => navigate("/new-list")}
                 parsedMealData={meal}
               />
             )}
