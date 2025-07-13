@@ -85,13 +85,15 @@ const MealCard: React.FC<GPMealCardProps> = ({
           <Link overlay underline="none"></Link>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {onSelectRecipe && (
-              <Button onClick={toggleModal}>
+              <Button onClick={toggleModal}
+              sx={{color: "primary.50"}}>
                 See Pricing Details
               </Button>
             )}
             {onSelectRecipe && (
               <Button
                 onClick={() => onSelectRecipe(parsedMealData)}
+                sx={{color: "primary.50"}}
               >
                 Select Recipe
               </Button>

@@ -10,9 +10,10 @@ const DietsAndIntolerances = ({
   const listItemStyle = {
     m: 1,
     p: 1,
-    backgroundColor: "#d9edf8",
+    border: "2px solid",
     borderRadius: "md",
     textAlign: "center",
+    color: "primary.50"
   };
 
   return (
