@@ -1,6 +1,5 @@
 import React from "react";
 import { useReducer } from "react";
-import "../styles/IngredientsPage.css";
 import { IngredientUnitOptions, Departments } from "../utils/enum";
 import type {
   GPIngredientDataTypes,

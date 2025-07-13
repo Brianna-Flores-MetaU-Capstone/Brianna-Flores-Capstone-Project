@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/Homepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type {

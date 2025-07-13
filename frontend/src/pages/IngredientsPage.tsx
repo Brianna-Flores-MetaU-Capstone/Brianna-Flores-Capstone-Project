@@ -1,4 +1,3 @@
-import "../styles/IngredientsPage.css";
 import AppHeader from "../components/AppHeader";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";

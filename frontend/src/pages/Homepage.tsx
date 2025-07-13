@@ -1,4 +1,3 @@
-import "../styles/Homepage.css";
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,

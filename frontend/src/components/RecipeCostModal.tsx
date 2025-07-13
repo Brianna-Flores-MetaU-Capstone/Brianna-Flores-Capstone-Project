@@ -3,7 +3,6 @@ import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import TitledListView from "./TitledListView";
 import IngredientCost from "./IngredientCost";
 import { v4 as uuidv4 } from "uuid";
-import "../styles/NewListPage.css";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 
 type GPLoadingModalTypes = {

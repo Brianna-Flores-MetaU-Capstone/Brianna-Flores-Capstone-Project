@@ -4,8 +4,6 @@ import RegistrationPreferenceButtons from "../components/RegistrationPreferenceB
 import type { GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
-import "../styles/AccountPage.css";
-import "../styles/LoginPage.css";
 import { auth } from "../utils/firebase";
 import {
   onAuthStateChanged,
@@ -196,7 +194,7 @@ const AccountPage = () => {
               },
             }}
             onChange={handleInputChange}
-            value={userEmail ? userEmail : ""}
+            value={userEmail}
           />
         </FormControl>
         <Typography level="h4">Selected Intolerances</Typography>

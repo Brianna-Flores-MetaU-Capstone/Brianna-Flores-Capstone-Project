@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/Meal.css";
 import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
 import { v4 as uuidv4 } from "uuid";

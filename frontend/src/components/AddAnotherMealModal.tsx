@@ -7,7 +7,6 @@ import {
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
-import "../styles/Meal.css";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";

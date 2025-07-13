@@ -7,7 +7,6 @@ import type {
   GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
-import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";

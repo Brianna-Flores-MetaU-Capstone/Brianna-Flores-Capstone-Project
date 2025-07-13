@@ -1,7 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import "../styles/Homepage.css";
-import "../styles/NavBar.css";
 import { useLocation, useNavigate } from "react-router";
 import {
   Box,
