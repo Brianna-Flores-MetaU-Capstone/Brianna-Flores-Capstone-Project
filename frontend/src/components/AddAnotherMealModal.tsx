@@ -76,8 +76,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     const userDiets = parsePreferenceList(user?.diets ?? []);
     const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
     const recipeUrl = usePreferences
-      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
-      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
+      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=1&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=1&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
+      // ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      // : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoading(true);
       const response = await axios.get(recipeUrl);
@@ -210,6 +212,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 onSelectRecipe={onSelectRecipe}
               />
             )}
+            flexDirectionRow={true}
           />
           {/* if search clicked, add a generate more button */}
           {searchClicked && (
