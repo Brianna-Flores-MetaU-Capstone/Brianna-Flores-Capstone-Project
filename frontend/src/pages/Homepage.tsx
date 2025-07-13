@@ -85,7 +85,7 @@ const Homepage = () => {
             />
           </Grid>
         </Grid>
-        <Box className="upcoming-meals">
+        <Box>
           <TitledListView
             headerList={[{ title: "Upcoming Meals", spacing: 12 }]}
             list={selectedRecipes}
