@@ -94,24 +94,24 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
         />
       </FormControl>
       {handleRegistrationSubmit && (
-        <div>
-          <label htmlFor="intolerances">Intolerances</label>
+        <Box>
+          <FormLabel>Intolerances</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.INTOLERANCES}
             listItems={Intolerances}
             userList={userIntolerances}
             handleButtonClick={handlePreferenceClick}
           />
-          <label>Diets</label>
+          <FormLabel>Diets</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.DIETS}
             listItems={Diets}
             userList={userDiets}
             handleButtonClick={handlePreferenceClick}
           />
-        </div>
+        </Box>
       )}
-      <Button type="submit" sx={{display: "block", mx: "auto"}}>
+      <Button type="submit" sx={{display: "block", mx: "auto", mt: 1}}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

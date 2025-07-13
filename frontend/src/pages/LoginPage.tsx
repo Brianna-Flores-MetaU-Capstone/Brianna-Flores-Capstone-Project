@@ -43,11 +43,8 @@ const LoginPage = () => {
   }
 
   return (
-    // <Box className="login-page">
     <Box>
       <AppHeader />
-      {/* <Box className="login-page"> */}
-      {/* <Box sx={{height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}> */}
       <Box>
         <Card
           sx={{ mt: 30, mx: "auto", width: 400 }}
