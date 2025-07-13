@@ -26,9 +26,11 @@ import {
   Card,
   Input,
   FormControl,
+  FormHelperText,
   FormLabel,
   Typography,
 } from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined"
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -41,6 +43,8 @@ const AccountPage = () => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [emailInputError, setEmailInputError] = useState(false);
+  const [passwordInuptError, setPasswordInputError] = useState(false)
   const { setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
@@ -93,8 +97,10 @@ const AccountPage = () => {
     const { credential } = (event.target as HTMLInputElement).dataset;
     const { value } = event.target;
     if (credential === AuthenticationFieldEnum.EMAIL) {
+      setEmailInputError(value === "")
       setUserEmail(value);
     } else if (credential === AuthenticationFieldEnum.PASSWORD) {
+      setPasswordInputError(value === "")
       setUserPassword(value);
     }
   };
@@ -183,7 +189,7 @@ const AccountPage = () => {
         }}
       >
         <Typography level="h2">Edit Account Details</Typography>
-        <FormControl>
+        <FormControl error={emailInputError}>
           <FormLabel>Email</FormLabel>
           <Input
             required
@@ -194,8 +200,12 @@ const AccountPage = () => {
               },
             }}
             onChange={handleInputChange}
-            value={userEmail}
+            value={userEmail ? userEmail : ""}
           />
+          {emailInputError && <FormHelperText>
+          <InfoOutlined />
+          Must enter an email
+        </FormHelperText>}
         </FormControl>
         <Typography level="h4">Selected Intolerances</Typography>
         <RegistrationPreferenceButtons
@@ -214,6 +224,7 @@ const AccountPage = () => {
         <AuthenticatePassword
           handleAccountSubmit={handleAccountSubmit}
           handleInputChange={handleInputChange}
+          passwordInputError={passwordInuptError}
         />
         {message && (
           <ErrorState error={message.error} message={message.message} />
