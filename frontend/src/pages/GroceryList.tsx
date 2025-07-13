@@ -7,7 +7,7 @@ import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import { Button } from "@mui/joy";
+import { Button, Box } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
@@ -59,9 +59,9 @@ const GroceryList = () => {
   }
 
   return (
-    <div>
+    <Box>
       <AppHeader />
-      <div className="grocery-list-container">
+      <Box className="grocery-list-container">
         <Button className="add-button" onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
@@ -79,7 +79,7 @@ const GroceryList = () => {
         />
         <h3>Estimated Cost</h3>
         <h3>${Number(groceryListCost).toFixed(2)}</h3>
-      </div>
+      </Box>
       {addGroceryItemModalOpen && (
         <IngredientModal
           modalFor={GROCERY_MODAL}
@@ -99,7 +99,7 @@ const GroceryList = () => {
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
-    </div>
+    </Box>
   );
 };
 

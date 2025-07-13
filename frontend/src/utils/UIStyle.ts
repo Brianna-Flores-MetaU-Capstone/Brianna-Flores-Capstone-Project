@@ -1,22 +1,34 @@
 import { extendTheme } from "@mui/joy/styles";
 
 const theme = extendTheme({
-  "colorSchemes": {
-    "light": {
-      "palette": {
-        "primary": {
-          "50": "#ecfeff",
-          "100": "#cffafe",
-          "200": "#a5f3fc",
-          "300": "#67e8f9",
-          "400": "#22d3ee",
-          "500": "#06b6d4",
-          "600": "#0891b2",
-          "700": "#0e7490",
-          "800": "#155e75",
-          "900": "#164e63"
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          50: "#EAF5F3",
+          100: "#DDEEEB",
+          200: "#C2E0DB",
+          300: "#A7D2CB",
+          400: "#82BFB5",
+          500: "#5DAC9F",
+          600: "#478A7F",
+          700: "#34655D",
+          800: "#21403B",
+          900: "#0E1B19",
         },
-        "neutral": {
+        secondary: {
+          50: "#E6C5BD",
+          100: "#E0B8AF",
+          200: "#D49E91",
+          300: "#C98474",
+          400: "#B9604C",
+          500: "#934A39",
+          600: "#6B362A",
+          700: "#43221A",
+          800: "#1A0D0A",
+          900: "#000000",
+        },
+        neutral: {
           "50": "#fafafa",
           "100": "#f5f5f5",
           "200": "#e5e5e5",
@@ -26,9 +38,9 @@ const theme = extendTheme({
           "600": "#525252",
           "700": "#404040",
           "800": "#262626",
-          "900": "#171717"
+          "900": "#171717",
         },
-        "danger": {
+        danger: {
           "50": "#fdf2f8",
           "100": "#fce7f3",
           "200": "#fbcfe8",
@@ -38,9 +50,9 @@ const theme = extendTheme({
           "600": "#db2777",
           "700": "#be185d",
           "800": "#9d174d",
-          "900": "#831843"
+          "900": "#831843",
         },
-        "success": {
+        success: {
           "50": "#f0fdfa",
           "100": "#ccfbf1",
           "200": "#99f6e4",
@@ -50,9 +62,9 @@ const theme = extendTheme({
           "600": "#0d9488",
           "700": "#0f766e",
           "800": "#115e59",
-          "900": "#134e4a"
+          "900": "#134e4a",
         },
-        "warning": {
+        warning: {
           "50": "#fff8e1",
           "100": "#ffecb3",
           "200": "#ffe082",
@@ -62,12 +74,12 @@ const theme = extendTheme({
           "600": "#ffb300",
           "700": "#ffa000",
           "800": "#ff8f00",
-          "900": "#ff6f00"
-        }
-      }
+          "900": "#ff6f00",
+        },
+      },
     },
-    "dark": {
-      "palette": {}
+    dark: {
+      palette: {},
     },
   },
   fontFamily: {
@@ -76,16 +88,16 @@ const theme = extendTheme({
   },
   components: {
     JoyButton: {
-        defaultProps: {
-            variant: "outlined"
-        }
+      defaultProps: {
+        variant: "outlined",
+      },
     },
     JoyInput: {
-        defaultProps: {
-            variant: "outlined"
-        }
-    }
-  }
+      defaultProps: {
+        variant: "outlined",
+      },
+    },
+  },
 });
 
 const GPModalStyle = {
