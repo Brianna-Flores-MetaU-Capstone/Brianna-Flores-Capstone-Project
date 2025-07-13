@@ -28,6 +28,7 @@ const NavBar = () => {
   ];
 
   return (
+    // code referenced from MUI documentation: https://mui.com/joy-ui/react-drawer/
     <React.Fragment>
       <IconButton
         variant="outlined"
