@@ -22,7 +22,7 @@ const TitledListView = <T,>({
   return (
     <Box>
       {headerList && (
-        <Grid container sx={{ flexGrow: 1, p: 2, bgcolor: "primary.300", borderRadius: "md", my: 2}}>
+        <Grid container sx={{ flexGrow: 1, p: 2, bgcolor: "primary.300", borderRadius: "md", mb: 2}}>
           {headerList.map((header) => (
             <Grid xs={header.spacing}>
             <Typography level="h4" key={uuidv4()}>{header.title}</Typography>
