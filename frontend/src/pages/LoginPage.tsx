@@ -3,10 +3,7 @@ import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
-import type {
-  GPAuthFormDataTypes,
-  GPErrorMessageTypes,
-} from "../utils/types";
+import type { GPAuthFormDataTypes, GPErrorMessageTypes } from "../utils/types";
 import { validateUserToken } from "../utils/databaseHelpers";
 import "../styles/LoginPage.css";
 import AppHeader from "../components/AppHeader";
@@ -52,7 +49,11 @@ const LoginPage = () => {
       {/* <Box className="login-page"> */}
       {/* <Box sx={{height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}> */}
       <Box>
-      <Card sx={{mt: 30, mx: "auto", width: 400}} variant="soft" color="primary">
+        <Card
+          sx={{ mt: 30, mx: "auto", width: 400 }}
+          variant="soft"
+          color="primary"
+        >
           <AuthForm
             handleLoginSubmit={handleSubmit}
             handleAuthInputChange={(event) =>
@@ -63,13 +64,19 @@ const LoginPage = () => {
           {message && (
             <ErrorState error={message.error} message={message.message} />
           )}
-          <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Typography>New User?</Typography>
             <Button onClick={() => navigate("/signup")}>
               Register for an Account!
             </Button>
-        </Box>
-      </Card>
+          </Box>
+        </Card>
       </Box>
     </Box>
   );

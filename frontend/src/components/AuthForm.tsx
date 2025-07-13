@@ -64,7 +64,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
   };
 
   return (
-    <form className="login-info" onSubmit={onRegistrationSubmit}>
+    <form onSubmit={onRegistrationSubmit}>
       <FormControl>
         <FormLabel>Enter Email</FormLabel>
         <Input
@@ -78,7 +78,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           onChange={handleAuthInputChange}
         />
       </FormControl>
-      <FormControl>
+      <FormControl sx={{my: 2}}>
         <FormLabel>Enter Password</FormLabel>
         <Input
           required
@@ -111,7 +111,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           />
         </div>
       )}
-      <Button className="submit-auth" type="submit">
+      <Button type="submit" sx={{display: "block", mx: "auto"}}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>
