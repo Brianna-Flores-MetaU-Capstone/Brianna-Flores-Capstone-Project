@@ -1,11 +1,6 @@
 import type { User } from "firebase/auth";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 
-type GPToggleNavBarProps = {
-  navOpen: boolean;
-  toggleNav: () => void;
-};
-
 type GPRecipeDataTypes = {
   apiId: number;
   recipeTitle: string;
@@ -82,7 +77,6 @@ type GPIngredientApiInfoType = {
 };
 
 export type {
-  GPToggleNavBarProps,
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
   GPCurrentUserTypes,
