@@ -1,6 +1,5 @@
 import "../styles/NewListPage.css";
 import type {
-  GPToggleNavBarProps,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
@@ -26,7 +25,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
     useState(false);
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
@@ -103,7 +102,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <div className="new-list-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <section>
         <Button onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}>
           Add Another Meal!

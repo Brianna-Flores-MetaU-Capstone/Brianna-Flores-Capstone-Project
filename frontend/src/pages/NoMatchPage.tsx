@@ -1,10 +1,9 @@
-import type { GPToggleNavBarProps } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 
-const NoMatchPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const NoMatchPage= () => {
   return (
     <div>
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       NoMatchPage: error page not found
     </div>
   );

@@ -33,6 +33,7 @@ const NavBar = () => {
         variant="outlined"
         color="neutral"
         onClick={() => setOpen(true)}
+        sx={{ zIndex: "1" }}
       >
         <Menu />
       </IconButton>
@@ -67,15 +68,19 @@ const NavBar = () => {
         >
           {pages.map((pageInfo) => {
             return (
-            <ListItemButton
-              key={pageInfo.name}
-              onClick={() => {
-                navigate(pageInfo.path)
-                setOpen(false)
-              }}
-              sx={{ fontWeight: (location.pathname === pageInfo.path) ? "lg" : "rg" }}
-            >{pageInfo.name}</ListItemButton>
-            )
+              <ListItemButton
+                key={pageInfo.name}
+                onClick={() => {
+                  navigate(pageInfo.path);
+                  setOpen(false);
+                }}
+                sx={{
+                  fontWeight: location.pathname === pageInfo.path ? "lg" : "rg",
+                }}
+              >
+                {pageInfo.name}
+              </ListItemButton>
+            );
           })}
         </List>
       </Drawer>

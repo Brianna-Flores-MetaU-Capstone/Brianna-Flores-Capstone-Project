@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
 import type {
   GPIngredientDataTypes,
-  GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { Button } from "@mui/joy";
@@ -19,10 +18,7 @@ import {
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
 
-const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
-  navOpen,
-  toggleNav,
-}) => {
+const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
   const [editIngredientData, setEditIngredientData] =
     useState<GPIngredientDataTypes>();
@@ -62,7 +58,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
 
   return (
     <div className="ingredients-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <section className="ingredient-page-container">
         <Button
           className="add-button"

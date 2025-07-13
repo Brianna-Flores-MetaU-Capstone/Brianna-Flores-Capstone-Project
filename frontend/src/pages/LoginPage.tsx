@@ -5,7 +5,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
 import type {
   GPAuthFormDataTypes,
-  GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { validateUserToken } from "../utils/databaseHelpers";
@@ -17,7 +16,7 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Button, Box } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
-const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const LoginPage = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
     password: "",
@@ -48,7 +47,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <div className="login-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <section className="login-page">
         <Box className="login-content">
           <AuthForm
