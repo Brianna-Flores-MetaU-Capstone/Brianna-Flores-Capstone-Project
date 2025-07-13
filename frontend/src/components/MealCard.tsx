@@ -40,7 +40,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card
         variant="outlined"
-        sx={{ minHeight: "280px", width: 420 }}
+        sx={{ minHeight: "280px", width: 350 }}
         onClick={() => onMealCardClick()}
       >
         <CardCover>
