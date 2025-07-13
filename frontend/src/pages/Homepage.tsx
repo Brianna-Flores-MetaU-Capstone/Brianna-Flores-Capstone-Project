@@ -51,8 +51,8 @@ const Homepage = () => {
     <Box>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <Grid container spacing={2}>
-          <Grid xs={6} sx={{ border: "2px solid"}}>
+        <Grid container spacing={2} sx={{my: 2}}>
+          <Grid xs={6}>
             <TitledListView
               headerList={[{ title: PreviewConstants.INGREDIENT, spacing: 12 }]}
               list={userIngredientList}
@@ -87,7 +87,7 @@ const Homepage = () => {
         </Grid>
         <Box className="upcoming-meals">
           <TitledListView
-            headerList={[{ title: "Upcoming Meals", spacing: 1 }]}
+            headerList={[{ title: "Upcoming Meals", spacing: 12 }]}
             list={selectedRecipes}
             renderItem={(meal) => (
               <MealCard
@@ -96,6 +96,7 @@ const Homepage = () => {
                 parsedMealData={meal}
               />
             )}
+            flexDirectionRow={true}
           />
         </Box>
       </Box>
