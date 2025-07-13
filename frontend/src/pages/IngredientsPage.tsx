@@ -66,7 +66,6 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
       <section className="ingredient-page-container">
         <Button
           className="add-button"
-          variant="outlined"
           onClick={addIngredientClick}
         >
           Add Ingredient

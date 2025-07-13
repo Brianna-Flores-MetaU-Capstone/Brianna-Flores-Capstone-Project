@@ -182,7 +182,6 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               }}
               onChange={handleInputChange}
               value={userEmail ? userEmail : ""}
-              variant="outlined"
             />
           </FormControl>
         </div>

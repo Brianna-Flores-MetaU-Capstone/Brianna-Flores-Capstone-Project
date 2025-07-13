@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import {
+  Box,
   Button,
   Modal,
   ModalClose,
@@ -148,7 +149,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         <ModalClose />
         <DialogContent>
           <div>
-            <Button variant="outlined">I Have My Own Recipe</Button>
+            <Button>I Have My Own Recipe</Button>
             {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
             <FormControl
               orientation="horizontal"
@@ -173,6 +174,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 }}
               />
             </FormControl>
+            <Box>
             <form className="meal-form" onSubmit={handleSearchSubmit}>
               <FormControl>
                 <FormLabel>Recipe</FormLabel>
@@ -182,20 +184,18 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   }}
                   onChange={handleRequestChange}
                   value={recipeRequest}
-                  variant="outlined"
                   required
                 />
               </FormControl>
               <Button
                 type="submit"
                 loading={loading}
-                variant="outlined"
                 loadingPosition="start"
               >
                 Find some Recipes!
               </Button>
             </form>
-
+            </Box>
             {/* Display error message if needed */}
             {errorMessage && (
               <ErrorState

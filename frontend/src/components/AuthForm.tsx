@@ -76,7 +76,6 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
             input: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
           }}
           onChange={handleAuthInputChange}
-          variant="outlined"
         />
       </FormControl>
       <FormControl>
@@ -92,7 +91,6 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           }}
           value={formData.password}
           onChange={handleAuthInputChange}
-          variant="outlined"
         />
       </FormControl>
       {handleRegistrationSubmit && (
@@ -113,7 +111,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           />
         </div>
       )}
-      <Button className="submit-auth" type="submit" variant="outlined">
+      <Button className="submit-auth" type="submit">
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

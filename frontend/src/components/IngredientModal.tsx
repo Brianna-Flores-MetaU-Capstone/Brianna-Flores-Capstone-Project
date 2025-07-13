@@ -122,7 +122,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   },
                 }}
                 value={newIngredientData?.ingredientName}
-                variant="outlined"
               />
             </FormControl>
           ) : (
@@ -145,7 +144,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   })
                 }
                 value={newIngredientData?.ingredientName}
-                variant="outlined"
               />
             </FormControl>
           )}
@@ -170,7 +168,6 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   })
                 }
                 value={newIngredientData?.quantity}
-                variant="outlined"
               />
             </FormControl>
             <FormControl>
@@ -274,7 +271,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               </Select>
             </FormControl>
           )}
-          <Button type="submit" variant="outlined" sx={{ display: "flex", mx: "auto", mt: 2 }}>
+          <Button type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
             {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>
