@@ -47,9 +47,7 @@ const LoginPage = () => {
       <AppHeader />
       <Box>
         <Card
-          sx={{ mt: 30, mx: "auto", width: 400 }}
-          variant="soft"
-          color="primary"
+          sx={{ mt: 30, mx: "auto" }}
         >
           <AuthForm
             handleLoginSubmit={handleSubmit}

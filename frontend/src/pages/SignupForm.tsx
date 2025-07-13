@@ -60,9 +60,7 @@ const SignupForm = () => {
   return (
     <Box>
       <AppHeader />
-      <Card sx={{ mt: 20, mx: "auto", width: 400 }}
-          variant="soft"
-          color="primary">
+      <Card sx={{ mt: 20, mx: "auto" }}>
         <AuthForm
           handleRegistrationSubmit={handleSubmit}
           handleAuthInputChange={(event) =>
