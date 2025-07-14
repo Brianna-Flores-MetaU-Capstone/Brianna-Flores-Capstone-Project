@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
 
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
+
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
 const ConnectCalendar = () => {
@@ -96,6 +100,12 @@ const ConnectCalendar = () => {
        }
      );
      const data = await response.json();
+
+     const events = await axios.post(
+        `${databaseUrl}/calendar/reccomendEvents`,
+        {},
+        axiosConfig
+      );
    } catch (err) {
      return;
    }
