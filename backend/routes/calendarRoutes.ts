@@ -13,7 +13,7 @@ router.post(
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { userEvents } = req.body;
+    const { parsedUserEvents, startDate, endDate, REQUESTED_DAYS } = req.body;
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
@@ -29,11 +29,9 @@ router.post(
       }
       // now we have the users list of recipes
       const userSelectedRecipes = user.recipes;
-      // add boolean for whether shopping slot has been assigned (ensure shopping slot assigned first)
-      
-      res.json("TODO: return list of empty spaces in calendar")
+      res.json("TODO: return list of empty spaces in calendar");
     } catch (error) {
-        res.status(500).send("Error finding empty time slots")
+      res.status(500).send("Error finding empty time slots");
     }
   }
 );

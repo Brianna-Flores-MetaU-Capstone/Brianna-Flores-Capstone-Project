@@ -8,9 +8,10 @@ import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
 import type { GPUserEventTypes } from "../utils/types";
+import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
 
-// TODO change requested days to have user input, for now we use 1 week
-const REQUESTED_DAYS = 7
+// TODO change requested days to have user input
+const REQUESTED_DAYS = 2;
 
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
@@ -97,8 +98,10 @@ const ConnectCalendar = () => {
   async function listUpcomingEvents() {
     try {
       const accessToken = gapi.client.getToken().access_token;
-      const todayDate = new Date();
-      const endDate = new Date(todayDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS)
+      const startDate = new Date();
+      const endDate = new Date(
+        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
+      );
       const response = await axios.get(
         "https://www.googleapis.com/calendar/v3/calendars/primary/events",
         {
@@ -108,17 +111,25 @@ const ConnectCalendar = () => {
           params: {
             singleEvents: true,
             orderBy: "startTime",
-            timeMin: todayDate.toISOString(),
-            timeMax: endDate.toISOString()
-          }
+            timeMin: startDate.toISOString(),
+            timeMax: endDate.toISOString(),
+          },
         }
       );
-    const userEvents = response.data.items
-    // parse events to extract out only needed information
-      const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents)
+      const userEvents = response.data.items;
+      // parse events to extract out only needed information
+      const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents);
+      // find free spaces in calendar
+      const freeTimeBlocks = findFreeTime({
+        userEvents: parsedUserEvents,
+        startDate,
+        endDate,
+        REQUESTED_DAYS,
+      });
+      const parsedFreeTime = parseFreeTime(freeTimeBlocks)
       const events = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedUserEvents },
+        { parsedUserEvents, startDate, endDate, REQUESTED_DAYS },
         axiosConfig
       );
     } catch (err) {
