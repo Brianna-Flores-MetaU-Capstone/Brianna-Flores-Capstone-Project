@@ -8,7 +8,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 const WithAuth = <T extends object>(
   WrappedComponent: React.ComponentType<T>
 ) => {
-  return function ProtectedComponent(props: T) {
+  return function AuthComponent(props: T) {
     const { user, setUser } = useUser();
     const navigate = useNavigate();
 
