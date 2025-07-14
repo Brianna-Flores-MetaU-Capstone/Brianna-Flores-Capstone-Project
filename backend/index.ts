@@ -45,6 +45,9 @@ app.use("/recipes", recipeRoutes);
 const groceryListRoutes = require("./routes/groceryListRoutes");
 app.use("/generateList", groceryListRoutes);
 
+const calendarRoutes = require("./routes/calendarRoutes");
+app.use("/calendar", calendarRoutes);
+
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);
 

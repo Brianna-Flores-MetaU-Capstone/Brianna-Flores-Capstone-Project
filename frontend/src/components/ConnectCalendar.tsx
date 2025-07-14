@@ -55,6 +55,7 @@ const ConnectCalendar = () => {
           if (resp.error !== undefined) {
             throw resp;
           }
+          await listUpcomingEvents()
         },
       });
     }
@@ -82,6 +83,24 @@ const ConnectCalendar = () => {
       gapi.client.setToken(null);
     }
   }
+
+  async function listUpcomingEvents() {
+   try {
+     const accessToken = gapi.client.getToken().access_token;
+     const response = await fetch(
+       "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+       {
+         headers: {
+           Authorization: `Bearer ${accessToken}`,
+         },
+       }
+     );
+     const data = await response.json();
+   } catch (err) {
+     return;
+   }
+ }
+
 
   return (
     <Box>
