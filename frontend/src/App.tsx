@@ -17,8 +17,6 @@ import AccountPage from "./pages/AccountPage";
 import WithAuth from "./components/WithAuth";
 
 function App() {
-  const [navOpen, setNavOpen] = useState<boolean>(false);
-
   const AuthNewListPage = WithAuth(NewListPage);
   const AuthIngredientsList = WithAuth(IngredientsPage);
   const AuthGroceryList = WithAuth(GroceryList);
