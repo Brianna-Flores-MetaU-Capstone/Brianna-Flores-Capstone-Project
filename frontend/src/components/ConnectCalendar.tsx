@@ -9,6 +9,9 @@ import { axiosConfig } from "../utils/databaseHelpers";
 
 import type { GPUserEventTypes } from "../utils/types";
 
+// TODO change requested days to have user input, for now we use 1 week
+const REQUESTED_DAYS = 7
+
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
 const ConnectCalendar = () => {
@@ -94,12 +97,20 @@ const ConnectCalendar = () => {
   async function listUpcomingEvents() {
     try {
       const accessToken = gapi.client.getToken().access_token;
+      const todayDate = new Date();
+      const endDate = new Date(todayDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS)
       const response = await axios.get(
-        "https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true",
+        "https://www.googleapis.com/calendar/v3/calendars/primary/events",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          params: {
+            singleEvents: true,
+            orderBy: "startTime",
+            timeMin: todayDate.toISOString(),
+            timeMax: endDate.toISOString()
+          }
         }
       );
     const userEvents = response.data.items
@@ -118,6 +129,7 @@ const ConnectCalendar = () => {
   return (
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
+      <Button onClick={handleSignoutClick}>Signout</Button>
     </Box>
   );
 };

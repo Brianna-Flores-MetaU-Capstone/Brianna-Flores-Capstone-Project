@@ -1,5 +1,3 @@
-import type { GPUserEventTypes } from "./types"
-
 // Parse user events to extract only necessary data
 const parseUserEvents = ( userEventsData: any) => {
     return userEventsData.map((userEvent: any) => ({
