@@ -122,7 +122,7 @@ router.post(
         data: {
           userId: userId,
           ingredientId: ingredient.id,
-          quantity: parseInt(quantity),
+          quantity: parseFloat(quantity),
           unit,
           expirationDate,
         },
@@ -178,7 +178,7 @@ router.put(
           },
         },
         data: {
-          quantity: parseInt(quantity),
+          quantity: parseFloat(quantity),
           unit: unit,
           expirationDate: expirationDate,
         },

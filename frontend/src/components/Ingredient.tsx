@@ -36,7 +36,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   onDelete,
 }) => {
   const formatQuantity =
-    parseInt(ingredient.quantity.toString()) % 1 === 0
+    parseFloat(ingredient.quantity.toString()) % 1 === 0
       ? ingredient.quantity
       : ingredient.quantity.toFixed(2);
   return (
