@@ -21,6 +21,7 @@ import LoadingModal from "../components/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
+import ConnectCalendar from "../components/ConnectCalendar";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -102,31 +103,36 @@ const NewListPage = () => {
   return (
     <Box>
       <AppHeader />
-      <Box sx={{m: 3}}>
-      <Box sx={{display: "flex", justifyContent: "space-between", my: 1}}>
-        <Button onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}>
-          Add Another Meal!
-        </Button>
-        <Button onClick={handleGenerateList}>Make My List</Button>
-      </Box>
-      <Box>
-      <TitledListView
-        headerList={[{title: "Selected Meals", spacing: 12}]}
-        list={selectedRecipes}
-        renderItem={(meal) => (
-          <MealCard
-            key={meal.apiId}
-            onMealCardClick={() => handleRecipeCardClick(meal)}
-            parsedMealData={meal}
-            onDeleteRecipe={handleDeleteRecipe}
+      <Box sx={{ m: 3 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Button
+              onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
+            >
+              Add Another Meal!
+            </Button>
+            <Button onClick={handleGenerateList}>Make My List</Button>
+          </Box>
+          <ConnectCalendar />
+        </Box>
+        <Box>
+          <TitledListView
+            headerList={[{ title: "Selected Meals", spacing: 12 }]}
+            list={selectedRecipes}
+            renderItem={(meal) => (
+              <MealCard
+                key={meal.apiId}
+                onMealCardClick={() => handleRecipeCardClick(meal)}
+                parsedMealData={meal}
+                onDeleteRecipe={handleDeleteRecipe}
+              />
+            )}
+            flexDirectionRow
           />
+        </Box>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
         )}
-        flexDirectionRow
-      />
-      </Box>
-      {message && (
-        <ErrorState error={message.error} message={message.message} />
-      )}
       </Box>
       <AddAnotherMealModal
         handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
