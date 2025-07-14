@@ -75,6 +75,8 @@ const getTotalQuantity = ({
         totalQuantity += ingredient.quantity;
       }
     }
+  } else {
+    totalQuantity = recipeIngredient.quantity
   }
   return totalQuantity;
 };
@@ -133,10 +135,7 @@ const getListOfMissingIngredients = ({
         recipeIngredient,
         recipeIngredients,
       });
-      const updatedIngredient =
-        totalQuantity > 0
-          ? { ...recipeIngredient, quantity: totalQuantity }
-          : recipeIngredient;
+      const updatedIngredient = { ...recipeIngredient, quantity: totalQuantity }
       if (
         ownedIngredientsNames.indexOf(
           recipeIngredient.ingredientName.toLowerCase()
@@ -214,7 +213,6 @@ const getCostForAmountOfIngredient = async ({
 export {
   checkUserExists,
   convertUnits,
-  getTotalQuantity,
   quantityNeeded,
   getListOfMissingIngredients,
   estimateListCost,

@@ -38,7 +38,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   const formatQuantity =
     parseFloat(ingredient.quantity.toString()) % 1 === 0
       ? ingredient.quantity
-      : ingredient.quantity.toFixed(2);
+      : Number(ingredient.quantity).toFixed(2);
   return (
     <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
       <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
