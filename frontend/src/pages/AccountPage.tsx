@@ -33,6 +33,7 @@ import {
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
+import ConnectCalendar from "../components/ConnectCalendar";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const AccountPage = () => {
@@ -179,6 +180,7 @@ const AccountPage = () => {
   return (
     <Box>
       <AppHeader />
+      <ConnectCalendar/>
       <Card
         sx={{
           display: "flex",
@@ -187,7 +189,7 @@ const AccountPage = () => {
           mt: 10,
           mx: "auto",
         }}
-      >
+        >
         <Typography level="h2">Edit Account Details</Typography>
         <FormControl error={emailInputError}>
           <FormLabel>Email</FormLabel>
