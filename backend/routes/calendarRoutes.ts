@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { getListOfMissingIngredients, estimateListCost } from "../utils/utils";
 
 const express = require("express");
 const router = express.Router();
@@ -16,7 +15,6 @@ router.post(
     // get parsed list of events from google calendar
     const { userEvents } = req.body;
     const userId = req.session.userId;
-
     try {
       const user = await prisma.User.findUnique({
         where: {
@@ -32,7 +30,11 @@ router.post(
       // now we have the users list of recipes
       const userSelectedRecipes = user.recipes;
       // add boolean for whether shopping slot has been assigned (ensure shopping slot assigned first)
-    } catch (error) {}
+      
+      res.json("TODO: return list of empty spaces in calendar")
+    } catch (error) {
+        res.status(500).send("Error finding empty time slots")
+    }
   }
 );
 

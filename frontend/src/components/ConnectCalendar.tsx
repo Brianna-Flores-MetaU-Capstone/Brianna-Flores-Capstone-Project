@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
+import { parseUserEvents } from "../utils/calendarUtils";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
+
+import type { GPUserEventTypes } from "../utils/types";
 
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
@@ -59,7 +62,7 @@ const ConnectCalendar = () => {
           if (resp.error !== undefined) {
             throw resp;
           }
-          await listUpcomingEvents()
+          await listUpcomingEvents();
         },
       });
     }
@@ -89,28 +92,28 @@ const ConnectCalendar = () => {
   }
 
   async function listUpcomingEvents() {
-   try {
-     const accessToken = gapi.client.getToken().access_token;
-     const response = await fetch(
-       "https://www.googleapis.com/calendar/v3/calendars/primary/events",
-       {
-         headers: {
-           Authorization: `Bearer ${accessToken}`,
-         },
-       }
-     );
-     const data = await response.json();
-
-     const events = await axios.post(
+    try {
+      const accessToken = gapi.client.getToken().access_token;
+      const response = await axios.get(
+        "https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    const userEvents = response.data.items
+    // parse events to extract out only needed information
+      const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents)
+      const events = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        {},
+        { parsedUserEvents },
         axiosConfig
       );
-   } catch (err) {
-     return;
-   }
- }
-
+    } catch (err) {
+      return;
+    }
+  }
 
   return (
     <Box>

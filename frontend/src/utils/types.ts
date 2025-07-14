@@ -77,6 +77,12 @@ type GPIngredientApiInfoType = {
   ingredientAmount: number;
 };
 
+type GPUserEventTypes = {
+  name: string;
+  startTime: Date;
+  endTime: Date;
+};
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -88,4 +94,5 @@ export type {
   GPRecipeIngredientTypes,
   GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
+  GPUserEventTypes,
 };
