@@ -180,6 +180,7 @@ const fetchRecipes = async ({
 }: GPFetchRecipeTypes) => {
   try {
     const response = await axios.get(`${databaseUrl}/recipes`, axiosConfig);
+    console.log("returned recipes are", response)
     setSelectedRecipes(response.data);
     return response.data;
   } catch (error) {
@@ -197,6 +198,7 @@ const updateUserRecipes = async ({
   setMessage,
 }: GPUpdateUserRecipesTypes) => {
   try {
+    console.log("selected recipe data is", selectedRecipe)
     await axios.post(
       `${databaseUrl}/recipes/${userId}`,
       selectedRecipe,

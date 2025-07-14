@@ -84,10 +84,12 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     try {
       setLoading(true);
       const response = await axios.get(recipeUrl);
+      console.log("unparsed recipes", response.data.results)
       const parsedRecipes = await parseRecipeData(
         ownedIngredients,
         response.data.results
       );
+      console.log("parsed recipes", parsedRecipes)
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {

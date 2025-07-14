@@ -9,6 +9,7 @@ type GPRecipeDataTypes = {
   ingredients: GPIngredientDataTypes[];
   instructions: string[];
   sourceUrl: string;
+  readyInMinutes: number;
   vegetarian: boolean;
   vegan: boolean;
   glutenFree: boolean;

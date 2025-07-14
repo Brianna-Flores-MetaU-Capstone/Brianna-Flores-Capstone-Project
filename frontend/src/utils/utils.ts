@@ -31,6 +31,7 @@ const parseRecipeData = async (
         ingredients: parsedIngredinets,
         instructions: parsedInstructions,
         sourceUrl: recipe.sourceUrl,
+        readyInMinutes: recipe.readyInMinutes,
         vegetarian: recipe.vegetarian,
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
