@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 type GPUserAccountType = {
   id: string;
@@ -20,13 +21,12 @@ const UserContext = createContext<GPAccountContextType>({
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
-  // check if session exists when app starts
   useEffect(() => {
-    fetch("http://localhost:3000/me", { credentials: "include" })
+    fetch(`${databaseUrl}/me`, { credentials: "include" })
       .then((response) => response.json())
       .then((data) => {
         if (data.id) {
-          setUser(data); // Persist login state
+          setUser(data);
         }
       });
   }, []);

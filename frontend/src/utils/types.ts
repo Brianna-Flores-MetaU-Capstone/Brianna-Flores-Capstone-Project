@@ -6,17 +6,18 @@ type GPToggleNavBarProps = {
 };
 
 type GPRecipeDataTypes = {
-  id: number;
-  image: string;
-  title: string;
+  apiId: number;
+  recipeTitle: string;
+  previewImage: string;
   servings: number;
+  ingredients: GPIngredientDataTypes[];
+  instructions: string[];
   sourceUrl: string;
   vegetarian: boolean;
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
-  ingredients: GPIngredientDataTypes[];
-  totalEstimatedCost: number;
+  totalCost: number;
 };
 
 type GPAccountInfoTypes = {
@@ -32,12 +33,11 @@ type GPAuthFormDataTypes = {
 };
 
 type GPIngredientDataTypes = {
-  id: number
+  id: number;
   ingredientName: string;
   quantity: string;
   unit: string;
   department: string;
-  image: string;
   estimatedCost: number;
   expirationDate?: string | null;
 };
@@ -65,6 +65,15 @@ type GPIngredientsOnHandTypes = {
   ingredientId: string;
 };
 
+type GPRecipeIngredientTypes = {
+  id: number;
+  unit: string;
+  quantity: string;
+  department: string;
+  estimatedCost: number;
+  ingredientName: string;
+};
+
 export type {
   GPToggleNavBarProps,
   GPAccountInfoTypes,
@@ -75,4 +84,5 @@ export type {
   GPRequestFormDataTypes,
   GPErrorMessageTypes,
   GPIngredientsOnHandTypes,
+  GPRecipeIngredientTypes,
 };

@@ -19,7 +19,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   presentExpiration,
   presentButtons,
   onEdit,
-  onDelete
+  onDelete,
 }) => {
   return (
     <div className="list-ingredient">
@@ -36,10 +36,11 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             className="ingredient-button"
             onClick={() => onEdit?.(ingredient)}
           />
-          <FontAwesomeIcon 
-            icon={faTrash} 
+          <FontAwesomeIcon
+            icon={faTrash}
             className="ingredient-button"
-            onClick={() => onDelete?.(ingredient)} />
+            onClick={() => onDelete?.(ingredient)}
+          />
         </div>
       )}
     </div>

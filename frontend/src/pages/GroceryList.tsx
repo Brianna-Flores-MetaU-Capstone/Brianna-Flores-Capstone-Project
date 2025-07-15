@@ -1,15 +1,20 @@
 import "../styles/GroceryList.css";
-import type { GPToggleNavBarProps } from "../utils/types";
+import type {
+  GPErrorMessageTypes,
+  GPRecipeIngredientTypes,
+  GPToggleNavBarProps,
+} from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import type { GPIngredientDataTypes } from "../utils/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import { departments } from "../utils/sampleData";
 import SearchBar from "../components/SearchBar";
 import Button from "@mui/material/Button";
 import { GROCERY_MODAL } from "../utils/constants";
 import GenericList from "../components/GenericList";
+import ErrorState from "../components/ErrorState";
+import { fetchGroceryList } from "../utils/databaseHelpers";
 
 const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [editGroceryItemData, setEditGroceryItemData] =
@@ -17,6 +22,11 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [editGroceryItemModalOpen, setEditGroceryItemModalOpen] =
     useState(false);
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
+  const [userGroceryList, setUserGroceryList] = useState<
+    GPRecipeIngredientTypes[]
+  >([]);
+  const [groceryDepartments, setGroceryDepartments] = useState<string[]>([]);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
 
   const handleAddGrocery = () => {
     setAddGroceryItemModalOpen((prev) => !prev);
@@ -27,7 +37,9 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     setEditGroceryItemModalOpen((prev) => !prev);
   };
 
-  const fetchUserIngredients = async () => {};
+  useEffect(() => {
+    fetchGroceryList({ setMessage, setUserGroceryList, setGroceryDepartments });
+  }, []);
 
   return (
     <div>
@@ -43,10 +55,11 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
         <GenericList
           className="grocery-departments"
-          list={departments}
+          list={groceryDepartments}
           renderItem={(department) => (
             <GroceryListDepartment
               key={department}
+              groceryList={userGroceryList}
               department={department}
               handleOpenModal={handleEditGrocery}
             />
@@ -61,7 +74,13 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           isEditing={false}
           onClose={handleAddGrocery}
           modalOpen={addGroceryItemModalOpen}
-          fetchUserIngredients={fetchUserIngredients}
+          fetchUserIngredients={() =>
+            fetchGroceryList({
+              setMessage,
+              setUserGroceryList,
+              setGroceryDepartments,
+            })
+          }
         />
       )}
       {editGroceryItemModalOpen && (
@@ -71,8 +90,17 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           ingredientData={editGroceryItemData}
           onClose={() => setEditGroceryItemModalOpen((prev) => !prev)}
           modalOpen={editGroceryItemModalOpen}
-          fetchUserIngredients={fetchUserIngredients}
+          fetchUserIngredients={() =>
+            fetchGroceryList({
+              setMessage,
+              setUserGroceryList,
+              setGroceryDepartments,
+            })
+          }
         />
+      )}
+      {message && (
+        <ErrorState error={message.error} message={message.message} />
       )}
     </div>
   );

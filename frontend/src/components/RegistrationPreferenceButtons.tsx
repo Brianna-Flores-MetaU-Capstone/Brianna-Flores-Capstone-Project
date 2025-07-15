@@ -2,14 +2,14 @@ import React from "react";
 import "../styles/LoginPage.css";
 import GenericList from "./GenericList";
 
-type UserPreferenceButtonsProps = {
+type GPUserPreferenceButtonsProps = {
   listName: string;
   listItems: string[];
   userList: string[];
   handleButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-const RegistrationPreferenceButtons: React.FC<UserPreferenceButtonsProps> = ({
+const RegistrationPreferenceButtons: React.FC<GPUserPreferenceButtonsProps> = ({
   listName,
   listItems,
   userList,
