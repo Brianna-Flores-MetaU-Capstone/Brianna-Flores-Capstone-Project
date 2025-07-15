@@ -1,15 +1,12 @@
-import React from "react";
 import {
   Modal,
-  Sheet,
   ModalClose,
-  Typography,
   ModalDialog,
-  DialogTitle,
   DialogContent,
 } from "@mui/joy";
 import type { GPRecipeEventOptionType } from "../utils/types";
-import CalendarEventOption from "./CalendarEventOption";
+import CalendarOptionGroup from "./CalendarOptionGroup";
+import TitledListView from "./TitledListView";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -31,11 +28,14 @@ const CalendarModal = ({
     >
       <ModalDialog layout="fullscreen">
         <ModalClose variant="plain" sx={{ m: 1 }} />
-        <DialogTitle>Event Suggestions</DialogTitle>
         <DialogContent>
-          {eventOptions && eventOptions[0] && eventOptions[0][0] && (
-            <CalendarEventOption eventOption={eventOptions[0][0]} />
-          )}
+          <TitledListView
+            headerList={[{ title: "Event Option Groups", spacing: 12 }]}
+            list={eventOptions}
+            renderItem={(optionGroup, index) => (
+              <CalendarOptionGroup key={index} eventOptions={optionGroup} groupNum={index + 1} />
+            )}
+          />
         </DialogContent>
       </ModalDialog>
     </Modal>

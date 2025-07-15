@@ -1,27 +1,48 @@
 import type { GPRecipeEventOptionType } from "../utils/types";
-import { Box, Card, IconButton, CardContent, Typography, AspectRatio, Button } from "@mui/joy";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {
+  Box,
+  Card,
+  IconButton,
+  CardContent,
+  Typography,
+  AspectRatio,
+  Button,
+} from "@mui/joy";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-const CalendarEventOption = ({eventOption}: {eventOption: GPRecipeEventOptionType}) => {
-    const recipe = eventOption.recipe
-    const startDate = new Date(eventOption.start)
-    const formattedStart = startDate.toLocaleTimeString([], {hour: 'numeric', minute: 'numeric'}).replace("PM", "").replace("AM", "")
-    const endDate = new Date(eventOption.end)
-    const formattedEnd = endDate.toLocaleTimeString([], {hour: 'numeric', minute: 'numeric'})
-    return (
-    <Card sx={{ width: 450 }}>
+const CalendarEventOption = ({
+  eventOption,
+}: {
+  eventOption: GPRecipeEventOptionType;
+}) => {
+  const recipe = eventOption.recipe;
+  const startDate = new Date(eventOption.start);
+  const formattedStart = startDate
+    .toLocaleTimeString([], { hour: "numeric", minute: "numeric" })
+    .replace("PM", "")
+    .replace("AM", "");
+  const endDate = new Date(eventOption.end);
+  const formattedEnd = endDate.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "numeric",
+  });
+  return (
+    <Card sx={{ width: 350 }}>
       <div>
-        <Typography level="title-lg">{recipe.recipeTitle}</Typography>
-        <Typography level="body-md">Cook Time: {recipe.readyInMinutes}</Typography>
-        <IconButton
-          aria-label="Accept Event Reccomendation"
-          variant="plain"
-          color="neutral"
-          size="sm"
-          sx={{ position: 'absolute', top: '0.875rem', right: '0.5rem' }}
+        <Typography
+          level="title-lg"
+          sx={{
+            textWrap: "nowrap",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
         >
-          <CheckCircleOutlineIcon />
-        </IconButton>
+          {recipe.recipeTitle}
+        </Typography>
+        <Typography level="body-md">
+          Cook Time: {recipe.readyInMinutes}
+        </Typography>
       </div>
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
@@ -32,21 +53,42 @@ const CalendarEventOption = ({eventOption}: {eventOption: GPRecipeEventOptionTyp
         />
       </AspectRatio>
       <CardContent orientation="horizontal">
-        <div>
-          <Typography level="body-sm">{startDate.toDateString()}</Typography>
-          <Typography sx={{ fontSize: 'lg', fontWeight: 'lg' }}>{formattedStart}- {formattedEnd}</Typography>
-        </div>
-        <Button
-          size="md"
-          color="primary"
-          aria-label="Adjust event recommendation"
-          sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
         >
-          Adjust Time
-        </Button>
+          <Box>
+            <Typography level="body-sm">{startDate.toDateString()}</Typography>
+            <Typography sx={{ fontSize: "lg", fontWeight: "lg" }}>
+              {formattedStart}- {formattedEnd}
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Button
+              size="md"
+              color="primary"
+              aria-label="Adjust event recommendation"
+              sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
+            >
+              Adjust Time
+            </Button>
+            <IconButton
+              aria-label="Accept Event Reccomendation"
+              variant="plain"
+              color="success"
+              size="md"
+            >
+              <CheckCircleOutlineIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </CardContent>
     </Card>
-    )
-}
+  );
+};
 
-export default CalendarEventOption
+export default CalendarEventOption;
