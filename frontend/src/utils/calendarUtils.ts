@@ -8,6 +8,9 @@ const parseUserEvents = (userEventsData: any) => {
 };
 
 import type { GPUserEventTypes } from "./types";
+import { START_OF_DAY_TIME, END_OF_DAY_TIME } from "./constants";
+
+const overnightHours = START_OF_DAY_TIME - END_OF_DAY_TIME + 24
 
 type GPFreeSpaceTypes = {
   userEvents: GPUserEventTypes[];
@@ -16,11 +19,7 @@ type GPFreeSpaceTypes = {
   REQUESTED_DAYS: number;
 };
 
-const findFreeTime = ({
-  userEvents,
-  startDate,
-  endDate,
-}: GPFreeSpaceTypes) => {
+const findFreeTime = ({ userEvents, startDate, endDate }: GPFreeSpaceTypes) => {
   // create array of available free spaces in a users week
   let freeSpaces: GPUserEventTypes[] = [];
   let timePointer = startDate;
@@ -51,9 +50,37 @@ const findFreeTime = ({
 };
 
 // remove free space between certain hours of the day
-const parseFreeTime = (freeSpace: GPUserEventTypes[]) => {
-    // loop through the array of free space
-
-}
+const parseFreeTime = (userFreeSpace: GPUserEventTypes[]) => {
+  let parsedFreeTime: GPUserEventTypes[] = [];
+  // loop through the array of free space
+  for (const freeSpace of userFreeSpace) {
+    let startDay = freeSpace.start;
+    let endDay = freeSpace.end;
+    // if start and end days are not the same, split event
+    while (startDay.getDay() !== endDay.getDay()) { // while loop if free space spans multiple days
+      const newStart = new Date(startDay);
+      const newEnd = new Date(startDay);
+      newEnd.setHours(END_OF_DAY_TIME, 0, 0, 0); // set end date to end of day
+      const splitFreeStart = {
+        name: "free",
+        start: newStart,
+        end: newEnd,
+      };
+      parsedFreeTime = [...parsedFreeTime, splitFreeStart];
+      startDay.setTime(newEnd.getTime() + 1000 * 60 * 60 * overnightHours);
+    }
+    if (startDay.getTime() < endDay.getTime()) {
+      parsedFreeTime = [
+        ...parsedFreeTime,
+        {
+          name: "free",
+          start: startDay,
+          end: endDay,
+        },
+      ];
+    }
+  }
+  return parsedFreeTime;
+};
 
 export { parseUserEvents, findFreeTime, parseFreeTime };

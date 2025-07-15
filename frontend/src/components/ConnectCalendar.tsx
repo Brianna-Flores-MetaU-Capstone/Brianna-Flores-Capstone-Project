@@ -84,6 +84,7 @@ const ConnectCalendar = () => {
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
       tokenClient.requestAccessToken({ prompt: "" });
+    listUpcomingEvents();
     }
   }
 
