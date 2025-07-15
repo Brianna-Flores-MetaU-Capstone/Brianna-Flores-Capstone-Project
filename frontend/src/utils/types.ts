@@ -83,6 +83,10 @@ type GPUserEventTypes = {
   end: Date;
 };
 
+type GPRecipeEventOptionType = GPUserEventTypes & {
+  recipe: GPRecipeDataTypes;
+};
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -95,4 +99,5 @@ export type {
   GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
   GPUserEventTypes,
+  GPRecipeEventOptionType
 };

@@ -1,7 +1,9 @@
-import {
+import type {
   GPUserEventTypes,
   GPRecipeDataTypes,
+  GPRecipeEventOptionType,
 } from "../../frontend/src/utils/types";
+
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
   shoppingTime: number;
@@ -37,9 +39,6 @@ const getShoppingTimeOptions = ({
   return eventOptions;
 };
 
-type GPRecipeOptionType = GPUserEventTypes & {
-  recipe: GPRecipeDataTypes;
-};
 type GPRecipeEventTypes = {
   userFreeTime: GPUserEventTypes[];
   userRecipes: GPRecipeDataTypes[];
@@ -49,7 +48,7 @@ const getRecipeTimeOptions = ({
   userRecipes,
 }: GPRecipeEventTypes) => {
   // cook one recipe max per day
-  let eventOptions: GPRecipeOptionType[] = [];
+  let eventOptions: GPRecipeEventOptionType[] = [];
   let currentDay = new Date(userFreeTime[0].start);
   for (const recipe of userRecipes) {
     for (const freeBlock of userFreeTime) {
@@ -95,7 +94,7 @@ const getMultipleScheduleOptions = ({
   userFreeTime,
   userRecipes,
 }: GPRecipeEventTypes) => {
-  let scheduleOptions: GPRecipeOptionType[][] = [];
+  let scheduleOptions: GPRecipeEventOptionType[][] = [];
   let freeTimeArray = userFreeTime;
   let recipeArray = userRecipes;
   for (let i = 0; i < NUM_SCHEDULE_OPTIONS; i++) {
@@ -129,4 +128,8 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return shuffledArray;
 };
 
-export { getShoppingTimeOptions, getRecipeTimeOptions, getMultipleScheduleOptions };
+export {
+  getShoppingTimeOptions,
+  getRecipeTimeOptions,
+  getMultipleScheduleOptions,
+};

@@ -7,8 +7,11 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 import { isAuthenticated } from "../utils/authMiddleware";
-import { getShoppingTimeOptions, getMultipleScheduleOptions } from "../utils/calendarUtils";
-const SHOPPING_TIME = 60
+import {
+  getShoppingTimeOptions,
+  getMultipleScheduleOptions,
+} from "../utils/calendarUtils";
+const SHOPPING_TIME = 60;
 
 router.post(
   "/reccomendEvents",
@@ -33,8 +36,14 @@ router.post(
       const userSelectedRecipes = user.recipes;
       // determine reccomended time slots to shop
       // approximate shopping time to be 1 hour
-      const shoppingTimeOptions = getShoppingTimeOptions({userFreeTime: parsedFreeTime, shoppingTime: SHOPPING_TIME})
-      const recipeScheduleOptions = getMultipleScheduleOptions({userFreeTime: parsedFreeTime, userRecipes: userSelectedRecipes})
+      const shoppingTimeOptions = getShoppingTimeOptions({
+        userFreeTime: parsedFreeTime,
+        shoppingTime: SHOPPING_TIME,
+      });
+      const recipeScheduleOptions = getMultipleScheduleOptions({
+        userFreeTime: parsedFreeTime,
+        userRecipes: userSelectedRecipes,
+      });
       res.json(recipeScheduleOptions);
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
