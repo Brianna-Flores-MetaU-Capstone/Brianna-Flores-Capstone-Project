@@ -83,7 +83,7 @@ const CalendarEventOption = ({
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <AdjustEventTimeModal eventInfo={eventOption} setEventOptions={() => {}}/>
+            <AdjustEventTimeModal eventInfo={eventOption} handleTimeSubmit={() => {}}/>
             <IconButton
               aria-label="Accept Event Reccomendation"
               variant="plain"

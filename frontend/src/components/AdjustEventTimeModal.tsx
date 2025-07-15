@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { GPRecipeEventOptionType } from "../utils/types";
 import {
   Button,
@@ -10,7 +10,10 @@ import {
   ModalClose,
   Sheet,
   Typography,
+  FormHelperText,
 } from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutline";
+
 import { EventTimeEnum } from "../utils/constants";
 
 type GPEventTimeModal = {
@@ -23,9 +26,9 @@ const AdjustEventTimeModal = ({
   handleTimeSubmit,
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
-  const [open, setOpen] = React.useState<boolean>(false);
   const eventStartTime = new Date(eventInfo.start);
   const eventEndTime = new Date(eventInfo.end);
+  const [open, setOpen] = React.useState<boolean>(false);
   const [start, setStart] = useState(
     eventStartTime.toLocaleTimeString([], {
       hour12: false,
@@ -40,16 +43,21 @@ const AdjustEventTimeModal = ({
       minute: "numeric",
     })
   );
+  const [inputError, setInputError] = useState(false);
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { time } = (event.target as HTMLInputElement).dataset;
     const { value } = event.target;
     if (time === EventTimeEnum.START) {
-      setStart(value)
+      setStart(value);
     } else if (time === EventTimeEnum.END) {
-      setEnd(value)
+      setEnd(value);
     }
   };
+
+  useEffect(() => {
+    setInputError(start > end);
+  }, [start, end]);
 
   const onTimeChangeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -62,7 +70,7 @@ const AdjustEventTimeModal = ({
       start: eventStartTime,
       end: eventEndTime,
     };
-    handleTimeSubmit(updatedEvent)
+    handleTimeSubmit(updatedEvent);
   };
 
   return (
@@ -97,7 +105,7 @@ const AdjustEventTimeModal = ({
             Adjust Event Time
           </Typography>
           <form onSubmit={onTimeChangeSubmit}>
-            <FormControl>
+            <FormControl error={inputError}>
               <FormLabel>New Start Time</FormLabel>
               <Input
                 type="time"
@@ -111,7 +119,7 @@ const AdjustEventTimeModal = ({
                 required
               />
             </FormControl>
-            <FormControl>
+            <FormControl error={inputError}>
               <FormLabel>New End Time</FormLabel>
               <Input
                 type="time"
@@ -124,8 +132,18 @@ const AdjustEventTimeModal = ({
                 }}
                 required
               />
+              {inputError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  End time must be after start
+                </FormHelperText>
+              )}
             </FormControl>
-            <Button type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
+            <Button
+              type="submit"
+              disabled={inputError}
+              sx={{ display: "flex", mx: "auto", mt: 2 }}
+            >
               Adjust Time
             </Button>
           </form>
