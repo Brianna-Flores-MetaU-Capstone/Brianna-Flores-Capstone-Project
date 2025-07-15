@@ -118,7 +118,7 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} setEvents={setCalendarEventOptions}/>
+          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} setEvents={setCalendarEventOptions} userSelectedRecipes={selectedRecipes}/>
         </Box>
         <Box>
           <TitledListView
