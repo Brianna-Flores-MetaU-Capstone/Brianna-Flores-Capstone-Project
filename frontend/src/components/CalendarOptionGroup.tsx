@@ -15,7 +15,7 @@ const CalendarOptionGroup = ({
 }: GPCalendarOptionGroup) => {
   return (
     <Box>
-      <Box sx={{display: "flex", alignItems: "center"}}>
+      <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
         <Typography>Option Group #{groupNum}</Typography>
         <IconButton
           aria-label="Accept Event Group Reccomendation"
@@ -24,6 +24,7 @@ const CalendarOptionGroup = ({
           size="lg"
         >
           <CheckCircleOutlineIcon />
+        <Typography>Accept All</Typography>
         </IconButton>
       </Box>
       <TitledListView

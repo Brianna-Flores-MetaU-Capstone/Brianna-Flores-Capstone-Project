@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/joy";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { DaysOfWeek } from "../utils/enum";
 
 const CalendarEventOption = ({
   eventOption,
@@ -28,10 +29,20 @@ const CalendarEventOption = ({
   });
   return (
     <Card sx={{ width: 350 }}>
-      <div>
+      <Box>
         <Typography
           level="title-lg"
           sx={{
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          {DaysOfWeek[startDate.getDay()]}
+        </Typography>
+        <Typography
+          level="title-lg"
+          sx={{
+            textAlign: "center",
             textWrap: "nowrap",
             overflow: "hidden",
             whiteSpace: "nowrap",
@@ -40,10 +51,13 @@ const CalendarEventOption = ({
         >
           {recipe.recipeTitle}
         </Typography>
-        <Typography level="body-md">
-          Cook Time: {recipe.readyInMinutes}
-        </Typography>
-      </div>
+        <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+          <Typography level="body-md">
+            Cook Time: {recipe.readyInMinutes}
+          </Typography>
+          <Typography level="body-md">Servings: {recipe.servings}</Typography>
+        </Box>
+      </Box>
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
           src={recipe.previewImage}

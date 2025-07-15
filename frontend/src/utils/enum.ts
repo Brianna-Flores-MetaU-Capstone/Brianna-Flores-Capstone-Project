@@ -58,4 +58,14 @@ const Departments = [
   "Tea and Coffee",
 ];
 
-export { IngredientUnitOptions, Intolerances, Diets, Departments };
+const DaysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+]
+
+export { IngredientUnitOptions, Intolerances, Diets, Departments, DaysOfWeek };
