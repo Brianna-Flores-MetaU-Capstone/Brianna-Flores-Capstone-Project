@@ -7,13 +7,15 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 import { isAuthenticated } from "../utils/authMiddleware";
+import { chooseShoppingTime } from "../utils/calendarUtils";
+const SHOPPING_TIME = 60
 
 router.post(
   "/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { parsedUserEvents, startDate, endDate, REQUESTED_DAYS } = req.body;
+    const { parsedFreeTime } = req.body;
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
@@ -29,7 +31,10 @@ router.post(
       }
       // now we have the users list of recipes
       const userSelectedRecipes = user.recipes;
-      res.json("TODO: return list of empty spaces in calendar");
+      // determine reccomended time slots to shop
+      // approximate shopping time to be 1 hour
+      const shoppingTimeOptions = chooseShoppingTime({userFreeTime: parsedFreeTime, shoppingTime: SHOPPING_TIME})
+      res.json(shoppingTimeOptions);
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
