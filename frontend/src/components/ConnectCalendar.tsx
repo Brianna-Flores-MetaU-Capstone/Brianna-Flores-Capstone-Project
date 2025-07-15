@@ -11,7 +11,7 @@ import type { GPUserEventTypes } from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
 
 // TODO change requested days to have user input
-const REQUESTED_DAYS = 2;
+const REQUESTED_DAYS = 7;
 
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
