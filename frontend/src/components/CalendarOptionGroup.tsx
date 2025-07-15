@@ -7,17 +7,20 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];
   groupNum: number;
+  adjustedSuggestion: boolean;
 };
 
 const CalendarOptionGroup = ({
   eventOptions,
   groupNum,
+  adjustedSuggestion,
 }: GPCalendarOptionGroup) => {
   return (
     <Box>
       <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
         <Typography>Option Group #{groupNum}</Typography>
         <IconButton
+          disabled={adjustedSuggestion}
           aria-label="Accept Event Group Reccomendation"
           variant="plain"
           color="success"

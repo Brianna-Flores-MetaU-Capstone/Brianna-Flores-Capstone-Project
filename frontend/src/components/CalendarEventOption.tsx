@@ -10,6 +10,7 @@ import {
 } from "@mui/joy";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { DaysOfWeek } from "../utils/enum";
+import AdjustEventTimeModal from "./AdjustEventTimeModal";
 
 const CalendarEventOption = ({
   eventOption,
@@ -82,14 +83,7 @@ const CalendarEventOption = ({
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button
-              size="md"
-              color="primary"
-              aria-label="Adjust event recommendation"
-              sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
-            >
-              Adjust Time
-            </Button>
+            <AdjustEventTimeModal eventInfo={eventOption} setEventOptions={() => {}}/>
             <IconButton
               aria-label="Accept Event Reccomendation"
               variant="plain"
