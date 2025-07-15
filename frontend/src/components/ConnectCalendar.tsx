@@ -70,6 +70,21 @@ const ConnectCalendar = () => {
         },
       });
     }
+    if (gapiInited && gisInited) {
+      const token = gapi.client.getToken();
+      if (token) {
+        getUserFreeTime();
+      }
+    }
+  }, [gapiInited, gisInited]);
+
+  useEffect(() => {
+    if (gapiInited && gisInited) {
+      const token = gapi.client.getToken();
+      if (token) {
+        getUserFreeTime();
+      }
+    }
   }, [gapiInited, gisInited]);
 
   function handleAuthClick() {
@@ -83,7 +98,6 @@ const ConnectCalendar = () => {
       tokenClient.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
-      tokenClient.requestAccessToken({ prompt: "" });
       getUserFreeTime();
     }
   }
@@ -117,7 +131,6 @@ const ConnectCalendar = () => {
           },
         }
       );
-      const userTimeZone = response.data.timeZone
       const userEvents = response.data.items;
       // parse events to extract out only needed information
       const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents);
@@ -135,10 +148,9 @@ const ConnectCalendar = () => {
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
-      const eventOptions = reccomendedEvents.data
-      // need to parse through returned events since not in local time
-      // TODO set state variable held within new list to hold the returned list
-
+      const eventOptions = reccomendedEvents.data;
+      // TODO set state variable held within new-list-page to hold the list of generated event options
+      
       // within new list convert to local time zone and present options to user
     } catch (err) {
       return;

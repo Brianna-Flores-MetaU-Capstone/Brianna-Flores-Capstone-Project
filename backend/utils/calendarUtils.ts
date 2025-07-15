@@ -48,8 +48,7 @@ const getRecipeTimeOptions = ({
   userFreeTime,
   userRecipes,
 }: GPRecipeEventTypes) => {
-  // cook one recipe per day
-  // TODO loop through number of options we want
+  // cook one recipe max per day
   let eventOptions: GPRecipeOptionType[] = [];
   let currentDay = new Date(userFreeTime[0].start);
   for (const recipe of userRecipes) {
@@ -90,4 +89,44 @@ const getRecipeTimeOptions = ({
   return eventOptions;
 };
 
-export { getShoppingTimeOptions, getRecipeTimeOptions };
+const NUM_SCHEDULE_OPTIONS = 3;
+
+const getMultipleScheduleOptions = ({
+  userFreeTime,
+  userRecipes,
+}: GPRecipeEventTypes) => {
+  let scheduleOptions: GPRecipeOptionType[][] = [];
+  let freeTimeArray = userFreeTime;
+  let recipeArray = userRecipes;
+  for (let i = 0; i < NUM_SCHEDULE_OPTIONS; i++) {
+    const option = getRecipeTimeOptions({
+      userFreeTime: freeTimeArray,
+      userRecipes: recipeArray,
+    });
+    scheduleOptions = [...scheduleOptions, option];
+    recipeArray = shuffleArray(recipeArray);
+  }
+  return scheduleOptions;
+};
+
+// shuffle algorithm from: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffledArray = [...array];
+  let currentIndex = shuffledArray.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
+      shuffledArray[randomIndex],
+      shuffledArray[currentIndex],
+    ];
+  }
+  return shuffledArray;
+};
+
+export { getShoppingTimeOptions, getRecipeTimeOptions, getMultipleScheduleOptions };

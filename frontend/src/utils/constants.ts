@@ -26,7 +26,6 @@ const GROCERY_MODAL = "grocery-page";
 
 const START_OF_DAY_TIME = 8;
 const END_OF_DAY_TIME = 20;
-const SHOPPING_TIME = 60;
 
 const PreviewConstants = {
   GROCERY: "Grocery List",
@@ -44,5 +43,4 @@ export {
   GROCERY_MODAL,
   START_OF_DAY_TIME,
   END_OF_DAY_TIME,
-  SHOPPING_TIME
 };
