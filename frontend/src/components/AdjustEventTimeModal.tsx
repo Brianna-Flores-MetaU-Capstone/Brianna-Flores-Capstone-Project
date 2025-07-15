@@ -15,32 +15,54 @@ import { EventTimeEnum } from "../utils/constants";
 
 type GPEventTimeModal = {
   eventInfo: GPRecipeEventOptionType;
-  setEventOptions: (data: GPRecipeEventOptionType) => void;
+  handleTimeSubmit: (data: GPRecipeEventOptionType) => void;
 };
 
 const AdjustEventTimeModal = ({
   eventInfo,
-  setEventOptions,
+  handleTimeSubmit,
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const [open, setOpen] = React.useState<boolean>(false);
   const eventStartTime = new Date(eventInfo.start);
   const eventEndTime = new Date(eventInfo.end);
-  const [start, setStart] = useState(eventStartTime.toLocaleTimeString([], { hour12: false, hour: "numeric", minute: "numeric" }))
-  const [end, setEnd] = useState(eventEndTime.toLocaleTimeString([], { hour12: false, hour: "numeric", minute: "numeric" }))
+  const [start, setStart] = useState(
+    eventStartTime.toLocaleTimeString([], {
+      hour12: false,
+      hour: "numeric",
+      minute: "numeric",
+    })
+  );
+  const [end, setEnd] = useState(
+    eventEndTime.toLocaleTimeString([], {
+      hour12: false,
+      hour: "numeric",
+      minute: "numeric",
+    })
+  );
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { time } = (event.target as HTMLInputElement).dataset;
     const { value } = event.target;
     if (time === EventTimeEnum.START) {
-      eventStartTime.setHours(parseInt(value.substring(0, 2)));
-      eventStartTime.setMinutes(parseInt(value.substring(3)));
-      setStart(eventStartTime.toLocaleTimeString([], { hour12: false, hour: "numeric", minute: "numeric" }))
+      setStart(value)
     } else if (time === EventTimeEnum.END) {
-      eventEndTime.setHours(parseInt(value.substring(0, 2)));
-      eventEndTime.setMinutes(parseInt(value.substring(3)));
-      setEnd(eventEndTime.toLocaleTimeString([], { hour12: false, hour: "numeric", minute: "numeric" }))
+      setEnd(value)
     }
+  };
+
+  const onTimeChangeSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    eventStartTime.setHours(parseInt(start.substring(0, 2)));
+    eventStartTime.setMinutes(parseInt(start.substring(3)));
+    eventEndTime.setHours(parseInt(end.substring(0, 2)));
+    eventEndTime.setMinutes(parseInt(end.substring(3)));
+    const updatedEvent = {
+      ...eventInfo,
+      start: eventStartTime,
+      end: eventEndTime,
+    };
+    handleTimeSubmit(updatedEvent)
   };
 
   return (
@@ -74,7 +96,7 @@ const AdjustEventTimeModal = ({
           >
             Adjust Event Time
           </Typography>
-          <form>
+          <form onSubmit={onTimeChangeSubmit}>
             <FormControl>
               <FormLabel>New Start Time</FormLabel>
               <Input
@@ -103,6 +125,9 @@ const AdjustEventTimeModal = ({
                 required
               />
             </FormControl>
+            <Button type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
+              Adjust Time
+            </Button>
           </form>
         </Sheet>
       </Modal>
