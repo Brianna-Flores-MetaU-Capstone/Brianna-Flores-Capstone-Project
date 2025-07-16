@@ -1,20 +1,46 @@
-import type { GPAuthFormDataTypes, GPIngredientDataTypes, GPRecipeIngredientTypes } from "./types";
+import type {
+  GPAuthFormDataTypes,
+  GPIngredientDataTypes,
+  GPRecipeIngredientTypes,
+  GPIngredientWithCostInfoTypes,
+} from "./types";
+import axios from "axios";
+import { axiosConfig } from "./databaseHelpers";
 
-const parseRecipeData = (recipeData: any) => {
-  return recipeData.map((recipe: any) => ({
-    apiId: recipe.id,
-    recipeTitle: recipe.title,
-    previewImage: recipe.image,
-    servings: recipe.servings,
-    ingredients: parseIngredients(recipe.extendedIngredients),
-    instructions: parseInstructions(recipe.analyzedInstructions[0].steps),
-    sourceUrl: recipe.sourceUrl,
-    vegetarian: recipe.vegetarian,
-    vegan: recipe.vegan,
-    glutenFree: recipe.glutenFree,
-    dairyFree: recipe.dairyFree,
-    totalCost: estimateTotalCost(recipe.ingredients),
-  }));
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+
+const parseRecipeData = async (
+  ownedIngredients: GPIngredientDataTypes,
+  recipeData: any
+) => {
+  return await Promise.all(
+    recipeData.map(async (recipe: any) => {
+      const parsedIngredinets = parseIngredients(recipe.extendedIngredients);
+      const parsedInstructions = parseInstructions(
+        recipe.analyzedInstructions[0].steps
+      );
+      const estimatedRecipeCostInfo = await estimateRecipeCost({
+        ownedIngredients,
+        recipeIngredients: parsedIngredinets,
+      });
+      return {
+        apiId: recipe.id,
+        recipeTitle: recipe.title,
+        previewImage: recipe.image,
+        servings: recipe.servings,
+        ingredients: parsedIngredinets,
+        instructions: parsedInstructions,
+        sourceUrl: recipe.sourceUrl,
+        vegetarian: recipe.vegetarian,
+        vegan: recipe.vegan,
+        glutenFree: recipe.glutenFree,
+        dairyFree: recipe.dairyFree,
+        ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
+        totalCost: estimatedRecipeCostInfo.estimatedCost,
+        isChecked: false,
+      };
+    })
+  );
 };
 
 const parseIngredients = (ingredientsData: any) => {
@@ -38,8 +64,26 @@ const getIngredientCost = (ingredientName: string) => {
   return 0;
 };
 
-const estimateTotalCost = (ingredients: GPIngredientDataTypes) => {
-  return 0;
+type GPEstimateRecipeCostTypes = {
+  recipeIngredients: GPRecipeIngredientTypes;
+  ownedIngredients: GPIngredientDataTypes;
+};
+
+const estimateRecipeCost = async ({
+  ownedIngredients,
+  recipeIngredients,
+}: GPEstimateRecipeCostTypes) => {
+  try {
+    const response = await axios.post(
+      `${databaseUrl}/generateList/estimateCost`,
+      { ownedIngredients, recipeIngredients },
+      axiosConfig
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error estimating cost, send default cost");
+    return;
+  }
 };
 
 const validateInput = (formData: GPAuthFormDataTypes) => {
@@ -66,17 +110,17 @@ const handleAuthInputChange = (
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };
 
-  const parseGroceryListDepartments = (
-    groceryList: GPRecipeIngredientTypes[]
-  ) => {
-    let departments: string[] = [];
-    for (const grocery of groceryList) {
-      if (!departments.includes(grocery.department)) {
-        departments = [...departments, grocery.department];
-      }
+const parseGroceryListDepartments = (
+  groceryList: GPIngredientWithCostInfoTypes[]
+) => {
+  let departments: string[] = [];
+  for (const grocery of groceryList) {
+    if (!departments.includes(grocery.ingredient.department)) {
+      departments = [...departments, grocery.ingredient.department];
     }
-    return departments;
-  };
+  }
+  return departments;
+};
 
 const GPModalStyle = {
   position: "absolute",
@@ -91,4 +135,10 @@ const GPModalStyle = {
   overflow: "auto",
 };
 
-export { validateInput, parseRecipeData, handleAuthInputChange, parseGroceryListDepartments, GPModalStyle };
+export {
+  validateInput,
+  parseRecipeData,
+  handleAuthInputChange,
+  parseGroceryListDepartments,
+  GPModalStyle,
+};

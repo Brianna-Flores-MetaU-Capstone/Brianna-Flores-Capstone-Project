@@ -39,14 +39,6 @@ const NavBar: React.FC<GPToggleNavBarProps> = ({ toggleNav, navOpen }) => {
         Grocery List
       </NavLink>
       <NavLink
-        to="/recipes"
-        className={({ isActive }) => (isActive ? "nav-active" : "nav-inactive")}
-        onClick={toggleNav}
-        end
-      >
-        Recipes
-      </NavLink>
-      <NavLink
         to="/account"
         className={({ isActive }) => (isActive ? "nav-active" : "nav-inactive")}
         onClick={toggleNav}

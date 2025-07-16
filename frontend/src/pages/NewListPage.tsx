@@ -3,7 +3,7 @@ import type {
   GPToggleNavBarProps,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
-  GPRecipeIngredientTypes
+  GPRecipeIngredientTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -11,7 +11,7 @@ import MealInfoModal from "../components/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
 import Button from "@mui/material/Button";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -20,6 +20,9 @@ import {
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
 import { useNavigate } from "react-router";
+import LoadingModal from "../components/LoadingModal";
+import axios from "axios";
+import { axiosConfig } from "../utils/databaseHelpers";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -33,6 +36,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [loadingList, setLoadingList] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -60,47 +64,41 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   };
 
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
-    // take the current recipes we have
-    const updatedUser = await fetch(
-      `${databaseUrl}/recipes/${deletedRecipe.apiId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!updatedUser.ok) {
+    try {
+      await axios.put(
+        `${databaseUrl}/recipes/${deletedRecipe.apiId}`,
+        {},
+        axiosConfig
+      );
+      await fetchRecipes({ setMessage, setSelectedRecipes });
+    } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }
-    await fetchRecipes({ setMessage, setSelectedRecipes });
   };
-  
+
   const getRecipeIngredients = (recipes: GPRecipeDataTypes[]) => {
-    let recipeIngredients: GPRecipeIngredientTypes[] = []
+    let recipeIngredients: GPRecipeIngredientTypes[] = [];
     for (const recipe of recipes) {
-      recipeIngredients = [...recipeIngredients, ...recipe.ingredients]
+      recipeIngredients = [...recipeIngredients, ...recipe.ingredients];
     }
-    return recipeIngredients
-  }
+    return recipeIngredients;
+  };
 
   const handleGenerateList = async () => {
-    const ingredientsOnHand = await fetchUserIngredientsHelper({ setMessage });
-    const recipeIngredients = getRecipeIngredients(selectedRecipes)
-    const response = await fetch(`${databaseUrl}/generateList/${user?.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ingredientsOnHand, recipeIngredients}),
-      credentials: "include",
-    })
-    if (!response.ok) {
+    setLoadingList(true);
+    const ownedIngredients = await fetchUserIngredientsHelper({ setMessage });
+    const recipeIngredients = getRecipeIngredients(selectedRecipes);
+
+    try {
+      await axios.post(
+        `${databaseUrl}/generateList/${user?.id}`,
+        { ownedIngredients, recipeIngredients },
+        axiosConfig
+      );
+      navigate("/grocery-list");
+    } catch (error) {
       setMessage({ error: true, message: "Failed to generate grocery list" });
     }
-    const data = await response.json()
-    navigate("/grocery-list")
   };
 
   return (
@@ -112,7 +110,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         </Button>
         <Button onClick={handleGenerateList}>Make My List</Button>
       </section>
-      <GenericList
+      <TitledListView
         className="selected-meals"
         headerList={["Selected Meals"]}
         list={selectedRecipes}
@@ -138,6 +136,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
+      <LoadingModal modalOpen={loadingList} />
     </div>
   );
 };

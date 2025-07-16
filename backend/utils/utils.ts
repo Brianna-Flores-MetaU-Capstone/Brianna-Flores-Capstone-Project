@@ -7,6 +7,7 @@ import type {
 } from "../../frontend/src/utils/types";
 import { unitConversions } from "./constants";
 import convert from "convert-units";
+import { searchWalmart } from "./walmartAPI";
 
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.User.findUnique({
@@ -22,7 +23,7 @@ type GPConvertUnitsType = {
 const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
   let convertToUnit = unitConversions[convertTo.unit.toLowerCase()];
   let convertingUnit = unitConversions[converting.unit.toLowerCase()];
-  let convertingQuantity = parseInt(converting.quantity);
+  let convertingQuantity = converting.quantity;
   if (convertToUnit && convertingUnit) {
     // ingredient units converted to convert-unit library compatible format
     try {
@@ -32,7 +33,7 @@ const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
       convertingUnit = convertToUnit;
     } catch (error) {
       // TODO handle errors in type conversion better
-      convertingQuantity = parseInt(converting.quantity);
+      convertingQuantity = converting.quantity;
       convertingUnit = convertingUnit;
     }
   }
@@ -71,7 +72,7 @@ const getTotalQuantity = ({
         });
         totalQuantity += converted.converted.quantity;
       } else {
-        totalQuantity += parseInt(ingredient.quantity);
+        totalQuantity += ingredient.quantity;
       }
     }
   }
@@ -88,7 +89,7 @@ const quantityNeeded = ({
   recipeIngredient,
 }: GPQuantityNeededTypes) => {
   let ingredientOnHandQuantity = ingredientOnHand.quantity;
-  let recipeIngredientQuantity = parseInt(recipeIngredient.quantity);
+  let recipeIngredientQuantity = recipeIngredient.quantity;
   if (
     unitConversions[ingredientOnHand.unit.toLowerCase()] !==
     unitConversions[recipeIngredient.unit.toLowerCase()]
@@ -100,24 +101,24 @@ const quantityNeeded = ({
     });
     recipeIngredientQuantity = converted.converted.quantity;
   }
-  if (recipeIngredientQuantity <= parseInt(ingredientOnHandQuantity)) {
+  if (recipeIngredientQuantity <= ingredientOnHandQuantity) {
     return 0;
   }
-  return recipeIngredientQuantity - parseInt(ingredientOnHandQuantity);
+  return recipeIngredientQuantity - ingredientOnHandQuantity;
 };
 
-type GPCreateGroceryListType = {
+type GPMissingIngredientsListType = {
   recipeIngredients: GPRecipeIngredientTypes[];
-  ingredientsOnHand: GPIngredientDataTypes[];
+  ownedIngredients: GPIngredientDataTypes[];
 };
 
-const createGroceryList = ({
+const getListOfMissingIngredients = ({
   recipeIngredients,
-  ingredientsOnHand,
-}: GPCreateGroceryListType) => {
+  ownedIngredients,
+}: GPMissingIngredientsListType) => {
   let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
-  const ingredientsOnHandNames = ingredientsOnHand.map((ingredient) =>
+  const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
     ingredient.ingredientName.toLowerCase()
   );
 
@@ -134,10 +135,10 @@ const createGroceryList = ({
       });
       const updatedIngredient =
         totalQuantity > 0
-          ? { ...recipeIngredient, quantity: totalQuantity.toFixed(2) }
+          ? { ...recipeIngredient, quantity: totalQuantity }
           : recipeIngredient;
       if (
-        ingredientsOnHandNames.indexOf(
+        ownedIngredientsNames.indexOf(
           recipeIngredient.ingredientName.toLowerCase()
         ) === -1
       ) {
@@ -146,8 +147,8 @@ const createGroceryList = ({
       } else {
         // user has ingredient, check if they have enough
         const ingredientOnHand =
-          ingredientsOnHand[
-            ingredientsOnHandNames.indexOf(recipeIngredient.ingredientName)
+          ownedIngredients[
+            ownedIngredientsNames.indexOf(recipeIngredient.ingredientName)
           ];
         const quantityUserNeeds = quantityNeeded({
           ingredientOnHand,
@@ -156,7 +157,7 @@ const createGroceryList = ({
         if (quantityUserNeeds > 0) {
           ingredientsToPurchase = [
             ...ingredientsToPurchase,
-            { ...updatedIngredient, quantity: quantityUserNeeds.toString() },
+            { ...updatedIngredient, quantity: quantityUserNeeds },
           ];
         }
       }
@@ -165,10 +166,57 @@ const createGroceryList = ({
   return ingredientsToPurchase;
 };
 
+type GPEstimateListCostTypes = {
+  ingredientsToPurchase: GPRecipeIngredientTypes[];
+};
+
+type GPIngredientCostInfoTypes = {
+  ingredient: GPRecipeIngredientTypes;
+  ingredientApiInfo: { ingredientCost: number; ingredientAmount: number };
+};
+const estimateListCost = async ({
+  ingredientsToPurchase,
+}: GPEstimateListCostTypes) => {
+  let ingredientCostInfo: GPIngredientCostInfoTypes[] = [];
+  let estimatedCost = 0;
+  for (const ingredient of ingredientsToPurchase) {
+    const ingredientApiInfo = await getCostForAmountOfIngredient({
+      ingredient,
+    });
+    const ingredientCost = ingredientApiInfo.ingredientCost;
+    estimatedCost += ingredientCost;
+    ingredientCostInfo = [
+      ...ingredientCostInfo,
+      {
+        ingredient: { ...ingredient, isChecked: false },
+        ingredientApiInfo,
+      },
+    ];
+  }
+  return { ingredientCostInfo, estimatedCost };
+};
+
+type GPGetItemCostType = {
+  ingredient: GPRecipeIngredientTypes;
+};
+
+const getCostForAmountOfIngredient = async ({
+  ingredient,
+}: GPGetItemCostType) => {
+  const searchResults = await searchWalmart(ingredient.ingredientName);
+  // get the cost of the first result (most rellevant)
+  const ingredientCost = searchResults?.items[0].salePrice ?? 0.0;
+  const ingredientAmount = searchResults?.items[0]?.size ?? "Not Found";
+  // TODO implement check for item[0].size of item using convert quantity
+  return { ingredientCost, ingredientAmount };
+};
+
 export {
   checkUserExists,
   convertUnits,
   getTotalQuantity,
   quantityNeeded,
-  createGroceryList,
+  getListOfMissingIngredients,
+  estimateListCost,
+  type GPIngredientCostInfoTypes,
 };

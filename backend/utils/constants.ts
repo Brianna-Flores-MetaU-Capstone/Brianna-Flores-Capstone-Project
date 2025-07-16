@@ -34,7 +34,7 @@ const unitConversions: Record<string, string> = {
   tbs: "Tbs",
   "tbs.": "Tbs",
   tbsp: "Tbs",
-  "Tbsp.": "Tbs",
+  "tbsp.": "Tbs",
   tablespoon: "Tbs",
   tablespoons: "Tbs",
 

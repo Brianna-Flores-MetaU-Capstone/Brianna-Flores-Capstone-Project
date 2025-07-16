@@ -2,32 +2,49 @@ import React from "react";
 import "../styles/Homepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
-import type { GPIngredientDataTypes } from "../utils/types";
+import type {
+  GPIngredientApiInfoType,
+  GPIngredientDataTypes,
+} from "../utils/types";
 
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
-  groceryCheck: boolean;
+  presentGroceryCheck: boolean;
   presentExpiration: boolean;
   presentButtons: boolean;
+  ingredientCost?: GPIngredientApiInfoType;
+  onGroceryCheck?: (ingredientName: string) => void;
   onEdit?: (ingredient: GPIngredientDataTypes) => void;
   onDelete?: (ingredient: GPIngredientDataTypes) => void;
 };
 
 const Ingredient: React.FC<GPIngredientProps> = ({
   ingredient,
-  groceryCheck,
+  presentGroceryCheck,
   presentExpiration,
+  ingredientCost,
   presentButtons,
+  onGroceryCheck,
   onEdit,
   onDelete,
 }) => {
   return (
     <div className="list-ingredient">
-      {groceryCheck && <input type="checkbox" />}
+      {presentGroceryCheck && <input type="checkbox" checked={ingredient.isChecked} onChange={() => onGroceryCheck?.(ingredient.ingredientName)} />}
       <p className="ingredient-name">{ingredient.ingredientName}</p>
-      <p className="ingredient-amount">{`${ingredient.quantity} ${ingredient.unit}`}</p>
+      {/* Quantity goes to 2 decimal places only if decimal */}
+      <p className="ingredient-amount">{`${
+        ingredient.quantity % 1 === 0
+          ? ingredient.quantity
+          : ingredient.quantity.toFixed(2)
+      } ${ingredient.unit}`}</p>
       {presentExpiration && (
         <p className="ingredient-expiration">{ingredient.expirationDate}</p>
+      )}
+      {ingredientCost && (
+        <p className="ingredient-cost">
+          Est. ${ingredientCost.ingredientCost?.toFixed(2)}
+        </p>
       )}
       {presentButtons && (
         <div className="ingredient-buttons-container">

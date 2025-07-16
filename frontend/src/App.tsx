@@ -7,9 +7,7 @@ import { useState } from "react";
 import Homepage from "./pages/Homepage";
 import NewListPage from "./pages/NewListPage";
 import IngredientsPage from "./pages/IngredientsPage";
-import RecipesPage from "./pages/RecipesPage";
 import LoginPage from "./pages/LoginPage";
-import CreateRecipePage from "./pages/CreateRecipePage";
 import NoMatchPage from "./pages/NoMatchPage";
 import GroceryList from "./pages/GroceryList";
 import SignupForm from "./pages/SignupForm";
@@ -54,17 +52,6 @@ function App() {
             />
           }
         />
-        <Route
-          path="recipes"
-          element={
-            <RecipesPage
-              navOpen={navOpen}
-              toggleNav={() => setNavOpen((prev) => !prev)}
-            />
-          }
-        >
-          <Route path="create" element={<CreateRecipePage />} />
-        </Route>
         <Route
           path="grocery-list"
           element={

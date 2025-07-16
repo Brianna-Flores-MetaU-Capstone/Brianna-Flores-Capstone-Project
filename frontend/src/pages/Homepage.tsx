@@ -1,33 +1,58 @@
 import "../styles/Homepage.css";
-import type { GPErrorMessageTypes, GPIngredientDataTypes, GPRecipeIngredientTypes, GPToggleNavBarProps } from "../utils/types";
-import NextRecipe from "../components/NextRecipe";
+import type {
+  GPErrorMessageTypes,
+  GPIngredientDataTypes,
+  GPToggleNavBarProps,
+  GPIngredientWithCostInfoTypes,
+  GPRecipeDataTypes,
+} from "../utils/types";
 import AppHeader from "../components/AppHeader";
-import GenericList from "../components/GenericList";
+import TitledListView from "../components/TitledListView";
 import { PreviewConstants } from "../utils/constants";
 import Ingredient from "../components/Ingredient";
+import MealCard from "../components/MealCard";
 import { v4 as uuidv4 } from "uuid";
-import { fetchGroceryList, fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import {
+  fetchGroceryList,
+  fetchUserIngredientsHelper,
+  fetchRecipes,
+} from "../utils/databaseHelpers";
 import { useState, useEffect } from "react";
+import { useUser } from "../contexts/UserContext";
 
 const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
-  const [message, setMessage] = useState<GPErrorMessageTypes>()
-  const [userGroceryList, setUserGroceryList] = useState<GPRecipeIngredientTypes[]>([])
-  const [userIngredientList, setUserIngredientList] = useState<GPIngredientDataTypes[]>([])
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [userGroceryList, setUserGroceryList] = useState<
+    GPIngredientWithCostInfoTypes[]
+  >([]);
+  const [userIngredientList, setUserIngredientList] = useState<
+    GPIngredientDataTypes[]
+  >([]);
+  const [selectedRecipes, setSelectedRecipes] = useState<GPRecipeDataTypes[]>(
+    []
+  );
+
+  const { user } = useUser();
+
   useEffect(() => {
-    const setLists = async () => {
-      fetchGroceryList({setMessage, setUserGroceryList});
-      const userIngredients = await fetchUserIngredientsHelper({setMessage})
-      setUserIngredientList(userIngredients)
-    }
-    setLists();
-  }, [])
+    const setUserListPreviews = async () => {
+      if (user) {
+        fetchGroceryList({ setMessage, setUserGroceryList });
+        const userIngredients = await fetchUserIngredientsHelper({
+          setMessage,
+        });
+        setUserIngredientList(userIngredients);
+        await fetchRecipes({ setMessage, setSelectedRecipes });
+      }
+    };
+    setUserListPreviews();
+  }, []);
   return (
     <div className="homepage-container">
       <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
       <section className="quick-access-container">
-        <NextRecipe />
         <div className="item-list">
-          <GenericList
+          <TitledListView
             className="list-items"
             headerList={[PreviewConstants.INGREDIENT]}
             list={userIngredientList}
@@ -35,7 +60,7 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               <Ingredient
                 key={uuidv4()}
                 ingredient={ingredient}
-                groceryCheck={false}
+                presentGroceryCheck={false}
                 presentExpiration={false}
                 presentButtons={false}
               />
@@ -43,15 +68,15 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           />
         </div>
         <div className="item-list">
-          <GenericList
+          <TitledListView
             className="list-items"
             headerList={[PreviewConstants.GROCERY]}
             list={userGroceryList}
             renderItem={(item) => (
               <Ingredient
                 key={uuidv4()}
-                ingredient={item}
-                groceryCheck={true}
+                ingredient={item?.ingredient}
+                presentGroceryCheck={true}
                 presentExpiration={false}
                 presentButtons={false}
               />
@@ -60,7 +85,18 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         </div>
       </section>
       <section className="upcoming-meals">
-        <h3>Upcoming Meals</h3>
+        <TitledListView
+          className="selected-meals"
+          headerList={["Upcoming Meals"]}
+          list={selectedRecipes}
+          renderItem={(meal) => (
+            <MealCard
+              key={meal.apiId}
+              onMealCardClick={() => event?.preventDefault()}
+              parsedMealData={meal}
+            />
+          )}
+        />
       </section>
     </div>
   );

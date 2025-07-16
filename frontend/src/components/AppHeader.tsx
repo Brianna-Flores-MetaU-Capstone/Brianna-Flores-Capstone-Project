@@ -26,7 +26,6 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       <button className="nav-button" onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
       </button>
-      {/* TODO make a better name */}
       <h1>Grociplan</h1>
       <div className="auth-access-buttons">
         {user ? (

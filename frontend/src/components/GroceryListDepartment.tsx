@@ -1,25 +1,24 @@
 import React from "react";
 import type {
   GPIngredientDataTypes,
-  GPRecipeIngredientTypes,
+  GPIngredientWithCostInfoTypes,
 } from "../utils/types";
-import GenericList from "./GenericList";
+import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { v4 as uuidv4 } from "uuid";
 
 type GPGroceryListDepartmentProps = {
-  groceryList: GPRecipeIngredientTypes[];
+  groceryList: GPIngredientWithCostInfoTypes[];
   department: string;
-  handleOpenModal: (ingredient: GPIngredientDataTypes) => void;
+  onGroceryCheck: (ingredientName: string) => void;
 };
-
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,
   department,
-  handleOpenModal,
+  onGroceryCheck,
 }) => {
   const filteredGroceries = groceryList.filter(
-    (item) => item.department === department
+    (item) => item.ingredient.department === department
   );
 
   const handleDeleteIngredient = async (
@@ -28,18 +27,19 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
 
   return (
     <div className="grocery-department">
-      <GenericList
+      <TitledListView
         className="grocery-department-items"
         headerList={[department]}
         list={filteredGroceries}
-        renderItem={(ingredient) => (
+        renderItem={(itemInfo) => (
           <Ingredient
             key={uuidv4()}
-            ingredient={ingredient}
-            groceryCheck={true}
+            ingredient={itemInfo.ingredient}
+            presentGroceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            onEdit={handleOpenModal}
+            ingredientCost={itemInfo.ingredientApiInfo}
+            onGroceryCheck={onGroceryCheck}
             onDelete={handleDeleteIngredient}
           />
         )}

@@ -26,7 +26,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <div className="meal-info">
             <h2>{recipeInfo?.recipeTitle}</h2>
             <p>Servings: {recipeInfo?.servings}</p>
-            <p>Estimated Cost: ${recipeInfo?.totalCost}</p>
             <ul className="diets-and-intolerances">
               {recipeInfo?.dairyFree && <li>Dairy Free</li>}
               {recipeInfo?.glutenFree && <li>Gluten Free</li>}
@@ -40,7 +39,11 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           return (
             <div className="recipe-modal-ingredient" key={ingredient.id}>
               <p>{ingredient.ingredientName}</p>
-              <p>{ingredient.quantity}</p>
+              <p>
+                {ingredient.quantity % 1 === 0
+                  ? ingredient.quantity
+                  : ingredient.quantity.toFixed(2)}
+              </p>
               <p>{ingredient.unit}</p>
             </div>
           );

@@ -1,5 +1,6 @@
 // Signature generation code from Walmart API Documentation
 // https://walmart.io/docs/walmart-identity/v1/supporting-information
+import axios from "axios";
 import * as crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
@@ -28,23 +29,20 @@ const authsign = getSign();
 const searchWalmart = async (searchQuery: string) => {
   const { keyVersion, consumerId, timestamp, signature } = getSign();
   if (consumerId) {
-    const response = await fetch(
-      `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=milk`,
-      {
+    try {
+      const response = await axios.get(`https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=3`, {
         headers: {
           "WM_SEC.KEY_VERSION": keyVersion,
           "WM_CONSUMER.ID": consumerId,
           "WM_CONSUMER.INTIMESTAMP": timestamp,
           "WM_SEC.AUTH_SIGNATURE": signature,
         },
-      }
-    );
-
-    if (!response.ok) {
+      })
+      return response.data
+    } catch (error) {
       console.error("Error fetching data");
       return;
     }
-    const data = await response.json();
   }
 };
 

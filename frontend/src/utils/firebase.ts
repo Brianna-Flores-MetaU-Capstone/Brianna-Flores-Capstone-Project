@@ -26,20 +26,7 @@ const errorCodes: { [errorMessage: string]: string } = {
   "success/profile-update": "Successfully updated profile",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const getCurrentUserToken = async () => {
-  const user = auth.currentUser;
-
-  if (!user) {
-    // TODO User not logged in error state instead of throw error
-    throw new Error("User not logged in");
-  }
-
-  const currentUserToken = await user.getIdToken();
-  return currentUserToken;
-};
-
-export { auth, errorCodes, getCurrentUserToken };
+export { auth, errorCodes };

@@ -1,9 +1,12 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 type GPUserAccountType = {
   id: string;
   userName: string;
+  intolerances: string[];
+  diets: string[];
 };
 
 type GPAccountContextType = {
@@ -22,12 +25,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch(`${databaseUrl}/me`, { credentials: "include" })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.id) {
-          setUser(data);
+    axios
+      .get(`${databaseUrl}/me`, { withCredentials: true })
+      .then(function (response) {
+        if (response.data.id) {
+          setUser(response.data);
         }
+      })
+      .catch(function (error) {
+        setUser(null);
       });
   }, []);
 
