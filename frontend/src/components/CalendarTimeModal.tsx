@@ -47,6 +47,7 @@ const CalendarTimeModal = ({
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const eventStartTime = new Date(eventInfo?.timeOptions[0].start ?? "");
   const eventEndTime = new Date(eventInfo?.timeOptions[0].end ?? "");
+
   const [start, setStart] = useState(
     eventStartTime.toLocaleTimeString([], {
       hour12: false,
@@ -62,13 +63,13 @@ const CalendarTimeModal = ({
     })
   );
   const [inputError, setInputError] = useState(false);
-  const { eventOptions, setEventOptions } = useEventRec();
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
-    GPPreferredBlockType[]
+  GPPreferredBlockType[]
   >([{ start: "", end: "" }]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
   const [date, setDate] = useState(eventStartTime.getFullYear()+"-"+eventStartTime.getMonth().toString().padStart(2, '0')+"-"+eventStartTime.getDate().toString().padStart(2, '0'))
+  const { eventOptions, setEventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,

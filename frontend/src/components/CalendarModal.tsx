@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import type { GPRecipeEventOptionType } from "../utils/types";
 import {
   Modal,
   ModalClose,
@@ -10,6 +12,7 @@ import CalendarOptionGroup from "./CalendarOptionGroup";
 import TitledListView from "./TitledListView";
 import { useEventRec } from "../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { useSelectedEvents } from "../contexts/SelectedEventsContext";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -18,6 +21,12 @@ type GPCalendarModalTypes = {
 
 const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
   const { eventOptions } = useEventRec();
+  const { selectedEvents } = useSelectedEvents()
+
+  const onEventConfirmation = () => {
+    // TODO create google calendar events
+  }
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -46,6 +55,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
             variant="outlined"
             color="success"
             size="lg"
+            onClick={onEventConfirmation}
           >
             <CheckCircleOutlineIcon />
             <Typography>Confirm Selections</Typography>
