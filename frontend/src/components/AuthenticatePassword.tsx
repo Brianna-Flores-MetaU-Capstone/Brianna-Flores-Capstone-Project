@@ -1,19 +1,23 @@
 import React from "react";
 import { AuthenticationFieldEnum } from "../utils/constants";
-import { Button, Box, FormControl, FormLabel, Input } from "@mui/joy";
+import { Button, FormControl, FormHelperText, FormLabel, Input } from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined"
 
 type GPPasswordAuthenticationProps = {
   handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  passwordInputError: boolean
 };
 
 const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
   handleAccountSubmit,
   handleInputChange,
+  passwordInputError
 }) => {
+
   return (
     <form onSubmit={handleAccountSubmit}>
-      <FormControl>
+      <FormControl error={passwordInputError}>
         <FormLabel>Confirm Password</FormLabel>
         <Input
           required
@@ -25,6 +29,10 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
           onChange={handleInputChange}
           type="password"
         />
+        {passwordInputError && <FormHelperText>
+          <InfoOutlined />
+          Enter password to update account
+        </FormHelperText>}
       </FormControl>
       <Button sx={{display: "block", mx: "auto", mt: 1}} type="submit">
         Update Account!

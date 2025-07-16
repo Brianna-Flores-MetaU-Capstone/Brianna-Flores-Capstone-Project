@@ -7,7 +7,6 @@ import {
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
-import "../styles/Meal.css";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
@@ -25,7 +24,9 @@ import {
   ModalDialog,
   DialogContent,
   Input,
+  FormHelperText,
 } from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutline";
 
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
@@ -47,6 +48,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
+  const [inputError, setInputError] = useState(false);
   const { user } = useUser();
 
   const parsePreferenceList = (preferenceList: string[]) => {
@@ -60,6 +62,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const handleRequestChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newRecipeRequest = event.target.value;
     setRecipeRequest(newRecipeRequest);
+    setInputError(event.target.value === "");
   };
 
   // fetch recipes from API dependent on user input
@@ -150,7 +153,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         <DialogContent sx={{ my: 3 }}>
           <Box>
             <form onSubmit={handleSearchSubmit}>
-              <FormControl>
+              <FormControl error={inputError}>
                 <FormLabel>Recipe</FormLabel>
                 <Input
                   slotProps={{
@@ -160,6 +163,12 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   value={recipeRequest}
                   required
                 />
+                {inputError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    Must enter a search term
+                  </FormHelperText>
+                )}
               </FormControl>
               <Box
                 sx={{ my: 3, display: "flex", justifyContent: "space-between" }}

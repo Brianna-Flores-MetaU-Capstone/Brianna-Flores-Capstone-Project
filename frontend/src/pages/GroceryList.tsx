@@ -1,4 +1,3 @@
-import "../styles/GroceryList.css";
 import type {
   GPErrorMessageTypes,
   GPIngredientWithCostInfoTypes,

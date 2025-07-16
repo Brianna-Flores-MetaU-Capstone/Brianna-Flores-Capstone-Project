@@ -1,6 +1,5 @@
 import React from "react";
 import { useReducer } from "react";
-import "../styles/IngredientsPage.css";
 import { IngredientUnitOptions, Departments } from "../utils/enum";
 import type {
   GPIngredientDataTypes,
@@ -24,7 +23,9 @@ import {
   Input,
   Select,
   Option,
+  FormHelperText,
 } from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined"
 
 type GPIngredientModalProps = {
   modalFor: string;
@@ -50,6 +51,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 }) => {
   const { user } = useUser();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [ingredientInputError, setIngredientInputError] = useState(false)
 
   const initialIngredientState = ingredientData ?? {
     id: 0,
@@ -92,6 +94,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     }
     if (isEditing) {
       if (ingredientData) {
+        if (ingredientData.quantity && ingredientData.quantity <= 0) {
+          setMessage({ error: true, message: "Quantity must be greater than 0"})
+          return;
+        }
         const ingredientId = ingredientData.id;
         await updateIngredientDatabase({
           ingredientId,
@@ -153,7 +159,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </FormControl>
           )}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <FormControl>
+            <FormControl error={ingredientInputError}>
               <FormLabel>Quantity</FormLabel>
               <Input
                 required
@@ -164,7 +170,8 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   },
                 }}
                 type="number"
-                onChange={(event) =>
+                onChange={(event) => {
+                  setIngredientInputError(parseFloat(event.target.value) <= 0)
                   dispatch({
                     type: actions.SET_INPUT,
                     ingredientField: event?.target
@@ -172,8 +179,13 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                     value: event.target.value,
                   })
                 }
+                }
                 value={newIngredientData?.quantity}
               />
+              {ingredientInputError && <FormHelperText>
+                <InfoOutlined />
+                    Quantity must be greater than 0
+                </FormHelperText>}
             </FormControl>
             <FormControl>
               <FormLabel>Unit</FormLabel>
@@ -208,6 +220,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             <FormControl>
               <FormLabel>Expiration Date</FormLabel>
               <Input
+                required
                 sx={{ mt: 1.5, mb: 1.5, width: "100%" }}
                 type="date"
                 slotProps={{
@@ -281,7 +294,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
               </Select>
             </FormControl>
           )}
-          <Button type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
+          <Button disabled={ingredientInputError} type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
             {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>

@@ -19,23 +19,23 @@ import WithAuth from "./components/WithAuth";
 function App() {
   const [navOpen, setNavOpen] = useState<boolean>(false);
 
-  const ProtectedNewListPage = WithAuth(NewListPage);
-  const ProtectedIngredientsList = WithAuth(IngredientsPage);
-  const ProtectedGroceryList = WithAuth(GroceryList);
-  const ProtectedAccountPage = WithAuth(AccountPage);
+  const AuthNewListPage = WithAuth(NewListPage);
+  const AuthIngredientsList = WithAuth(IngredientsPage);
+  const AuthGroceryList = WithAuth(GroceryList);
+  const AuthAccountPage = WithAuth(AccountPage);
 
   return (
     <CssVarsProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Homepage />} />
-          <Route path="new-list" element={<ProtectedNewListPage />} />
-          <Route path="ingredients" element={<ProtectedIngredientsList />} />
-          <Route path="grocery-list" element={<ProtectedGroceryList />} />
+          <Route path="new-list" element={<AuthNewListPage />} />
+          <Route path="ingredients" element={<AuthIngredientsList />} />
+          <Route path="grocery-list" element={<AuthGroceryList />} />
           <Route path="*" element={<NoMatchPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupForm />} />
-          <Route path="account" element={<ProtectedAccountPage />} />
+          <Route path="account" element={<AuthAccountPage />} />
         </Routes>
       </BrowserRouter>
     </CssVarsProvider>

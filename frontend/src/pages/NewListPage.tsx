@@ -1,4 +1,3 @@
-import "../styles/NewListPage.css";
 import type {
   GPRecipeDataTypes,
   GPErrorMessageTypes,

@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 import type {
@@ -10,7 +10,7 @@ import convert from "convert-units";
 import { searchWalmart } from "./walmartAPI";
 
 const checkUserExists = async (firebaseId: string) => {
-  const user = await prisma.User.findUnique({
+  const user = await prisma.user.findUnique({
     where: { firebaseId: firebaseId },
   });
   return user;
@@ -75,6 +75,8 @@ const getTotalQuantity = ({
         totalQuantity += ingredient.quantity;
       }
     }
+  } else {
+    totalQuantity = recipeIngredient.quantity
   }
   return totalQuantity;
 };
@@ -133,10 +135,7 @@ const getListOfMissingIngredients = ({
         recipeIngredient,
         recipeIngredients,
       });
-      const updatedIngredient =
-        totalQuantity > 0
-          ? { ...recipeIngredient, quantity: totalQuantity }
-          : recipeIngredient;
+      const updatedIngredient = { ...recipeIngredient, quantity: totalQuantity }
       if (
         ownedIngredientsNames.indexOf(
           recipeIngredient.ingredientName.toLowerCase()
@@ -214,7 +213,6 @@ const getCostForAmountOfIngredient = async ({
 export {
   checkUserExists,
   convertUnits,
-  getTotalQuantity,
   quantityNeeded,
   getListOfMissingIngredients,
   estimateListCost,

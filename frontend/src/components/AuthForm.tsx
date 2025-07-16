@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/LoginPage.css";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState } from "react";
 import RegistrationPreferenceButtons from "./RegistrationPreferenceButtons";

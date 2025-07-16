@@ -1,11 +1,9 @@
-import "../styles/LoginPage.css";
 import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
 import type { GPAuthFormDataTypes, GPErrorMessageTypes } from "../utils/types";
 import { validateUserToken } from "../utils/databaseHelpers";
-import "../styles/LoginPage.css";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import AuthForm from "../components/AuthForm";

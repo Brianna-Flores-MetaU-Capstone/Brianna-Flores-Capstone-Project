@@ -12,7 +12,7 @@ app.use(
     credentials: true,
   })
 );
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const sessionSecret = process.env.SESSION_SECRET;

@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/Homepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type {
@@ -37,9 +36,9 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   onDelete,
 }) => {
   const formatQuantity =
-    parseInt(ingredient.quantity.toString()) % 1 === 0
+    parseFloat(ingredient.quantity.toString()) % 1 === 0
       ? ingredient.quantity
-      : ingredient.quantity.toFixed(2);
+      : Number(ingredient.quantity).toFixed(2);
   return (
     <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
       <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
