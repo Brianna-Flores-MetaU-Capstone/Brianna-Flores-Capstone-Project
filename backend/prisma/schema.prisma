@@ -49,18 +49,19 @@ model Ingredient {
 // many to many relationship
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations
 model Recipe {
-  id           Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
-  apiId        Int      @unique
-  recipeTitle  String
-  previewImage String // if image not provided, generic image will be presented
-  servings     Int
-  ingredients  Json
-  sourceUrl    String
-  totalCost    Decimal? // total cost of ingredients to create for baseline servings
-  instructions String[]
-  vegetarian   Boolean
-  vegan        Boolean
-  glutenFree   Boolean
-  dairyFree    Boolean
-  users        User[]
+  id             Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
+  apiId          Int      @unique
+  recipeTitle    String
+  previewImage   String // if image not provided, generic image will be presented
+  servings       Int
+  ingredients    Json
+  sourceUrl      String
+  readyInMinutes Int      @default(45)
+  totalCost      Decimal? // total cost of ingredients to create for baseline servings
+  instructions   String[]
+  vegetarian     Boolean
+  vegan          Boolean
+  glutenFree     Boolean
+  dairyFree      Boolean
+  users          User[]
 }

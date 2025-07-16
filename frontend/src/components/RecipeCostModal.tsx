@@ -1,13 +1,9 @@
 import React from "react";
-import Modal from "@mui/joy/Modal";
-import ModalClose from "@mui/joy/ModalClose";
-import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import TitledListView from "./TitledListView";
 import IngredientCost from "./IngredientCost";
 import { v4 as uuidv4 } from "uuid";
-import "../styles/NewListPage.css";
+import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 
 type GPLoadingModalTypes = {
   ingredientsCostInformation: GPIngredientCostInfoTypes[];
@@ -29,13 +25,12 @@ const RecipeCostModal = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        className="recipe-cost-modal"
         variant="outlined"
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "70%",
+          width: "80%",
           maxWidth: 700,
           borderRadius: "md",
           p: 3,
@@ -53,9 +48,9 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
+        <Box sx={{width: "100%", overflowY: "auto"}}>
         <TitledListView
-          className="ingredient-cost-info"
-          headerList={["Ingredient", "Cost", "for Amount"]}
+          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "for Amount", spacing: 2}]}
           list={ingredientsCostInformation}
           renderItem={(ingredientInfo) => (
             <IngredientCost
@@ -64,6 +59,7 @@ const RecipeCostModal = ({
             />
           )}
         />
+        </Box>
       </Sheet>
     </Modal>
   );

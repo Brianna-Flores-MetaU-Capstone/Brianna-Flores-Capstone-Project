@@ -4,19 +4,18 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
-  GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
-import "../styles/LoginPage.css";
 import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
-import Box from "@mui/material/Box";
+import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
-const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+
+const SignupForm = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
     password: "",
@@ -34,9 +33,14 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then(async (userCredential) => {
         const user = userCredential.user;
+        if (!user.uid || !user.email) {
+          setMessage({error: true, message: "Unable to create account, missing required information"})
+          return;
+        }
+
         const newUser: GPAccountInfoTypes = {
-          firebaseId: user.uid ? user.uid : "",
-          email: user.email ? user.email : "",
+          firebaseId: user.uid,
+          email: user.email,
           intolerances: userIntolerances,
           diets: userDiets,
         };
@@ -59,9 +63,9 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }
 
   return (
-    <div className="login-page signup-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <Box className="login-content">
+    <Box>
+      <AppHeader />
+      <Card sx={{ mt: 20, mx: "auto" }}>
         <AuthForm
           handleRegistrationSubmit={handleSubmit}
           handleAuthInputChange={(event) =>
@@ -72,8 +76,8 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </Box>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

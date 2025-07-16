@@ -1,10 +1,19 @@
 import React from "react";
-import "../styles/Meal.css";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { GPModalStyle } from "../utils/utils";
+import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
 import { v4 as uuidv4 } from "uuid";
+import {
+  Modal,
+  Typography,
+  Sheet,
+  List,
+  ListItem,
+  ListItemContent,
+  Box,
+  AspectRatio,
+} from "@mui/joy";
+import DietsAndIntolerances from "./DietsAndIntolerances";
+import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -19,42 +28,55 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 }) => {
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
-    <Modal open={modalOpen} onClose={handleModalClose}>
-      <Box sx={GPModalStyle}>
-        <div className="modal-header">
-          <img className="meal-img" src={recipeInfo?.previewImage} />
-          <div className="meal-info">
-            <h2>{recipeInfo?.recipeTitle}</h2>
-            <p>Servings: {recipeInfo?.servings}</p>
-            <ul className="diets-and-intolerances">
-              {recipeInfo?.dairyFree && <li>Dairy Free</li>}
-              {recipeInfo?.glutenFree && <li>Gluten Free</li>}
-              {recipeInfo?.vegetarian && <li>Vegetarian</li>}
-              {recipeInfo?.vegan && <li>Vegan</li>}
-            </ul>
-          </div>
-        </div>
-        <h4>Ingredients</h4>
-        {recipeInfo?.ingredients.map((ingredient) => {
-          return (
-            <div className="recipe-modal-ingredient" key={ingredient.id}>
-              <p>{ingredient.ingredientName}</p>
-              <p>
-                {ingredient.quantity % 1 === 0
-                  ? ingredient.quantity
-                  : ingredient.quantity.toFixed(2)}
-              </p>
-              <p>{ingredient.unit}</p>
-            </div>
-          );
-        })}
-        <h4>Instructions</h4>
-        <ol>
-          {recipeInfo?.instructions.map((step) => {
-            return <li key={uuidv4()}>{step}</li>;
-          })}
-        </ol>
-      </Box>
+    <Modal
+      open={modalOpen}
+      onClose={handleModalClose}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <Sheet variant="outlined" sx={GPModalStyle}>
+        <Box sx={{ display: "flex" }}>
+          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md"}}>
+            <img src={recipeInfo?.previewImage} />
+          </AspectRatio>
+          <Box
+            sx={GPCenteredBoxStyle}
+          >
+            <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
+            <Typography>Servings: {recipeInfo?.servings}</Typography>
+            <DietsAndIntolerances recipeInfo={recipeInfo} />
+          </Box>
+        </Box>
+        <Box>
+          <Typography level="h3">Ingredients</Typography>
+          <List marker="circle">
+            {recipeInfo?.ingredients.map((ingredient) => {
+              return (
+                <ListItem
+                  key={ingredient.id}
+                >
+                  <ListItemContent
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography>{ingredient.ingredientName}</Typography>
+                    <Typography>
+                      {ingredient.quantity % 1 === 0
+                        ? ingredient.quantity
+                        : ingredient.quantity.toFixed(2)}{" "}
+                      {ingredient.unit}
+                    </Typography>
+                  </ListItemContent>
+                </ListItem>
+              );
+            })}
+          </List>
+          <Typography level="h3">Instructions</Typography>
+          <List component="ol" marker="decimal">
+            {recipeInfo?.instructions.map((step) => {
+              return <ListItem key={uuidv4()}>{step}</ListItem>;
+            })}
+          </List>
+        </Box>
+      </Sheet>
     </Modal>
   );
 };

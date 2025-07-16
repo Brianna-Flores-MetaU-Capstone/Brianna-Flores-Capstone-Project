@@ -1,13 +1,12 @@
 import React from "react";
 import { useReducer } from "react";
-import "../styles/IngredientsPage.css";
 import { IngredientUnitOptions, Departments } from "../utils/enum";
 import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
-import { GPModalStyle } from "../utils/utils";
+import { GPModalStyle } from "../utils/UIStyle";
 import { useState } from "react";
 import ErrorState from "./ErrorState";
 import { useUser } from "../contexts/UserContext";
@@ -15,17 +14,18 @@ import {
   addIngredientDatabase,
   updateIngredientDatabase,
 } from "../utils/databaseHelpers";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
+import {
+  Button,
+  Box,
+  Modal,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Option,
+  FormHelperText,
+} from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined"
 
 type GPIngredientModalProps = {
   modalFor: string;
@@ -51,6 +51,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 }) => {
   const { user } = useUser();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [ingredientInputError, setIngredientInputError] = useState(false)
 
   const initialIngredientState = ingredientData ?? {
     id: 0,
@@ -60,7 +61,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     department: "",
     expirationDate: null,
     image: "",
-    isChecked: false
+    isChecked: false,
   };
 
   type ACTIONTYPE =
@@ -93,6 +94,10 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     }
     if (isEditing) {
       if (ingredientData) {
+        if (ingredientData.quantity && ingredientData.quantity <= 0) {
+          setMessage({ error: true, message: "Quantity must be greater than 0"})
+          return;
+        }
         const ingredientId = ingredientData.id;
         await updateIngredientDatabase({
           ingredientId,
@@ -113,144 +118,183 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   return (
     <Modal open={modalOpen} onClose={onClose}>
       <Box sx={GPModalStyle}>
-        <form className="ingredient-form" onSubmit={handleModalSubmit}>
+        <form onSubmit={handleModalSubmit}>
           {isEditing ? (
             // prevent editing the ingredient name
-            <TextField
-              disabled
-              required
-              name={IngredientDataFields.NAME}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.NAME,
-                },
-              }}
-              value={newIngredientData?.ingredientName}
-              label="Ingredient Name"
-              variant="standard"
-            />
+            <FormControl>
+              <FormLabel>Ingredient Name</FormLabel>
+              <Input
+                disabled
+                required
+                name={IngredientDataFields.NAME}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.NAME,
+                  },
+                }}
+                value={newIngredientData?.ingredientName}
+              />
+            </FormControl>
           ) : (
-            <TextField
-              required
-              name={IngredientDataFields.NAME}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.NAME,
-                },
-              }}
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              value={newIngredientData?.ingredientName}
-              label="Ingredient Name"
-              variant="standard"
-            />
+            <FormControl>
+              <FormLabel>Ingredient Name</FormLabel>
+              <Input
+                required
+                name={IngredientDataFields.NAME}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.NAME,
+                  },
+                }}
+                onChange={(event) =>
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
+                  })
+                }
+                value={newIngredientData?.ingredientName}
+              />
+            </FormControl>
           )}
-          <Box display="flex" width="100%">
-            <TextField
-              required
-              name={IngredientDataFields.QUANTITY}
-              slotProps={{
-                htmlInput: {
-                  "data-ingredientfield": IngredientDataFields.QUANTITY,
-                },
-              }}
-              type="number"
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              value={newIngredientData?.quantity}
-              fullWidth
-              label="Quantity"
-              variant="standard"
-            />
-            <Select
-              name={IngredientDataFields.UNIT}
-              value={newIngredientData?.unit}
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              autoWidth
-              label="unit"
-            >
-              {IngredientUnitOptions.map((unit) => (
-                <MenuItem key={unit} value={unit}>
-                  {unit}
-                </MenuItem>
-              ))}
-            </Select>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <FormControl error={ingredientInputError}>
+              <FormLabel>Quantity</FormLabel>
+              <Input
+                required
+                name={IngredientDataFields.QUANTITY}
+                slotProps={{
+                  input: {
+                    "data-ingredientfield": IngredientDataFields.QUANTITY,
+                  },
+                }}
+                type="number"
+                onChange={(event) => {
+                  setIngredientInputError(parseFloat(event.target.value) <= 0)
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
+                  })
+                }
+                }
+                value={newIngredientData?.quantity}
+              />
+              {ingredientInputError && <FormHelperText>
+                <InfoOutlined />
+                    Quantity must be greater than 0
+                </FormHelperText>}
+            </FormControl>
+            <FormControl>
+              <FormLabel>Unit</FormLabel>
+              <Select
+                required
+                name={IngredientDataFields.UNIT}
+                value={newIngredientData?.unit}
+                onChange={(event, newValue) =>
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: "unit",
+                    value: newValue ?? "",
+                  })
+                }
+                slotProps={{
+                  listbox: {
+                    sx: {
+                      zIndex: 2000,
+                    },
+                  },
+                }}
+              >
+                {IngredientUnitOptions.map((unit) => (
+                  <Option key={unit} value={unit}>
+                    {unit}
+                  </Option>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
           {modalFor === INGREDIENT_MODAL && (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
+            <FormControl>
+              <FormLabel>Expiration Date</FormLabel>
+              <Input
+                required
+                sx={{ mt: 1.5, mb: 1.5, width: "100%" }}
+                type="date"
+                slotProps={{
+                  input: {
+                    "data-ingredientfield":
+                      IngredientDataFields.EXPIRATION_DATE,
+                  },
+                }}
                 name={IngredientDataFields.EXPIRATION_DATE}
-                label="Expiration Date"
-                value={
-                  newIngredientData?.expirationDate
-                    ? dayjs(newIngredientData?.expirationDate)
-                    : null
-                }
-                onChange={(newDate) =>
+                value={newIngredientData?.expirationDate ?? ""}
+                onChange={(event) =>
                   dispatch({
-                    type: actions.SET_DATE,
-                    value: newDate?.format("YYYY-MM-DD"),
+                    type: actions.SET_INPUT,
+                    ingredientField: event?.target
+                      .name as keyof GPIngredientDataTypes,
+                    value: event.target.value,
                   })
                 }
               />
-            </LocalizationProvider>
+            </FormControl>
           )}
-          <InputLabel>Select a Department</InputLabel>
           {isEditing ? (
-            // prevent edits to department (edits to direct ingredient)
-            <Select
-              disabled
-              name={IngredientDataFields.DEPARTMENT}
-              value={newIngredientData?.department}
-              label="Department"
-            >
-              {Departments.map((department) => (
-                <MenuItem key={department} value={department}>
-                  {department}
-                </MenuItem>
-              ))}
-            </Select>
+            <FormControl>
+              <FormLabel>Select a Department</FormLabel>
+              <Select
+                disabled
+                name={IngredientDataFields.DEPARTMENT}
+                value={newIngredientData?.department}
+                slotProps={{
+                  listbox: {
+                    sx: {
+                      zIndex: 2000,
+                    },
+                  },
+                }}
+              >
+                {Departments.map((department) => (
+                  <Option key={department} value={department}>
+                    {department}
+                  </Option>
+                ))}
+              </Select>
+            </FormControl>
           ) : (
-            <Select
-              name={IngredientDataFields.DEPARTMENT}
-              value={newIngredientData?.department}
-              onChange={(event) =>
-                dispatch({
-                  type: actions.SET_INPUT,
-                  ingredientField: event?.target
-                    .name as keyof GPIngredientDataTypes,
-                  value: event.target.value,
-                })
-              }
-              label="Department"
-            >
-              {Departments.map((department) => (
-                <MenuItem key={department} value={department}>
-                  {department}
-                </MenuItem>
-              ))}
-            </Select>
+            <FormControl>
+              <FormLabel>Select a Department</FormLabel>
+              <Select
+                required
+                name={IngredientDataFields.DEPARTMENT}
+                value={newIngredientData?.department}
+                onChange={(event, newValue) =>
+                  dispatch({
+                    type: actions.SET_INPUT,
+                    ingredientField: "department",
+                    value: newValue ?? "",
+                  })
+                }
+                slotProps={{
+                  listbox: {
+                    sx: {
+                      zIndex: 2000,
+                    },
+                  },
+                }}
+              >
+                {Departments.map((department) => (
+                  <Option key={department} value={department}>
+                    {department}
+                  </Option>
+                ))}
+              </Select>
+            </FormControl>
           )}
-          <Button type="submit" className="add-button">
+          <Button disabled={ingredientInputError} type="submit" sx={{ display: "flex", mx: "auto", mt: 2 }}>
             {isEditing ? "Edit Ingredient!" : "Add Ingredient!"}
           </Button>
         </form>

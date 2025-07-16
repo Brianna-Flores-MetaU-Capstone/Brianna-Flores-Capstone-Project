@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/LoginPage.css";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState } from "react";
 import RegistrationPreferenceButtons from "./RegistrationPreferenceButtons";
@@ -7,8 +6,7 @@ import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
 } from "../utils/constants";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button, Box, Input, FormControl, FormLabel } from "@mui/joy";
 import type { GPAuthFormDataTypes } from "../utils/types";
 
 type GPAuthFormEventProps = {
@@ -65,52 +63,54 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
   };
 
   return (
-    <form className="login-info" onSubmit={onRegistrationSubmit}>
-      <TextField
-        required
-        id={AuthenticationFieldEnum.EMAIL}
-        type="text"
-        value={formData.email}
-        slotProps={{
-          htmlInput: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
-        }}
-        onChange={handleAuthInputChange}
-        label="Enter Email"
-        variant="standard"
-      />
-      <TextField
-        required
-        id={AuthenticationFieldEnum.PASSWORD}
-        type="password"
-        slotProps={{
-          htmlInput: {
-            "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
-          },
-        }}
-        value={formData.password}
-        onChange={handleAuthInputChange}
-        label="Enter Password"
-        variant="standard"
-      />
+    <form onSubmit={onRegistrationSubmit}>
+      <FormControl>
+        <FormLabel>Enter Email</FormLabel>
+        <Input
+          required
+          id={AuthenticationFieldEnum.EMAIL}
+          type="text"
+          value={formData.email}
+          slotProps={{
+            input: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
+          }}
+          onChange={handleAuthInputChange}
+        />
+      </FormControl>
+      <FormControl sx={{my: 2}}>
+        <FormLabel>Enter Password</FormLabel>
+        <Input
+          required
+          id={AuthenticationFieldEnum.PASSWORD}
+          type="password"
+          slotProps={{
+            input: {
+              "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
+            },
+          }}
+          value={formData.password}
+          onChange={handleAuthInputChange}
+        />
+      </FormControl>
       {handleRegistrationSubmit && (
-        <div>
-          <label htmlFor="intolerances">Intolerances</label>
+        <Box>
+          <FormLabel>Intolerances</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.INTOLERANCES}
             listItems={Intolerances}
             userList={userIntolerances}
             handleButtonClick={handlePreferenceClick}
           />
-          <label>Diets</label>
+          <FormLabel>Diets</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.DIETS}
             listItems={Diets}
             userList={userDiets}
             handleButtonClick={handlePreferenceClick}
           />
-        </div>
+        </Box>
       )}
-      <Button className="submit-auth" type="submit" variant="outlined">
+      <Button type="submit" sx={{display: "block", mx: "auto", mt: 1}}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

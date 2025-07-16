@@ -1,10 +1,18 @@
-import "../styles/Meal.css";
 import type { GPRecipeDataTypes } from "../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import Button from "@mui/joy/Button";
+import {
+  Button,
+  Box,
+  Card,
+  CardContent,
+  CardCover,
+  Link,
+  Typography,
+} from "@mui/joy";
 import RecipeCostModal from "./RecipeCostModal";
+import DietsAndIntolerances from "./DietsAndIntolerances";
 
 type GPMealCardProps = {
   onMealCardClick: () => void;
@@ -27,37 +35,71 @@ const MealCard: React.FC<GPMealCardProps> = ({
 
   return (
     //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
-    <div className="meal-card" onClick={() => onMealCardClick()}>
-      <img className="meal-img" src={parsedMealData.previewImage} />
-      <p className="meal-title">{parsedMealData.recipeTitle}</p>
-      <p>Servings: {parsedMealData.servings}</p>
-      {onSelectRecipe && (
-        <p>Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}</p>
-      )}
-      <ul className="diets-and-intolerances">
-        {parsedMealData.dairyFree && <li>Dairy Free</li>}
-        {parsedMealData.glutenFree && <li>Gluten Free</li>}
-        {parsedMealData.vegetarian && <li>Vegetarian</li>}
-        {parsedMealData.vegan && <li>Vegan</li>}
-      </ul>
-      {onDeleteRecipe && (
-        <FontAwesomeIcon
-          icon={faTrash}
-          className="ingredient-button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onDeleteRecipe?.(parsedMealData);
+    <>
+      {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
+      <Card
+        variant="outlined"
+        sx={{ minHeight: "280px", width: 350 }}
+        onClick={() => onMealCardClick()}
+      >
+        <CardCover>
+          <img src={parsedMealData.previewImage} />
+        </CardCover>
+        <CardCover
+          sx={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
           }}
         />
-      )}
-      {onSelectRecipe && (
-        <Button onClick={toggleModal}>See Pricing Details</Button>
-      )}
-      {onSelectRecipe && (
-        <Button onClick={() => onSelectRecipe(parsedMealData)}>
-          Select Recipe
-        </Button>
-      )}
+        <CardContent sx={{ justifyContent: "flex-end" }}>
+          {onSelectRecipe && (
+            <DietsAndIntolerances recipeInfo={parsedMealData} />
+          )}
+          <Typography textColor="#fff" level="h4">
+            {parsedMealData.recipeTitle}
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography textColor="neutral.300">
+              Servings: {parsedMealData.servings}
+            </Typography>
+            {onDeleteRecipe && (
+              <Button
+                variant="plain"
+                size="lg"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDeleteRecipe?.(parsedMealData);
+                }}
+                sx={{ zIndex: 1 }}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
+            )}
+            {onSelectRecipe && (
+              <Typography textColor="neutral.300">
+                Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
+              </Typography>
+            )}
+          </Box>
+          <Link overlay underline="none"></Link>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            {onSelectRecipe && (
+              <Button onClick={toggleModal}
+              sx={{color: "primary.50"}}>
+                See Pricing Details
+              </Button>
+            )}
+            {onSelectRecipe && (
+              <Button
+                onClick={() => onSelectRecipe(parsedMealData)}
+                sx={{color: "primary.50"}}
+              >
+                Select Recipe
+              </Button>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
       {ingredientCostModalOpen && (
         <RecipeCostModal
           ingredientsCostInformation={parsedMealData.ingredientCostInfo}
@@ -65,7 +107,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
           onClose={toggleModal}
         />
       )}
-    </div>
+    </>
   );
 };
 

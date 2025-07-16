@@ -1,14 +1,12 @@
-import "../styles/GroceryList.css";
 import type {
   GPErrorMessageTypes,
-  GPToggleNavBarProps,
   GPIngredientWithCostInfoTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import Button from "@mui/material/Button";
+import { Button, Box, Grid, Typography } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
@@ -17,7 +15,7 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
-const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const GroceryList = () => {
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
   const [userGroceryList, setUserGroceryList] = useState<
     GPIngredientWithCostInfoTypes[]
@@ -60,18 +58,14 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }
 
   return (
-    <div>
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <div className="grocery-list-container">
-        <Button className="add-button" onClick={handleAddGrocery}>
-          Add Item
-        </Button>
-        <Button className="add-button" onClick={handleClearGroceries}>
+    <Box>
+      <AppHeader />
+      <Box sx={{m: 3}}>
+        <Button onClick={handleClearGroceries}>
           Clear Purchased Items
         </Button>
-
+        <Box sx={{my: 3}}>
         <TitledListView
-          className="grocery-departments"
           list={groceryDepartments}
           renderItem={(department) => (
             <GroceryListDepartment
@@ -81,10 +75,12 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
               onGroceryCheck={toggleGroceryCheck}
             />
           )}
+          flexDirectionRow={true}
         />
-        <h3>Estimated Cost</h3>
-        <h3>${Number(groceryListCost).toFixed(2)}</h3>
-      </div>
+        </Box>
+        <Typography level="h3">Estimated Cost</Typography>
+        <Typography level="h4">${Number(groceryListCost).toFixed(2)}</Typography>
+      </Box>
       {addGroceryItemModalOpen && (
         <IngredientModal
           modalFor={GROCERY_MODAL}
@@ -104,7 +100,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
-    </div>
+    </Box>
   );
 };
 

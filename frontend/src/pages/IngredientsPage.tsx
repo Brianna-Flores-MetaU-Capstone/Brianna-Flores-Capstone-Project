@@ -1,13 +1,11 @@
-import "../styles/IngredientsPage.css";
 import AppHeader from "../components/AppHeader";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
 import type {
   GPIngredientDataTypes,
-  GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
-import Button from "@mui/material/Button";
+import { Box, Button, Grid, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import { v4 as uuidv4 } from "uuid";
@@ -19,10 +17,7 @@ import {
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
 
-const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
-  navOpen,
-  toggleNav,
-}) => {
+const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
   const [editIngredientData, setEditIngredientData] =
     useState<GPIngredientDataTypes>();
@@ -61,19 +56,12 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
   };
 
   return (
-    <div className="ingredients-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <section className="ingredient-page-container">
-        <Button
-          className="add-button"
-          variant="outlined"
-          onClick={addIngredientClick}
-        >
-          Add Ingredient
-        </Button>
+    <Sheet>
+      <AppHeader />
+      <Box sx={{m: 2}}>
+        <Button onClick={addIngredientClick}>Add Ingredient</Button>
         <TitledListView
-          className="list-items"
-          headerList={["Ingredient", "Quantity", "Expiration"]}
+          headerList={[{title: "Ingredient", spacing: 4}, {title: "Quantity", spacing: 3}, {title: "Expiration", spacing: 5}]}
           list={userIngredients}
           renderItem={(ingredient) => (
             <Ingredient
@@ -90,7 +78,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </section>
+      </Box>
       {addIngredientModalOpen && (
         <IngredientModal
           modalFor={INGREDIENT_MODAL}
@@ -110,7 +98,7 @@ const IngredientsPage: React.FC<GPToggleNavBarProps> = ({
           fetchUserIngredients={fetchUserIngredients}
         />
       )}
-    </div>
+    </Sheet>
   );
 };
 

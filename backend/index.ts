@@ -12,7 +12,7 @@ app.use(
     credentials: true,
   })
 );
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const sessionSecret = process.env.SESSION_SECRET;
@@ -44,6 +44,9 @@ app.use("/recipes", recipeRoutes);
 
 const groceryListRoutes = require("./routes/groceryListRoutes");
 app.use("/generateList", groceryListRoutes);
+
+const calendarRoutes = require("./routes/calendarRoutes");
+app.use("/calendar", calendarRoutes);
 
 const authRoutes = require("./routes/authRoutes");
 app.use("/", authRoutes);

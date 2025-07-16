@@ -41,6 +41,7 @@ router.post(
       servings,
       ingredients,
       sourceUrl,
+      readyInMinutes,
       instructions,
       vegetarian,
       vegan,
@@ -53,7 +54,8 @@ router.post(
       !previewImage ||
       !servings ||
       !ingredients ||
-      !sourceUrl
+      !sourceUrl || 
+      !readyInMinutes
     ) {
       return res.status(400).send("Missing required recipe fields");
     }
@@ -75,6 +77,7 @@ router.post(
             servings,
             ingredients: ingredients as Prisma.JsonArray,
             sourceUrl,
+            readyInMinutes,
             instructions,
             vegetarian,
             vegan,

@@ -1,11 +1,9 @@
 import React from "react";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import type { GPToggleNavBarProps, GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
-import "../styles/AccountPage.css";
-import "../styles/LoginPage.css";
 import { auth } from "../utils/firebase";
 import {
   onAuthStateChanged,
@@ -22,13 +20,22 @@ import {
 } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import {
+  Button,
+  Box,
+  Card,
+  Input,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Typography,
+} from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const AccountPage = () => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>();
@@ -36,6 +43,8 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   const [userPassword, setUserPassword] = useState<string>();
   const [loadingData, setLoadingData] = useState(true);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [emailInputError, setEmailInputError] = useState(false);
+  const [passwordInuptError, setPasswordInputError] = useState(false);
   const { setUser } = useUser();
 
   // TODO Implement useReducer to handle user data
@@ -88,8 +97,10 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
     const { credential } = (event.target as HTMLInputElement).dataset;
     const { value } = event.target;
     if (credential === AuthenticationFieldEnum.EMAIL) {
+      setEmailInputError(value === "");
       setUserEmail(value);
     } else if (credential === AuthenticationFieldEnum.PASSWORD) {
+      setPasswordInputError(value === "");
       setUserPassword(value);
     }
   };
@@ -156,43 +167,56 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   if (!currentUser && !loadingData) {
     return (
-      <div className="account-page">
-        <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <Box>
+        <AppHeader />
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </div>
+      </Box>
     );
   }
 
   return (
-    <div className="account-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <div className="account-info">
-        <h1>Edit Account Details</h1>
-        <div className="account-email">
-          <TextField
+    <Box>
+      <AppHeader />
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 10,
+          mx: "auto",
+        }}
+        >
+        <Typography level="h2">Edit Account Details</Typography>
+        <FormControl error={emailInputError}>
+          <FormLabel>Email</FormLabel>
+          <Input
             required
             id={AuthenticationFieldEnum.EMAIL}
             slotProps={{
-              htmlInput: {
+              input: {
                 "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
               },
             }}
             onChange={handleInputChange}
             value={userEmail ? userEmail : ""}
-            label="Email"
-            variant="standard"
           />
-        </div>
-        <h2>Selected Intolerances</h2>
+          {emailInputError && (
+            <FormHelperText>
+              <InfoOutlined />
+              Must enter an email
+            </FormHelperText>
+          )}
+        </FormControl>
+        <Typography level="h4">Selected Intolerances</Typography>
         <RegistrationPreferenceButtons
           listName={PreferenceCategoryEnum.INTOLERANCES}
           listItems={Intolerances}
           userList={userIntolerances}
           handleButtonClick={handlePreferenceClick}
         />
-        <h2>Selected Diets</h2>
+        <Typography level="h4">Selected Diets</Typography>
         <RegistrationPreferenceButtons
           listName={PreferenceCategoryEnum.DIETS}
           listItems={Diets}
@@ -202,13 +226,14 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         <AuthenticatePassword
           handleAccountSubmit={handleAccountSubmit}
           handleInputChange={handleInputChange}
+          passwordInputError={passwordInuptError}
         />
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
         <Button onClick={handleLogout}>Logout</Button>
-      </div>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

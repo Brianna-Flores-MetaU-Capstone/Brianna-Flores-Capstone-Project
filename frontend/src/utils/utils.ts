@@ -31,6 +31,7 @@ const parseRecipeData = async (
         ingredients: parsedIngredinets,
         instructions: parsedInstructions,
         sourceUrl: recipe.sourceUrl,
+        readyInMinutes: recipe.readyInMinutes,
         vegetarian: recipe.vegetarian,
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
@@ -122,23 +123,9 @@ const parseGroceryListDepartments = (
   return departments;
 };
 
-const GPModalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "50%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  maxHeight: "70%",
-  overflow: "auto",
-};
-
 export {
   validateInput,
   parseRecipeData,
   handleAuthInputChange,
   parseGroceryListDepartments,
-  GPModalStyle,
 };

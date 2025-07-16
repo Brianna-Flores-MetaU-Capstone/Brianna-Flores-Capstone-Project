@@ -1,31 +1,53 @@
 import React from "react";
-import "../styles/Homepage.css";
 import { v4 as uuidv4 } from "uuid";
+import { Box, Grid, Typography } from "@mui/joy";
+
+type GPHeaderListType = {
+  title: string;
+  spacing: number;
+};
 
 type GPTitledListViewProps<T> = {
-  className: string;
   list: T[];
   renderItem: (item: T) => React.ReactNode;
-  headerList?: string[];
+  headerList?: GPHeaderListType[];
+  flexDirectionRow?: boolean;
+  listHeight?: number
 };
 
 const TitledListView = <T,>({
-  className,
   list,
   renderItem,
   headerList,
+  flexDirectionRow,
+  listHeight
 }: GPTitledListViewProps<T>) => {
   return (
-    <>
+    <Box>
       {headerList && (
-        <div className="ingredient-columns">
+        <Grid
+          container
+          sx={{
+            flexGrow: 1,
+            p: 2,
+            bgcolor: "primary.300",
+            borderRadius: "md",
+            mb: 2,
+          }}
+        >
           {headerList.map((header) => (
-            <h3 key={uuidv4()}>{header}</h3>
+            <Grid xs={header.spacing} key={uuidv4()}>
+              <Typography level="h4">
+                {header.title}
+              </Typography>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
-      <div className={className}>{list.map(renderItem)}</div>
-    </>
+      <Box sx={{display: "flex", gap: 3, ...(flexDirectionRow ? {flexWrap: "wrap", justifyContent: "center"} : {flexDirection: "column",}), ...(listHeight ? {maxHeight: listHeight,  overflowY: "auto"} : {})}}>
+        {list && list.map(renderItem)}
+      </Box>
+    </Box>
   );
 };
 

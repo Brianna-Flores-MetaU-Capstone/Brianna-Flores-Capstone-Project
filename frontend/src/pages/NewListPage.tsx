@@ -1,6 +1,4 @@
-import "../styles/NewListPage.css";
 import type {
-  GPToggleNavBarProps,
   GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
@@ -10,7 +8,6 @@ import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import Button from "@mui/material/Button";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
@@ -23,10 +20,12 @@ import { useNavigate } from "react-router";
 import LoadingModal from "../components/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
+import { Box, Button } from "@mui/joy";
+import ConnectCalendar from "../components/ConnectCalendar";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
     useState(false);
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
@@ -102,30 +101,39 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   };
 
   return (
-    <div className="new-list-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
-      <section>
-        <Button onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}>
-          Add Another Meal!
-        </Button>
-        <Button onClick={handleGenerateList}>Make My List</Button>
-      </section>
-      <TitledListView
-        className="selected-meals"
-        headerList={["Selected Meals"]}
-        list={selectedRecipes}
-        renderItem={(meal) => (
-          <MealCard
-            key={meal.apiId}
-            onMealCardClick={() => handleRecipeCardClick(meal)}
-            parsedMealData={meal}
-            onDeleteRecipe={handleDeleteRecipe}
+    <Box>
+      <AppHeader />
+      <Box sx={{ m: 3 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Button
+              onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
+            >
+              Add Another Meal!
+            </Button>
+            <Button onClick={handleGenerateList}>Make My List</Button>
+          </Box>
+          <ConnectCalendar />
+        </Box>
+        <Box>
+          <TitledListView
+            headerList={[{ title: "Selected Meals", spacing: 12 }]}
+            list={selectedRecipes}
+            renderItem={(meal) => (
+              <MealCard
+                key={meal.apiId}
+                onMealCardClick={() => handleRecipeCardClick(meal)}
+                parsedMealData={meal}
+                onDeleteRecipe={handleDeleteRecipe}
+              />
+            )}
+            flexDirectionRow
           />
+        </Box>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
         )}
-      />
-      {message && (
-        <ErrorState error={message.error} message={message.message} />
-      )}
+      </Box>
       <AddAnotherMealModal
         handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
@@ -137,7 +145,7 @@ const NewListPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
         recipeInfo={recipeInfoModalInfo}
       />
       <LoadingModal modalOpen={loadingList} />
-    </div>
+    </Box>
   );
 };
 

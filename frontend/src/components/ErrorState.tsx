@@ -1,13 +1,21 @@
 import React from "react";
 import { errorCodes } from "../utils/firebase";
-import Alert from "@mui/material/Alert";
+import Alert from "@mui/joy/Alert";
+import ReportIcon from "@mui/icons-material/Report";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { GPErrorMessageTypes } from "../utils/types";
 
 const ErrorState: React.FC<GPErrorMessageTypes> = ({ error, message }) => {
   const displayedMessage = errorCodes[message] ?? message;
   return (
     <div>
-      <Alert severity={error ? "error" : "success"}>{displayedMessage}</Alert>
+      <Alert
+        startDecorator={error ? <ReportIcon /> : <CheckCircleIcon />}
+        sx={{ alignItems: "flex-start" }}
+        color={error ? "danger" : "success"}
+      >
+        {displayedMessage}
+      </Alert>
     </div>
   );
 };
