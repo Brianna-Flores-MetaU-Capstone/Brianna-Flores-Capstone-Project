@@ -6,6 +6,7 @@ import type {
 import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { v4 as uuidv4 } from "uuid";
+import { Box } from "@mui/joy";
 
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientWithCostInfoTypes[];
@@ -26,9 +27,9 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   ) => {};
 
   return (
-    <div className="grocery-department">
+    <Box sx={{p: 2, width: 500, borderRadius: "md", border: "2px solid", borderColor: "primary.300"}}>
       <TitledListView
-        headerList={[{title: department, spacing: 1}]}
+        headerList={[{title: department, spacing: 12}]}
         list={filteredGroceries}
         renderItem={(itemInfo) => (
           <Ingredient
@@ -43,7 +44,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
           />
         )}
       />
-    </div>
+    </Box>
   );
 };
 

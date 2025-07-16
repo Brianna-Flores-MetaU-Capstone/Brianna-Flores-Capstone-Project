@@ -4,33 +4,48 @@ import { v4 as uuidv4 } from "uuid";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPHeaderListType = {
-title: string 
-spacing: number
-}
+  title: string;
+  spacing: number;
+};
 
 type GPTitledListViewProps<T> = {
   list: T[];
   renderItem: (item: T) => React.ReactNode;
   headerList?: GPHeaderListType[];
+  flexDirectionRow?: boolean;
 };
 
 const TitledListView = <T,>({
   list,
   renderItem,
   headerList,
+  flexDirectionRow
 }: GPTitledListViewProps<T>) => {
   return (
     <Box>
       {headerList && (
-        <Grid container sx={{ flexGrow: 1, p: 2, bgcolor: "primary.300", borderRadius: "md", my: 2}}>
+        <Grid
+          container
+          sx={{
+            flexGrow: 1,
+            p: 2,
+            bgcolor: "primary.300",
+            borderRadius: "md",
+            mb: 2,
+          }}
+        >
           {headerList.map((header) => (
             <Grid xs={header.spacing}>
-            <Typography level="h4" key={uuidv4()}>{header.title}</Typography>
+              <Typography level="h4" key={uuidv4()}>
+                {header.title}
+              </Typography>
             </Grid>
           ))}
         </Grid>
       )}
-      <Box sx={{display: "flex", flexDirection: "column", gap: 3}}>{list && list.map(renderItem)}</Box>
+      <Box sx={{ display: "flex", gap: 3, ...(flexDirectionRow ? {flexWrap: "wrap", justifyContent: "center"} : {flexDirection: "column",}) }}>
+        {list && list.map(renderItem)}
+      </Box>
     </Box>
   );
 };

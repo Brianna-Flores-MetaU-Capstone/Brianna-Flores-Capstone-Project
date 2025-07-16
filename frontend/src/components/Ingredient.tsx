@@ -42,7 +42,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       : ingredient.quantity.toFixed(2);
   return (
     <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
-      <Grid container alignItems="center" spacing={2}>
+      <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
         {presentGroceryCheck && (
           <Grid xs={1}>
             <Checkbox
@@ -51,7 +51,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             />
           </Grid>
         )}
-        <Grid xs={presentGroceryCheck ? 3 : 4}>
+        <Grid xs={4}>
           <Typography>{ingredient.ingredientName}</Typography>
         </Grid>
         {/* Quantity goes to 2 decimal places only if decimal */}
@@ -66,7 +66,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
           </Grid>
         )}
         {ingredientCost && (
-          <Grid>
+          <Grid xs={4}>
             <Typography>
               Est. ${ingredientCost.ingredientCost?.toFixed(2)}
             </Typography>
