@@ -46,7 +46,7 @@ GPEventTimeModal) => {
     })
   );
   const [inputError, setInputError] = useState(false);
-  const { eventOptions } = useEventRec();
+  const { eventOptions, setEventOptions } = useEventRec();
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { time } = (event.target as HTMLInputElement).dataset;
@@ -74,12 +74,12 @@ GPEventTimeModal) => {
       end: eventEndTime,
     };
     if (eventOptions) {
-      const updatedEventsGroup = eventOptions[groupNum].map((eventInfo) =>
-        eventInfo.name === updatedEvent.name
-          ? updatedEvent
-          : eventInfo
-      );
-      eventOptions[groupNum] = updatedEventsGroup
+      setEventOptions((prev) => {
+        const updatedEventOptions = [...prev]
+        updatedEventOptions[groupNum] = prev[groupNum].map((eventInfo) => eventInfo.name === updatedEvent.name ? updatedEvent : eventInfo)
+        return updatedEventOptions
+      })
+      setOpen(false)
     }
   };
 
