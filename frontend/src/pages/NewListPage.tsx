@@ -2,6 +2,7 @@ import type {
   GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
+  GPRecipeEventOptionType,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -22,6 +23,7 @@ import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
+import CalendarModal from "../components/CalendarModal";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -36,6 +38,9 @@ const NewListPage = () => {
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
+  const [calendarModalOpen, setCalendarModalOpen] = useState(false);
+  const [calendarEventOptions, setCalendarEventOptions] = useState<GPRecipeEventOptionType[][]>([]);
+
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -113,7 +118,7 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar />
+          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} setEvents={setCalendarEventOptions} userSelectedRecipes={selectedRecipes}/>
         </Box>
         <Box>
           <TitledListView
@@ -145,6 +150,7 @@ const NewListPage = () => {
         recipeInfo={recipeInfoModalInfo}
       />
       <LoadingModal modalOpen={loadingList} />
+      <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)} eventOptions={calendarEventOptions}/>
     </Box>
   );
 };

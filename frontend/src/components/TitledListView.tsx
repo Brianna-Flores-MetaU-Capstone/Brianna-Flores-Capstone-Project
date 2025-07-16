@@ -9,7 +9,7 @@ type GPHeaderListType = {
 
 type GPTitledListViewProps<T> = {
   list: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
   headerList?: GPHeaderListType[];
   flexDirectionRow?: boolean;
   listHeight?: number
