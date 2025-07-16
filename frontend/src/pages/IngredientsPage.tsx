@@ -6,7 +6,7 @@ import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
 } from "../utils/types";
-import { Button } from "@mui/joy";
+import { Box, Button, Grid, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import { v4 as uuidv4 } from "uuid";
@@ -57,18 +57,12 @@ const IngredientsPage = () => {
   };
 
   return (
-    <div className="ingredients-page">
+    <Sheet>
       <AppHeader />
-      <section className="ingredient-page-container">
-        <Button
-          className="add-button"
-          onClick={addIngredientClick}
-        >
-          Add Ingredient
-        </Button>
+      <Box sx={{m: 2}}>
+        <Button onClick={addIngredientClick}>Add Ingredient</Button>
         <TitledListView
-          className="list-items"
-          headerList={["Ingredient", "Quantity", "Expiration"]}
+          headerList={[{title: "Ingredient", spacing: 4}, {title: "Quantity", spacing: 3}, {title: "Expiration", spacing: 5}]}
           list={userIngredients}
           renderItem={(ingredient) => (
             <Ingredient
@@ -85,7 +79,7 @@ const IngredientsPage = () => {
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </section>
+      </Box>
       {addIngredientModalOpen && (
         <IngredientModal
           modalFor={INGREDIENT_MODAL}
@@ -105,7 +99,7 @@ const IngredientsPage = () => {
           fetchUserIngredients={fetchUserIngredients}
         />
       )}
-    </div>
+    </Sheet>
   );
 };
 

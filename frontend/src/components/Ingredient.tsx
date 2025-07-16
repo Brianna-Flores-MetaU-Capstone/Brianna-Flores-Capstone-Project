@@ -6,6 +6,14 @@ import type {
   GPIngredientApiInfoType,
   GPIngredientDataTypes,
 } from "../utils/types";
+import {
+  Box,
+  ButtonGroup,
+  Checkbox,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/joy";
 
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
@@ -28,45 +36,56 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const formatQuantity =
+    parseInt(ingredient.quantity.toString()) % 1 === 0
+      ? ingredient.quantity
+      : ingredient.quantity.toFixed(2);
   return (
-    <div className="list-ingredient">
-      {presentGroceryCheck && (
-        <input
-          type="checkbox"
-          checked={ingredient.isChecked}
-          onChange={() => onGroceryCheck?.(ingredient.ingredientName)}
-        />
-      )}
-      <p className="ingredient-name">{ingredient.ingredientName}</p>
-      {/* Quantity goes to 2 decimal places only if decimal */}
-      <p className="ingredient-amount">{`${
-        parseInt(ingredient.quantity.toString()) % 1 === 0
-          ? ingredient.quantity
-          : ingredient.quantity.toFixed(2)
-      } ${ingredient.unit}`}</p>
-      {presentExpiration && (
-        <p className="ingredient-expiration">{ingredient.expirationDate}</p>
-      )}
-      {ingredientCost && (
-        <p className="ingredient-cost">
-          Est. ${ingredientCost.ingredientCost?.toFixed(2)}
-        </p>
-      )}
-      {presentButtons && (
-        <div className="ingredient-buttons-container">
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="ingredient-button"
-            onClick={() => onEdit?.(ingredient)}
-          />
-          <FontAwesomeIcon
-            icon={faTrash}
-            className="ingredient-button"
-            onClick={() => onDelete?.(ingredient)}
-          />
-        </div>
-      )}
-    </div>
+    <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
+      <Grid container alignItems="center" spacing={2}>
+        {presentGroceryCheck && (
+          <Grid xs={1}>
+            <Checkbox
+              checked={ingredient.isChecked}
+              onChange={() => onGroceryCheck?.(ingredient.ingredientName)}
+            />
+          </Grid>
+        )}
+        <Grid xs={presentGroceryCheck ? 3 : 4}>
+          <Typography>{ingredient.ingredientName}</Typography>
+        </Grid>
+        {/* Quantity goes to 2 decimal places only if decimal */}
+        <Grid xs={3}>
+          <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
+        </Grid>
+        {presentExpiration && (
+          <Grid xs={3}>
+            <Typography className="ingredient-expiration">
+              {ingredient.expirationDate}
+            </Typography>
+          </Grid>
+        )}
+        {ingredientCost && (
+          <Grid>
+            <Typography>
+              Est. ${ingredientCost.ingredientCost?.toFixed(2)}
+            </Typography>
+          </Grid>
+        )}
+        {presentButtons && (
+          <Grid xs={2}>
+            <ButtonGroup>
+              <IconButton onClick={() => onEdit?.(ingredient)}>
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </IconButton>
+              <IconButton onClick={() => onDelete?.(ingredient)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </IconButton>
+            </ButtonGroup>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
   );
 };
 

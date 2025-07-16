@@ -28,8 +28,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   return (
     <div className="grocery-department">
       <TitledListView
-        className="grocery-department-items"
-        headerList={[department]}
+        headerList={[{title: department, spacing: 1}]}
         list={filteredGroceries}
         renderItem={(itemInfo) => (
           <Ingredient
