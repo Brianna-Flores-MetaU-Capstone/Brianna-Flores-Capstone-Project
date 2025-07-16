@@ -29,7 +29,10 @@ type GPEventTimeModal = {
   groupNum?: number;
   modalOpen: boolean;
   toggleModal: () => void;
-  onSubmit?: (preferences: GPPreferredBlockType[], singleDayPrep: boolean) => void;
+  onSubmit?: (
+    preferences: GPPreferredBlockType[],
+    singleDayPrep: boolean
+  ) => void;
 };
 
 const CalendarTimeModal = ({
@@ -98,18 +101,7 @@ const CalendarTimeModal = ({
     eventEndTime.setHours(parseInt(end.substring(0, 2)));
     eventEndTime.setMinutes(parseInt(end.substring(3)));
     if (eventInfo && groupNum !== undefined && eventOptions) {
-      const updatedEvent = {
-        ...eventInfo,
-        start: eventStartTime,
-        end: eventEndTime,
-      };
-      setEventOptions((prev) => {
-        const updatedEventOptions = [...prev];
-        updatedEventOptions[groupNum] = prev[groupNum].map((eventInfo) =>
-          eventInfo.name === updatedEvent.name ? updatedEvent : eventInfo
-        );
-        return updatedEventOptions;
-      });
+      eventInfo.timeOptions[0] = { start: eventStartTime, end: eventEndTime };
       toggleModal();
     }
   };
@@ -212,10 +204,16 @@ const CalendarTimeModal = ({
                   buttonFlex={1}
                   size="lg"
                 >
-                  <Button variant={!singleDayPrep ? "solid" : "outlined"}onClick={() => setSingleDayPrep(false)}>
+                  <Button
+                    variant={!singleDayPrep ? "solid" : "outlined"}
+                    onClick={() => setSingleDayPrep(false)}
+                  >
                     Cook throughout the week
                   </Button>
-                  <Button variant={singleDayPrep ? "solid" : "outlined"} onClick={() => setSingleDayPrep(true)}>
+                  <Button
+                    variant={singleDayPrep ? "solid" : "outlined"}
+                    onClick={() => setSingleDayPrep(true)}
+                  >
                     Cook on a single day
                   </Button>
                 </ButtonGroup>
