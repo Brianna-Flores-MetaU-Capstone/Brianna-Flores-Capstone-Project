@@ -2,6 +2,7 @@ import type {
   GPUserEventTypes,
   GPRecipeDataTypes,
   GPRecipeEventOptionType,
+  GPPreferredBlockType,
 } from "../../frontend/src/utils/types";
 
 type GPBestTimeType = {
@@ -42,10 +43,12 @@ const getShoppingTimeOptions = ({
 type GPRecipeEventTypes = {
   userFreeTime: GPUserEventTypes[];
   userRecipes: GPRecipeDataTypes[];
+  userPreferences: GPPreferredBlockType[];
 };
 const getRecipeTimeOptions = ({
   userFreeTime,
   userRecipes,
+  userPreferences,
 }: GPRecipeEventTypes) => {
   // cook one recipe max per day
   let eventOptions: GPRecipeEventOptionType[] = [];
@@ -54,32 +57,17 @@ const getRecipeTimeOptions = ({
     for (const freeBlock of userFreeTime) {
       let startTime = new Date(freeBlock.start);
       let endTime = new Date(freeBlock.end);
-      // check if the blocks end time is before the current day
       if (endTime.getTime() >= currentDay.getTime()) {
-        let blockTime = (endTime.getTime() - startTime.getTime()) / 60000;
-        if (
-          blockTime >= recipe.readyInMinutes &&
-          (startTime.getHours() >= 17 ||
-            (endTime.getHours() <= 20 && endTime.getHours() >= 16))
-        ) {
-          // block is large enough to fit the required cook time
-          // start time for block is after 5 pm and before 8 (automatic constraint from "alert hours")
-          if (startTime.getHours() <= 17) {
-            startTime.setHours(17, 0, 0, 0);
-          }
-          const cookTimeOption = {
-            name: recipe.recipeTitle,
-            start: startTime,
-            end: new Date(
-              startTime.getTime() + recipe.readyInMinutes * 1000 * 60
-            ),
-            recipe: recipe,
-          };
-          eventOptions = [...eventOptions, cookTimeOption];
-          // eat leftover servings if > 1, dont have to cook till another day
+        // block is after current day
+        const bestBlock = fitsUserPreferences({
+          freeBlock,
+          userPreferences,
+          recipe,
+        });
+        if (bestBlock) {
+          eventOptions = [...eventOptions, bestBlock];
           currentDay.setDate(startTime.getDate() + recipe.servings);
           currentDay.setHours(8, 0, 0, 0);
-          // added option to array, go to next recipe
           break;
         }
       }
@@ -88,19 +76,101 @@ const getRecipeTimeOptions = ({
   return eventOptions;
 };
 
+type GPFitsPreferenceTypes = {
+  freeBlock: GPUserEventTypes;
+  userPreferences: GPPreferredBlockType[];
+  recipe: GPRecipeDataTypes;
+};
+const fitsUserPreferences = ({
+  freeBlock,
+  userPreferences,
+  recipe,
+}: GPFitsPreferenceTypes) => {
+  // userPreferences formatted as 00:00
+  // loop through user preferences
+  const startAsDate = new Date(freeBlock.start);
+  const endAsDate = new Date(freeBlock.end);
+  const freeBlockStart = startAsDate.getTime();
+  const freeBlockEnd = endAsDate.getTime();
+  let bestChoice = null;
+  for (const preference of userPreferences) {
+    const tempPrefStart = new Date(freeBlock.start);
+    tempPrefStart.setHours(0, 0, 0, 0);
+    const preferredStart =
+      tempPrefStart.getTime() +
+      (parseInt(preference.start.substring(0, 2)) * 60 +
+        parseInt(preference.start.substring(3))) *
+        60 *
+        1000;
+
+    const tempPrefEnd = new Date(freeBlock.end);
+    tempPrefEnd.setHours(0, 0, 0, 0);
+    const preferredEnd =
+      tempPrefEnd.getTime() +
+      (parseInt(preference.end.substring(0, 2)) * 60 +
+        parseInt(preference.end.substring(3))) *
+        60 *
+        1000;
+    if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
+      continue;
+    }
+    let start = 0;
+    let end = 0;
+    if (freeBlockStart <= preferredStart && freeBlockEnd >= preferredEnd) {
+      // preferred block completely within free block
+      start = preferredStart;
+      end = preferredEnd;
+    }
+    if (preferredStart <= freeBlockStart && preferredEnd >= freeBlockEnd) {
+      // free block is completely within prefered block
+      start = freeBlockStart;
+      end = freeBlockEnd;
+    }
+    if (
+      freeBlockStart < preferredStart &&
+      freeBlockEnd > preferredStart &&
+      freeBlockEnd < preferredEnd
+    ) {
+      // free block starts before prefered block and ends within prefered block
+      start = preferredStart;
+      end = freeBlockEnd;
+    }
+    if (
+      freeBlockStart > preferredStart &&
+      freeBlockStart < preferredEnd &&
+      freeBlockEnd > preferredEnd
+    ) {
+      // free block starts within prefered block and ends after it
+      start = freeBlockStart;
+      end = preferredEnd;
+    }
+    if (end - start >= recipe.readyInMinutes) {
+      bestChoice = {
+        name: recipe.recipeTitle,
+        start: new Date(start),
+        end: new Date(start + recipe.readyInMinutes * 1000 * 60),
+        recipe: recipe,
+      };
+      return bestChoice;
+    }
+  }
+  return null;
+};
+
 const NUM_SCHEDULE_OPTIONS = 3;
 
 const getMultipleScheduleOptions = ({
   userFreeTime,
   userRecipes,
+  userPreferences,
 }: GPRecipeEventTypes) => {
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
-  let freeTimeArray = userFreeTime;
   let recipeArray = userRecipes;
   for (let i = 0; i < NUM_SCHEDULE_OPTIONS; i++) {
     const option = getRecipeTimeOptions({
-      userFreeTime: freeTimeArray,
+      userFreeTime: userFreeTime,
       userRecipes: recipeArray,
+      userPreferences,
     });
     scheduleOptions = [...scheduleOptions, option];
     recipeArray = shuffleArray(recipeArray);

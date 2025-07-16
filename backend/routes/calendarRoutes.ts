@@ -43,6 +43,7 @@ router.post(
       const recipeScheduleOptions = getMultipleScheduleOptions({
         userFreeTime: parsedFreeTime,
         userRecipes: userSelectedRecipes,
+        userPreferences: userPreferences
       });
       res.json(recipeScheduleOptions);
     } catch (error) {
