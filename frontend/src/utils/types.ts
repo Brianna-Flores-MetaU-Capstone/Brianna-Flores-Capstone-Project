@@ -120,4 +120,5 @@ export type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
+  GPTimeBlockType
 };
