@@ -117,7 +117,7 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} userSelectedRecipes={selectedRecipes}/>
+          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} />
         </Box>
         <Box>
           <TitledListView
@@ -148,7 +148,7 @@ const NewListPage = () => {
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
-      <LoadingModal modalOpen={loadingList} />
+      <LoadingModal modalOpen={loadingList} message={"Generating Your Grocery List"}/>
       <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)}/>
     </Box>
   );

@@ -7,10 +7,15 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
-import type { GPUserEventTypes, GPRecipeDataTypes } from "../utils/types";
+import type {
+  GPUserEventTypes,
+  GPRecipeDataTypes,
+  GPPreferredBlockType,
+} from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
-import { useEventRec } from "../contexts/EventRecContext";  
-
+import { useEventRec } from "../contexts/EventRecContext";
+import AdjustEventTimeModal from "./AdjustEventTimeModal";
+import LoadingModal from "./LoadingModal";
 
 // TODO change requested days to have user input
 const REQUESTED_DAYS = 7;
@@ -18,12 +23,13 @@ const REQUESTED_DAYS = 7;
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
 type GPConnectCalendarTypes = {
-  onClick: () => void
-  userSelectedRecipes: GPRecipeDataTypes[]
-}
+  onClick: () => void;
+};
 
-const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes) => {
-  const { setEventOptions} = useEventRec()
+const ConnectCalendar = ({
+  onClick,
+}: GPConnectCalendarTypes) => {
+  const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC =
     "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
@@ -35,6 +41,8 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
   let tokenClient: google.accounts.oauth2.TokenClient;
@@ -74,14 +82,16 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
           if (resp.error !== undefined) {
             throw resp;
           }
-          await getUserFreeTime();
+          setModalOpen(true);
+          // await getUserFreeTime();
         },
       });
     }
     if (gapiInited && gisInited) {
       const token = gapi.client.getToken();
       if (token) {
-        getUserFreeTime();
+        setModalOpen(true);
+        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -90,7 +100,8 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
     if (gapiInited && gisInited) {
       const token = gapi.client.getToken();
       if (token) {
-        getUserFreeTime();
+        setModalOpen(true);
+        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -106,7 +117,8 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
       tokenClient.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
-      getUserFreeTime();
+      setModalOpen(true);
+      // getUserFreeTime();
     }
   }
 
@@ -118,7 +130,8 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
     }
   }
 
-  async function getUserFreeTime() {
+  async function getUserFreeTime(userPreferences: GPPreferredBlockType[]) {
+    setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
       const startDate = new Date();
@@ -152,25 +165,39 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
       const reccomendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedFreeTime, userSelectedRecipes },
+        { parsedFreeTime, userPreferences },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
       const eventOptions = reccomendedEvents.data;
-      setEventOptions(eventOptions)
+      setEventOptions(eventOptions);
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options
-      
+      setLoading(false);
       // within new list convert to local time zone and present options to user
     } catch (err) {
+      setLoading(false);
       return;
     }
   }
+
+  const getUserTimePreferences = async (
+    preferences: GPPreferredBlockType[]
+  ) => {
+    await getUserFreeTime(preferences);
+  };
 
   return (
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
       <Button onClick={handleSignoutClick}>Signout</Button>
+      <AdjustEventTimeModal
+        editMode={false}
+        modalOpen={modalOpen}
+        toggleModal={() => setModalOpen((prev) => !prev)}
+        onSubmit={getUserTimePreferences}
+      />
+      <LoadingModal modalOpen={loading} message={"Generating Schedule"}/>
     </Box>
   );
 };

@@ -87,6 +87,11 @@ type GPRecipeEventOptionType = GPUserEventTypes & {
   recipe: GPRecipeDataTypes;
 };
 
+type GPPreferredBlockType = {
+  start: string
+  end: string
+}
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -99,5 +104,6 @@ export type {
   GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
   GPUserEventTypes,
-  GPRecipeEventOptionType
+  GPRecipeEventOptionType,
+  GPPreferredBlockType
 };

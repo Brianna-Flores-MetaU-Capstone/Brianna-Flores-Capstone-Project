@@ -18,7 +18,7 @@ router.post(
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { parsedFreeTime } = req.body;
+    const { parsedFreeTime, userPreferences } = req.body;
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
