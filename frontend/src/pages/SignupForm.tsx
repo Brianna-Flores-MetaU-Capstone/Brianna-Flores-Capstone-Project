@@ -12,7 +12,7 @@ import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
-import { Box } from "@mui/joy";
+import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
 const SignupForm = () => {
@@ -58,9 +58,9 @@ const SignupForm = () => {
   }
 
   return (
-    <div className="login-page signup-page">
+    <Box>
       <AppHeader />
-      <Box className="login-content">
+      <Card sx={{ mt: 20, mx: "auto" }}>
         <AuthForm
           handleRegistrationSubmit={handleSubmit}
           handleAuthInputChange={(event) =>
@@ -71,8 +71,8 @@ const SignupForm = () => {
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </Box>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

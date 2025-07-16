@@ -22,7 +22,15 @@ import {
 } from "../utils/constants";
 import AuthenticatePassword from "../components/AuthenticatePassword";
 import ErrorState from "../components/ErrorState";
-import { Button, Input, FormControl, FormLabel } from "@mui/joy";
+import {
+  Button,
+  Box,
+  Card,
+  Input,
+  FormControl,
+  FormLabel,
+  Typography,
+} from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -155,44 +163,50 @@ const AccountPage = () => {
 
   if (!currentUser && !loadingData) {
     return (
-      <div className="account-page">
-        <AppHeader/>
+      <Box>
+        <AppHeader />
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
-      </div>
+      </Box>
     );
   }
 
   return (
-    <div className="account-page">
-      <AppHeader/>
-      <div className="account-info">
-        <h1>Edit Account Details</h1>
-        <div className="account-email">
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <Input
-              required
-              id={AuthenticationFieldEnum.EMAIL}
-              slotProps={{
-                input: {
-                  "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
-                },
-              }}
-              onChange={handleInputChange}
-              value={userEmail ? userEmail : ""}
-            />
-          </FormControl>
-        </div>
-        <h2>Selected Intolerances</h2>
+    <Box>
+      <AppHeader />
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 10,
+          mx: "auto",
+        }}
+      >
+        <Typography level="h2">Edit Account Details</Typography>
+        <FormControl>
+          <FormLabel>Email</FormLabel>
+          <Input
+            required
+            id={AuthenticationFieldEnum.EMAIL}
+            slotProps={{
+              input: {
+                "data-credential": `${AuthenticationFieldEnum.EMAIL}`,
+              },
+            }}
+            onChange={handleInputChange}
+            value={userEmail ? userEmail : ""}
+          />
+        </FormControl>
+        <Typography level="h4">Selected Intolerances</Typography>
         <RegistrationPreferenceButtons
           listName={PreferenceCategoryEnum.INTOLERANCES}
           listItems={Intolerances}
           userList={userIntolerances}
           handleButtonClick={handlePreferenceClick}
         />
-        <h2>Selected Diets</h2>
+        <Typography level="h4">Selected Diets</Typography>
         <RegistrationPreferenceButtons
           listName={PreferenceCategoryEnum.DIETS}
           listItems={Diets}
@@ -207,8 +221,8 @@ const AccountPage = () => {
           <ErrorState error={message.error} message={message.message} />
         )}
         <Button onClick={handleLogout}>Logout</Button>
-      </div>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

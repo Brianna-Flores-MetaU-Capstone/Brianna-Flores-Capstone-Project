@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/LoginPage.css";
 import TitledListView from "./TitledListView";
+import { Button } from "@mui/joy";
 
 type GPUserPreferenceButtonsProps = {
   listName: string;
@@ -19,22 +20,19 @@ const RegistrationPreferenceButtons: React.FC<GPUserPreferenceButtonsProps> = ({
     <TitledListView
       list={listItems}
       renderItem={(item) => (
-        <button
+        <Button
           key={item}
           data-category={listName}
           data-selection={item}
           id={item}
-          className={
-            userList.includes(item)
-              ? "preference-selected"
-              : "preference-not-selected"
-          }
+          variant={userList.includes(item) ? "solid" : "soft"}
           type="button"
           onClick={handleButtonClick}
         >
           {item}
-        </button>
+        </Button>
       )}
+      flexDirectionRow={true}
     />
   );
 };

@@ -97,6 +97,17 @@ const theme = extendTheme({
         variant: "outlined",
       },
     },
+    JoyCard: {
+      styleOverrides: {
+        root: {
+          width: 450,
+        },
+      },
+      defaultProps: {
+        variant: "outlined",
+        color: "primary",
+      },
+    },
   },
 });
 

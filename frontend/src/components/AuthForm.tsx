@@ -7,7 +7,7 @@ import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
 } from "../utils/constants";
-import { Button, Input, FormControl, FormLabel } from "@mui/joy";
+import { Button, Box, Input, FormControl, FormLabel } from "@mui/joy";
 import type { GPAuthFormDataTypes } from "../utils/types";
 
 type GPAuthFormEventProps = {
@@ -64,7 +64,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
   };
 
   return (
-    <form className="login-info" onSubmit={onRegistrationSubmit}>
+    <form onSubmit={onRegistrationSubmit}>
       <FormControl>
         <FormLabel>Enter Email</FormLabel>
         <Input
@@ -78,7 +78,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           onChange={handleAuthInputChange}
         />
       </FormControl>
-      <FormControl>
+      <FormControl sx={{my: 2}}>
         <FormLabel>Enter Password</FormLabel>
         <Input
           required
@@ -94,24 +94,24 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
         />
       </FormControl>
       {handleRegistrationSubmit && (
-        <div>
-          <label htmlFor="intolerances">Intolerances</label>
+        <Box>
+          <FormLabel>Intolerances</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.INTOLERANCES}
             listItems={Intolerances}
             userList={userIntolerances}
             handleButtonClick={handlePreferenceClick}
           />
-          <label>Diets</label>
+          <FormLabel>Diets</FormLabel>
           <RegistrationPreferenceButtons
             listName={PreferenceCategoryEnum.DIETS}
             listItems={Diets}
             userList={userDiets}
             handleButtonClick={handlePreferenceClick}
           />
-        </div>
+        </Box>
       )}
-      <Button className="submit-auth" type="submit">
+      <Button type="submit" sx={{display: "block", mx: "auto", mt: 1}}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

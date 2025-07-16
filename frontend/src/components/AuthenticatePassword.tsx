@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthenticationFieldEnum } from "../utils/constants";
-import { Button, FormControl, FormLabel, Input } from "@mui/joy";
+import { Button, Box, FormControl, FormLabel, Input } from "@mui/joy";
 
 type GPPasswordAuthenticationProps = {
   handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -12,7 +12,7 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
   handleInputChange,
 }) => {
   return (
-    <form className="confirm-password" onSubmit={handleAccountSubmit}>
+    <form onSubmit={handleAccountSubmit}>
       <FormControl>
         <FormLabel>Confirm Password</FormLabel>
         <Input
@@ -26,8 +26,8 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
           type="password"
         />
       </FormControl>
-      <Button type="submit">
-        Submit
+      <Button sx={{display: "block", mx: "auto", mt: 1}} type="submit">
+        Update Account!
       </Button>
     </form>
   );
