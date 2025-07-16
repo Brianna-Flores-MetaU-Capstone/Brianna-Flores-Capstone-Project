@@ -1,7 +1,7 @@
 import React from "react";
 import AppHeader from "../components/AppHeader";
 import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
-import type { GPToggleNavBarProps, GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import "../styles/AccountPage.css";
@@ -27,7 +27,7 @@ import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const AccountPage = () => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>();
@@ -156,7 +156,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   if (!currentUser && !loadingData) {
     return (
       <div className="account-page">
-        <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+        <AppHeader/>
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}
@@ -166,7 +166,7 @@ const AccountPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <div className="account-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader/>
       <div className="account-info">
         <h1>Edit Account Details</h1>
         <div className="account-email">

@@ -1,7 +1,6 @@
 import "../styles/GroceryList.css";
 import type {
   GPErrorMessageTypes,
-  GPToggleNavBarProps,
   GPIngredientWithCostInfoTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
@@ -17,7 +16,7 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
-const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const GroceryList = () => {
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
   const [userGroceryList, setUserGroceryList] = useState<
     GPIngredientWithCostInfoTypes[]
@@ -61,7 +60,7 @@ const GroceryList: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <div>
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <div className="grocery-list-container">
         <Button className="add-button" onClick={handleClearGroceries}>
           Clear Purchased Items

@@ -2,7 +2,6 @@ import "../styles/Homepage.css";
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPToggleNavBarProps,
   GPIngredientWithCostInfoTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
@@ -20,7 +19,7 @@ import {
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 
-const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
     GPIngredientWithCostInfoTypes[]
@@ -49,7 +48,7 @@ const Homepage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
   }, []);
   return (
     <div className="homepage-container">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <section className="quick-access-container">
         <div className="item-list">
           <TitledListView

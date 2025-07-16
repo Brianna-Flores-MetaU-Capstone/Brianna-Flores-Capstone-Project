@@ -4,7 +4,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
-  GPToggleNavBarProps,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
@@ -16,7 +15,7 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Box } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
-const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
+const SignupForm = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
     password: "",
@@ -60,7 +59,7 @@ const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <div className="login-page signup-page">
-      <AppHeader navOpen={navOpen} toggleNav={toggleNav} />
+      <AppHeader />
       <Box className="login-content">
         <AuthForm
           handleRegistrationSubmit={handleSubmit}
