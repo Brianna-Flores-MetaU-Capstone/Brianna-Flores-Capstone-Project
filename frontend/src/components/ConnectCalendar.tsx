@@ -9,12 +9,11 @@ import { axiosConfig } from "../utils/databaseHelpers";
 
 import type {
   GPUserEventTypes,
-  GPRecipeDataTypes,
   GPPreferredBlockType,
 } from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
 import { useEventRec } from "../contexts/EventRecContext";
-import AdjustEventTimeModal from "./AdjustEventTimeModal";
+import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "./LoadingModal";
 
 // TODO change requested days to have user input
@@ -26,9 +25,7 @@ type GPConnectCalendarTypes = {
   onClick: () => void;
 };
 
-const ConnectCalendar = ({
-  onClick,
-}: GPConnectCalendarTypes) => {
+const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC =
@@ -83,7 +80,6 @@ const ConnectCalendar = ({
             throw resp;
           }
           setModalOpen(true);
-          // await getUserFreeTime();
         },
       });
     }
@@ -91,7 +87,6 @@ const ConnectCalendar = ({
       const token = gapi.client.getToken();
       if (token) {
         setModalOpen(true);
-        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -101,7 +96,6 @@ const ConnectCalendar = ({
       const token = gapi.client.getToken();
       if (token) {
         setModalOpen(true);
-        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -118,7 +112,6 @@ const ConnectCalendar = ({
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
       setModalOpen(true);
-      // getUserFreeTime();
     }
   }
 
@@ -130,7 +123,7 @@ const ConnectCalendar = ({
     }
   }
 
-  async function getUserFreeTime(userPreferences: GPPreferredBlockType[]) {
+  async function getUserFreeTime(userPreferences: GPPreferredBlockType[], singleDayPrep: boolean, servingsPerDay: number) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
@@ -165,7 +158,7 @@ const ConnectCalendar = ({
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
       const reccomendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedFreeTime, userPreferences },
+        { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
@@ -182,22 +175,24 @@ const ConnectCalendar = ({
   }
 
   const getUserTimePreferences = async (
-    preferences: GPPreferredBlockType[]
+    preferences: GPPreferredBlockType[], 
+    singleDayPrep: boolean,
+    servingsPerDay: number,
   ) => {
-    await getUserFreeTime(preferences);
+    await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
   };
 
   return (
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
       <Button onClick={handleSignoutClick}>Signout</Button>
-      <AdjustEventTimeModal
+      <CalendarTimeModal
         editMode={false}
         modalOpen={modalOpen}
         toggleModal={() => setModalOpen((prev) => !prev)}
         onSubmit={getUserTimePreferences}
       />
-      <LoadingModal modalOpen={loading} message={"Generating Schedule"}/>
+      <LoadingModal modalOpen={loading} message={"Generating Schedule"} />
     </Box>
   );
 };

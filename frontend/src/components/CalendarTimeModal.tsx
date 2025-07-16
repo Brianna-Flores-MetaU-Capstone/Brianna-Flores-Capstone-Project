@@ -16,6 +16,7 @@ import {
   Typography,
   FormHelperText,
   IconButton,
+  ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -28,20 +29,25 @@ type GPEventTimeModal = {
   groupNum?: number;
   modalOpen: boolean;
   toggleModal: () => void;
-  onSubmit?: (preferences: GPPreferredBlockType[]) => void
+  onSubmit?: (
+    preferences: GPPreferredBlockType[],
+    singleDayPrep: boolean,
+    servingsPerDay: number
+  ) => void;
 };
 
-const AdjustEventTimeModal = ({
+const CalendarTimeModal = ({
   editMode,
   eventInfo,
   groupNum,
   modalOpen,
   toggleModal,
-  onSubmit
+  onSubmit,
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
-  const eventStartTime = new Date(eventInfo?.start ?? "");
-  const eventEndTime = new Date(eventInfo?.end ?? "");
+  const eventStartTime = new Date(eventInfo?.timeOptions[0].start ?? "");
+  const eventEndTime = new Date(eventInfo?.timeOptions[0].end ?? "");
+
   const [start, setStart] = useState(
     eventStartTime.toLocaleTimeString([], {
       hour12: false,
@@ -57,10 +63,13 @@ const AdjustEventTimeModal = ({
     })
   );
   const [inputError, setInputError] = useState(false);
+  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
+  GPPreferredBlockType[]
+  >([{ start: "", end: "" }]);
+  const [singleDayPrep, setSingleDayPrep] = useState(false);
+  const [servingsPerDay, setServingsPerDay] = useState(1);
+  const [date, setDate] = useState(eventStartTime.getFullYear()+"-"+eventStartTime.getMonth().toString().padStart(2, '0')+"-"+eventStartTime.getDate().toString().padStart(2, '0'))
   const { eventOptions, setEventOptions } = useEventRec();
-  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<GPPreferredBlockType[]>([
-    { start: "", end: "" },
-  ]);
 
   const handleTimeChange = (
     index: number,
@@ -72,6 +81,8 @@ const AdjustEventTimeModal = ({
         setStart(newValue);
       } else if (timeField === EventTimeEnum.END) {
         setEnd(newValue);
+      } else if (timeField === EventTimeEnum.DATE) {
+        setDate(newValue)
       }
     } else {
       setPreferredTimeBlocks((prev) => {
@@ -91,23 +102,18 @@ const AdjustEventTimeModal = ({
 
   const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    // set event start time to new date if changed
+    eventStartTime.setDate(parseInt(date.substring(8, 10)))
+    eventStartTime.setMonth(parseInt(date.substring(5, 7)))
+    eventEndTime.setDate(parseInt(date.substring(8, 10)))
+    eventEndTime.setMonth(parseInt(date.substring(5, 7)))
+
     eventStartTime.setHours(parseInt(start.substring(0, 2)));
     eventStartTime.setMinutes(parseInt(start.substring(3)));
     eventEndTime.setHours(parseInt(end.substring(0, 2)));
     eventEndTime.setMinutes(parseInt(end.substring(3)));
     if (eventInfo && groupNum !== undefined && eventOptions) {
-      const updatedEvent = {
-        ...eventInfo,
-        start: eventStartTime,
-        end: eventEndTime,
-      };
-      setEventOptions((prev) => {
-        const updatedEventOptions = [...prev];
-        updatedEventOptions[groupNum] = prev[groupNum].map((eventInfo) =>
-          eventInfo.name === updatedEvent.name ? updatedEvent : eventInfo
-        );
-        return updatedEventOptions;
-      });
+      eventInfo.timeOptions[0] = { start: eventStartTime, end: eventEndTime };
       toggleModal();
     }
   };
@@ -115,7 +121,7 @@ const AdjustEventTimeModal = ({
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
     if (onSubmit) {
-      onSubmit(preferredTimeBlocks)
+      onSubmit(preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
     toggleModal();
   };
@@ -147,6 +153,28 @@ const AdjustEventTimeModal = ({
             {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
           <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
+            {editMode && (
+              <FormControl error={inputError}>
+                <FormLabel>New Date</FormLabel>
+                <Input
+                  type="date"
+                  onChange={(event) =>
+                    handleTimeChange(
+                      0,
+                      EventTimeEnum.DATE,
+                      event.target.value
+                    )
+                  }
+                  value={date}
+                  slotProps={{
+                    input: {
+                      "data-time": EventTimeEnum.DATE,
+                    },
+                  }}
+                  required
+                />
+              </FormControl>
+            )}
             {preferredTimeBlocks.map((block, index) => (
               <Box key={index}>
                 <FormControl error={inputError}>
@@ -160,7 +188,7 @@ const AdjustEventTimeModal = ({
                         event.target.value
                       )
                     }
-                    value={editMode ? start : preferredTimeBlocks[index].start}
+                    value={editMode ? start : block.start}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.START,
@@ -173,8 +201,14 @@ const AdjustEventTimeModal = ({
                   <FormLabel>{editMode ? "New End Time" : "To"}</FormLabel>
                   <Input
                     type="time"
-                    onChange={(event) => handleTimeChange(index, EventTimeEnum.END, event.target.value)}
-                    value={editMode ? end : preferredTimeBlocks[index].end}
+                    onChange={(event) =>
+                      handleTimeChange(
+                        index,
+                        EventTimeEnum.END,
+                        event.target.value
+                      )
+                    }
+                    value={editMode ? end : block.end}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.END,
@@ -196,6 +230,47 @@ const AdjustEventTimeModal = ({
                 )}
               </Box>
             ))}
+            {!editMode && (
+              <Box>
+                <ButtonGroup
+                  color="primary"
+                  sx={{ my: 2 }}
+                  buttonFlex={1}
+                  size="lg"
+                >
+                  <Button
+                    variant={!singleDayPrep ? "solid" : "outlined"}
+                    onClick={() => setSingleDayPrep(false)}
+                  >
+                    Cook throughout the week
+                  </Button>
+                  <Button
+                    variant={singleDayPrep ? "solid" : "outlined"}
+                    onClick={() => setSingleDayPrep(true)}
+                  >
+                    Cook on a single day
+                  </Button>
+                </ButtonGroup>
+
+                <FormControl error={inputError}>
+                  <FormLabel>Servings eaten per day</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={(event) =>
+                      setServingsPerDay(parseInt(event.target.value))
+                    }
+                    value={servingsPerDay}
+                    required
+                  />
+                  {inputError && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      End time must be after start
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Box>
+            )}
             <Button
               type="submit"
               disabled={inputError}
@@ -210,4 +285,4 @@ const AdjustEventTimeModal = ({
   );
 };
 
-export default AdjustEventTimeModal;
+export default CalendarTimeModal;
