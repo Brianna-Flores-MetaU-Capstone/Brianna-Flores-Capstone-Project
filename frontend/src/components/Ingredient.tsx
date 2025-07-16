@@ -60,7 +60,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
         </Grid>
         {presentExpiration && (
           <Grid xs={3}>
-            <Typography className="ingredient-expiration">
+            <Typography>
               {ingredient.expirationDate}
             </Typography>
           </Grid>

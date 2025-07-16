@@ -9,7 +9,6 @@ import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import { Button } from "@mui/joy";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";
@@ -22,6 +21,7 @@ import { useNavigate } from "react-router";
 import LoadingModal from "../components/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
+import { Box, Button } from "@mui/joy";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -101,16 +101,18 @@ const NewListPage = () => {
   };
 
   return (
-    <div className="new-list-page">
+    <Box>
       <AppHeader />
-      <section>
+      <Box sx={{m: 3}}>
+      <Box sx={{display: "flex", justifyContent: "space-between", my: 1}}>
         <Button onClick={() => setAddAnotherRecipeModalOpen((prev) => !prev)}>
           Add Another Meal!
         </Button>
         <Button onClick={handleGenerateList}>Make My List</Button>
-      </section>
+      </Box>
+      <Box>
       <TitledListView
-        headerList={[{title: "Selected Meals", spacing: 1}]}
+        headerList={[{title: "Selected Meals", spacing: 12}]}
         list={selectedRecipes}
         renderItem={(meal) => (
           <MealCard
@@ -120,10 +122,13 @@ const NewListPage = () => {
             onDeleteRecipe={handleDeleteRecipe}
           />
         )}
+        flexDirectionRow
       />
+      </Box>
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
+      </Box>
       <AddAnotherMealModal
         handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
@@ -135,7 +140,7 @@ const NewListPage = () => {
         recipeInfo={recipeInfoModalInfo}
       />
       <LoadingModal modalOpen={loadingList} />
-    </div>
+    </Box>
   );
 };
 
