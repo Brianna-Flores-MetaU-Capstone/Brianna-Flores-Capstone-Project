@@ -50,7 +50,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
           />
         </DialogContent>
           <IconButton
-            aria-label="Accept Event Group Reccomendation"
+            aria-label="Accept Event Group Recommendation"
             variant="outlined"
             color="success"
             size="lg"

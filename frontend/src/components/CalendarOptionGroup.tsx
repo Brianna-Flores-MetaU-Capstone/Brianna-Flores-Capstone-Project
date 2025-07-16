@@ -21,7 +21,7 @@ const CalendarOptionGroup = ({
         <Typography>Option Group #{groupNum}</Typography>
         <IconButton
           disabled={adjustedSuggestion}
-          aria-label="Accept Event Group Reccomendation"
+          aria-label="Accept Event Group Recommendation"
           variant="plain"
           color="success"
           size="lg"

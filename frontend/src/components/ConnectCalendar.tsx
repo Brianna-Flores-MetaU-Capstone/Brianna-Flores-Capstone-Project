@@ -156,13 +156,13 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
         REQUESTED_DAYS,
       });
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
-      const reccomendedEvents = await axios.post(
+      const recommendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
         { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
-      const eventOptions = reccomendedEvents.data;
+      const eventOptions = recommendedEvents.data;
       setEventOptions(eventOptions);
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options
