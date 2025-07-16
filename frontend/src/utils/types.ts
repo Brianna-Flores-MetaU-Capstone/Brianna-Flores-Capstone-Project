@@ -88,10 +88,17 @@ type GPTimeBlockType = {
   end: Date;
 };
 
+type GPPrepBlockType = {
+  recipeTitle: string;
+  readyInMinutes: number;
+  servings: number;
+  previewImage: string;
+}
+
 type GPRecipeEventOptionType = {
   name: string;
   timeOptions: GPTimeBlockType[];
-  recipe: GPRecipeDataTypes;
+  recipe: GPRecipeDataTypes | GPPrepBlockType;
 };
 
 type GPPreferredBlockType = {

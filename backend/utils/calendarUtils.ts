@@ -45,6 +45,49 @@ type GPRecipeEventTypes = {
   userRecipes: GPRecipeDataTypes[];
   userPreferences: GPPreferredBlockType[];
 };
+
+const getMealPrepTimeOptions = ({
+  userRecipes,
+  userFreeTime,
+  userPreferences,
+}: GPRecipeEventTypes) => {
+  let eventOptions: GPRecipeEventOptionType[] = [];
+  // if single day prep, estimate time to cook all recipes
+  let longestCookTime = 0;
+  let totalServings = 0;
+  for (const recipe of userRecipes) {
+    if (recipe.readyInMinutes > longestCookTime) {
+      longestCookTime = recipe.readyInMinutes;
+    }
+    totalServings += recipe.servings;
+  }
+  // TODO determine heuristic to estimate cooking all recipes
+  const estimatedCookTime = longestCookTime * 2;
+  for (const freeBlock of userFreeTime) {
+    const timeOptions = fitsUserPreferences({
+      freeBlock,
+      userPreferences,
+      readyInMinutes: estimatedCookTime,
+    });
+    if (timeOptions) {
+      const bestBlock = {
+        name: "Prep Block",
+        timeOptions: timeOptions,
+        recipe: {
+          recipeTitle: "Prep Block",
+          readyInMinutes: estimatedCookTime,
+          servings: totalServings,
+          previewImage:
+          "https://images.pexels.com/photos/1435910/pexels-photo-1435910.jpeg",
+        },
+      };
+      eventOptions = [...eventOptions, bestBlock]
+      break;
+    }
+  }
+  return eventOptions
+};
+
 const getRecipeTimeOptions = ({
   userFreeTime,
   userRecipes,
@@ -59,12 +102,17 @@ const getRecipeTimeOptions = ({
       let endTime = new Date(freeBlock.end);
       if (endTime.getTime() >= currentDay.getTime()) {
         // block is after current day
-        const bestBlock = fitsUserPreferences({
+        const timeOptions = fitsUserPreferences({
           freeBlock,
           userPreferences,
-          recipe,
+          readyInMinutes: recipe.readyInMinutes,
         });
-        if (bestBlock) {
+        if (timeOptions) {
+          const bestBlock = {
+            name: recipe.recipeTitle,
+            timeOptions: timeOptions,
+            recipe: recipe,
+          };
           eventOptions = [...eventOptions, bestBlock];
           currentDay.setDate(startTime.getDate() + recipe.servings);
           currentDay.setHours(8, 0, 0, 0);
@@ -79,12 +127,12 @@ const getRecipeTimeOptions = ({
 type GPFitsPreferenceTypes = {
   freeBlock: GPUserEventTypes;
   userPreferences: GPPreferredBlockType[];
-  recipe: GPRecipeDataTypes;
+  readyInMinutes: number;
 };
 const fitsUserPreferences = ({
   freeBlock,
   userPreferences,
-  recipe,
+  readyInMinutes,
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
   // loop through user preferences
@@ -144,42 +192,62 @@ const fitsUserPreferences = ({
       start = freeBlockStart;
       end = preferredEnd;
     }
-    if (end - start >= recipe.readyInMinutes) {
-      let optionArray = [{start: new Date(start),
-        end: new Date(start + recipe.readyInMinutes * 1000 * 60),}]
-      start = start + 1000 * 60 * 15
-      if (end - start >= recipe.readyInMinutes) {
-        optionArray = [...optionArray, { start: new Date(start),
-        end: new Date(start + recipe.readyInMinutes * 1000 * 60),}]
+    if (end - start >= readyInMinutes * 1000 * 60) {
+      let optionArray = [
+        {
+          start: new Date(start),
+          end: new Date(start + readyInMinutes * 1000 * 60),
+        },
+      ];
+      start = start + 1000 * 60 * 15;
+      if (end - start >= readyInMinutes * 1000 * 60) {
+        optionArray = [
+          ...optionArray,
+          {
+            start: new Date(start),
+            end: new Date(start + readyInMinutes * 1000 * 60),
+          },
+        ];
       }
-      bestChoice = {
-        name: recipe.recipeTitle,
-        timeOptions: optionArray,
-        recipe: recipe,
-      };
-      return bestChoice;
+      return optionArray;
     }
   }
   return null;
 };
 
-const NUM_SCHEDULE_OPTIONS = 3;
+type GPMultipleScheduleTypes = GPRecipeEventTypes & {
+  singleDayPrep: boolean;
+  numOptions: number;
+};
 
 const getMultipleScheduleOptions = ({
   userFreeTime,
   userRecipes,
   userPreferences,
-}: GPRecipeEventTypes) => {
+  singleDayPrep,
+  numOptions,
+}: GPMultipleScheduleTypes) => {
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
-  let recipeArray = userRecipes;
-  for (let i = 0; i < NUM_SCHEDULE_OPTIONS; i++) {
-    const option = getRecipeTimeOptions({
-      userFreeTime: userFreeTime,
-      userRecipes: recipeArray,
-      userPreferences,
-    });
-    scheduleOptions = [...scheduleOptions, option];
-    recipeArray = shuffleArray(recipeArray);
+  let recipeArray = [...userRecipes];
+  let freeTimeArray = [...userFreeTime];
+  for (let i = 0; i < numOptions; i++) {
+    if (singleDayPrep) {
+      const option = getMealPrepTimeOptions({
+        userFreeTime: freeTimeArray,
+        userRecipes: userRecipes,
+        userPreferences: userPreferences,
+      });
+      scheduleOptions = [...scheduleOptions, option];
+      freeTimeArray = shuffleArray(freeTimeArray);
+    } else {
+      const option = getRecipeTimeOptions({
+        userFreeTime: userFreeTime,
+        userRecipes: recipeArray,
+        userPreferences,
+      });
+      scheduleOptions = [...scheduleOptions, option];
+      recipeArray = shuffleArray(recipeArray);
+    }
   }
   return scheduleOptions;
 };

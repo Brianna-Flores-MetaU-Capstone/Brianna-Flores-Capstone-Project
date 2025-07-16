@@ -16,6 +16,7 @@ import {
   Typography,
   FormHelperText,
   IconButton,
+  ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -28,7 +29,7 @@ type GPEventTimeModal = {
   groupNum?: number;
   modalOpen: boolean;
   toggleModal: () => void;
-  onSubmit?: (preferences: GPPreferredBlockType[]) => void
+  onSubmit?: (preferences: GPPreferredBlockType[], singleDayPrep: boolean) => void;
 };
 
 const CalendarTimeModal = ({
@@ -37,7 +38,7 @@ const CalendarTimeModal = ({
   groupNum,
   modalOpen,
   toggleModal,
-  onSubmit
+  onSubmit,
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const eventStartTime = new Date(eventInfo?.timeOptions[0].start ?? "");
@@ -58,9 +59,10 @@ const CalendarTimeModal = ({
   );
   const [inputError, setInputError] = useState(false);
   const { eventOptions, setEventOptions } = useEventRec();
-  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<GPPreferredBlockType[]>([
-    { start: "", end: "" },
-  ]);
+  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
+    GPPreferredBlockType[]
+  >([{ start: "", end: "" }]);
+  const [singleDayPrep, setSingleDayPrep] = useState(false);
 
   const handleTimeChange = (
     index: number,
@@ -115,7 +117,7 @@ const CalendarTimeModal = ({
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
     if (onSubmit) {
-      onSubmit(preferredTimeBlocks)
+      onSubmit(preferredTimeBlocks, singleDayPrep);
     }
     toggleModal();
   };
@@ -160,7 +162,7 @@ const CalendarTimeModal = ({
                         event.target.value
                       )
                     }
-                    value={editMode ? start : preferredTimeBlocks[index].start}
+                    value={editMode ? start : block.start}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.START,
@@ -173,8 +175,14 @@ const CalendarTimeModal = ({
                   <FormLabel>{editMode ? "New End Time" : "To"}</FormLabel>
                   <Input
                     type="time"
-                    onChange={(event) => handleTimeChange(index, EventTimeEnum.END, event.target.value)}
-                    value={editMode ? end : preferredTimeBlocks[index].end}
+                    onChange={(event) =>
+                      handleTimeChange(
+                        index,
+                        EventTimeEnum.END,
+                        event.target.value
+                      )
+                    }
+                    value={editMode ? end : block.end}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.END,
@@ -196,6 +204,23 @@ const CalendarTimeModal = ({
                 )}
               </Box>
             ))}
+            {!editMode && (
+              <Box>
+                <ButtonGroup
+                  color="primary"
+                  sx={{ my: 2 }}
+                  buttonFlex={1}
+                  size="lg"
+                >
+                  <Button variant={!singleDayPrep ? "solid" : "outlined"}onClick={() => setSingleDayPrep(false)}>
+                    Cook throughout the week
+                  </Button>
+                  <Button variant={singleDayPrep ? "solid" : "outlined"} onClick={() => setSingleDayPrep(true)}>
+                    Cook on a single day
+                  </Button>
+                </ButtonGroup>
+              </Box>
+            )}
             <Button
               type="submit"
               disabled={inputError}
