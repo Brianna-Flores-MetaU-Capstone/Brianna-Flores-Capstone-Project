@@ -9,12 +9,11 @@ import { axiosConfig } from "../utils/databaseHelpers";
 
 import type {
   GPUserEventTypes,
-  GPRecipeDataTypes,
   GPPreferredBlockType,
 } from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
 import { useEventRec } from "../contexts/EventRecContext";
-import AdjustEventTimeModal from "./AdjustEventTimeModal";
+import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "./LoadingModal";
 
 // TODO change requested days to have user input
@@ -26,9 +25,7 @@ type GPConnectCalendarTypes = {
   onClick: () => void;
 };
 
-const ConnectCalendar = ({
-  onClick,
-}: GPConnectCalendarTypes) => {
+const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC =
@@ -191,13 +188,13 @@ const ConnectCalendar = ({
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
       <Button onClick={handleSignoutClick}>Signout</Button>
-      <AdjustEventTimeModal
+      <CalendarTimeModal
         editMode={false}
         modalOpen={modalOpen}
         toggleModal={() => setModalOpen((prev) => !prev)}
         onSubmit={getUserTimePreferences}
       />
-      <LoadingModal modalOpen={loading} message={"Generating Schedule"}/>
+      <LoadingModal modalOpen={loading} message={"Generating Schedule"} />
     </Box>
   );
 };

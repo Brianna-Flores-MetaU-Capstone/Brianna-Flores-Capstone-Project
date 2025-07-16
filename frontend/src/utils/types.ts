@@ -83,14 +83,21 @@ type GPUserEventTypes = {
   end: Date;
 };
 
-type GPRecipeEventOptionType = GPUserEventTypes & {
+type GPTimeBlockType = {
+  start: Date;
+  end: Date;
+};
+
+type GPRecipeEventOptionType = {
+  name: string;
+  timeOptions: GPTimeBlockType[];
   recipe: GPRecipeDataTypes;
 };
 
 type GPPreferredBlockType = {
-  start: string
-  end: string
-}
+  start: string;
+  end: string;
+};
 
 export type {
   GPAccountInfoTypes,
@@ -105,5 +112,5 @@ export type {
   GPIngredientApiInfoType,
   GPUserEventTypes,
   GPRecipeEventOptionType,
-  GPPreferredBlockType
+  GPPreferredBlockType,
 };

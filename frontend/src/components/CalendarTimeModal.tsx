@@ -31,7 +31,7 @@ type GPEventTimeModal = {
   onSubmit?: (preferences: GPPreferredBlockType[]) => void
 };
 
-const AdjustEventTimeModal = ({
+const CalendarTimeModal = ({
   editMode,
   eventInfo,
   groupNum,
@@ -40,8 +40,8 @@ const AdjustEventTimeModal = ({
   onSubmit
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
-  const eventStartTime = new Date(eventInfo?.start ?? "");
-  const eventEndTime = new Date(eventInfo?.end ?? "");
+  const eventStartTime = new Date(eventInfo?.timeOptions[0].start ?? "");
+  const eventEndTime = new Date(eventInfo?.timeOptions[0].end ?? "");
   const [start, setStart] = useState(
     eventStartTime.toLocaleTimeString([], {
       hour12: false,
@@ -210,4 +210,4 @@ const AdjustEventTimeModal = ({
   );
 };
 
-export default AdjustEventTimeModal;
+export default CalendarTimeModal;
