@@ -31,7 +31,8 @@ type GPEventTimeModal = {
   toggleModal: () => void;
   onSubmit?: (
     preferences: GPPreferredBlockType[],
-    singleDayPrep: boolean
+    singleDayPrep: boolean,
+    servingsPerDay: number
   ) => void;
 };
 
@@ -66,6 +67,8 @@ const CalendarTimeModal = ({
     GPPreferredBlockType[]
   >([{ start: "", end: "" }]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
+  const [servingsPerDay, setServingsPerDay] = useState(1);
+  const [date, setDate] = useState(eventStartTime.getFullYear()+"-"+eventStartTime.getMonth().toString().padStart(2, '0')+"-"+eventStartTime.getDate().toString().padStart(2, '0'))
 
   const handleTimeChange = (
     index: number,
@@ -77,6 +80,8 @@ const CalendarTimeModal = ({
         setStart(newValue);
       } else if (timeField === EventTimeEnum.END) {
         setEnd(newValue);
+      } else if (timeField === EventTimeEnum.DATE) {
+        setDate(newValue)
       }
     } else {
       setPreferredTimeBlocks((prev) => {
@@ -96,6 +101,12 @@ const CalendarTimeModal = ({
 
   const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    // set event start time to new date if changed
+    eventStartTime.setDate(parseInt(date.substring(8, 10)))
+    eventStartTime.setMonth(parseInt(date.substring(5, 7)))
+    eventEndTime.setDate(parseInt(date.substring(8, 10)))
+    eventEndTime.setMonth(parseInt(date.substring(5, 7)))
+
     eventStartTime.setHours(parseInt(start.substring(0, 2)));
     eventStartTime.setMinutes(parseInt(start.substring(3)));
     eventEndTime.setHours(parseInt(end.substring(0, 2)));
@@ -109,7 +120,7 @@ const CalendarTimeModal = ({
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
     if (onSubmit) {
-      onSubmit(preferredTimeBlocks, singleDayPrep);
+      onSubmit(preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
     toggleModal();
   };
@@ -141,6 +152,28 @@ const CalendarTimeModal = ({
             {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
           <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
+            {editMode && (
+              <FormControl error={inputError}>
+                <FormLabel>New Date</FormLabel>
+                <Input
+                  type="date"
+                  onChange={(event) =>
+                    handleTimeChange(
+                      0,
+                      EventTimeEnum.DATE,
+                      event.target.value
+                    )
+                  }
+                  value={date}
+                  slotProps={{
+                    input: {
+                      "data-time": EventTimeEnum.DATE,
+                    },
+                  }}
+                  required
+                />
+              </FormControl>
+            )}
             {preferredTimeBlocks.map((block, index) => (
               <Box key={index}>
                 <FormControl error={inputError}>
@@ -217,6 +250,24 @@ const CalendarTimeModal = ({
                     Cook on a single day
                   </Button>
                 </ButtonGroup>
+
+                <FormControl error={inputError}>
+                  <FormLabel>Servings eaten per day</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={(event) =>
+                      setServingsPerDay(parseInt(event.target.value))
+                    }
+                    value={servingsPerDay}
+                    required
+                  />
+                  {inputError && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      End time must be after start
+                    </FormHelperText>
+                  )}
+                </FormControl>
               </Box>
             )}
             <Button

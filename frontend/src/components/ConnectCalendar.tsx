@@ -123,7 +123,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     }
   }
 
-  async function getUserFreeTime(userPreferences: GPPreferredBlockType[], singleDayPrep: boolean) {
+  async function getUserFreeTime(userPreferences: GPPreferredBlockType[], singleDayPrep: boolean, servingsPerDay: number) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
@@ -158,7 +158,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
       const reccomendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedFreeTime, userPreferences, singleDayPrep },
+        { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
@@ -176,9 +176,10 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   const getUserTimePreferences = async (
     preferences: GPPreferredBlockType[], 
-    singleDayPrep: boolean
+    singleDayPrep: boolean,
+    servingsPerDay: number,
   ) => {
-    await getUserFreeTime(preferences, singleDayPrep);
+    await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
   };
 
   return (
