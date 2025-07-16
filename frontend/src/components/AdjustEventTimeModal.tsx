@@ -15,16 +15,18 @@ import {
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 
 import { EventTimeEnum } from "../utils/constants";
+import { useEventRec } from "../contexts/EventRecContext";
 
 type GPEventTimeModal = {
   eventInfo: GPRecipeEventOptionType;
-  handleTimeSubmit: (data: GPRecipeEventOptionType) => void;
+  groupNum: number;
 };
 
 const AdjustEventTimeModal = ({
   eventInfo,
-  handleTimeSubmit,
-}: GPEventTimeModal) => {
+  groupNum,
+}: 
+GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const eventStartTime = new Date(eventInfo.start);
   const eventEndTime = new Date(eventInfo.end);
@@ -44,6 +46,7 @@ const AdjustEventTimeModal = ({
     })
   );
   const [inputError, setInputError] = useState(false);
+  const { eventOptions } = useEventRec();
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { time } = (event.target as HTMLInputElement).dataset;
@@ -70,7 +73,14 @@ const AdjustEventTimeModal = ({
       start: eventStartTime,
       end: eventEndTime,
     };
-    handleTimeSubmit(updatedEvent);
+    if (eventOptions) {
+      const updatedEventsGroup = eventOptions[groupNum].map((eventInfo) =>
+        eventInfo.name === updatedEvent.name
+          ? updatedEvent
+          : eventInfo
+      );
+      eventOptions[groupNum] = updatedEventsGroup
+    }
   };
 
   return (

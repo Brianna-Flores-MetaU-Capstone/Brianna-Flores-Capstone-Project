@@ -4,21 +4,21 @@ import {
   ModalDialog,
   DialogContent,
 } from "@mui/joy";
-import type { GPRecipeEventOptionType } from "../utils/types";
 import CalendarOptionGroup from "./CalendarOptionGroup";
 import TitledListView from "./TitledListView";
+import { useEventRec } from "../contexts/EventRecContext";
+
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
   toggleModal: () => void;
-  eventOptions: GPRecipeEventOptionType[][];
 };
 
 const CalendarModal = ({
   modalOpen,
   toggleModal,
-  eventOptions,
 }: GPCalendarModalTypes) => {
+  const {eventOptions} = useEventRec()
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -31,7 +31,7 @@ const CalendarModal = ({
         <DialogContent sx={{my: 4}}>
           <TitledListView
             headerList={[{ title: "Event Option Groups", spacing: 12 }]}
-            list={eventOptions}
+            list={eventOptions ?? []}
             renderItem={(optionGroup, index) => (
               <CalendarOptionGroup key={index} eventOptions={optionGroup} groupNum={index + 1} adjustedSuggestion={false} />
             )}

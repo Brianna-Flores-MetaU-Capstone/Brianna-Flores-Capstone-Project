@@ -33,7 +33,7 @@ const CalendarOptionGroup = ({
       <TitledListView
         list={eventOptions}
         renderItem={(event) => (
-          <CalendarEventOption key={event.recipe.apiId} eventOption={event} />
+          <CalendarEventOption key={event.recipe.apiId} eventOption={event} groupNum={groupNum - 1}/>
         )}
         flexDirectionRow
       />
