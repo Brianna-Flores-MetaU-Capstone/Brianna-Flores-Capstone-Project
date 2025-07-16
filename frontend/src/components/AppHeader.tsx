@@ -5,7 +5,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import type { GPToggleNavBarProps } from "../utils/types";
 import { useNavigate } from "react-router";
 import "../styles/Homepage.css";
-import Button from "@mui/material/Button";
+import Button from "@mui/joy/Button";
 import { useUser } from "../contexts/UserContext";
 import { useLocation } from "react-router";
 
@@ -23,9 +23,9 @@ const AppHeader: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
 
   return (
     <section className="app-header">
-      <button className="nav-button" onClick={toggleNav}>
+      <Button className="nav-button" onClick={toggleNav}>
         <FontAwesomeIcon icon={faBars} className="nav-icon" />
-      </button>
+      </Button>
       <h1>Grociplan</h1>
       <div className="auth-access-buttons">
         {user ? (
