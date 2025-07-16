@@ -6,8 +6,9 @@ import CircularProgress from "@mui/joy/CircularProgress";
 
 type GPLoadingModalTypes = {
   modalOpen: boolean;
+  message: string
 };
-const LoadingModal = ({ modalOpen }: GPLoadingModalTypes) => {
+const LoadingModal = ({ modalOpen, message }: GPLoadingModalTypes) => {
   return (
     // Code based on MUI documentation: https://mui.com/joy-ui/react-modal/
     <div>
@@ -38,7 +39,7 @@ const LoadingModal = ({ modalOpen }: GPLoadingModalTypes) => {
             textColor="inherit"
             sx={{ fontWeight: "lg", mb: 1 }}
           >
-            Generating Your Grocery List
+            {message}
           </Typography>
           <CircularProgress variant="soft" />
           <Typography id="modal-desc" textColor="text.tertiary">

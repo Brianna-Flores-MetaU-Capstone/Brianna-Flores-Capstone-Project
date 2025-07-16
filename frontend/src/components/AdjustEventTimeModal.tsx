@@ -29,6 +29,7 @@ type GPEventTimeModal = {
   groupNum?: number;
   modalOpen: boolean;
   toggleModal: () => void;
+  onSubmit?: (preferences: GPPreferredBlockType[]) => void
 };
 
 const AdjustEventTimeModal = ({
@@ -37,6 +38,7 @@ const AdjustEventTimeModal = ({
   groupNum,
   modalOpen,
   toggleModal,
+  onSubmit
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const eventStartTime = new Date(eventInfo?.start ?? "");
@@ -115,6 +117,9 @@ const AdjustEventTimeModal = ({
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
     setUserPreferences(preferredTimeBlocks);
+    if (onSubmit) {
+      onSubmit(preferredTimeBlocks)
+    }
     toggleModal();
   };
 
