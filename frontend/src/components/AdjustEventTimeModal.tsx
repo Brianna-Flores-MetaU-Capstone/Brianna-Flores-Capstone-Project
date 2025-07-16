@@ -21,7 +21,6 @@ import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { EventTimeEnum } from "../utils/constants";
 import { useEventRec } from "../contexts/EventRecContext";
-import { useUserPreferences } from "../contexts/UserPreferenceContexts";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -59,7 +58,6 @@ const AdjustEventTimeModal = ({
   );
   const [inputError, setInputError] = useState(false);
   const { eventOptions, setEventOptions } = useEventRec();
-  const { setUserPreferences } = useUserPreferences();
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<GPPreferredBlockType[]>([
     { start: "", end: "" },
   ]);
@@ -116,7 +114,6 @@ const AdjustEventTimeModal = ({
 
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
-    setUserPreferences(preferredTimeBlocks);
     if (onSubmit) {
       onSubmit(preferredTimeBlocks)
     }
