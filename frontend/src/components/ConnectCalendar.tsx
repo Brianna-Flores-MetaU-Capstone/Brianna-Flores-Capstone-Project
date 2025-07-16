@@ -10,6 +10,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import type { GPUserEventTypes, GPRecipeDataTypes } from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
 import { useEventRec } from "../contexts/EventRecContext";  
+import AdjustEventTimeModal from "./AdjustEventTimeModal";
 
 
 // TODO change requested days to have user input
@@ -34,6 +35,8 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
 
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
+
+  const [modalOpen, setModalOpen] = useState(false)
 
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
@@ -74,6 +77,7 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
           if (resp.error !== undefined) {
             throw resp;
           }
+          setModalOpen(true)
           await getUserFreeTime();
         },
       });
@@ -81,6 +85,7 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
     if (gapiInited && gisInited) {
       const token = gapi.client.getToken();
       if (token) {
+        setModalOpen(true)
         getUserFreeTime();
       }
     }
@@ -90,6 +95,7 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
     if (gapiInited && gisInited) {
       const token = gapi.client.getToken();
       if (token) {
+        setModalOpen(true)
         getUserFreeTime();
       }
     }
@@ -106,6 +112,7 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
       tokenClient.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
+      setModalOpen(true)
       getUserFreeTime();
     }
   }
@@ -171,6 +178,7 @@ const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes)
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
       <Button onClick={handleSignoutClick}>Signout</Button>
+      <AdjustEventTimeModal editMode={false} modalOpen={modalOpen} toggleModal={() => setModalOpen((prev) => !prev)}/>
     </Box>
   );
 };

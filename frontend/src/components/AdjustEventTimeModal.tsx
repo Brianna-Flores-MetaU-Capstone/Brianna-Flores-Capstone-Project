@@ -1,7 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import type { GPRecipeEventOptionType } from "../utils/types";
+import type {
+  GPPreferredBlockType,
+  GPRecipeEventOptionType,
+} from "../utils/types";
 import {
+  Box,
   Button,
   FormControl,
   FormLabel,
@@ -11,26 +15,32 @@ import {
   Sheet,
   Typography,
   FormHelperText,
+  IconButton,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
-
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { EventTimeEnum } from "../utils/constants";
 import { useEventRec } from "../contexts/EventRecContext";
+import { useUserPreferences } from "../contexts/UserPreferenceContexts";
 
 type GPEventTimeModal = {
-  eventInfo: GPRecipeEventOptionType;
-  groupNum: number;
+  editMode: boolean;
+  eventInfo?: GPRecipeEventOptionType;
+  groupNum?: number;
+  modalOpen: boolean;
+  toggleModal: () => void;
 };
 
 const AdjustEventTimeModal = ({
+  editMode,
   eventInfo,
   groupNum,
-}: 
-GPEventTimeModal) => {
+  modalOpen,
+  toggleModal,
+}: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
-  const eventStartTime = new Date(eventInfo.start);
-  const eventEndTime = new Date(eventInfo.end);
-  const [open, setOpen] = React.useState<boolean>(false);
+  const eventStartTime = new Date(eventInfo?.start ?? "");
+  const eventEndTime = new Date(eventInfo?.end ?? "");
   const [start, setStart] = useState(
     eventStartTime.toLocaleTimeString([], {
       hour12: false,
@@ -47,14 +57,31 @@ GPEventTimeModal) => {
   );
   const [inputError, setInputError] = useState(false);
   const { eventOptions, setEventOptions } = useEventRec();
+  const { setUserPreferences } = useUserPreferences();
+  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<GPPreferredBlockType[]>([
+    { start: "", end: "" },
+  ]);
 
-  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { time } = (event.target as HTMLInputElement).dataset;
-    const { value } = event.target;
-    if (time === EventTimeEnum.START) {
-      setStart(value);
-    } else if (time === EventTimeEnum.END) {
-      setEnd(value);
+  const handleTimeChange = (
+    index: number,
+    timeField: string,
+    newValue: string
+  ) => {
+    if (editMode) {
+      if (timeField === EventTimeEnum.START) {
+        setStart(newValue);
+      } else if (timeField === EventTimeEnum.END) {
+        setEnd(newValue);
+      }
+    } else {
+      setPreferredTimeBlocks((prev) => {
+        const updatedBlocks = [...prev];
+        updatedBlocks[index] = {
+          ...updatedBlocks[index],
+          [timeField]: newValue,
+        };
+        return updatedBlocks;
+      });
     }
   };
 
@@ -62,42 +89,45 @@ GPEventTimeModal) => {
     setInputError(start > end);
   }, [start, end]);
 
-  const onTimeChangeSubmit = (event: React.FormEvent) => {
+  const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     eventStartTime.setHours(parseInt(start.substring(0, 2)));
     eventStartTime.setMinutes(parseInt(start.substring(3)));
     eventEndTime.setHours(parseInt(end.substring(0, 2)));
     eventEndTime.setMinutes(parseInt(end.substring(3)));
-    const updatedEvent = {
-      ...eventInfo,
-      start: eventStartTime,
-      end: eventEndTime,
-    };
-    if (eventOptions) {
+    if (eventInfo && groupNum !== undefined && eventOptions) {
+      const updatedEvent = {
+        ...eventInfo,
+        start: eventStartTime,
+        end: eventEndTime,
+      };
       setEventOptions((prev) => {
-        const updatedEventOptions = [...prev]
-        updatedEventOptions[groupNum] = prev[groupNum].map((eventInfo) => eventInfo.name === updatedEvent.name ? updatedEvent : eventInfo)
-        return updatedEventOptions
-      })
-      setOpen(false)
+        const updatedEventOptions = [...prev];
+        updatedEventOptions[groupNum] = prev[groupNum].map((eventInfo) =>
+          eventInfo.name === updatedEvent.name ? updatedEvent : eventInfo
+        );
+        return updatedEventOptions;
+      });
+      toggleModal();
     }
+  };
+
+  const onSubmitPreferences = (event: React.FormEvent) => {
+    event.preventDefault();
+    setUserPreferences(preferredTimeBlocks);
+    toggleModal();
+  };
+
+  const addAnotherTimeBlock = () => {
+    setPreferredTimeBlocks((prev) => [...prev, { start: "", end: "" }]);
   };
 
   return (
     <React.Fragment>
-      <Button
-        size="md"
-        color="primary"
-        aria-label="Adjust event recommendation"
-        sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
-        onClick={() => setOpen(true)}
-      >
-        Adjust Time
-      </Button>
       <Modal
         aria-labelledby="adjust-event-time-modal"
-        open={open}
-        onClose={() => setOpen(false)}
+        open={modalOpen}
+        onClose={toggleModal}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Sheet
@@ -112,49 +142,64 @@ GPEventTimeModal) => {
             textColor="inherit"
             sx={{ fontWeight: "lg", mb: 1 }}
           >
-            Adjust Event Time
+            {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
-          <form onSubmit={onTimeChangeSubmit}>
-            <FormControl error={inputError}>
-              <FormLabel>New Start Time</FormLabel>
-              <Input
-                type="time"
-                onChange={handleTimeChange}
-                value={start}
-                slotProps={{
-                  input: {
-                    "data-time": EventTimeEnum.START,
-                  },
-                }}
-                required
-              />
-            </FormControl>
-            <FormControl error={inputError}>
-              <FormLabel>New End Time</FormLabel>
-              <Input
-                type="time"
-                onChange={handleTimeChange}
-                value={end}
-                slotProps={{
-                  input: {
-                    "data-time": EventTimeEnum.END,
-                  },
-                }}
-                required
-              />
-              {inputError && (
-                <FormHelperText>
-                  <InfoOutlined />
-                  End time must be after start
-                </FormHelperText>
-              )}
-            </FormControl>
+          <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
+            {preferredTimeBlocks.map((block, index) => (
+              <Box key={index}>
+                <FormControl error={inputError}>
+                  <FormLabel>{editMode ? "New Start Time" : "From"}</FormLabel>
+                  <Input
+                    type="time"
+                    onChange={(event) =>
+                      handleTimeChange(
+                        index,
+                        EventTimeEnum.START,
+                        event.target.value
+                      )
+                    }
+                    value={editMode ? start : preferredTimeBlocks[index].start}
+                    slotProps={{
+                      input: {
+                        "data-time": EventTimeEnum.START,
+                      },
+                    }}
+                    required
+                  />
+                </FormControl>
+                <FormControl error={inputError}>
+                  <FormLabel>{editMode ? "New End Time" : "To"}</FormLabel>
+                  <Input
+                    type="time"
+                    onChange={(event) => handleTimeChange(index, EventTimeEnum.END, event.target.value)}
+                    value={editMode ? end : preferredTimeBlocks[index].end}
+                    slotProps={{
+                      input: {
+                        "data-time": EventTimeEnum.END,
+                      },
+                    }}
+                    required
+                  />
+                  {inputError && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      End time must be after start
+                    </FormHelperText>
+                  )}
+                </FormControl>
+                {!editMode && (
+                  <IconButton onClick={addAnotherTimeBlock}>
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                )}
+              </Box>
+            ))}
             <Button
               type="submit"
               disabled={inputError}
               sx={{ display: "flex", mx: "auto", mt: 2 }}
             >
-              Adjust Time
+              {editMode ? "Adjust Time" : "Submit Preferences!"}
             </Button>
           </form>
         </Sheet>
