@@ -5,6 +5,7 @@ import "../styles/Homepage.css";
 import Button from "@mui/joy/Button";
 import { useUser } from "../contexts/UserContext";
 import { useLocation } from "react-router";
+import { Box, Typography } from "@mui/joy";
 
 const AppHeader = () => {
   const { user } = useUser();
@@ -12,19 +13,19 @@ const AppHeader = () => {
   const location = useLocation();
 
   return (
-    <section className="app-header">
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 3, bgcolor: "primary.300"}}>
       <NavBar />
-      <h1>Grociplan</h1>
-      <div className="auth-access-buttons">
+      <Typography level="h1">Grociplan</Typography>
+      <Box>
         {user ? (
-          <p>Welcome</p>
+          <Typography>Welcome</Typography>
         ) : (
           location.pathname !== "/login" && (
             <Button onClick={() => navigate("/login")}>Login</Button>
           )
         )}
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 };
 
