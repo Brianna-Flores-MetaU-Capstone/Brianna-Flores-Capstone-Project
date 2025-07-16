@@ -14,6 +14,7 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
+
 const SignupForm = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",

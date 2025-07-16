@@ -187,7 +187,7 @@ const AccountPage = () => {
           mt: 10,
           mx: "auto",
         }}
-      >
+        >
         <Typography level="h2">Edit Account Details</Typography>
         <FormControl error={emailInputError}>
           <FormLabel>Email</FormLabel>
