@@ -80,7 +80,6 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
             throw resp;
           }
           setModalOpen(true);
-          // await getUserFreeTime();
         },
       });
     }
@@ -88,7 +87,6 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const token = gapi.client.getToken();
       if (token) {
         setModalOpen(true);
-        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -98,7 +96,6 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const token = gapi.client.getToken();
       if (token) {
         setModalOpen(true);
-        // getUserFreeTime();
       }
     }
   }, [gapiInited, gisInited]);
@@ -115,7 +112,6 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
       setModalOpen(true);
-      // getUserFreeTime();
     }
   }
 
@@ -127,7 +123,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     }
   }
 
-  async function getUserFreeTime(userPreferences: GPPreferredBlockType[]) {
+  async function getUserFreeTime(userPreferences: GPPreferredBlockType[], singleDayPrep: boolean) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
@@ -162,7 +158,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
       const reccomendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedFreeTime, userPreferences },
+        { parsedFreeTime, userPreferences, singleDayPrep },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
@@ -179,9 +175,10 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }
 
   const getUserTimePreferences = async (
-    preferences: GPPreferredBlockType[]
+    preferences: GPPreferredBlockType[], 
+    singleDayPrep: boolean
   ) => {
-    await getUserFreeTime(preferences);
+    await getUserFreeTime(preferences, singleDayPrep);
   };
 
   return (
