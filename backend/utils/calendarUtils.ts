@@ -145,10 +145,16 @@ const fitsUserPreferences = ({
       end = preferredEnd;
     }
     if (end - start >= recipe.readyInMinutes) {
+      let optionArray = [{start: new Date(start),
+        end: new Date(start + recipe.readyInMinutes * 1000 * 60),}]
+      start = start + 1000 * 60 * 15
+      if (end - start >= recipe.readyInMinutes) {
+        optionArray = [...optionArray, { start: new Date(start),
+        end: new Date(start + recipe.readyInMinutes * 1000 * 60),}]
+      }
       bestChoice = {
         name: recipe.recipeTitle,
-        start: new Date(start),
-        end: new Date(start + recipe.readyInMinutes * 1000 * 60),
+        timeOptions: optionArray,
         recipe: recipe,
       };
       return bestChoice;

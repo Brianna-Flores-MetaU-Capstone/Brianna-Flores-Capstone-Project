@@ -4,36 +4,24 @@ import {
   Button,
   Box,
   Card,
-  IconButton,
+  ButtonGroup,
   CardContent,
   Typography,
   AspectRatio,
+  Tooltip
 } from "@mui/joy";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { DaysOfWeek } from "../utils/enum";
-import AdjustEventTimeModal from "./AdjustEventTimeModal";
+import CalendarTimeModal from "./CalendarTimeModal";
 
 type GPCalendarOption = {
   eventOption: GPRecipeEventOptionType;
-  groupNum: number
+  groupNum: number;
 };
 
-const CalendarEventOption = ({
-  eventOption,
-  groupNum
-}: GPCalendarOption) => {
-  const [modalOpen, setModalOpen] = useState(false)
+const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const recipe = eventOption.recipe;
-  const startDate = new Date(eventOption.start);
-  const formattedStart = startDate
-    .toLocaleTimeString([], { hour: "numeric", minute: "numeric" })
-    .replace("PM", "")
-    .replace("AM", "");
-  const endDate = new Date(eventOption.end);
-  const formattedEnd = endDate.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "numeric",
-  });
+  const startDate = new Date(eventOption.timeOptions[0].start);
 
   return (
     <Card sx={{ width: 350 }}>
@@ -91,40 +79,48 @@ const CalendarEventOption = ({
         >
           <Box>
             <Typography level="body-sm">{startDate.toDateString()}</Typography>
-            <Typography sx={{ fontSize: "lg", fontWeight: "lg" }}>
-              {formattedStart}- {formattedEnd}
-            </Typography>
+            <ButtonGroup color="primary" size="sm">
+              {eventOption.timeOptions.map((option, index) => {
+                const formattedStart = new Date(option.start)
+                  .toLocaleTimeString([], {
+                    hour: "numeric",
+                    minute: "numeric",
+                  })
+                  .replace(" PM", "")
+                  .replace(" AM", "");
+                const formattedEnd = new Date(option.end).toLocaleTimeString(
+                  [],
+                  {
+                    hour: "numeric",
+                    minute: "numeric",
+                  }
+                );
+                return (
+                  <Tooltip title="Select time">
+                  <Button onClick={() => {}} key={index}>
+                    {formattedStart}-{formattedEnd}
+                  </Button>
+                  </Tooltip>
+                );
+              })}
+              <Button
+                onClick={() => setModalOpen(true)}
+              >
+                Adjust Time
+              </Button>
+            </ButtonGroup>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button
-        size="md"
-        color="primary"
-        aria-label="Adjust event recommendation"
-        sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
-        onClick={() => setModalOpen(true)}
-      >
-        Adjust Time
-      </Button>
-            <AdjustEventTimeModal
-              editMode={true}
-              eventInfo={eventOption}
-              groupNum={groupNum}
-              modalOpen={modalOpen}
-              toggleModal={() => setModalOpen((prev) => !prev)}
-            />
-            <IconButton
-              aria-label="Accept Event Reccomendation"
-              variant="plain"
-              color="success"
-              size="md"
-            >
-              <CheckCircleOutlineIcon />
-            </IconButton>
-          </Box>
+          <CalendarTimeModal
+            editMode={true}
+            eventInfo={eventOption}
+            groupNum={groupNum}
+            modalOpen={modalOpen}
+            toggleModal={() => setModalOpen((prev) => !prev)}
+          />
         </Box>
       </CardContent>
     </Card>
   );
 };
 
-export default CalendarEventOption;
+export default CalendarEventCard;
