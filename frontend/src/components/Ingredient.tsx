@@ -14,6 +14,10 @@ import {
   Typography,
 } from "@mui/joy";
 
+const GRID_EXP_QUANT_SPACING = 3;
+const GRID_NAME_COST_SPACING = 4;
+const GRID_BUTTON_SPACING = 2;
+
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
   presentGroceryCheck: boolean;
@@ -40,8 +44,13 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       ? ingredient.quantity
       : Number(ingredient.quantity).toFixed(2);
   return (
-    <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md"}}>
-      <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+    <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md" }}>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+      >
         {presentGroceryCheck && (
           <Grid xs={1}>
             <Checkbox
@@ -50,29 +59,27 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             />
           </Grid>
         )}
-        <Grid xs={4}>
+        <Grid xs={GRID_NAME_COST_SPACING}>
           <Typography>{ingredient.ingredientName}</Typography>
         </Grid>
         {/* Quantity goes to 2 decimal places only if decimal */}
-        <Grid xs={3}>
+        <Grid xs={GRID_EXP_QUANT_SPACING}>
           <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
         </Grid>
         {presentExpiration && (
-          <Grid xs={3}>
-            <Typography>
-              {ingredient.expirationDate}
-            </Typography>
+          <Grid xs={GRID_EXP_QUANT_SPACING}>
+            <Typography>{ingredient.expirationDate}</Typography>
           </Grid>
         )}
         {ingredientCost && (
-          <Grid xs={4}>
+          <Grid xs={GRID_NAME_COST_SPACING}>
             <Typography>
               Est. ${ingredientCost.ingredientCost?.toFixed(2)}
             </Typography>
           </Grid>
         )}
         {presentButtons && (
-          <Grid xs={2}>
+          <Grid xs={GRID_BUTTON_SPACING}>
             <ButtonGroup>
               <IconButton onClick={() => onEdit?.(ingredient)}>
                 <FontAwesomeIcon icon={faPenToSquare} />

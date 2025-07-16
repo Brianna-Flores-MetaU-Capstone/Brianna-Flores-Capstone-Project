@@ -6,7 +6,7 @@ import type {
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import TitledListView from "../components/TitledListView";
-import { PreviewConstants } from "../utils/constants";
+import { PreviewConstants, MUI_GRID_FULL_SPACE } from "../utils/constants";
 import Ingredient from "../components/Ingredient";
 import MealCard from "../components/MealCard";
 import { v4 as uuidv4 } from "uuid";
@@ -56,8 +56,8 @@ const Homepage = () => {
         <Grid container spacing={2} sx={{my: 2}}>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: 12 }]}
-              list={userIngredientList}
+              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: MUI_GRID_FULL_SPACE }]}
+              itemsList={userIngredientList}
               renderItem={(ingredient) => (
                 <Ingredient
                   key={uuidv4()}
@@ -72,8 +72,8 @@ const Homepage = () => {
           </Grid>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.GROCERY, spacing: 12 }]}
-              list={userGroceryList}
+              headerList={[{ title: PreviewConstants.GROCERY, spacing: MUI_GRID_FULL_SPACE }]}
+              itemsList={userGroceryList}
               renderItem={(item) => (
                 <Ingredient
                   key={uuidv4()}
@@ -89,8 +89,8 @@ const Homepage = () => {
         </Grid>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: 12 }]}
-            list={selectedRecipes}
+            headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
+            itemsList={selectedRecipes}
             renderItem={(meal) => (
               <MealCard
                 key={meal.apiId}

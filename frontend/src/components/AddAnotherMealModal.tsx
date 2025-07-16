@@ -178,7 +178,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   orientation="horizontal"
                   sx={{ width: "10%", justifyContent: "space-between" }}
                 >
-                  <FormLabel>Use Dietary Preferences</FormLabel>
+                  <FormLabel>Apply Dietary Preferences</FormLabel>
                   <Switch
                     checked={usePreferences}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -209,7 +209,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             />
           )}
           <TitledListView
-            list={mealResults}
+            itemsList={mealResults}
             renderItem={(meal) => (
               <MealCard
                 key={uuidv4()}

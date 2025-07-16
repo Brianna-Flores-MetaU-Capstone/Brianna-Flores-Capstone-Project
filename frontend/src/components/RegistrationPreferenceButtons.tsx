@@ -17,7 +17,7 @@ const RegistrationPreferenceButtons: React.FC<GPUserPreferenceButtonsProps> = ({
 }) => {
   return (
     <TitledListView
-      list={listItems}
+      itemsList={listItems}
       renderItem={(item) => (
         <Button
           key={item}

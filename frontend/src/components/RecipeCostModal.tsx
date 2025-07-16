@@ -50,8 +50,8 @@ const RecipeCostModal = ({
         </Typography>
         <Box sx={{width: "100%", overflowY: "auto"}}>
         <TitledListView
-          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "for Amount", spacing: 2}]}
-          list={ingredientsCostInformation}
+          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "For Amount", spacing: 2}]}
+          itemsList={ingredientsCostInformation}
           renderItem={(ingredientInfo) => (
             <IngredientCost
               key={uuidv4()}

@@ -31,7 +31,7 @@ const CalendarOptionGroup = ({
         </IconButton>
       </Box>
       <TitledListView
-        list={eventOptions}
+        itemsList={eventOptions}
         renderItem={(event, index) => (
           <CalendarEventCard key={index} eventOption={event} groupNum={groupNum - 1}/>
         )}

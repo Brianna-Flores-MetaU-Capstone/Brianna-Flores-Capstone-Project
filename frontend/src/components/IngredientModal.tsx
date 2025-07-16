@@ -248,7 +248,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           )}
           {isEditing ? (
             <FormControl>
-              <FormLabel>Select a Department</FormLabel>
+              <FormLabel>Department</FormLabel>
               <Select
                 disabled
                 name={IngredientDataFields.DEPARTMENT}
@@ -270,7 +270,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </FormControl>
           ) : (
             <FormControl>
-              <FormLabel>Select a Department</FormLabel>
+              <FormLabel>Department</FormLabel>
               <Select
                 required
                 name={IngredientDataFields.DEPARTMENT}
