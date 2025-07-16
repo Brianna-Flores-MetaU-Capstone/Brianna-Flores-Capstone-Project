@@ -8,7 +8,7 @@ import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";

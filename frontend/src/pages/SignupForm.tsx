@@ -13,7 +13,7 @@ import AuthForm from "../components/AuthForm";
 import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
 const SignupForm: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {

@@ -14,8 +14,7 @@ import AppHeader from "../components/AppHeader";
 import ErrorState from "../components/ErrorState";
 import AuthForm from "../components/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import { Button, Box } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
 const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
@@ -64,7 +63,7 @@ const LoginPage: React.FC<GPToggleNavBarProps> = ({ navOpen, toggleNav }) => {
           )}
           <div className="new-user-section">
             <p>New User?</p>
-            <Button className="submit-auth" onClick={() => navigate("/signup")}>
+            <Button onClick={() => navigate("/signup")}>
               Register for an Account!
             </Button>
           </div>

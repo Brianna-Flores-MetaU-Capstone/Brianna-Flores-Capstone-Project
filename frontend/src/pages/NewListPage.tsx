@@ -10,7 +10,7 @@ import MealCard from "../components/MealCard";
 import MealInfoModal from "../components/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/joy";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { useUser } from "../contexts/UserContext";

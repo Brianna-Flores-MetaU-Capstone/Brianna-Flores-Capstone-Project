@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { useState } from "react";
+import { CssVarsProvider } from "@mui/joy";
+import { theme } from "./utils/UIStyle";
 
 // import pages for routing
 import Homepage from "./pages/Homepage";
@@ -23,6 +25,7 @@ function App() {
   const ProtectedAccountPage = WithAuth(AccountPage);
 
   return (
+    <CssVarsProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -99,6 +102,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+    </CssVarsProvider>
   );
 }
 
