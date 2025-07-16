@@ -8,6 +8,10 @@ import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
 import type { GPUserEventTypes } from "../utils/types";
+import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
+
+// TODO change requested days to have user input
+const REQUESTED_DAYS = 7;
 
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
@@ -62,9 +66,24 @@ const ConnectCalendar = () => {
           if (resp.error !== undefined) {
             throw resp;
           }
-          await listUpcomingEvents();
+          await getUserFreeTime();
         },
       });
+    }
+    if (gapiInited && gisInited) {
+      const token = gapi.client.getToken();
+      if (token) {
+        getUserFreeTime();
+      }
+    }
+  }, [gapiInited, gisInited]);
+
+  useEffect(() => {
+    if (gapiInited && gisInited) {
+      const token = gapi.client.getToken();
+      if (token) {
+        getUserFreeTime();
+      }
     }
   }, [gapiInited, gisInited]);
 
@@ -79,7 +98,7 @@ const ConnectCalendar = () => {
       tokenClient.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
-      tokenClient.requestAccessToken({ prompt: "" });
+      getUserFreeTime();
     }
   }
 
@@ -91,25 +110,48 @@ const ConnectCalendar = () => {
     }
   }
 
-  async function listUpcomingEvents() {
+  async function getUserFreeTime() {
     try {
       const accessToken = gapi.client.getToken().access_token;
+      const startDate = new Date();
+      const endDate = new Date(
+        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
+      );
       const response = await axios.get(
-        "https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true",
+        "https://www.googleapis.com/calendar/v3/calendars/primary/events",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          params: {
+            singleEvents: true,
+            orderBy: "startTime",
+            timeMin: startDate.toISOString(),
+            timeMax: endDate.toISOString(),
+          },
         }
       );
-    const userEvents = response.data.items
-    // parse events to extract out only needed information
-      const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents)
-      const events = await axios.post(
+      const userEvents = response.data.items;
+      // parse events to extract out only needed information
+      const parsedUserEvents: GPUserEventTypes[] = parseUserEvents(userEvents);
+      // find free spaces in calendar
+      const freeTimeBlocks = findFreeTime({
+        userEvents: parsedUserEvents,
+        startDate,
+        endDate,
+        REQUESTED_DAYS,
+      });
+      const parsedFreeTime = parseFreeTime(freeTimeBlocks);
+      const reccomendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedUserEvents },
+        { parsedFreeTime },
         axiosConfig
       );
+      // get back a list of possible options for each event (shopping + each recipe)
+      const eventOptions = reccomendedEvents.data;
+      // TODO set state variable held within new-list-page to hold the list of generated event options
+      
+      // within new list convert to local time zone and present options to user
     } catch (err) {
       return;
     }
@@ -118,6 +160,7 @@ const ConnectCalendar = () => {
   return (
     <Box>
       <Button onClick={handleAuthClick}>Add to Calendar!</Button>
+      <Button onClick={handleSignoutClick}>Signout</Button>
     </Box>
   );
 };

@@ -176,7 +176,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
                 <FormControl
                   orientation="horizontal"
-                  sx={{ width: "20%", justifyContent: "space-between" }}
+                  sx={{ width: "10%", justifyContent: "space-between" }}
                 >
                   <FormLabel>Use Dietary Preferences</FormLabel>
                   <Switch
@@ -200,7 +200,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 </Button>
               </Box>
             </form>
-            <Button>I Have My Own Recipe</Button>
           </Box>
           {/* Display error message if needed */}
           {errorMessage && (
@@ -222,7 +221,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             flexDirectionRow={true}
           />
           {/* if search clicked, add a generate more button */}
-          {searchClicked && (
+          {searchClicked && !loading && (
             <Button onClick={handleGenerateMore}>Generate More!</Button>
           )}
         </DialogContent>

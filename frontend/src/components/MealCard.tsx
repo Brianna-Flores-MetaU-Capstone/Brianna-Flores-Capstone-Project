@@ -34,7 +34,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   return (
-    //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
+    // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card

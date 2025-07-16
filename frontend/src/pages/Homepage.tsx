@@ -89,7 +89,7 @@ const Homepage = () => {
         </Grid>
         <Box>
           <TitledListView
-            headerList={[{ title: "Upcoming Meals", spacing: 12 }]}
+            headerList={[{ title: "Selected Meals", spacing: 12 }]}
             list={selectedRecipes}
             renderItem={(meal) => (
               <MealCard

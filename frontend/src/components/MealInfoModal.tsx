@@ -27,7 +27,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   recipeInfo,
 }) => {
   return (
-    //click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
+    // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
       open={modalOpen}
       onClose={handleModalClose}

@@ -1,7 +1,4 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { useState } from "react";
 import { CssVarsProvider } from "@mui/joy";
 import { theme } from "./utils/UIStyle";
 

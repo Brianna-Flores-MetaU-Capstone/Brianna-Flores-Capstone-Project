@@ -24,6 +24,9 @@ const TOTAL_SEARCH_REQUESTS = 6;
 const INGREDIENT_MODAL = "ingredients-page";
 const GROCERY_MODAL = "grocery-page";
 
+const START_OF_DAY_TIME = 8;
+const END_OF_DAY_TIME = 20;
+
 const PreviewConstants = {
   GROCERY: "Grocery List",
   INGREDIENT: "Ingredients on Hand",
@@ -38,4 +41,6 @@ export {
   TOTAL_SEARCH_REQUESTS,
   INGREDIENT_MODAL,
   GROCERY_MODAL,
+  START_OF_DAY_TIME,
+  END_OF_DAY_TIME,
 };

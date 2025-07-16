@@ -79,8 +79,8 @@ type GPIngredientApiInfoType = {
 
 type GPUserEventTypes = {
   name: string;
-  startTime: Date;
-  endTime: Date;
+  start: Date;
+  end: Date;
 };
 
 export type {
