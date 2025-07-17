@@ -1,5 +1,3 @@
-import etag from 'etag'
-
 type GPCalendarJSONType = {
   "kind": "calendar#event",
   "etag": string,
