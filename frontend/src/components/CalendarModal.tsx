@@ -32,20 +32,6 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<GPErrorMessageTypes>()
 
-  type GPGoogleCalendarEventType = {
-    summary: string
-    start: {
-      dateTime: string
-    }
-    end: {
-      dateTime: string
-    }
-    source: {
-      title: string
-      url: string
-    }
-  }
-
   const onEventConfirmation = async () => {
     const token = gapi.client.getToken();
     if (!token) {
