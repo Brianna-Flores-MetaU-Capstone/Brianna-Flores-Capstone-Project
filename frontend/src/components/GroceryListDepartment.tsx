@@ -5,7 +5,6 @@ import type {
 } from "../utils/types";
 import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
-import { v4 as uuidv4 } from "uuid";
 import { Box } from "@mui/joy";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
@@ -32,9 +31,9 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
       <TitledListView
         headerList={[{title: department, spacing: MUI_GRID_FULL_SPACE}]}
         itemsList={filteredGroceries}
-        renderItem={(itemInfo) => (
+        renderItem={(itemInfo, index) => (
           <Ingredient
-            key={uuidv4()}
+            key={index}
             ingredient={itemInfo.ingredient}
             presentGroceryCheck={true}
             presentExpiration={false}

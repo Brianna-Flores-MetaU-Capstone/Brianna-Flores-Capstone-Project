@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
 import { parseUserEvents } from "../utils/calendarUtils";
@@ -34,7 +34,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  const SCOPES = `${calendarUrl}/auth/calendar.readonly`;
+  const SCOPES = `${calendarUrl}/auth/calendar.events`;
 
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
@@ -43,7 +43,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const [loading, setLoading] = useState(false);
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
-  let tokenClient: google.accounts.oauth2.TokenClient;
+  const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(null)
 
   // load on mount
   useEffect(() => {
@@ -72,8 +72,8 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }, []);
 
   useEffect(() => {
-    if (gapiInited && gisInited && !tokenClient) {
-      tokenClient = google.accounts.oauth2.initTokenClient({
+    if (gapiInited && gisInited && !tokenClientVar.current) {
+      tokenClientVar.current = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPES,
         callback: async (resp) => {
@@ -101,15 +101,15 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     }
   }, [gapiInited, gisInited]);
 
-  function handleAuthClick() {
-    if (!tokenClient) {
+  function handleAddToCalendarClick() {
+    if (!tokenClientVar.current) {
       return;
     }
 
     if (gapi.client.getToken() === null) {
       // Prompt the user to select a Google Account and ask for consent to share their data
       // when establishing a new session.
-      tokenClient.requestAccessToken({ prompt: "consent" });
+      tokenClientVar.current.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
       setModalOpen(true);
@@ -168,6 +168,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options
       setLoading(false);
+
       // within new list convert to local time zone and present options to user
     } catch (err) {
       setLoading(false);
@@ -185,8 +186,10 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   return (
     <Box>
-      <Button onClick={handleAuthClick}>Add to Calendar!</Button>
-      <Button onClick={handleSignoutClick}>Signout</Button>
+      <Box sx={{display: "flex", gap: 2 }}>
+      <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
+      <Button onClick={handleSignoutClick}>Signout of Google</Button>
+      </Box>
       <CalendarTimeModal
         editMode={false}
         modalOpen={modalOpen}

@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPHeaderListType = {
@@ -35,8 +34,8 @@ const TitledListView = <T,>({
             mb: 2,
           }}
         >
-          {headerList.map((header) => (
-            <Grid xs={header.spacing} key={uuidv4()}>
+          {headerList.map((header, index) => (
+            <Grid xs={header.spacing} key={index}>
               <Typography level="h4">
                 {header.title}
               </Typography>

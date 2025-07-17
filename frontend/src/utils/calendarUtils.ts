@@ -2,7 +2,6 @@ import type { GPCalendarJSONType } from "./calendarApiTypes";
 
 // Parse user events to extract only necessary data
 const parseUserEvents = (userEventsData: GPCalendarJSONType[]) => {
-  console.log("in parse user events")
   return userEventsData.map((userEvent: GPCalendarJSONType) => ({
     name: userEvent.summary,
     start: new Date(userEvent.start.dateTime),

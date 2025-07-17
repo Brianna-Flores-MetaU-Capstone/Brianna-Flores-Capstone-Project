@@ -120,7 +120,7 @@ const CalendarEventCard = ({
                 }
                 const isSelected = selectedEvents.filter((selectedEvent) => selectedEvent.name === clickedEvent.name && selectedEvent.timeOptions[0].start === clickedEvent.timeOptions[0].start && selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end)
                 return (
-                  <Tooltip title="Select time">
+                  <Tooltip key={index} title="Select time">
                     <Button variant={isSelected.length === 0 ? "outlined" : "solid"} onClick={() => toggleSelection(option)} key={index}>
                       {formattedStart}-{formattedEnd}
                     </Button>
