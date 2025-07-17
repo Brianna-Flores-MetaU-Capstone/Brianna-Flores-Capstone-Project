@@ -63,6 +63,8 @@ const getMealPrepTimeOptions = ({
   }
   // heuristic: 70% of total cook time
   const estimatedCookTime = sumAllCookTimes * 0.7;
+  let preferedOptions: GPTimeBlockType[] = [];
+  let fallbackOptions: GPTimeBlockType[] = [];
   for (const freeBlock of userFreeTime) {
     const timeOptions = fitsUserPreferences({
       freeBlock,
@@ -70,22 +72,36 @@ const getMealPrepTimeOptions = ({
       readyInMinutes: estimatedCookTime,
     });
     if (timeOptions) {
-      const bestBlock = {
-        name: "Prep Block",
-        timeOptions: timeOptions,
-        recipe: {
-          recipeTitle: "Prep Block",
-          readyInMinutes: estimatedCookTime,
-          servings: totalServings,
-          previewImage:
-            "https://images.pexels.com/photos/1435910/pexels-photo-1435910.jpeg",
-          sourceUrl:
-            "https://www.goodhousekeeping.com/food-recipes/a28377603/how-to-meal-prep/",
-        },
-      };
-      eventOptions = [...eventOptions, bestBlock];
+      preferedOptions = timeOptions;
+    }
+    if (
+      preferedOptions.length > 0 &&
+      preferedOptions.length + fallbackOptions.length >= 2
+    ) {
       break;
     }
+    const otherFreeTimes = getAnyFreeTime({
+      freeBlock,
+      readyInMinutes: estimatedCookTime,
+    });
+    fallbackOptions = [...fallbackOptions, ...otherFreeTimes];
+  }
+  const combinedTimes = [...preferedOptions, ...fallbackOptions];
+  if (combinedTimes.length > 0) {
+    const bestBlock = {
+      name: "Prep Block",
+      timeOptions: combinedTimes.slice(0, 2),
+      recipe: {
+        recipeTitle: "Prep Block",
+        readyInMinutes: estimatedCookTime,
+        servings: totalServings,
+        previewImage:
+          "https://images.pexels.com/photos/1435910/pexels-photo-1435910.jpeg",
+        sourceUrl:
+          "https://www.goodhousekeeping.com/food-recipes/a28377603/how-to-meal-prep/",
+      },
+    };
+    eventOptions = [...eventOptions, bestBlock];
   }
   return eventOptions;
 };
@@ -114,9 +130,12 @@ const getRecipeTimeOptions = ({
           readyInMinutes: recipe.readyInMinutes,
         });
         if (timeOptions && preferredOptions.length <= 0) {
-          preferredOptions = timeOptions
-        } 
-        if (preferredOptions.length > 0 && fallbackOptions.length + preferredOptions.length >= 2) {
+          preferredOptions = timeOptions;
+        }
+        if (
+          preferredOptions.length > 0 &&
+          fallbackOptions.length + preferredOptions.length >= 2
+        ) {
           break;
         }
         // look for any fallback options
@@ -127,15 +146,18 @@ const getRecipeTimeOptions = ({
         fallbackOptions = [...fallbackOptions, ...otherFreeTimes];
       }
     }
-    const combinedTimes = [...preferredOptions, ...fallbackOptions]
+    const combinedTimes = [...preferredOptions, ...fallbackOptions];
     if (combinedTimes.length > 0) {
       const bestOption = {
         name: recipe.recipeTitle,
         timeOptions: combinedTimes.splice(0, 2),
-        recipe: recipe
-      }
-      eventOptions = [...eventOptions, bestOption]
-      currentDay.setDate(bestOption.timeOptions[0].start.getDate() + Math.ceil((recipe.servings) / servingsPerDay));
+        recipe: recipe,
+      };
+      eventOptions = [...eventOptions, bestOption];
+      currentDay.setDate(
+        bestOption.timeOptions[0].start.getDate() +
+          Math.ceil(recipe.servings / servingsPerDay)
+      );
       currentDay.setHours(8, 0, 0, 0);
     }
   }
