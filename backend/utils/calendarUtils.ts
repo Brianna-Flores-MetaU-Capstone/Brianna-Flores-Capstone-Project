@@ -174,18 +174,19 @@ type GPAnyBlockTypes = {
 };
 
 const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   let freeBlockStart = startAsDate.getTime();
   const freeBlockEnd = endAsDate.getTime();
   let optionArray: TimeBlock[] = [];
 
-  while (freeBlockStart + readyInMinutes * TO_MILLISECONDS <= freeBlockEnd) {
+  while (freeBlockStart + readyInMilliseconds <= freeBlockEnd) {
     optionArray = [
       ...optionArray,
       new TimeBlock(
         new Date(freeBlockStart),
-        new Date(freeBlockStart + readyInMinutes * TO_MILLISECONDS)
+        new Date(freeBlockStart + readyInMilliseconds)
       ),
     ];
     freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
@@ -207,6 +208,7 @@ const fitsUserPreferences = ({
   readyInMinutes,
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   const freeTimeBlock = new TimeBlock(startAsDate, endAsDate);
@@ -232,20 +234,20 @@ const fitsUserPreferences = ({
     );
     const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
 
-    if (overlap.end - overlap.start > readyInMinutes * TO_MILLISECONDS) {
+    if (overlap.end - overlap.start > readyInMilliseconds) {
       let optionArray = [
         new TimeBlock(
           new Date(overlap.start),
-          new Date(overlap.start + readyInMinutes * TO_MILLISECONDS)
+          new Date(overlap.start + readyInMilliseconds)
         ),
       ];
       const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
-      if (overlap.end - newStart >= readyInMinutes * TO_MILLISECONDS) {
+      if (overlap.end - newStart >= readyInMilliseconds) {
         optionArray = [
           ...optionArray,
           new TimeBlock(
             new Date(newStart),
-            new Date(newStart + readyInMinutes * TO_MILLISECONDS)
+            new Date(newStart + readyInMilliseconds)
           ),
         ];
       }
