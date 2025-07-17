@@ -34,7 +34,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  const SCOPES = `${calendarUrl}/auth/calendar`;
+  const SCOPES = `${calendarUrl}/auth/calendar.events`;
 
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
