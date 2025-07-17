@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import { UserProvider } from "./contexts/UserContext.tsx";
 import { EventRecProvider } from "./contexts/EventRecContext.tsx";
+import { SelectedEventsProvider } from "./contexts/SelectedEventsContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserProvider>
       <EventRecProvider>
-        <App />
+        <SelectedEventsProvider>
+          <App />
+        </SelectedEventsProvider>
       </EventRecProvider>
     </UserProvider>
   </StrictMode>

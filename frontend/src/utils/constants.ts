@@ -10,6 +10,7 @@ const AuthenticationFieldEnum = {
 };
 
 const EventTimeEnum = {
+  DATE: "date",
   START: "start",
   END: "end"
 }

@@ -47,12 +47,13 @@ type GPRecipeEventTypes = {
   userFreeTime: GPUserEventTypes[];
   userRecipes: GPRecipeDataTypes[];
   userPreferences: GPPreferredBlockType[];
+  servingsPerDay: number;
 };
 
 const getMealPrepTimeOptions = ({
   userRecipes,
   userFreeTime,
-  userPreferences,
+  userPreferences
 }: GPRecipeEventTypes) => {
   let eventOptions: GPRecipeEventOptionType[] = [];
   // if single day prep, estimate time to cook all recipes
@@ -95,6 +96,7 @@ const getRecipeTimeOptions = ({
   userFreeTime,
   userRecipes,
   userPreferences,
+  servingsPerDay
 }: GPRecipeEventTypes) => {
   // cook one recipe max per day
   let eventOptions: GPRecipeEventOptionType[] = [];
@@ -117,7 +119,7 @@ const getRecipeTimeOptions = ({
             recipe: recipe,
           };
           eventOptions = [...eventOptions, bestBlock];
-          currentDay.setDate(startTime.getDate() + recipe.servings);
+          currentDay.setDate(startTime.getDate() + ((recipe.servings + 1) / servingsPerDay));
           currentDay.setHours(8, 0, 0, 0);
           break;
         }
@@ -227,6 +229,7 @@ const getMultipleScheduleOptions = ({
   userRecipes,
   userPreferences,
   singleDayPrep,
+  servingsPerDay,
   numOptions,
 }: GPMultipleScheduleTypes) => {
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
@@ -238,6 +241,7 @@ const getMultipleScheduleOptions = ({
         userFreeTime: freeTimeArray,
         userRecipes: userRecipes,
         userPreferences: userPreferences,
+        servingsPerDay: servingsPerDay
       });
       scheduleOptions = [...scheduleOptions, option];
       freeTimeArray = shuffleArray(freeTimeArray);
@@ -246,6 +250,7 @@ const getMultipleScheduleOptions = ({
         userFreeTime: userFreeTime,
         userRecipes: recipeArray,
         userPreferences,
+        servingsPerDay: servingsPerDay
       });
       scheduleOptions = [...scheduleOptions, option];
       recipeArray = shuffleArray(recipeArray);
