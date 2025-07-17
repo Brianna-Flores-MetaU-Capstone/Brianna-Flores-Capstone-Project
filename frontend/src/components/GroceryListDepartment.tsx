@@ -7,7 +7,7 @@ import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { v4 as uuidv4 } from "uuid";
 import { Box } from "@mui/joy";
-import { MUI_GRID_FULL_SPACE } from "../utils/constants";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientWithCostInfoTypes[];

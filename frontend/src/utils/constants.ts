@@ -33,8 +33,6 @@ const GROCERY_MODAL = "grocery-page";
 const START_OF_DAY_TIME = 8;
 const END_OF_DAY_TIME = 20;
 
-const MUI_GRID_FULL_SPACE = 12
-
 const PreviewConstants = {
   GROCERY: "Grocery List",
   INGREDIENT: "Ingredients on Hand",
@@ -52,5 +50,4 @@ export {
   GROCERY_MODAL,
   START_OF_DAY_TIME,
   END_OF_DAY_TIME,
-  MUI_GRID_FULL_SPACE
 };

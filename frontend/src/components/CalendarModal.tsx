@@ -11,7 +11,7 @@ import TitledListView from "./TitledListView";
 import { useEventRec } from "../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../contexts/SelectedEventsContext";
-import { MUI_GRID_FULL_SPACE } from "../utils/constants";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;

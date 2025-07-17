@@ -6,7 +6,8 @@ import type {
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import TitledListView from "../components/TitledListView";
-import { PreviewConstants, MUI_GRID_FULL_SPACE } from "../utils/constants";
+import { PreviewConstants } from "../utils/constants";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 import Ingredient from "../components/Ingredient";
 import MealCard from "../components/MealCard";
 import { v4 as uuidv4 } from "uuid";
