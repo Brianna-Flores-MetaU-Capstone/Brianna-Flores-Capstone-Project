@@ -47,7 +47,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
   const { user } = useUser();
@@ -75,7 +75,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     offset: number;
   }) => {
     const ownedIngredients = await fetchUserIngredientsHelper({
-      setMessage: setErrorMessage,
+      setMessage: setMessage,
     });
     const userDiets = parsePreferenceList(user?.diets ?? []);
     const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
@@ -97,7 +97,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
-      setErrorMessage({
+      setMessage({
         error: true,
         message: `Error fetching from api`,
       });
@@ -203,10 +203,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             </form>
           </Box>
           {/* Display error message if needed */}
-          {errorMessage && (
+          {message && (
             <ErrorState
-              error={errorMessage.error}
-              message={errorMessage.message}
+              error={message.error}
+              message={message.message}
             />
           )}
           <TitledListView

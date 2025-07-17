@@ -34,7 +34,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  const SCOPES = `${calendarUrl}/auth/calendar.readonly`;
+  const SCOPES = `${calendarUrl}/auth/calendar`;
 
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
@@ -168,6 +168,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options
       setLoading(false);
+
       // within new list convert to local time zone and present options to user
     } catch (err) {
       setLoading(false);

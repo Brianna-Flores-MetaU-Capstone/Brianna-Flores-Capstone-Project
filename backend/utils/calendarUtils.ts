@@ -80,6 +80,7 @@ const getMealPrepTimeOptions = ({
           servings: totalServings,
           previewImage:
           "https://images.pexels.com/photos/1435910/pexels-photo-1435910.jpeg",
+          sourceUrl: ""
         },
       };
       eventOptions = [...eventOptions, bestBlock]
