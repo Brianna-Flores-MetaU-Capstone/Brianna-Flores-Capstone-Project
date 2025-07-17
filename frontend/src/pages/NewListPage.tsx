@@ -23,9 +23,6 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
-
-import { useEventRec } from "../contexts/EventRecContext";
-
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -117,7 +114,9 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} />
+          <ConnectCalendar
+            onClick={() => setCalendarModalOpen((prev) => !prev)}
+          />
         </Box>
         <Box>
           <TitledListView
@@ -148,8 +147,14 @@ const NewListPage = () => {
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
-      <LoadingModal modalOpen={loadingList} message={"Generating Your Grocery List"}/>
-      <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)}/>
+      <LoadingModal
+        modalOpen={loadingList}
+        message={"Generating Your Grocery List"}
+      />
+      <CalendarModal
+        modalOpen={calendarModalOpen}
+        toggleModal={() => setCalendarModalOpen((prev) => !prev)}
+      />
     </Box>
   );
 };
