@@ -166,10 +166,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const eventOptions = recommendedEvents.data;
       setEventOptions(eventOptions);
       onClick();
-      // TODO set state variable held within new-list-page to hold the list of generated event options
       setLoading(false);
-
-      // within new list convert to local time zone and present options to user
     } catch (err) {
       setLoading(false);
       return;

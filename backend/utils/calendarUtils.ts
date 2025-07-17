@@ -3,8 +3,9 @@ import type {
   GPRecipeDataTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
-  GPTimeBlockType,
 } from "../../frontend/src/utils/types";
+
+import TimeBlock from "./TimeBlockClass";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
@@ -63,8 +64,8 @@ const getMealPrepTimeOptions = ({
   }
   // heuristic: 70% of total cook time
   const estimatedCookTime = sumAllCookTimes * 0.7;
-  let preferedOptions: GPTimeBlockType[] = [];
-  let fallbackOptions: GPTimeBlockType[] = [];
+  let preferedOptions: TimeBlock[] = [];
+  let fallbackOptions: TimeBlock[] = [];
   for (const freeBlock of userFreeTime) {
     const timeOptions = fitsUserPreferences({
       freeBlock,
@@ -118,8 +119,8 @@ const getRecipeTimeOptions = ({
   currentDay.setDate(currentDay.getDate() + 1);
   currentDay.setHours(0, 0, 0, 0);
   for (const recipe of userRecipes) {
-    let fallbackOptions: GPTimeBlockType[] = [];
-    let preferredOptions: GPTimeBlockType[] = [];
+    let fallbackOptions: TimeBlock[] = [];
+    let preferredOptions: TimeBlock[] = [];
     for (const freeBlock of userFreeTime) {
       let endTime = new Date(freeBlock.end);
       if (endTime.getTime() >= currentDay.getTime()) {
@@ -174,15 +175,15 @@ const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
   const endAsDate = new Date(freeBlock.end);
   let freeBlockStart = startAsDate.getTime();
   const freeBlockEnd = endAsDate.getTime();
-  let optionArray: GPTimeBlockType[] = [];
+  let optionArray: TimeBlock[] = [];
 
   while (freeBlockStart + readyInMinutes * 1000 * 60 <= freeBlockEnd) {
     optionArray = [
       ...optionArray,
-      {
-        start: new Date(freeBlockStart),
-        end: new Date(freeBlockStart + readyInMinutes * 1000 * 60),
-      },
+      new TimeBlock(
+        new Date(freeBlockStart),
+        new Date(freeBlockStart + readyInMinutes * 1000 * 60)
+      ),
     ];
     freeBlockStart += 15 * 60 * 1000;
     if (optionArray.length >= 2) {
@@ -261,19 +262,19 @@ const fitsUserPreferences = ({
     }
     if (end - start >= readyInMinutes * 1000 * 60) {
       let optionArray = [
-        {
-          start: new Date(start),
-          end: new Date(start + readyInMinutes * 1000 * 60),
-        },
+        new TimeBlock(
+          new Date(start),
+          new Date(start + readyInMinutes * 1000 * 60)
+        ),
       ];
       start = start + 1000 * 60 * 15;
       if (end - start >= readyInMinutes * 1000 * 60) {
         optionArray = [
           ...optionArray,
-          {
-            start: new Date(start),
-            end: new Date(start + readyInMinutes * 1000 * 60),
-          },
+          new TimeBlock(
+            new Date(start),
+            new Date(start + readyInMinutes * 1000 * 60)
+          ),
         ];
       }
       return optionArray;
