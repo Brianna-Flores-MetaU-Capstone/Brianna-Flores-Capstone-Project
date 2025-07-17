@@ -5,6 +5,9 @@ import type {
   GPPreferredBlockType,
 } from "../../frontend/src/utils/types";
 
+const TO_MILLISECONDS = 1000 * 60;
+const TIME_BLOCK_INCREMENT = 15;
+
 import TimeBlock from "./TimeBlockClass";
 
 type GPBestTimeType = {
@@ -28,7 +31,7 @@ const getShoppingTimeOptions = ({
       const option = {
         name: `Option ${choices + 1}`,
         start: startTime,
-        end: new Date(startTime.getTime() + 1000 * 60 * shoppingTime),
+        end: new Date(startTime.getTime() + TO_MILLISECONDS * shoppingTime),
       };
       eventOptions = [...eventOptions, option];
       blockTime -= shoppingTime;
@@ -177,15 +180,15 @@ const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
   const freeBlockEnd = endAsDate.getTime();
   let optionArray: TimeBlock[] = [];
 
-  while (freeBlockStart + readyInMinutes * 1000 * 60 <= freeBlockEnd) {
+  while (freeBlockStart + readyInMinutes * TO_MILLISECONDS <= freeBlockEnd) {
     optionArray = [
       ...optionArray,
       new TimeBlock(
         new Date(freeBlockStart),
-        new Date(freeBlockStart + readyInMinutes * 1000 * 60)
+        new Date(freeBlockStart + readyInMinutes * TO_MILLISECONDS)
       ),
     ];
-    freeBlockStart += 15 * 60 * 1000;
+    freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
     if (optionArray.length >= 2) {
       break;
     }
@@ -204,11 +207,9 @@ const fitsUserPreferences = ({
   readyInMinutes,
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
-  // loop through user preferences
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
-  const freeBlockStart = startAsDate.getTime();
-  const freeBlockEnd = endAsDate.getTime();
+  const freeTimeBlock = new TimeBlock(startAsDate, endAsDate);
   for (const preference of userPreferences) {
     const tempPrefStart = new Date(freeBlock.start);
     tempPrefStart.setHours(0, 0, 0, 0);
@@ -216,64 +217,35 @@ const fitsUserPreferences = ({
       tempPrefStart.getTime() +
       (parseInt(preference.start.substring(0, 2)) * 60 +
         parseInt(preference.start.substring(3))) *
-        60 *
-        1000;
-
+        TO_MILLISECONDS;
     const tempPrefEnd = new Date(freeBlock.end);
     tempPrefEnd.setHours(0, 0, 0, 0);
     const preferredEnd =
       tempPrefEnd.getTime() +
       (parseInt(preference.end.substring(0, 2)) * 60 +
         parseInt(preference.end.substring(3))) *
-        60 *
-        1000;
-    if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
-      continue;
-    }
-    let start = 0;
-    let end = 0;
-    if (freeBlockStart <= preferredStart && freeBlockEnd >= preferredEnd) {
-      // preferred block completely within free block
-      start = preferredStart;
-      end = preferredEnd;
-    }
-    if (preferredStart <= freeBlockStart && preferredEnd >= freeBlockEnd) {
-      // free block is completely within prefered block
-      start = freeBlockStart;
-      end = freeBlockEnd;
-    }
-    if (
-      freeBlockStart < preferredStart &&
-      freeBlockEnd > preferredStart &&
-      freeBlockEnd < preferredEnd
-    ) {
-      // free block starts before prefered block and ends within prefered block
-      start = preferredStart;
-      end = freeBlockEnd;
-    }
-    if (
-      freeBlockStart > preferredStart &&
-      freeBlockStart < preferredEnd &&
-      freeBlockEnd > preferredEnd
-    ) {
-      // free block starts within prefered block and ends after it
-      start = freeBlockStart;
-      end = preferredEnd;
-    }
-    if (end - start >= readyInMinutes * 1000 * 60) {
+        TO_MILLISECONDS;
+
+    const userPreferenceTimeBlock = new TimeBlock(
+      new Date(preferredStart),
+      new Date(preferredEnd)
+    );
+    const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
+
+    if (overlap.end - overlap.start > readyInMinutes * TO_MILLISECONDS) {
       let optionArray = [
         new TimeBlock(
-          new Date(start),
-          new Date(start + readyInMinutes * 1000 * 60)
+          new Date(overlap.start),
+          new Date(overlap.start + readyInMinutes * TO_MILLISECONDS)
         ),
       ];
-      start = start + 1000 * 60 * 15;
-      if (end - start >= readyInMinutes * 1000 * 60) {
+      const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
+      if (overlap.end - newStart >= readyInMinutes * TO_MILLISECONDS) {
         optionArray = [
           ...optionArray,
           new TimeBlock(
-            new Date(start),
-            new Date(start + readyInMinutes * 1000 * 60)
+            new Date(newStart),
+            new Date(newStart + readyInMinutes * TO_MILLISECONDS)
           ),
         ];
       }

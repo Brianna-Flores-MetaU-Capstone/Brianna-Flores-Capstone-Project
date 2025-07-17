@@ -1,3 +1,4 @@
+const TO_MILLISECONDS = 1000 * 60;
 class TimeBlock {
   start: Date;
   end: Date;
@@ -32,6 +33,49 @@ class TimeBlock {
 
   set setEnd(value: number) {
     this.end.setTime(value);
+  }
+
+  getOverlap(freeTimeBlock: TimeBlock) {
+    const preferredStart = this.start.getTime();
+    const preferredEnd = this.end.getTime();
+    const freeBlockStart = freeTimeBlock.start.getTime();
+    const freeBlockEnd = freeTimeBlock.end.getTime();
+
+    if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
+      // no overlap
+      return {start: 0, end: 0};
+    }
+    let start = 0;
+    let end = 0;
+    if (freeBlockStart <= preferredStart && freeBlockEnd >= preferredEnd) {
+      // preferred block completely within free block
+      start = preferredStart;
+      end = preferredEnd;
+    }
+    if (preferredStart <= freeBlockStart && preferredEnd >= freeBlockEnd) {
+      // free block is completely within prefered block
+      start = freeBlockStart;
+      end = freeBlockEnd;
+    }
+    if (
+      freeBlockStart < preferredStart &&
+      freeBlockEnd > preferredStart &&
+      freeBlockEnd < preferredEnd
+    ) {
+      // free block starts before prefered block and ends within prefered block
+      start = preferredStart;
+      end = freeBlockEnd;
+    }
+    if (
+      freeBlockStart > preferredStart &&
+      freeBlockStart < preferredEnd &&
+      freeBlockEnd > preferredEnd
+    ) {
+      // free block starts within prefered block and ends after it
+      start = freeBlockStart;
+      end = preferredEnd;
+    }
+    return {start: start, end: end}
   }
 
   toString() {
