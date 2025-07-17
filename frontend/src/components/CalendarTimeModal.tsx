@@ -22,6 +22,7 @@ import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { EventTimeEnum } from "../utils/constants";
 import { useEventRec } from "../contexts/EventRecContext";
+import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -64,11 +65,17 @@ const CalendarTimeModal = ({
   );
   const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
-  GPPreferredBlockType[]
+    GPPreferredBlockType[]
   >([{ start: "", end: "" }]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
-  const [date, setDate] = useState(eventStartTime.getFullYear()+"-"+eventStartTime.getMonth().toString().padStart(2, '0')+"-"+eventStartTime.getDate().toString().padStart(2, '0'))
+  const [date, setDate] = useState(
+    eventStartTime.getFullYear() +
+      "-" +
+      eventStartTime.getMonth().toString().padStart(2, "0") +
+      "-" +
+      eventStartTime.getDate().toString().padStart(2, "0")
+  );
   const { eventOptions, setEventOptions } = useEventRec();
 
   const handleTimeChange = (
@@ -82,7 +89,7 @@ const CalendarTimeModal = ({
       } else if (timeField === EventTimeEnum.END) {
         setEnd(newValue);
       } else if (timeField === EventTimeEnum.DATE) {
-        setDate(newValue)
+        setDate(newValue);
       }
     } else {
       setPreferredTimeBlocks((prev) => {
@@ -103,17 +110,17 @@ const CalendarTimeModal = ({
   const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // set event start time to new date if changed
-    eventStartTime.setDate(parseInt(date.substring(8, 10)))
-    eventStartTime.setMonth(parseInt(date.substring(5, 7)))
-    eventEndTime.setDate(parseInt(date.substring(8, 10)))
-    eventEndTime.setMonth(parseInt(date.substring(5, 7)))
+    eventStartTime.setDate(parseInt(date.substring(8, 10)));
+    eventStartTime.setMonth(parseInt(date.substring(5, 7)));
+    eventEndTime.setDate(parseInt(date.substring(8, 10)));
+    eventEndTime.setMonth(parseInt(date.substring(5, 7)));
 
     eventStartTime.setHours(parseInt(start.substring(0, 2)));
     eventStartTime.setMinutes(parseInt(start.substring(3)));
     eventEndTime.setHours(parseInt(end.substring(0, 2)));
     eventEndTime.setMinutes(parseInt(end.substring(3)));
     if (eventInfo && groupNum !== undefined && eventOptions) {
-      eventInfo.timeOptions[0] = { start: eventStartTime, end: eventEndTime };
+      eventInfo.timeOptions[0] = new TimeBlock(eventStartTime, eventEndTime);
       toggleModal();
     }
   };
@@ -159,11 +166,7 @@ const CalendarTimeModal = ({
                 <Input
                   type="date"
                   onChange={(event) =>
-                    handleTimeChange(
-                      0,
-                      EventTimeEnum.DATE,
-                      event.target.value
-                    )
+                    handleTimeChange(0, EventTimeEnum.DATE, event.target.value)
                   }
                   value={date}
                   slotProps={{

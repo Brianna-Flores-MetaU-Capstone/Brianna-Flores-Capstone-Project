@@ -23,5 +23,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "../backend/types/convert-units.d.ts"]
+  "include": [
+    "src",
+    "../backend/types/convert-units.d.ts",
+    "../backend/utils/TimeBlockClass.ts"
+  ]
 }
