@@ -28,6 +28,7 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 
+const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 type GPAddAnotherMealProps = {
@@ -79,8 +80,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     const userDiets = parsePreferenceList(user?.diets ?? []);
     const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
     const recipeUrl = usePreferences
-      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
-      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
+      ? `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      : `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoading(true);
       const response = await axios.get(recipeUrl);
@@ -178,7 +179,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   orientation="horizontal"
                   sx={{ width: "10%", justifyContent: "space-between" }}
                 >
-                  <FormLabel>Use Dietary Preferences</FormLabel>
+                  <FormLabel>Apply Dietary Preferences</FormLabel>
                   <Switch
                     checked={usePreferences}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -209,7 +210,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             />
           )}
           <TitledListView
-            list={mealResults}
+            itemsList={mealResults}
             renderItem={(meal) => (
               <MealCard
                 key={uuidv4()}
