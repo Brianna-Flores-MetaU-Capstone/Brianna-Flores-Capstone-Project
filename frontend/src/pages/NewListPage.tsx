@@ -24,6 +24,7 @@ import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { getDiffResults } from "../utils/diffUtils";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -102,9 +103,16 @@ const NewListPage = () => {
     }
   };
 
+  const handleDiff = () => {
+    const results = getDiffResults({recipeA: selectedRecipes[0], recipeB: selectedRecipes[1]})
+  }
+
   return (
     <Box>
       <AppHeader />
+
+      <Button onClick={handleDiff}>Diff recipes</Button>
+
       <Box sx={{ m: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

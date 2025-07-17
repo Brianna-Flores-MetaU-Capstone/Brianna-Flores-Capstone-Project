@@ -48,10 +48,10 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         <Box>
           <Typography level="h3">Ingredients</Typography>
           <List marker="circle">
-            {(recipeInfo?.ingredients ?? []).map((ingredient) => {
+            {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
               return (
                 <ListItem
-                  key={ingredient.id}
+                  key={index}
                 >
                   <ListItemContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
