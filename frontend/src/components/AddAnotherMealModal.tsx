@@ -10,7 +10,6 @@ import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -211,9 +210,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           )}
           <TitledListView
             itemsList={mealResults}
-            renderItem={(meal) => (
+            renderItem={(meal, index) => (
               <MealCard
-                key={uuidv4()}
+                key={index}
                 onMealCardClick={() => event?.preventDefault()}
                 parsedMealData={meal}
                 onSelectRecipe={onSelectRecipe}

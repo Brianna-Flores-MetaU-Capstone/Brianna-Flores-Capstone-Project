@@ -186,8 +186,10 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   return (
     <Box>
+      <Box sx={{display: "flex", gap: 2 }}>
       <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
-      <Button onClick={handleSignoutClick}>Signout</Button>
+      <Button onClick={handleSignoutClick}>Signout of Google</Button>
+      </Box>
       <CalendarTimeModal
         editMode={false}
         modalOpen={modalOpen}
