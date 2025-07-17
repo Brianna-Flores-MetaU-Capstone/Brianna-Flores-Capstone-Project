@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
 import { parseUserEvents } from "../utils/calendarUtils";
@@ -43,7 +43,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const [loading, setLoading] = useState(false);
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
-  let tokenClient: google.accounts.oauth2.TokenClient;
+  const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(null)
 
   // load on mount
   useEffect(() => {
@@ -72,8 +72,8 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }, []);
 
   useEffect(() => {
-    if (gapiInited && gisInited && !tokenClient) {
-      tokenClient = google.accounts.oauth2.initTokenClient({
+    if (gapiInited && gisInited && !tokenClientVar.current) {
+      tokenClientVar.current = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPES,
         callback: async (resp) => {
@@ -101,15 +101,15 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     }
   }, [gapiInited, gisInited]);
 
-  function handleAuthClick() {
-    if (!tokenClient) {
+  function handleAddToCalendarClick() {
+    if (!tokenClientVar.current) {
       return;
     }
 
     if (gapi.client.getToken() === null) {
       // Prompt the user to select a Google Account and ask for consent to share their data
       // when establishing a new session.
-      tokenClient.requestAccessToken({ prompt: "consent" });
+      tokenClientVar.current.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
       setModalOpen(true);
@@ -186,7 +186,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
 
   return (
     <Box>
-      <Button onClick={handleAuthClick}>Add to Calendar!</Button>
+      <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
       <Button onClick={handleSignoutClick}>Signout</Button>
       <CalendarTimeModal
         editMode={false}
