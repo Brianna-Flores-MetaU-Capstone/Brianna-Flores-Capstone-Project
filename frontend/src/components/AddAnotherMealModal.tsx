@@ -6,7 +6,7 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
-import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
+import type { GPRecipeDataTypes, GPErrorMessageTypes, GPIngredientDataTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import axios from "axios";
@@ -27,18 +27,20 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import { RecipeIngredientsDiff } from "../classes/DiffClass";
+import type { GPDiffReturnType } from "../classes/DiffClass";
+import RecipeDiffModal from "./RecipeDiffModal";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 type GPAddAnotherMealProps = {
-  handleModalClose: () => void;
+  toggleModal: () => void;
   onSelectRecipe: (data: GPRecipeDataTypes) => void;
   modalOpen: boolean;
 };
 
 const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
-  handleModalClose,
+  toggleModal,
   onSelectRecipe,
   modalOpen,
 }) => {
@@ -51,6 +53,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>([])
+  const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false)
+  const [ingredientsDiffData, setIngredientsDiffData] = useState<GPDiffReturnType<GPIngredientDataTypes>>()
   const { user } = useUser();
 
   const parsePreferenceList = (preferenceList: string[]) => {
@@ -88,6 +92,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
         setMealResults(parsedRecipes);
+        setRecipesToCompare([])
       }
       setLoading(false);
       // TODO: add fetched recipes to database helper method
@@ -167,11 +172,14 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     if (recipesToCompare.length === 2) {
       const diffIngredients = new RecipeIngredientsDiff()
       const diffResults = diffIngredients.getDiff(recipesToCompare[0].ingredients, recipesToCompare[1].ingredients)
+      setIngredientsDiffData(diffResults)
+      setRecipeDiffModalOpen(true)
     }
   }
 
   return (
-    <Modal open={modalOpen} onClose={handleModalClose}>
+    <>
+    <Modal open={modalOpen} onClose={toggleModal}>
       <ModalDialog layout="fullscreen">
         <ModalClose />
         <DialogContent sx={{ my: 3 }}>
@@ -260,6 +268,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         </DialogContent>
       </ModalDialog>
     </Modal>
+    <RecipeDiffModal modalOpen={recipeDiffModalOpen} toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)} diffData={ingredientsDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} recipeA={recipesToCompare[0]} recipeB={recipesToCompare[1]}/>
+    </>
   );
 };
 

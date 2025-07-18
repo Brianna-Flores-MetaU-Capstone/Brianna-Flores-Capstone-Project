@@ -144,12 +144,12 @@ const NewListPage = () => {
         )}
       </Box>
       <AddAnotherMealModal
-        handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
+        toggleModal={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
         modalOpen={addAnotherRecipeModalOpen}
       />
       <MealInfoModal
-        handleModalClose={() => setRecipeInfoModalOpen((prev) => !prev)}
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
