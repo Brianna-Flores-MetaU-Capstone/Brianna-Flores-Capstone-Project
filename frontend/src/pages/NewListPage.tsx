@@ -103,16 +103,9 @@ const NewListPage = () => {
     }
   };
 
-  const handleDiff = () => {
-    const results = getDiffResults({recipeA: selectedRecipes[0], recipeB: selectedRecipes[1]})
-  }
-
   return (
     <Box>
       <AppHeader />
-
-      <Button onClick={handleDiff}>Diff recipes</Button>
-
       <Box sx={{ m: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -129,7 +122,9 @@ const NewListPage = () => {
         </Box>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
+            headerList={[
+              { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
+            ]}
             itemsList={selectedRecipes}
             renderItem={(meal) => (
               <MealCard
