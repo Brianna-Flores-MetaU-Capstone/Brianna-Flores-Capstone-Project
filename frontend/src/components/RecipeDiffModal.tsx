@@ -10,6 +10,12 @@ import {
 import RecipeDiffBlock from "./RecipeDiffBlock";
 import type { GPRecipeDiffType } from "../utils/diffUtils";
 
+const servingsStyle = {
+   p: 1,
+   borderRadius: "lg", 
+   display: "flex", 
+}
+
 type GPRecipeDiffModalType = {
   modalOpen: boolean;
   toggleModal: () => void;
@@ -29,17 +35,27 @@ const RecipeDiffModal = ({
           <Grid container spacing={2}>
             <Grid xs={6}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography level="h2">
-                  {recipeDiffData.recipeA?.recipeTitle}
-                </Typography>
+                <Box>
+                  <Typography level="h2">
+                    {recipeDiffData.recipeA?.recipeTitle}
+                  </Typography>
+                  <Typography sx={{ ...servingsStyle, bgcolor: recipeDiffData.servingsDiff ? "success.200" : "neutral"}} level="h4">
+                    Servings: {recipeDiffData.recipeA?.servings}
+                  </Typography>
+                </Box>
                 <img src={recipeDiffData.recipeA?.previewImage} />
               </Box>
             </Grid>
             <Grid xs={6}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography level="h2">
-                  {recipeDiffData.recipeB?.recipeTitle}
-                </Typography>
+                <Box>
+                  <Typography level="h2">
+                    {recipeDiffData.recipeB?.recipeTitle}
+                  </Typography>
+                  <Typography sx={{ ...servingsStyle, bgcolor: recipeDiffData.servingsDiff ? "danger.200" : "neutral"}} level="h4">
+                    Servings: {recipeDiffData.recipeB?.servings}
+                  </Typography>
+                </Box>
                 <img src={recipeDiffData.recipeB?.previewImage} />
               </Box>
             </Grid>
