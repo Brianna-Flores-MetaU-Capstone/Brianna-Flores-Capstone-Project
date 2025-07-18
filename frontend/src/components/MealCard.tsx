@@ -13,24 +13,58 @@ import {
 } from "@mui/joy";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
+import { estimateRecipeCost } from "../utils/utils";
+import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import type { GPErrorMessageTypes } from "../utils/types";
 
 type GPMealCardProps = {
+  index: number;
   onMealCardClick: () => void;
   parsedMealData: GPRecipeDataTypes;
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
   onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
+  onLoadRecipes?: (data: GPRecipeDataTypes, index: number) => void;
 };
 
 const MealCard: React.FC<GPMealCardProps> = ({
+  index,
   onMealCardClick,
   parsedMealData,
+  setMessage,
   onSelectRecipe,
   onDeleteRecipe,
+  onLoadRecipes,
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleModal = () => {
     setIngredientCostModalOpen((prev) => !prev);
+  };
+
+  const handleCostEstimateClick = async () => {
+    setLoading(true);
+    const ownedIngredients = await fetchUserIngredientsHelper({
+      setMessage: setMessage,
+    });
+    const estimatedRecipeCostInfo = await estimateRecipeCost({
+      ownedIngredients,
+      recipeIngredients: parsedMealData.ingredients,
+    });
+    // update list of meal data
+    const updatedRecipeInfo = {
+      ...parsedMealData,
+      ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
+      totalCost: estimatedRecipeCostInfo.estimatedCost,
+    };
+    if (onLoadRecipes) {
+      onLoadRecipes(updatedRecipeInfo, index);
+    }
+    setLoading(false);
+    toggleModal();
   };
 
   return (
@@ -75,26 +109,38 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
             )}
-            {onSelectRecipe && (
-              <Typography textColor="neutral.300">
-                Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
-              </Typography>
-            )}
           </Box>
           <Link overlay underline="none"></Link>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {onSelectRecipe && (
-              <Button onClick={toggleModal}
-              sx={{color: "primary.50"}}>
+              <Button
+                onClick={() => {
+                  setMessage({
+                    error: false,
+                    message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
+                  });
+                  onSelectRecipe(parsedMealData);
+                }}
+                sx={{ color: "primary.50" }}
+              >
+                Select Recipe
+              </Button>
+            )}
+            {onSelectRecipe && parsedMealData.totalCost > 0 && (
+              <Button
+                onClick={toggleModal}
+                sx={{ zIndex: 1, color: "primary.50" }}
+              >
                 See Pricing Details
               </Button>
             )}
-            {onSelectRecipe && (
+            {onSelectRecipe && parsedMealData.totalCost <= 0 && (
               <Button
-                onClick={() => onSelectRecipe(parsedMealData)}
-                sx={{color: "primary.50"}}
+                loading={loading}
+                sx={{ zIndex: 1, color: "primary.50" }}
+                onClick={handleCostEstimateClick}
               >
-                Select Recipe
+                Get Estimated Cost
               </Button>
             )}
           </Box>

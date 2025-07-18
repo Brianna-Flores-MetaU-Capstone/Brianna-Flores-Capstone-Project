@@ -27,7 +27,7 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 
-const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL
+const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 type GPAddAnotherMealProps = {
@@ -73,9 +73,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     numToRequest: number;
     offset: number;
   }) => {
-    const ownedIngredients = await fetchUserIngredientsHelper({
-      setMessage: setMessage,
-    });
     const userDiets = parsePreferenceList(user?.diets ?? []);
     const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
     const recipeUrl = usePreferences
@@ -84,10 +81,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     try {
       setLoading(true);
       const response = await axios.get(recipeUrl);
-      const parsedRecipes = await parseRecipeData(
-        ownedIngredients,
-        response.data.results
-      );
+      const parsedRecipes = await parseRecipeData(response.data.results);
       if (searchClicked) {
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
@@ -144,6 +138,18 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
     handleFetchRecipes(false);
     setSearchClicked(false);
+  };
+
+  const handleUpdateRecipe = (
+    updatedRecipeInfo: GPRecipeDataTypes,
+    index: number
+  ) => {
+    const updatedFetchedMeals = [
+      ...mealResults.slice(0, index),
+      updatedRecipeInfo,
+      ...mealResults.slice(index + 1),
+    ];
+    setMealResults(updatedFetchedMeals);
   };
 
   return (
@@ -203,19 +209,19 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           </Box>
           {/* Display error message if needed */}
           {message && (
-            <ErrorState
-              error={message.error}
-              message={message.message}
-            />
+            <ErrorState error={message.error} message={message.message} />
           )}
           <TitledListView
             itemsList={mealResults}
             renderItem={(meal, index) => (
               <MealCard
                 key={index}
+                index={index}
                 onMealCardClick={() => event?.preventDefault()}
+                setMessage={setMessage}
                 parsedMealData={meal}
                 onSelectRecipe={onSelectRecipe}
+                onLoadRecipes={handleUpdateRecipe}
               />
             )}
             flexDirectionRow={true}

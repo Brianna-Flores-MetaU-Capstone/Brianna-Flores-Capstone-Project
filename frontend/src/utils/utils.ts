@@ -9,20 +9,13 @@ import { axiosConfig } from "./databaseHelpers";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const parseRecipeData = async (
-  ownedIngredients: GPIngredientDataTypes,
-  recipeData: any
-) => {
+const parseRecipeData = async (recipeData: any) => {
   return await Promise.all(
     recipeData.map(async (recipe: any) => {
       const parsedIngredinets = parseIngredients(recipe.extendedIngredients);
       const parsedInstructions = parseInstructions(
         recipe.analyzedInstructions[0].steps
       );
-      const estimatedRecipeCostInfo = await estimateRecipeCost({
-        ownedIngredients,
-        recipeIngredients: parsedIngredinets,
-      });
       return {
         apiId: recipe.id,
         recipeTitle: recipe.title,
@@ -36,8 +29,8 @@ const parseRecipeData = async (
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
         dairyFree: recipe.dairyFree,
-        ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
-        totalCost: estimatedRecipeCostInfo.estimatedCost,
+        ingredientCostInfo: [],
+        totalCost: 0,
         isChecked: false,
       };
     })
@@ -66,8 +59,8 @@ const getIngredientCost = (ingredientName: string) => {
 };
 
 type GPEstimateRecipeCostTypes = {
-  recipeIngredients: GPRecipeIngredientTypes;
-  ownedIngredients: GPIngredientDataTypes;
+  recipeIngredients: GPRecipeIngredientTypes[];
+  ownedIngredients: GPIngredientDataTypes[];
 };
 
 const estimateRecipeCost = async ({
@@ -128,4 +121,5 @@ export {
   parseRecipeData,
   handleAuthInputChange,
   parseGroceryListDepartments,
+  estimateRecipeCost,
 };

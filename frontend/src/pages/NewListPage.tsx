@@ -126,10 +126,12 @@ const NewListPage = () => {
               { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
             ]}
             itemsList={selectedRecipes}
-            renderItem={(meal) => (
+            renderItem={(meal, index) => (
               <MealCard
                 key={meal.apiId}
+                index={index}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
+                setMessage={setMessage}
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
               />
