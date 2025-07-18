@@ -1,8 +1,6 @@
-import React from "react";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import TitledListView from "./TitledListView";
 import IngredientCost from "./IngredientCost";
-import { v4 as uuidv4 } from "uuid";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 
 type GPLoadingModalTypes = {
@@ -50,11 +48,11 @@ const RecipeCostModal = ({
         </Typography>
         <Box sx={{width: "100%", overflowY: "auto"}}>
         <TitledListView
-          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "for Amount", spacing: 2}]}
-          list={ingredientsCostInformation}
-          renderItem={(ingredientInfo) => (
+          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "For Amount", spacing: 2}]}
+          itemsList={ingredientsCostInformation}
+          renderItem={(ingredientInfo, index) => (
             <IngredientCost
-              key={uuidv4()}
+              key={index}
               ingredientCostInfo={ingredientInfo}
             />
           )}

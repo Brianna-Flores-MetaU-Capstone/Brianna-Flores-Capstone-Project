@@ -7,9 +7,9 @@ import type {
 import AppHeader from "../components/AppHeader";
 import TitledListView from "../components/TitledListView";
 import { PreviewConstants } from "../utils/constants";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 import Ingredient from "../components/Ingredient";
 import MealCard from "../components/MealCard";
-import { v4 as uuidv4 } from "uuid";
 import {
   fetchGroceryList,
   fetchUserIngredientsHelper,
@@ -56,11 +56,11 @@ const Homepage = () => {
         <Grid container spacing={2} sx={{my: 2}}>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: 12 }]}
-              list={userIngredientList}
-              renderItem={(ingredient) => (
+              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: MUI_GRID_FULL_SPACE }]}
+              itemsList={userIngredientList}
+              renderItem={(ingredient, index) => (
                 <Ingredient
-                  key={uuidv4()}
+                  key={index}
                   ingredient={ingredient}
                   presentGroceryCheck={false}
                   presentExpiration={false}
@@ -72,11 +72,11 @@ const Homepage = () => {
           </Grid>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.GROCERY, spacing: 12 }]}
-              list={userGroceryList}
-              renderItem={(item) => (
+              headerList={[{ title: PreviewConstants.GROCERY, spacing: MUI_GRID_FULL_SPACE }]}
+              itemsList={userGroceryList}
+              renderItem={(item, index) => (
                 <Ingredient
-                  key={uuidv4()}
+                  key={index}
                   ingredient={item?.ingredient}
                   presentGroceryCheck={true}
                   presentExpiration={false}
@@ -89,8 +89,8 @@ const Homepage = () => {
         </Grid>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: 12 }]}
-            list={selectedRecipes}
+            headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
+            itemsList={selectedRecipes}
             renderItem={(meal) => (
               <MealCard
                 key={meal.apiId}

@@ -1,7 +1,6 @@
 import React from "react";
 import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
-import { v4 as uuidv4 } from "uuid";
 import {
   Modal,
   Typography,
@@ -10,19 +9,21 @@ import {
   ListItem,
   ListItemContent,
   Box,
+  Link,
   AspectRatio,
 } from "@mui/joy";
+import LinkIcon from '@mui/icons-material/Link';
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
 type GPMealModalProps = {
   modalOpen: boolean;
-  handleModalClose: () => void;
+  toggleModal: () => void;
   recipeInfo: GPRecipeDataTypes | undefined;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
-  handleModalClose,
+  toggleModal,
   modalOpen,
   recipeInfo,
 }) => {
@@ -30,7 +31,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
       open={modalOpen}
-      onClose={handleModalClose}
+      onClose={toggleModal}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet variant="outlined" sx={GPModalStyle}>
@@ -44,15 +45,16 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             <Typography>Servings: {recipeInfo?.servings}</Typography>
             <DietsAndIntolerances recipeInfo={recipeInfo} />
+            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon/>}>Recipe link</Link>
           </Box>
         </Box>
         <Box>
           <Typography level="h3">Ingredients</Typography>
           <List marker="circle">
-            {recipeInfo?.ingredients.map((ingredient) => {
+            {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
               return (
                 <ListItem
-                  key={ingredient.id}
+                  key={index}
                 >
                   <ListItemContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
@@ -71,8 +73,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           </List>
           <Typography level="h3">Instructions</Typography>
           <List component="ol" marker="decimal">
-            {recipeInfo?.instructions.map((step) => {
-              return <ListItem key={uuidv4()}>{step}</ListItem>;
+            {recipeInfo?.instructions.map((step, index) => {
+              return <ListItem key={index}>{step}</ListItem>;
             })}
           </List>
         </Box>

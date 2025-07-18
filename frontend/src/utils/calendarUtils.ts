@@ -1,7 +1,9 @@
+import type { GPCalendarJSONType } from "./calendarApiTypes";
+
 // Parse user events to extract only necessary data
-const parseUserEvents = (userEventsData: any) => {
-  return userEventsData.map((userEvent: any) => ({
-    event: userEvent.summary,
+const parseUserEvents = (userEventsData: GPCalendarJSONType[]) => {
+  return userEventsData.map((userEvent: GPCalendarJSONType) => ({
+    name: userEvent.summary,
     start: new Date(userEvent.start.dateTime),
     end: new Date(userEvent.end.dateTime),
   }));
@@ -9,8 +11,6 @@ const parseUserEvents = (userEventsData: any) => {
 
 import type { GPUserEventTypes } from "./types";
 import { START_OF_DAY_TIME, END_OF_DAY_TIME } from "./constants";
-
-const overnightHours = START_OF_DAY_TIME - END_OF_DAY_TIME + 24
 
 type GPFreeSpaceTypes = {
   userEvents: GPUserEventTypes[];
@@ -54,30 +54,26 @@ const parseFreeTime = (userFreeSpace: GPUserEventTypes[]) => {
   let parsedFreeTime: GPUserEventTypes[] = [];
   // loop through the array of free space
   for (const freeSpace of userFreeSpace) {
-    let startDay = freeSpace.start;
-    let endDay = freeSpace.end;
+    let freeSpaceStart = freeSpace.start;
+    let freeSpaceEnd = freeSpace.end;
     // if start and end days are not the same, split event
-    while (startDay.getDay() !== endDay.getDay()) { // while loop if free space spans multiple days
-      const newStart = new Date(startDay);
-      const newEnd = new Date(startDay);
-      newEnd.setHours(END_OF_DAY_TIME, 0, 0, 0); // set end date to end of day
-      const splitFreeStart = {
-        name: "free",
-        start: newStart,
-        end: newEnd,
-      };
-      parsedFreeTime = [...parsedFreeTime, splitFreeStart];
-      startDay.setTime(newEnd.getTime() + 1000 * 60 * 60 * overnightHours);
-    }
-    if (startDay.getTime() < endDay.getTime()) {
-      parsedFreeTime = [
-        ...parsedFreeTime,
-        {
+    while (freeSpaceStart < freeSpaceEnd) { // while loop if free space spans multiple days
+      const startOfDay = new Date(freeSpaceStart);
+      const endOfDay = new Date(freeSpaceStart);
+      startOfDay.setHours(START_OF_DAY_TIME, 0, 0, 0)
+      endOfDay.setHours(END_OF_DAY_TIME, 0, 0, 0); // set end date to end of day
+      const newStart = freeSpaceStart > startOfDay ? new Date(freeSpaceStart) : new Date(startOfDay)
+      const newEnd = freeSpaceEnd > endOfDay ? new Date(endOfDay) : new Date(freeSpaceEnd)
+      if (newEnd > newStart) {
+        const splitFreeStart = {
           name: "free",
-          start: startDay,
-          end: endDay,
-        },
-      ];
+          start: newStart,
+          end: newEnd,
+        };
+        parsedFreeTime = [...parsedFreeTime, splitFreeStart];
+      }
+      freeSpaceStart.setDate(freeSpaceStart.getDate() + 1);
+      freeSpaceStart.setHours(START_OF_DAY_TIME, 0, 0, 0)
     }
   }
   return parsedFreeTime;

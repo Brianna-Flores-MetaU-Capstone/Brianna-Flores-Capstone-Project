@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPHeaderListType = {
@@ -8,7 +7,7 @@ type GPHeaderListType = {
 };
 
 type GPTitledListViewProps<T> = {
-  list: T[];
+  itemsList: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   headerList?: GPHeaderListType[];
   flexDirectionRow?: boolean;
@@ -16,7 +15,7 @@ type GPTitledListViewProps<T> = {
 };
 
 const TitledListView = <T,>({
-  list,
+  itemsList,
   renderItem,
   headerList,
   flexDirectionRow,
@@ -35,8 +34,8 @@ const TitledListView = <T,>({
             mb: 2,
           }}
         >
-          {headerList.map((header) => (
-            <Grid xs={header.spacing} key={uuidv4()}>
+          {headerList.map((header, index) => (
+            <Grid xs={header.spacing} key={index}>
               <Typography level="h4">
                 {header.title}
               </Typography>
@@ -45,7 +44,7 @@ const TitledListView = <T,>({
         </Grid>
       )}
       <Box sx={{display: "flex", gap: 3, ...(flexDirectionRow ? {flexWrap: "wrap", justifyContent: "center"} : {flexDirection: "column",}), ...(listHeight ? {maxHeight: listHeight,  overflowY: "auto"} : {})}}>
-        {list && list.map(renderItem)}
+        {itemsList && itemsList.map(renderItem)}
       </Box>
     </Box>
   );

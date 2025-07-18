@@ -2,7 +2,6 @@ import type {
   GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
-  GPRecipeEventOptionType,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -24,7 +23,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
-
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -39,8 +38,6 @@ const NewListPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
-  const [calendarEventOptions, setCalendarEventOptions] = useState<GPRecipeEventOptionType[][]>([]);
-
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -118,18 +115,25 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} setEvents={setCalendarEventOptions} userSelectedRecipes={selectedRecipes}/>
+          <ConnectCalendar
+            onClick={() => setCalendarModalOpen((prev) => !prev)}
+          />
         </Box>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: 12 }]}
-            list={selectedRecipes}
-            renderItem={(meal) => (
+            headerList={[
+              { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
+            ]}
+            itemsList={selectedRecipes}
+            renderItem={(meal, index) => (
               <MealCard
                 key={meal.apiId}
+                index={index}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
+                setMessage={setMessage}
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
+                selected={false}
               />
             )}
             flexDirectionRow
@@ -140,17 +144,23 @@ const NewListPage = () => {
         )}
       </Box>
       <AddAnotherMealModal
-        handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
+        toggleModal={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
         modalOpen={addAnotherRecipeModalOpen}
       />
       <MealInfoModal
-        handleModalClose={() => setRecipeInfoModalOpen((prev) => !prev)}
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
-      <LoadingModal modalOpen={loadingList} />
-      <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)} eventOptions={calendarEventOptions}/>
+      <LoadingModal
+        modalOpen={loadingList}
+        message={"Generating Your Grocery List"}
+      />
+      <CalendarModal
+        modalOpen={calendarModalOpen}
+        toggleModal={() => setCalendarModalOpen((prev) => !prev)}
+      />
     </Box>
   );
 };

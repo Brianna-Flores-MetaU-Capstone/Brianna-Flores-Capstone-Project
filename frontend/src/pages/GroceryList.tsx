@@ -66,7 +66,7 @@ const GroceryList = () => {
         </Button>
         <Box sx={{my: 3}}>
         <TitledListView
-          list={groceryDepartments}
+          itemsList={groceryDepartments}
           renderItem={(department) => (
             <GroceryListDepartment
               key={department}

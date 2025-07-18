@@ -1,5 +1,6 @@
 import type { User } from "firebase/auth";
 import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
+import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
   apiId: number;
@@ -83,8 +84,23 @@ type GPUserEventTypes = {
   end: Date;
 };
 
-type GPRecipeEventOptionType = GPUserEventTypes & {
-  recipe: GPRecipeDataTypes;
+type GPPrepBlockType = {
+  recipeTitle: string;
+  readyInMinutes: number;
+  servings: number;
+  previewImage: string;
+  sourceUrl: string;
+};
+
+type GPRecipeEventOptionType = {
+  name: string;
+  timeOptions: TimeBlock[];
+  recipe: GPRecipeDataTypes | GPPrepBlockType;
+};
+
+type GPPreferredBlockType = {
+  start: string;
+  end: string;
 };
 
 export type {
@@ -99,5 +115,6 @@ export type {
   GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
   GPUserEventTypes,
-  GPRecipeEventOptionType
+  GPRecipeEventOptionType,
+  GPPreferredBlockType,
 };
