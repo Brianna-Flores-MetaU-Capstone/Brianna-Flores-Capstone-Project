@@ -2,7 +2,6 @@ import type {
   GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
-  GPRecipeEventOptionType,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import MealCard from "../components/MealCard";
@@ -25,6 +24,8 @@ import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
 
+import { useEventRec } from "../contexts/EventRecContext";
+
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -39,8 +40,6 @@ const NewListPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
-  const [calendarEventOptions, setCalendarEventOptions] = useState<GPRecipeEventOptionType[][]>([]);
-
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -118,7 +117,7 @@ const NewListPage = () => {
             </Button>
             <Button onClick={handleGenerateList}>Make My List</Button>
           </Box>
-          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} setEvents={setCalendarEventOptions} userSelectedRecipes={selectedRecipes}/>
+          <ConnectCalendar onClick={() => setCalendarModalOpen((prev) => !prev)} userSelectedRecipes={selectedRecipes}/>
         </Box>
         <Box>
           <TitledListView
@@ -150,7 +149,7 @@ const NewListPage = () => {
         recipeInfo={recipeInfoModalInfo}
       />
       <LoadingModal modalOpen={loadingList} />
-      <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)} eventOptions={calendarEventOptions}/>
+      <CalendarModal modalOpen={calendarModalOpen} toggleModal={() => setCalendarModalOpen((prev) => !prev)}/>
     </Box>
   );
 };

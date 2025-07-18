@@ -9,6 +9,11 @@ const AuthenticationFieldEnum = {
   PASSWORD: "password",
 };
 
+const EventTimeEnum = {
+  START: "startTime",
+  END: "endTime"
+}
+
 const IngredientDataFields = {
   DEPARTMENT: "department",
   IMAGE: "image",
@@ -37,6 +42,7 @@ export {
   AuthenticationFieldEnum,
   IngredientDataFields,
   PreviewConstants,
+  EventTimeEnum,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
   INGREDIENT_MODAL,

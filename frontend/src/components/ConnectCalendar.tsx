@@ -7,8 +7,10 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
-import type { GPUserEventTypes, GPRecipeEventOptionType, GPRecipeDataTypes } from "../utils/types";
+import type { GPUserEventTypes, GPRecipeDataTypes } from "../utils/types";
 import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
+import { useEventRec } from "../contexts/EventRecContext";  
+
 
 // TODO change requested days to have user input
 const REQUESTED_DAYS = 7;
@@ -16,12 +18,12 @@ const REQUESTED_DAYS = 7;
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
 type GPConnectCalendarTypes = {
-    onClick: () => void
-    setEvents: (data: GPRecipeEventOptionType[][]) => void;
-    userSelectedRecipes: GPRecipeDataTypes[]
+  onClick: () => void
+  userSelectedRecipes: GPRecipeDataTypes[]
 }
 
-const ConnectCalendar = ({onClick, setEvents, userSelectedRecipes}: GPConnectCalendarTypes) => {
+const ConnectCalendar = ({onClick, userSelectedRecipes}: GPConnectCalendarTypes) => {
+  const { setEventOptions} = useEventRec()
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC =
     "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
@@ -155,7 +157,7 @@ const ConnectCalendar = ({onClick, setEvents, userSelectedRecipes}: GPConnectCal
       );
       // get back a list of possible options for each event (shopping + each recipe)
       const eventOptions = reccomendedEvents.data;
-      setEvents(eventOptions)
+      setEventOptions(eventOptions)
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options
       

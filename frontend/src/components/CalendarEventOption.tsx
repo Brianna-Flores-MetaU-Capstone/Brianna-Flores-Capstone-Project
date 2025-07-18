@@ -6,16 +6,20 @@ import {
   CardContent,
   Typography,
   AspectRatio,
-  Button,
 } from "@mui/joy";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { DaysOfWeek } from "../utils/enum";
+import AdjustEventTimeModal from "./AdjustEventTimeModal";
+
+type GPCalendarOption = {
+  eventOption: GPRecipeEventOptionType;
+  groupNum: number
+};
 
 const CalendarEventOption = ({
   eventOption,
-}: {
-  eventOption: GPRecipeEventOptionType;
-}) => {
+  groupNum
+}: GPCalendarOption) => {
   const recipe = eventOption.recipe;
   const startDate = new Date(eventOption.start);
   const formattedStart = startDate
@@ -27,6 +31,7 @@ const CalendarEventOption = ({
     hour: "numeric",
     minute: "numeric",
   });
+
   return (
     <Card sx={{ width: 350 }}>
       <Box>
@@ -51,7 +56,13 @@ const CalendarEventOption = ({
         >
           {recipe.recipeTitle}
         </Typography>
-        <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Typography level="body-md">
             Cook Time: {recipe.readyInMinutes}
           </Typography>
@@ -82,14 +93,10 @@ const CalendarEventOption = ({
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button
-              size="md"
-              color="primary"
-              aria-label="Adjust event recommendation"
-              sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
-            >
-              Adjust Time
-            </Button>
+            <AdjustEventTimeModal
+              eventInfo={eventOption}
+              groupNum={groupNum}
+            />
             <IconButton
               aria-label="Accept Event Reccomendation"
               variant="plain"

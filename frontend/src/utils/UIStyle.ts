@@ -108,6 +108,11 @@ const theme = extendTheme({
         color: "primary",
       },
     },
+    JoyFormHelperText: {
+      defaultProps: {
+        color: "error"
+      }
+    }
   },
 });
 
