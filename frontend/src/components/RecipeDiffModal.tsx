@@ -7,26 +7,19 @@ import {
   Box,
   Grid,
 } from "@mui/joy";
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
-import type { GPDiffReturnType } from "../classes/DiffClass";
 import RecipeDiffBlock from "./RecipeDiffBlock";
+import type { GPRecipeDiffType } from "../utils/diffUtils";
 
 type GPRecipeDiffModalType = {
   modalOpen: boolean;
   toggleModal: () => void;
-  diffRecipeIngredinetsData: GPDiffReturnType<GPIngredientDataTypes>;
-  diffIngredientsToPurchaseData: GPDiffReturnType<GPIngredientDataTypes>;
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeDiffData: GPRecipeDiffType;
 };
 
 const RecipeDiffModal = ({
   modalOpen,
   toggleModal,
-  diffRecipeIngredinetsData,
-  diffIngredientsToPurchaseData,
-  recipeA,
-  recipeB,
+  recipeDiffData,
 }: GPRecipeDiffModalType) => {
   return (
     <Modal open={modalOpen} onClose={toggleModal}>
@@ -36,27 +29,31 @@ const RecipeDiffModal = ({
           <Grid container spacing={2}>
             <Grid xs={6}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography level="h2">{recipeA?.recipeTitle}</Typography>
-                <img src={recipeA?.previewImage} />
+                <Typography level="h2">
+                  {recipeDiffData.recipeA?.recipeTitle}
+                </Typography>
+                <img src={recipeDiffData.recipeA?.previewImage} />
               </Box>
             </Grid>
             <Grid xs={6}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography level="h2">{recipeB?.recipeTitle}</Typography>
-                <img src={recipeB?.previewImage} />
+                <Typography level="h2">
+                  {recipeDiffData.recipeB?.recipeTitle}
+                </Typography>
+                <img src={recipeDiffData.recipeB?.previewImage} />
               </Box>
             </Grid>
           </Grid>
           <RecipeDiffBlock
-            recipeA={recipeA}
-            recipeB={recipeB}
-            diffInfo={diffRecipeIngredinetsData}
+            recipeA={recipeDiffData.recipeA}
+            recipeB={recipeDiffData.recipeB}
+            diffInfo={recipeDiffData.recipeIngredientDiff}
             costDiff={false}
           />
           <RecipeDiffBlock
-            recipeA={recipeA}
-            recipeB={recipeB}
-            diffInfo={diffIngredientsToPurchaseData}
+            recipeA={recipeDiffData.recipeA}
+            recipeB={recipeDiffData.recipeB}
+            diffInfo={recipeDiffData.purchasedIngredientsDiff}
             costDiff={true}
           />
         </DialogContent>

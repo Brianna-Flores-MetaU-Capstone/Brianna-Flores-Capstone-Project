@@ -30,12 +30,13 @@ import {
   ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
+import type { GPRecipeDiffType } from "../utils/diffUtils";
+import RecipeDiffModal from "./RecipeDiffModal";
+import { updateRecipeWithPricing } from "../utils/utils";
+import LoadingModal from "./LoadingModal";
+import { getRecipeDiffResults } from "../utils/diffUtils";
 import { RecipeIngredientsDiff } from "../classes/DiffClass";
 import type { GPDiffReturnType } from "../classes/DiffClass";
-import RecipeDiffModal from "./RecipeDiffModal";
-import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
-import { estimateRecipeCost } from "../utils/utils";
-import LoadingModal from "./LoadingModal";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -64,11 +65,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     []
   );
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
-  const [ingredientsDiffData, setIngredientsDiffData] =
-    useState<GPDiffReturnType<GPIngredientDataTypes>>();
-  // TODO create a single "recipe diff data" which contains diff for recipe ingredients, ingredients to purchase, servings, etc
-  const [purchaseDiffData, setPurchaseDiffData] =
-    useState<GPDiffReturnType<GPIngredientDataTypes>>();
+  const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
 
   const { user } = useUser();
 
@@ -192,20 +189,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoadingModal(true);
       let updatedRecipesToCompare: GPRecipeDataTypes[] = [];
       for (const recipe of recipesToCompare) {
-        // update recipes with pricing information
-        const ownedIngredients = await fetchUserIngredientsHelper({
-          setMessage: setMessage,
+        const updatedRecipe = await updateRecipeWithPricing({
+          setMessage,
+          recipe,
         });
-        const estimatedRecipeCostInfo = await estimateRecipeCost({
-          ownedIngredients,
-          recipeIngredients: recipe.ingredients,
-        });
-        // update list of meal data
-        const updatedRecipe = {
-          ...recipe,
-          ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo ?? 0,
-          totalCost: estimatedRecipeCostInfo.estimatedCost,
-        };
         updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
         // find index of recipe in meal results so we can also update the recipe information there too
         const index = mealResults.findIndex(
@@ -214,19 +201,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         handleUpdateRecipe(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
       }
-      const diffRecipeIngredients = new RecipeIngredientsDiff();
-      const diffRecipeIngredientsResults = diffRecipeIngredients.getDiff(
-        updatedRecipesToCompare[0].ingredients,
-        updatedRecipesToCompare[1].ingredients
-      );
-      const diffIngredientsToPurchase = new RecipeIngredientsDiff();
-      const diffIngredientsToPurchaseResults =
-        diffIngredientsToPurchase.getDiff(
-          updatedRecipesToCompare[0].ingredientCostInfo,
-          updatedRecipesToCompare[1].ingredientCostInfo
-        );
-      setIngredientsDiffData(diffRecipeIngredientsResults);
-      setPurchaseDiffData(diffIngredientsToPurchaseResults);
+      const recipeDiffResults = getRecipeDiffResults({
+        recipeA: updatedRecipesToCompare[0],
+        recipeB: updatedRecipesToCompare[1],
+      });
+      setRecipeDiffData(recipeDiffResults);
       setLoadingModal(false);
       setRecipeDiffModalOpen(true);
     }
@@ -342,24 +321,25 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       <RecipeDiffModal
         modalOpen={recipeDiffModalOpen}
         toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
-        diffIngredientsToPurchaseData={
-          purchaseDiffData ?? {
-            added: [],
-            deleted: [],
-            changed: [],
-            unchanged: [],
+        recipeDiffData={
+          recipeDiffData ?? {
+            recipeA: recipesToCompare[0],
+            recipeB: recipesToCompare[1],
+            servingsDiff: false,
+            recipeIngredientDiff: {
+              added: [],
+              deleted: [],
+              changed: [],
+              unchanged: [],
+            },
+            purchasedIngredientsDiff: {
+              added: [],
+              deleted: [],
+              changed: [],
+              unchanged: [],
+            },
           }
         }
-        diffRecipeIngredinetsData={
-          ingredientsDiffData ?? {
-            added: [],
-            deleted: [],
-            changed: [],
-            unchanged: [],
-          }
-        }
-        recipeA={recipesToCompare[0]}
-        recipeB={recipesToCompare[1]}
       />
     </>
   );
