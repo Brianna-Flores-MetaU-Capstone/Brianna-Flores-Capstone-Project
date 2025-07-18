@@ -32,6 +32,14 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<GPErrorMessageTypes>()
 
+  const verifyDate = (dateToCheck: Date | string) => {
+    if (typeof dateToCheck === "object") {
+      return dateToCheck
+    } else {
+      return new Date(dateToCheck)
+    }
+  }
+
   const onEventConfirmation = async () => {
     const token = gapi.client.getToken();
     if (!token) {
@@ -43,10 +51,10 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
       const newEvent = {
         summary: `Cook ${eventInfo.name}`,
         start: {
-          dateTime: eventInfo.timeOptions[0].start.toString()
+          dateTime: verifyDate(eventInfo.timeOptions[0].start).toISOString()
         },
         end: {
-          dateTime: eventInfo.timeOptions[0].end.toString()
+          dateTime: verifyDate(eventInfo.timeOptions[0].end).toISOString()
         },
         source: {
           title: `${eventInfo.name} recipe link`,

@@ -19,10 +19,7 @@ type GPCalendarOption = {
   groupNum: number;
 };
 
-const CalendarEventCard = ({
-  eventOption,
-  groupNum,
-}: GPCalendarOption) => {
+const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
   const [modalOpen, setModalOpen] = useState(false);
   const recipe = eventOption.recipe;
   const startDate = new Date(eventOption.timeOptions[0].start);
@@ -34,11 +31,25 @@ const CalendarEventCard = ({
       timeOptions: [timeBlock],
     };
     // if not already in the set, add
-    const isSelected = selectedEvents.filter((selectedEvent) => selectedEvent.name === clickedEvent.name && selectedEvent.timeOptions[0].start === clickedEvent.timeOptions[0].start && selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end)
+    const isSelected = selectedEvents.filter(
+      (selectedEvent) =>
+        selectedEvent.name === clickedEvent.name &&
+        selectedEvent.timeOptions[0].start ===
+          clickedEvent.timeOptions[0].start &&
+        selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end
+    );
     if (isSelected.length === 0) {
-      setSelectedEvents((prev) => [...prev, clickedEvent])
+      setSelectedEvents((prev) => [...prev, clickedEvent]);
     } else {
-      setSelectedEvents((prev) => prev.filter((selectedEvent) => selectedEvent.name !== clickedEvent.name && selectedEvent.timeOptions[0].start !== clickedEvent.timeOptions[0].start && selectedEvent.timeOptions[0].end !== clickedEvent.timeOptions[0].end))
+      setSelectedEvents((prev) =>
+        prev.filter(
+          (selectedEvent) =>
+            selectedEvent.name !== clickedEvent.name ||
+            selectedEvent.timeOptions[0].start !==
+              clickedEvent.timeOptions[0].start ||
+            selectedEvent.timeOptions[0].end !== clickedEvent.timeOptions[0].end
+        )
+      );
     }
   };
 
@@ -117,11 +128,22 @@ const CalendarEventCard = ({
                 const clickedEvent: GPRecipeEventOptionType = {
                   ...eventOption,
                   timeOptions: [option],
-                }
-                const isSelected = selectedEvents.filter((selectedEvent) => selectedEvent.name === clickedEvent.name && selectedEvent.timeOptions[0].start === clickedEvent.timeOptions[0].start && selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end)
+                };
+                const isSelected = selectedEvents.filter(
+                  (selectedEvent) =>
+                    selectedEvent.name === clickedEvent.name &&
+                    selectedEvent.timeOptions[0].start ===
+                      clickedEvent.timeOptions[0].start &&
+                    selectedEvent.timeOptions[0].end ===
+                      clickedEvent.timeOptions[0].end
+                );
                 return (
                   <Tooltip key={index} title="Select time">
-                    <Button variant={isSelected.length === 0 ? "outlined" : "solid"} onClick={() => toggleSelection(option)} key={index}>
+                    <Button
+                      variant={isSelected.length === 0 ? "outlined" : "solid"}
+                      onClick={() => toggleSelection(option)}
+                      key={index}
+                    >
                       {formattedStart}-{formattedEnd}
                     </Button>
                   </Tooltip>
