@@ -10,6 +10,7 @@ import {
   CardCover,
   Link,
   Typography,
+  Checkbox,
 } from "@mui/joy";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
@@ -27,6 +28,8 @@ type GPMealCardProps = {
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
   onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
   onLoadRecipes?: (data: GPRecipeDataTypes, index: number) => void;
+  selected: boolean
+  onCompareSelect?: (data: GPRecipeDataTypes) => void;
 };
 
 const MealCard: React.FC<GPMealCardProps> = ({
@@ -37,6 +40,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onSelectRecipe,
   onDeleteRecipe,
   onLoadRecipes,
+  selected,
+  onCompareSelect,
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -85,6 +90,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
               "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
           }}
         />
+          {onCompareSelect && <Checkbox sx={{zIndex: 5}} checked={selected} onClick={(event) => {
+            event.stopPropagation()
+            onCompareSelect(parsedMealData)
+          }}/>}
         <CardContent sx={{ justifyContent: "flex-end" }}>
           {onSelectRecipe && (
             <DietsAndIntolerances recipeInfo={parsedMealData} />

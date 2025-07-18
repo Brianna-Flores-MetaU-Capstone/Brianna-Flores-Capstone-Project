@@ -9,7 +9,6 @@ import { parseRecipeData } from "../utils/utils";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
-import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -24,6 +23,7 @@ import {
   DialogContent,
   Input,
   FormHelperText,
+  ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 
@@ -49,6 +49,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
+  const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>([])
   const { user } = useUser();
 
   const parsePreferenceList = (preferenceList: string[]) => {
@@ -92,7 +93,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     } catch (error) {
       setMessage({
         error: true,
-        message: `Error fetching from api`,
+        message: "Error fetching from api",
       });
     }
   };
@@ -152,6 +153,19 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setMealResults(updatedFetchedMeals);
   };
 
+  const handleToggleCompareRecipe = (clickedRecipe: GPRecipeDataTypes) => {
+    if (!recipesToCompare.some((recipe) => recipe.apiId === clickedRecipe.apiId)) { 
+      // recipe not found, add to array
+      setRecipesToCompare((prev) => [...prev, clickedRecipe])
+    } else {
+      setRecipesToCompare((prev) => prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId))
+    }
+  }
+  
+  const compareRecipesClick = () => {
+    
+  }
+
   return (
     <Modal open={modalOpen} onClose={handleModalClose}>
       <ModalDialog layout="fullscreen">
@@ -160,7 +174,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           <Box>
             <form onSubmit={handleSearchSubmit}>
               <FormControl error={inputError}>
-                <FormLabel>Recipe</FormLabel>
+                <FormLabel>Search</FormLabel>
                 <Input
                   slotProps={{
                     input: { "data-reciperequest": "recipeName" },
@@ -182,7 +196,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
                 <FormControl
                   orientation="horizontal"
-                  sx={{ width: "10%", justifyContent: "space-between" }}
+                  sx={{ justifyContent: "space-between" }}
                 >
                   <FormLabel>Apply Dietary Preferences</FormLabel>
                   <Switch
@@ -222,14 +236,23 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 parsedMealData={meal}
                 onSelectRecipe={onSelectRecipe}
                 onLoadRecipes={handleUpdateRecipe}
+                selected={recipesToCompare.some((recipe) => recipe.apiId === meal.apiId)}
+                onCompareSelect={handleToggleCompareRecipe}
               />
             )}
             flexDirectionRow={true}
           />
           {/* if search clicked, add a generate more button */}
-          {searchClicked && !loading && (
-            <Button onClick={handleGenerateMore}>Generate More!</Button>
-          )}
+          <ButtonGroup buttonFlex={1} color="primary">
+            {searchClicked && !loading && (
+              <Button onClick={handleGenerateMore}>Generate More!</Button>
+            )}
+            {mealResults.length > 0 && (
+              <Button disabled={recipesToCompare.length !== 2 } onClick={compareRecipesClick}>
+                Compare Recipes!
+              </Button>
+            )}
+          </ButtonGroup>
         </DialogContent>
       </ModalDialog>
     </Modal>

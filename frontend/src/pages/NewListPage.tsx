@@ -24,7 +24,6 @@ import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
-import { getDiffResults } from "../utils/diffUtils";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -134,6 +133,7 @@ const NewListPage = () => {
                 setMessage={setMessage}
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
+                selected={false}
               />
             )}
             flexDirectionRow
