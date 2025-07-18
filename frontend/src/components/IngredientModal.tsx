@@ -63,7 +63,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
     image: "",
     isChecked: false,
     ingredientCost: 0,
-    ingredientAmount: 0,
+    ingredientCostUnit: 0,
   };
 
   type ACTIONTYPE =

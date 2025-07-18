@@ -5,10 +5,11 @@ import {
   DialogContent,
   Typography,
   Box,
+  Grid,
 } from "@mui/joy";
 import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
 import type { GPDiffReturnType } from "../classes/DiffClass";
-import RecipeDiffTable from "./RecipeDiffTable";
+import RecipeDiffBlock from "./RecipeDiffBlock";
 
 type GPRecipeDiffModalType = {
   modalOpen: boolean;
@@ -32,40 +33,32 @@ const RecipeDiffModal = ({
       <ModalDialog layout="fullscreen">
         <ModalClose />
         <DialogContent sx={{ my: 3 }}>
-          <Box sx={{ display: "flex", gap: 5 }}>
-            <Box>
-              <Box display="flex" justifyContent="space-between">
+          <Grid container spacing={2}>
+            <Grid xs={6}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography level="h2">{recipeA?.recipeTitle}</Typography>
                 <img src={recipeA?.previewImage} />
               </Box>
-              <RecipeDiffTable
-                first={true}
-                diffInfo={diffRecipeIngredinetsData}
-                costDiff={false}
-              />
-              <RecipeDiffTable
-                first={true}
-                diffInfo={diffIngredientsToPurchaseData}
-                costDiff={true}
-              />
-            </Box>
-            <Box>
-                <Box display="flex" justifyContent="space-between">
+            </Grid>
+            <Grid xs={6}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography level="h2">{recipeB?.recipeTitle}</Typography>
                 <img src={recipeB?.previewImage} />
               </Box>
-              <RecipeDiffTable
-                first={false}
-                diffInfo={diffRecipeIngredinetsData}
-                costDiff={false}
-              />
-              <RecipeDiffTable
-                first={false}
-                diffInfo={diffIngredientsToPurchaseData}
-                costDiff={true}
-              />
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
+          <RecipeDiffBlock
+            recipeA={recipeA}
+            recipeB={recipeB}
+            diffInfo={diffRecipeIngredinetsData}
+            costDiff={false}
+          />
+          <RecipeDiffBlock
+            recipeA={recipeA}
+            recipeB={recipeB}
+            diffInfo={diffIngredientsToPurchaseData}
+            costDiff={true}
+          />
         </DialogContent>
       </ModalDialog>
     </Modal>

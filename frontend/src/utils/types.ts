@@ -39,7 +39,7 @@ type GPIngredientDataTypes = {
   expirationDate?: string | null;
   isChecked: boolean;
   ingredientCost: number; 
-  ingredientAmount: number;
+  ingredientCostUnit: number;
 };
 
 type GPCurrentUserTypes = {
@@ -71,7 +71,7 @@ type GPRecipeIngredientTypes = {
 
 type GPIngredientApiInfoType = {
   ingredientCost: number;
-  ingredientAmount: number;
+  ingredientCostUnit: number;
 };
 
 type GPUserEventTypes = {

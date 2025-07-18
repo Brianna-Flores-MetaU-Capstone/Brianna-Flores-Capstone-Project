@@ -37,7 +37,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentGroceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            ingredientCost={{ingredientCost: itemInfo.ingredientCost, ingredientAmount: itemInfo.ingredientAmount}}
+            ingredientCost={{ingredientCost: itemInfo.ingredientCost, ingredientCostUnit: itemInfo.ingredientCostUnit}}
             onGroceryCheck={onGroceryCheck}
             onDelete={handleDeleteIngredient}
           />

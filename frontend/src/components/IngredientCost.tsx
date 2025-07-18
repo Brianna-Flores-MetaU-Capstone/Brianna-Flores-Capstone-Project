@@ -22,7 +22,7 @@ const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
         </Grid>
         <Grid xs={2}>
           <Typography>
-            {ingredientCostInfo.ingredientAmount}
+            {ingredientCostInfo.ingredientCostUnit}
           </Typography>
         </Grid>
       </Grid>
