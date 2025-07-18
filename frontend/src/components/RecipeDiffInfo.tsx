@@ -9,35 +9,56 @@ type GPRecipeDiffInfo = {
 };
 
 const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
+  const formatQuantity = (ingredientQuantity: number) => {
+    return ingredientQuantity % 1 === 0
+      ? ingredientQuantity
+      : ingredientQuantity.toFixed(2);
+  };
+
   return (
     <Box>
-        <Box display="flex">
-      <Typography level="h2">{recipe.recipeTitle}</Typography>
-            <img src={recipe.previewImage}/>
-        </Box>
+      <Box display="flex">
+        <Typography level="h2">{recipe.recipeTitle}</Typography>
+        <img src={recipe.previewImage} />
+      </Box>
 
-      <Table aria-label="recipe diff info">
+      <Table
+        aria-label="recipe diff info"
+        sx={{ "& thead th:nth-child(1)": { width: "30%" } }}
+      >
         <thead>
           <tr>
-            <th>Quantity</th>
+            <th style={{ textAlign: "center" }}>Quantity</th>
             <th>Ingredient Name</th>
           </tr>
         </thead>
-        <tbody>
+        <Box component="tbody">
           {diffInfo.unchanged.map((ingredient, index) => (
             <Box bgcolor="primary.200" component="tr" key={index}>
-              <td>
-                {ingredient.quantity} {ingredient.unit}
+              <td style={{ textAlign: "center" }}>
+                {formatQuantity(ingredient.quantity)} {ingredient.unit}
               </td>
               <td>{ingredient.ingredientName}</td>
             </Box>
           ))}
 
           {diffInfo.changed.map((ingredient, index) => (
-            <Box bgcolor="neutral.200" component="tr" key={index}>
+            <Box component="tr" bgcolor="neutral.50" key={index}>
               <td>
-                {first ? ingredient.itemA.quantity : ingredient.itemB.quantity}{" "}
-                {first ? ingredient.itemA.unit : ingredient.itemB.unit}
+                <Box
+                  sx={{
+                    bgcolor: "danger.200",
+                    borderRadius: "lg",
+                    textAlign: "center",
+                  }}
+                >
+                  {formatQuantity(
+                    first
+                      ? ingredient.itemA.quantity
+                      : ingredient.itemB.quantity
+                  )}{" "}
+                  {first ? ingredient.itemA.unit : ingredient.itemB.unit}
+                </Box>
               </td>
               <td>
                 {first
@@ -49,8 +70,8 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
           {first &&
             diffInfo.deleted.map((ingredient, index) => (
               <Box bgcolor="success.200" component="tr" key={index}>
-                <td>
-                  {ingredient.quantity} {ingredient.unit}
+                <td style={{ textAlign: "center" }}>
+                  {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
               </Box>
@@ -58,13 +79,13 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
           {!first &&
             diffInfo.added.map((ingredient, index) => (
               <Box bgcolor="danger.200" component="tr" key={index}>
-                <td>
-                  {ingredient.quantity} {ingredient.unit}
+                <td style={{ textAlign: "center" }}>
+                  {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
               </Box>
             ))}
-        </tbody>
+        </Box>
       </Table>
     </Box>
   );

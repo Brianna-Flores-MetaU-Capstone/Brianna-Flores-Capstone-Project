@@ -92,7 +92,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         setMealResults((prev) => [...prev, ...parsedRecipes]);
       } else {
         setMealResults(parsedRecipes);
-        setRecipesToCompare([])
       }
       setLoading(false);
       // TODO: add fetched recipes to database helper method
@@ -137,6 +136,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setNumInDatabase(0);
     setSearchClicked(false);
     setMealResults([]);
+    setRecipesToCompare([])
     // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
     handleFetchRecipes(true);
     setSearchClicked(true);
