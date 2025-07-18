@@ -26,6 +26,7 @@ import {
   ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
+import { RecipeIngredientsDiff } from "../classes/DiffClass";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -163,7 +164,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   }
   
   const compareRecipesClick = () => {
-    
+    if (recipesToCompare.length === 2) {
+      const diffIngredients = new RecipeIngredientsDiff()
+      const diffResults = diffIngredients.getDiff(recipesToCompare[0].ingredients, recipesToCompare[1].ingredients)
+    }
   }
 
   return (

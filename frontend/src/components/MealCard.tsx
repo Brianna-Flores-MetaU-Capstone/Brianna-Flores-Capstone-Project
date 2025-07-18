@@ -28,7 +28,7 @@ type GPMealCardProps = {
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
   onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
   onLoadRecipes?: (data: GPRecipeDataTypes, index: number) => void;
-  selected: boolean
+  selected: boolean;
   onCompareSelect?: (data: GPRecipeDataTypes) => void;
 };
 
@@ -90,10 +90,16 @@ const MealCard: React.FC<GPMealCardProps> = ({
               "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
           }}
         />
-          {onCompareSelect && <Checkbox sx={{zIndex: 5}} checked={selected} onClick={(event) => {
-            event.stopPropagation()
-            onCompareSelect(parsedMealData)
-          }}/>}
+        {onCompareSelect && (
+          <Checkbox
+            sx={{ zIndex: 5 }}
+            checked={selected}
+            onClick={(event) => {
+              event.stopPropagation();
+              onCompareSelect(parsedMealData);
+            }}
+          />
+        )}
         <CardContent sx={{ justifyContent: "flex-end" }}>
           {onSelectRecipe && (
             <DietsAndIntolerances recipeInfo={parsedMealData} />
@@ -105,6 +111,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
             <Typography textColor="neutral.300">
               Servings: {parsedMealData.servings}
             </Typography>
+            {onSelectRecipe && parsedMealData.totalCost > 0 && (
+              <Typography textColor="neutral.300">
+                Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
+              </Typography>
+            )}
             {onDeleteRecipe && (
               <Button
                 variant="plain"
