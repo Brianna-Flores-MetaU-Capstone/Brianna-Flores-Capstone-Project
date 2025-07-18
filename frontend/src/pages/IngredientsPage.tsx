@@ -5,10 +5,9 @@ import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
 } from "../utils/types";
-import { Box, Button, Grid, Sheet } from "@mui/joy";
+import { Box, Button, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
-import { v4 as uuidv4 } from "uuid";
 import Ingredient from "../components/Ingredient";
 import ErrorState from "../components/ErrorState";
 import {
@@ -62,10 +61,10 @@ const IngredientsPage = () => {
         <Button onClick={addIngredientClick}>Add Ingredient</Button>
         <TitledListView
           headerList={[{title: "Ingredient", spacing: 4}, {title: "Quantity", spacing: 3}, {title: "Expiration", spacing: 5}]}
-          list={userIngredients}
-          renderItem={(ingredient) => (
+          itemsList={userIngredients}
+          renderItem={(ingredient, index) => (
             <Ingredient
-              key={uuidv4()}
+              key={index}
               ingredient={ingredient}
               presentGroceryCheck={false}
               presentExpiration={true}

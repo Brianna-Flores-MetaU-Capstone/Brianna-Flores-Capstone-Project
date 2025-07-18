@@ -1,7 +1,6 @@
 import React from "react";
 import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
-import { v4 as uuidv4 } from "uuid";
 import {
   Modal,
   Typography,
@@ -49,7 +48,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         <Box>
           <Typography level="h3">Ingredients</Typography>
           <List marker="circle">
-            {recipeInfo?.ingredients.map((ingredient) => {
+            {(recipeInfo?.ingredients ?? []).map((ingredient) => {
               return (
                 <ListItem
                   key={ingredient.id}
@@ -71,8 +70,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           </List>
           <Typography level="h3">Instructions</Typography>
           <List component="ol" marker="decimal">
-            {recipeInfo?.instructions.map((step) => {
-              return <ListItem key={uuidv4()}>{step}</ListItem>;
+            {recipeInfo?.instructions.map((step, index) => {
+              return <ListItem key={index}>{step}</ListItem>;
             })}
           </List>
         </Box>

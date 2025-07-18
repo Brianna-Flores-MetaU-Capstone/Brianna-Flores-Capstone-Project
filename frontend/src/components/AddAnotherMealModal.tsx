@@ -10,7 +10,6 @@ import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -28,6 +27,7 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 
+const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 type GPAddAnotherMealProps = {
@@ -46,7 +46,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<GPErrorMessageTypes>();
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
   const { user } = useUser();
@@ -74,13 +74,13 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     offset: number;
   }) => {
     const ownedIngredients = await fetchUserIngredientsHelper({
-      setMessage: setErrorMessage,
+      setMessage: setMessage,
     });
     const userDiets = parsePreferenceList(user?.diets ?? []);
     const userIntolerances = parsePreferenceList(user?.intolerances ?? []);
     const recipeUrl = usePreferences
-      ? `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
-      : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
+      ? `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
+      : `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoading(true);
       const response = await axios.get(recipeUrl);
@@ -96,7 +96,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setLoading(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
-      setErrorMessage({
+      setMessage({
         error: true,
         message: `Error fetching from api`,
       });
@@ -178,7 +178,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   orientation="horizontal"
                   sx={{ width: "10%", justifyContent: "space-between" }}
                 >
-                  <FormLabel>Use Dietary Preferences</FormLabel>
+                  <FormLabel>Apply Dietary Preferences</FormLabel>
                   <Switch
                     checked={usePreferences}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -202,17 +202,17 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             </form>
           </Box>
           {/* Display error message if needed */}
-          {errorMessage && (
+          {message && (
             <ErrorState
-              error={errorMessage.error}
-              message={errorMessage.message}
+              error={message.error}
+              message={message.message}
             />
           )}
           <TitledListView
-            list={mealResults}
-            renderItem={(meal) => (
+            itemsList={mealResults}
+            renderItem={(meal, index) => (
               <MealCard
-                key={uuidv4()}
+                key={index}
                 onMealCardClick={() => event?.preventDefault()}
                 parsedMealData={meal}
                 onSelectRecipe={onSelectRecipe}
