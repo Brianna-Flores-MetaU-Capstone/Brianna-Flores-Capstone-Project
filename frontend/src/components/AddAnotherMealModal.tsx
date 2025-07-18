@@ -59,6 +59,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>([])
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false)
   const [ingredientsDiffData, setIngredientsDiffData] = useState<GPDiffReturnType<GPIngredientDataTypes>>()
+  // TODO create a single "recipe diff data" which contains diff for recipe ingredients, ingredients to purchase, servings, etc
+  const [purchaseDiffData, setPurchaseDiffData] = useState<GPDiffReturnType<GPIngredientDataTypes>>()
+
   const { user } = useUser();
 
   const parsePreferenceList = (preferenceList: string[]) => {
@@ -188,7 +191,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         // update list of meal data
         const updatedRecipe = {
           ...recipe,
-          ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
+          ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo ?? 0,
           totalCost: estimatedRecipeCostInfo.estimatedCost,
         };
         updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe]
@@ -199,8 +202,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       const diffRecipeIngredients = new RecipeIngredientsDiff()
       const diffRecipeIngredientsResults = diffRecipeIngredients.getDiff(updatedRecipesToCompare[0].ingredients, updatedRecipesToCompare[1].ingredients)
       const diffIngredientsToPurchase = new RecipeIngredientsDiff()
-      const diffIngredientsToPurchaseResults = diffIngredientsToPurchase.getDiff(updatedRecipesToCompare[0].ingredients, updatedRecipesToCompare[1].ingredients)
+      const diffIngredientsToPurchaseResults = diffIngredientsToPurchase.getDiff(updatedRecipesToCompare[0].ingredientCostInfo, updatedRecipesToCompare[1].ingredientCostInfo)
       setIngredientsDiffData(diffRecipeIngredientsResults)
+      setPurchaseDiffData(diffIngredientsToPurchaseResults)
       setLoadingModal(false)
       setRecipeDiffModalOpen(true)
     }
@@ -298,7 +302,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       </ModalDialog>
     </Modal>
     <LoadingModal modalOpen={loadingModal} message="Generating comparison" />
-    <RecipeDiffModal modalOpen={recipeDiffModalOpen} toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)} diffData={ingredientsDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} recipeA={recipesToCompare[0]} recipeB={recipesToCompare[1]}/>
+    <RecipeDiffModal modalOpen={recipeDiffModalOpen} toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)} diffIngredientsToPurchaseData={purchaseDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} diffRecipeIngredinetsData={ingredientsDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} recipeA={recipesToCompare[0]} recipeB={recipesToCompare[1]}/>
     </>
   );
 };

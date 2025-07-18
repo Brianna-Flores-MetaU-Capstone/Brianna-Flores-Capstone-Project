@@ -1,9 +1,9 @@
 import React from "react";
-import type { GPIngredientWithCostInfoTypes } from "../utils/types";
+import type { GPIngredientDataTypes } from "../utils/types";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPIngredientCostTypes = {
-  ingredientCostInfo: GPIngredientWithCostInfoTypes;
+  ingredientCostInfo: GPIngredientDataTypes;
 };
 
 const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {

@@ -14,7 +14,7 @@ type GPRecipeDataTypes = {
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
-  ingredientCostInfo: GPIngredientWithCostInfoTypes[];
+  ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
 };
 
@@ -38,6 +38,8 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
+  ingredientCost: number; 
+  ingredientAmount: number;
 };
 
 type GPCurrentUserTypes = {
@@ -65,11 +67,6 @@ type GPRecipeIngredientTypes = {
   department: string;
   ingredientName: string;
   isChecked: boolean;
-};
-
-type GPIngredientWithCostInfoTypes = GPRecipeIngredientTypes & {
-  ingredientCost: number; 
-  ingredientAmount: number;
 };
 
 type GPIngredientApiInfoType = {
@@ -111,7 +108,6 @@ export type {
   GPErrorMessageTypes,
   GPOwnedIngredientsTypes,
   GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
   GPUserEventTypes,
   GPRecipeEventOptionType,

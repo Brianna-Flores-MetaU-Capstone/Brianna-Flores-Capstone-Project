@@ -8,7 +8,6 @@ import type {
 import { unitConversions } from "./constants";
 import convert from "convert-units";
 import { searchWalmart } from "./walmartAPI";
-import { GPIngredientWithCostInfoTypes } from "../../frontend/src/utils/types";
 
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.user.findUnique({
@@ -173,7 +172,7 @@ type GPEstimateListCostTypes = {
 const estimateListCost = async ({
   ingredientsToPurchase,
 }: GPEstimateListCostTypes) => {
-  let ingredientCostInfo: GPIngredientWithCostInfoTypes[] = [];
+  let ingredientCostInfo: GPIngredientDataTypes[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
     const ingredientApiInfo = await getCostForAmountOfIngredient({

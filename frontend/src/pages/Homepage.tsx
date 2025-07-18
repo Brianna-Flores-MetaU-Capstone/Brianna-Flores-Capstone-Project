@@ -1,7 +1,6 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPIngredientWithCostInfoTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
@@ -25,7 +24,7 @@ const LIST_HEIGHT = 250
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientWithCostInfoTypes[]
+    GPIngredientDataTypes[]
   >([]);
   const [userIngredientList, setUserIngredientList] = useState<
     GPIngredientDataTypes[]

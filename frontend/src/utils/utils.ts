@@ -2,7 +2,6 @@ import type {
   GPAuthFormDataTypes,
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes,
 } from "./types";
 import axios from "axios";
 import { axiosConfig } from "./databaseHelpers";
@@ -105,7 +104,7 @@ const handleAuthInputChange = (
 };
 
 const parseGroceryListDepartments = (
-  groceryList: GPIngredientWithCostInfoTypes[]
+  groceryList: GPIngredientDataTypes[]
 ) => {
   let departments: string[] = [];
   for (const grocery of groceryList) {

@@ -8,12 +8,13 @@ import {
 } from "@mui/joy";
 import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
 import type { GPDiffReturnType } from "../classes/DiffClass";
-import RecipeDiffInfo from "./RecipeDiffInfo";
+import RecipeDiffTable from "./RecipeDiffTable";
 
 type GPRecipeDiffModalType = {
   modalOpen: boolean;
   toggleModal: () => void;
-  diffData: GPDiffReturnType<GPIngredientDataTypes>;
+  diffRecipeIngredinetsData: GPDiffReturnType<GPIngredientDataTypes>;
+  diffIngredientsToPurchaseData: GPDiffReturnType<GPIngredientDataTypes>;
   recipeA: GPRecipeDataTypes;
   recipeB: GPRecipeDataTypes;
 };
@@ -21,7 +22,8 @@ type GPRecipeDiffModalType = {
 const RecipeDiffModal = ({
   modalOpen,
   toggleModal,
-  diffData,
+  diffRecipeIngredinetsData,
+  diffIngredientsToPurchaseData,
   recipeA,
   recipeB,
 }: GPRecipeDiffModalType) => {
@@ -30,14 +32,39 @@ const RecipeDiffModal = ({
       <ModalDialog layout="fullscreen">
         <ModalClose />
         <DialogContent sx={{ my: 3 }}>
-          <Box sx={{display: "flex", gap: 5}}>
-            <RecipeDiffInfo first={true} recipe={recipeA} diffInfo={diffData} costDiff={true}/>
-            <RecipeDiffInfo
-              first={false}
-              recipe={recipeB}
-              diffInfo={diffData}
-              costDiff={true}
-            />
+          <Box sx={{ display: "flex", gap: 5 }}>
+            <Box>
+              <Box display="flex">
+                <Typography level="h2">{recipeA?.recipeTitle}</Typography>
+                <img src={recipeA?.previewImage} />
+              </Box>
+              <RecipeDiffTable
+                first={true}
+                diffInfo={diffRecipeIngredinetsData}
+                costDiff={false}
+              />
+              <RecipeDiffTable
+                first={true}
+                diffInfo={diffIngredientsToPurchaseData}
+                costDiff={true}
+              />
+            </Box>
+            <Box>
+                <Box display="flex">
+                <Typography level="h2">{recipeB?.recipeTitle}</Typography>
+                <img src={recipeB?.previewImage} />
+              </Box>
+              <RecipeDiffTable
+                first={false}
+                diffInfo={diffRecipeIngredinetsData}
+                costDiff={false}
+              />
+              <RecipeDiffTable
+                first={false}
+                diffInfo={diffIngredientsToPurchaseData}
+                costDiff={true}
+              />
+            </Box>
           </Box>
         </DialogContent>
       </ModalDialog>
