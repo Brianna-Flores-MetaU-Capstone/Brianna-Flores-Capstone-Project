@@ -1,14 +1,15 @@
 import type { GPDiffReturnType } from "../classes/DiffClass";
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
+import type { GPIngredientDataTypes, GPRecipeDataTypes, GPIngredientWithCostInfoTypes } from "../utils/types";
 import { Box, Typography, Table } from "@mui/joy";
 
 type GPRecipeDiffInfo = {
   first: boolean;
   recipe: GPRecipeDataTypes;
-  diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
+  diffInfo: GPDiffReturnType<GPIngredientDataTypes> | GPDiffReturnType<GPIngredientWithCostInfoTypes>;
+  costDiff: boolean
 };
 
-const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
+const RecipeDiffInfo = ({ first, recipe, diffInfo, costDiff }: GPRecipeDiffInfo) => {
   const formatQuantity = (ingredientQuantity: number) => {
     return ingredientQuantity % 1 === 0
       ? ingredientQuantity
@@ -30,6 +31,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
           <tr>
             <th style={{ textAlign: "center" }}>Quantity</th>
             <th>Ingredient Name</th>
+            {costDiff && <th>Estimated Cost</th>}
           </tr>
         </thead>
         <Box component="tbody">

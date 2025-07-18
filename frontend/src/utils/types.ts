@@ -1,5 +1,4 @@
 import type { User } from "firebase/auth";
-import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
@@ -15,7 +14,7 @@ type GPRecipeDataTypes = {
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
-  ingredientCostInfo: GPIngredientCostInfoTypes[];
+  ingredientCostInfo: GPIngredientWithCostInfoTypes[];
   totalCost: number;
 };
 
@@ -68,9 +67,9 @@ type GPRecipeIngredientTypes = {
   isChecked: boolean;
 };
 
-type GPIngredientWithCostInfoTypes = {
-  ingredient: GPRecipeIngredientTypes;
-  ingredientApiInfo: GPIngredientApiInfoType;
+type GPIngredientWithCostInfoTypes = GPRecipeIngredientTypes & {
+  ingredientCost: number; 
+  ingredientAmount: number;
 };
 
 type GPIngredientApiInfoType = {

@@ -109,8 +109,8 @@ const parseGroceryListDepartments = (
 ) => {
   let departments: string[] = [];
   for (const grocery of groceryList) {
-    if (!departments.includes(grocery.ingredient.department)) {
-      departments = [...departments, grocery.ingredient.department];
+    if (!departments.includes(grocery.department)) {
+      departments = [...departments, grocery.department];
     }
   }
   return departments;

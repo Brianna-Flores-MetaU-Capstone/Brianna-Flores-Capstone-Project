@@ -29,6 +29,9 @@ import InfoOutlined from "@mui/icons-material/InfoOutline";
 import { RecipeIngredientsDiff } from "../classes/DiffClass";
 import type { GPDiffReturnType } from "../classes/DiffClass";
 import RecipeDiffModal from "./RecipeDiffModal";
+import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
+import { estimateRecipeCost } from "../utils/utils";
+import LoadingModal from "./LoadingModal";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -48,7 +51,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loadingSearchButton, setLoadingSearchButton] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false)
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
@@ -85,7 +89,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       ? `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
       : `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
-      setLoading(true);
+      setLoadingSearchButton(true);
       const response = await axios.get(recipeUrl);
       const parsedRecipes = await parseRecipeData(response.data.results);
       if (searchClicked) {
@@ -93,7 +97,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       } else {
         setMealResults(parsedRecipes);
       }
-      setLoading(false);
+      setLoadingSearchButton(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
       setMessage({
@@ -168,11 +172,36 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   }
   
-  const compareRecipesClick = () => {
+  const compareRecipesClick = async () => {
     if (recipesToCompare.length === 2) {
-      const diffIngredients = new RecipeIngredientsDiff()
-      const diffResults = diffIngredients.getDiff(recipesToCompare[0].ingredients, recipesToCompare[1].ingredients)
-      setIngredientsDiffData(diffResults)
+      setLoadingModal(true);
+      let updatedRecipesToCompare: GPRecipeDataTypes[] = []
+      for (const recipe of recipesToCompare) {
+        // update recipes with pricing information
+        const ownedIngredients = await fetchUserIngredientsHelper({
+          setMessage: setMessage,
+        });
+        const estimatedRecipeCostInfo = await estimateRecipeCost({
+          ownedIngredients,
+          recipeIngredients: recipe.ingredients,
+        });
+        // update list of meal data
+        const updatedRecipe = {
+          ...recipe,
+          ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
+          totalCost: estimatedRecipeCostInfo.estimatedCost,
+        };
+        updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe]
+        // find index of recipe in meal results so we can also update the recipe information there too
+        const index = mealResults.findIndex((element) => element.apiId === recipe.apiId)
+        handleUpdateRecipe(updatedRecipe, index)
+      }
+      const diffRecipeIngredients = new RecipeIngredientsDiff()
+      const diffRecipeIngredientsResults = diffRecipeIngredients.getDiff(updatedRecipesToCompare[0].ingredients, updatedRecipesToCompare[1].ingredients)
+      const diffIngredientsToPurchase = new RecipeIngredientsDiff()
+      const diffIngredientsToPurchaseResults = diffIngredientsToPurchase.getDiff(updatedRecipesToCompare[0].ingredients, updatedRecipesToCompare[1].ingredients)
+      setIngredientsDiffData(diffRecipeIngredientsResults)
+      setLoadingModal(false)
       setRecipeDiffModalOpen(true)
     }
   }
@@ -227,7 +256,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     }}
                   />
                 </FormControl>
-                <Button type="submit" loading={loading} loadingPosition="start">
+                <Button type="submit" loading={loadingSearchButton} loadingPosition="start">
                   Find Recipes!
                 </Button>
               </Box>
@@ -256,7 +285,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           />
           {/* if search clicked, add a generate more button */}
           <ButtonGroup buttonFlex={1} color="primary">
-            {searchClicked && !loading && (
+            {searchClicked && !loadingSearchButton && (
               <Button onClick={handleGenerateMore}>Generate More!</Button>
             )}
             {mealResults.length > 0 && (
@@ -268,6 +297,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         </DialogContent>
       </ModalDialog>
     </Modal>
+    <LoadingModal modalOpen={loadingModal} message="Generating comparison" />
     <RecipeDiffModal modalOpen={recipeDiffModalOpen} toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)} diffData={ingredientsDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} recipeA={recipesToCompare[0]} recipeB={recipesToCompare[1]}/>
     </>
   );

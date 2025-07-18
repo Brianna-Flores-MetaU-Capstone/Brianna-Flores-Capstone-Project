@@ -40,7 +40,7 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
     }
     const clearedList = user.groceryList.filter(
       (ingredientItem: GPIngredientWithCostInfoTypes) => {
-        return !ingredientItem.ingredient.isChecked;
+        return !ingredientItem.isChecked;
       }
     );
     const updatedUser = await prisma.user.update({
@@ -69,13 +69,10 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
     }
     const checkedGroceryList = user.groceryList.map(
       (ingredientItem: GPIngredientWithCostInfoTypes) =>
-        ingredientItem.ingredient.ingredientName === ingredientName
+        ingredientItem.ingredientName === ingredientName
           ? {
               ...ingredientItem,
-              ingredient: {
-                ...ingredientItem.ingredient,
-                isChecked: !ingredientItem.ingredient.isChecked,
-              },
+                isChecked: !ingredientItem.isChecked,
             }
           : ingredientItem
     );

@@ -31,11 +31,12 @@ const RecipeDiffModal = ({
         <ModalClose />
         <DialogContent sx={{ my: 3 }}>
           <Box sx={{display: "flex", gap: 5}}>
-            <RecipeDiffInfo first={true} recipe={recipeA} diffInfo={diffData} />
+            <RecipeDiffInfo first={true} recipe={recipeA} diffInfo={diffData} costDiff={true}/>
             <RecipeDiffInfo
               first={false}
               recipe={recipeB}
               diffInfo={diffData}
+              costDiff={true}
             />
           </Box>
         </DialogContent>

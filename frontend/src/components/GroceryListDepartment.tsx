@@ -19,7 +19,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   onGroceryCheck,
 }) => {
   const filteredGroceries = groceryList.filter(
-    (item) => item.ingredient.department === department
+    (item) => item.department === department
   );
 
   const handleDeleteIngredient = async (
@@ -34,11 +34,11 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
         renderItem={(itemInfo, index) => (
           <Ingredient
             key={index}
-            ingredient={itemInfo.ingredient}
+            ingredient={itemInfo}
             presentGroceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            ingredientCost={itemInfo.ingredientApiInfo}
+            ingredientCost={{ingredientCost: itemInfo.ingredientCost, ingredientAmount: itemInfo.ingredientAmount}}
             onGroceryCheck={onGroceryCheck}
             onDelete={handleDeleteIngredient}
           />

@@ -8,6 +8,7 @@ import type {
 import { unitConversions } from "./constants";
 import convert from "convert-units";
 import { searchWalmart } from "./walmartAPI";
+import { GPIngredientWithCostInfoTypes } from "../../frontend/src/utils/types";
 
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.user.findUnique({
@@ -169,14 +170,10 @@ type GPEstimateListCostTypes = {
   ingredientsToPurchase: GPRecipeIngredientTypes[];
 };
 
-type GPIngredientCostInfoTypes = {
-  ingredient: GPRecipeIngredientTypes;
-  ingredientApiInfo: { ingredientCost: number; ingredientAmount: number };
-};
 const estimateListCost = async ({
   ingredientsToPurchase,
 }: GPEstimateListCostTypes) => {
-  let ingredientCostInfo: GPIngredientCostInfoTypes[] = [];
+  let ingredientCostInfo: GPIngredientWithCostInfoTypes[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
     const ingredientApiInfo = await getCostForAmountOfIngredient({
@@ -187,8 +184,9 @@ const estimateListCost = async ({
     ingredientCostInfo = [
       ...ingredientCostInfo,
       {
-        ingredient: { ...ingredient, isChecked: false },
-        ingredientApiInfo,
+        ...ingredient, 
+        isChecked: false,
+        ...ingredientApiInfo,
       },
     ];
   }
@@ -216,5 +214,4 @@ export {
   quantityNeeded,
   getListOfMissingIngredients,
   estimateListCost,
-  type GPIngredientCostInfoTypes,
 };
