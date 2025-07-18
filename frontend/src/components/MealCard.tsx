@@ -92,7 +92,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
         />
         {onCompareSelect && (
           <Checkbox
-            sx={{ zIndex: 5 }}
+            sx={{ zIndex: 5}}
+            size="lg"
             checked={selected}
             onClick={(event) => {
               event.stopPropagation();

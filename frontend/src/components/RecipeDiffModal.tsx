@@ -34,7 +34,7 @@ const RecipeDiffModal = ({
         <DialogContent sx={{ my: 3 }}>
           <Box sx={{ display: "flex", gap: 5 }}>
             <Box>
-              <Box display="flex">
+              <Box display="flex" justifyContent="space-between">
                 <Typography level="h2">{recipeA?.recipeTitle}</Typography>
                 <img src={recipeA?.previewImage} />
               </Box>
@@ -50,7 +50,7 @@ const RecipeDiffModal = ({
               />
             </Box>
             <Box>
-                <Box display="flex">
+                <Box display="flex" justifyContent="space-between">
                 <Typography level="h2">{recipeB?.recipeTitle}</Typography>
                 <img src={recipeB?.previewImage} />
               </Box>

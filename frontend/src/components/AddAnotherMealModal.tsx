@@ -288,7 +288,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             flexDirectionRow={true}
           />
           {/* if search clicked, add a generate more button */}
-          <ButtonGroup buttonFlex={1} color="primary">
+          <ButtonGroup buttonFlex={1} spacing={{xs: 10}} color="primary">
             {searchClicked && !loadingSearchButton && (
               <Button onClick={handleGenerateMore}>Generate More!</Button>
             )}
