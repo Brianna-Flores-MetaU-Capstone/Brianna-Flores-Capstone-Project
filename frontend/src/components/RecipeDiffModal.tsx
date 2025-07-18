@@ -9,6 +9,7 @@ import {
 } from "@mui/joy";
 import RecipeDiffBlock from "./RecipeDiffBlock";
 import type { GPRecipeDiffType } from "../utils/diffUtils";
+import RecipeDiffInstructionsBlock from "./RecipeDiffInstructionsBlock";
 
 const servingsStyle = {
    p: 1,
@@ -72,6 +73,7 @@ const RecipeDiffModal = ({
             diffInfo={recipeDiffData.purchasedIngredientsDiff}
             costDiff={true}
           />
+          <RecipeDiffInstructionsBlock recipeA={recipeDiffData.recipeA} recipeB={recipeDiffData.recipeB}/>
         </DialogContent>
       </ModalDialog>
     </Modal>

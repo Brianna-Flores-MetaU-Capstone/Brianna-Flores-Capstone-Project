@@ -1,6 +1,6 @@
 import type { GPDiffReturnType } from "../classes/DiffClass";
 import type { GPIngredientDataTypes } from "../utils/types";
-import { Box, Table, Typography } from "@mui/joy";
+import { Box, Table } from "@mui/joy";
 
 type GPRecipeDiffInfo = {
   first: boolean;
