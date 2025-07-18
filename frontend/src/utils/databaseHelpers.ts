@@ -4,7 +4,6 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-  GPIngredientWithCostInfoTypes,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
@@ -209,7 +208,7 @@ const updateUserRecipes = async ({
 
 type GPFetchGroceryListTypes = GPSetMessageType & {
   setUserGroceryList: (
-    value: React.SetStateAction<GPIngredientWithCostInfoTypes[]>
+    value: React.SetStateAction<GPIngredientDataTypes[]>
   ) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
   setGroceryListCost?: (value: React.SetStateAction<number>) => void;

@@ -1,14 +1,14 @@
 import type { GPDiffReturnType } from "../classes/DiffClass";
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
-import { Box, Typography, Table } from "@mui/joy";
+import type { GPIngredientDataTypes } from "../utils/types";
+import { Box, Table } from "@mui/joy";
 
 type GPRecipeDiffInfo = {
   first: boolean;
-  recipe: GPRecipeDataTypes;
+  costDiff: boolean
   diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
 };
 
-const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
+const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
   const formatQuantity = (ingredientQuantity: number) => {
     return ingredientQuantity % 1 === 0
       ? ingredientQuantity
@@ -17,11 +17,6 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
 
   return (
     <Box>
-      <Box display="flex">
-        <Typography level="h2">{recipe.recipeTitle}</Typography>
-        <img src={recipe.previewImage} />
-      </Box>
-
       <Table
         aria-label="recipe diff info"
         sx={{ "& thead th:nth-child(1)": { width: "30%" } }}
@@ -30,6 +25,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
           <tr>
             <th style={{ textAlign: "center" }}>Quantity</th>
             <th>Ingredient Name</th>
+            {costDiff && <th>Estimated Cost</th>}
           </tr>
         </thead>
         <Box component="tbody">
@@ -39,6 +35,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
                 {formatQuantity(ingredient.quantity)} {ingredient.unit}
               </td>
               <td>{ingredient.ingredientName}</td>
+              {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
             </Box>
           ))}
 
@@ -65,6 +62,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
                   ? ingredient.itemA.ingredientName
                   : ingredient.itemB.ingredientName}
               </td>
+              {costDiff && <td>{first ? `$${ingredient.itemA.ingredientCost} for ${ingredient.itemA.ingredientCostUnit}` : `$${ingredient.itemB.ingredientCost} for ${ingredient.itemB.ingredientCostUnit}`}</td>}
             </Box>
           ))}
           {first &&
@@ -74,6 +72,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
+              {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
               </Box>
             ))}
           {!first &&
@@ -83,6 +82,7 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
+                {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
               </Box>
             ))}
         </Box>
@@ -91,4 +91,4 @@ const RecipeDiffInfo = ({ first, recipe, diffInfo }: GPRecipeDiffInfo) => {
   );
 };
 
-export default RecipeDiffInfo;
+export default RecipeDiffTable;

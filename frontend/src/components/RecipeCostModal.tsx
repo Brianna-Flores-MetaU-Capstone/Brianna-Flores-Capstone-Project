@@ -1,10 +1,10 @@
-import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
+import type { GPIngredientDataTypes } from "../utils/types";
 import TitledListView from "./TitledListView";
 import IngredientCost from "./IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 
 type GPLoadingModalTypes = {
-  ingredientsCostInformation: GPIngredientCostInfoTypes[];
+  ingredientsCostInformation: GPIngredientDataTypes[];
   modalOpen: boolean;
   onClose: () => void;
 };

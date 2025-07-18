@@ -1,9 +1,9 @@
 import React from "react";
-import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
+import type { GPIngredientDataTypes } from "../utils/types";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPIngredientCostTypes = {
-  ingredientCostInfo: GPIngredientCostInfoTypes;
+  ingredientCostInfo: GPIngredientDataTypes;
 };
 
 const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
@@ -12,17 +12,17 @@ const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
       <Grid container alignItems="center">
         <Grid xs={8}>
           <Typography>
-            {ingredientCostInfo.ingredient.ingredientName}
+            {ingredientCostInfo.ingredientName}
           </Typography>
         </Grid>
         <Grid xs={2}>
           <Typography>
-            ${ingredientCostInfo.ingredientApiInfo.ingredientCost?.toFixed(2)}
+            ${ingredientCostInfo.ingredientCost?.toFixed(2)}
           </Typography>
         </Grid>
         <Grid xs={2}>
           <Typography>
-            {ingredientCostInfo.ingredientApiInfo.ingredientAmount}
+            {ingredientCostInfo.ingredientCostUnit}
           </Typography>
         </Grid>
       </Grid>

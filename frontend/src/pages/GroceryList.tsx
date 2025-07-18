@@ -1,6 +1,6 @@
 import type {
   GPErrorMessageTypes,
-  GPIngredientWithCostInfoTypes,
+  GPIngredientDataTypes
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
@@ -18,7 +18,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 const GroceryList = () => {
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
   const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientWithCostInfoTypes[]
+    GPIngredientDataTypes[]
   >([]);
   const [groceryDepartments, setGroceryDepartments] = useState<string[]>([]);
   const [groceryListCost, setGroceryListCost] = useState(0.0);
