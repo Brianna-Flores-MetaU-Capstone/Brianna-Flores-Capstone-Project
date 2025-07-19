@@ -10,14 +10,13 @@ const prisma = new PrismaClient();
 import { isAuthenticated } from "../utils/authMiddleware";
 import { convertUnits } from "../utils/utils";
 
-router.post("/discover/:filter", async (req: Request, res: Response) => {
-  const filter = req.params.filter
-  const {offset, numRequested} = req.body
+router.post("/discover", async (req: Request, res: Response) => {
+  const {filter, offset, numRequested} = req.body
   try {
     const recipeData = await prisma.recipe.findMany({
-      where: { filter: true },
-      skip: offset,
-      take: numRequested,
+      ...(filter ? {where: { [filter]: true }} : {}),
+      skip: parseInt(offset),
+      take: parseInt(numRequested),
     })
     res.json(recipeData)
   } catch (error) {
