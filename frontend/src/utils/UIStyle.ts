@@ -139,6 +139,13 @@ const GPCenteredBoxStyle = {
   gap: 3,
 };
 
+const GPDiffHeaderStyle = {
+  mt: 3,
+  bgcolor: "primary.200",
+  p: 2,
+  borderRadius: "lg",
+};
+
 const MUI_GRID_FULL_SPACE = 12;
 
-export { GPModalStyle, GPCenteredBoxStyle, theme, MUI_GRID_FULL_SPACE };
+export { GPModalStyle, GPCenteredBoxStyle, GPDiffHeaderStyle, theme, MUI_GRID_FULL_SPACE };

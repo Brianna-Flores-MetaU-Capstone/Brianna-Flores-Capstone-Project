@@ -242,6 +242,23 @@ const fetchGroceryList = async ({
   }
 };
 
+type GPFetchDiscoverRecipesType = GPSetMessageType & {
+  setDiscoverRecipes: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void
+  offset: number
+  numRequested: number
+}
+const fetchDiscoverRecipes = async ({setMessage, setDiscoverRecipes, offset, numRequested}: GPFetchDiscoverRecipesType) => {
+  try {
+    const response = await axios.post(`${databaseUrl}/recipes/discover`, {offset, numRequested}, axiosConfig);
+    setDiscoverRecipes(response.data)
+  } catch (error) {
+    setMessage({
+      error: true,
+      message: "Error fetching recipes",
+    });
+  }
+}
+
 export {
   updateAccount,
   getUserData,
@@ -254,5 +271,6 @@ export {
   fetchRecipes,
   updateUserRecipes,
   fetchGroceryList,
+  fetchDiscoverRecipes,
   axiosConfig,
 };

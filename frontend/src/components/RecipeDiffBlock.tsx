@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from "@mui/joy";
 import RecipeDiffTable from "./RecipeDiffTable";
 import type { GPDiffReturnType } from "../classes/DiffClass";
 import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
+import { GPDiffHeaderStyle } from "../utils/UIStyle";
 
 type GPRecipeDiffInfo = {
   recipeA: GPRecipeDataTypes
@@ -13,7 +14,7 @@ type GPRecipeDiffInfo = {
 const RecipeDiffBlock = ({ recipeA, recipeB, diffInfo, costDiff }: GPRecipeDiffInfo) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography level="h2">
+      <Typography sx={GPDiffHeaderStyle} level="h2">
         {!costDiff
           ? "Compare Recipe Ingredients"
           : "Compare Ingredients to Purchase"}

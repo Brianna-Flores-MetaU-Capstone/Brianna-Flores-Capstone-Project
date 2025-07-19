@@ -9,7 +9,6 @@ import { parseRecipeData } from "../utils/utils";
 import type {
   GPRecipeDataTypes,
   GPErrorMessageTypes,
-  GPIngredientDataTypes,
 } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
