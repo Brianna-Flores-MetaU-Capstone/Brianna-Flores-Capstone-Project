@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
+import { ColumnOverflowTitledListStyle, RowOverflowTitledListStyle } from "../utils/UIStyle";
 
 const LIST_HEIGHT = 250
 
@@ -67,6 +68,7 @@ const Homepage = () => {
                 />
               )}
               listHeight={LIST_HEIGHT}
+              listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
           <Grid xs={6}>
@@ -83,6 +85,7 @@ const Homepage = () => {
                 />
               )}
               listHeight={LIST_HEIGHT}
+              listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
         </Grid>
@@ -98,9 +101,11 @@ const Homepage = () => {
                 parsedMealData={meal}
                 setMessage={setMessage}
                 selected={false}
+                cardSize={350}
               />
             )}
             flexDirectionRow={true}
+            listItemsStyle={RowOverflowTitledListStyle}
           />
         </Box>
       </Box>

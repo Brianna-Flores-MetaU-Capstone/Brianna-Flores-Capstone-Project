@@ -11,7 +11,9 @@ type GPTitledListViewProps<T> = {
   renderItem: (item: T, index: number) => React.ReactNode;
   headerList?: GPHeaderListType[];
   flexDirectionRow?: boolean;
-  listHeight?: number
+  listOverflow?: boolean;
+  listHeight?: number;
+  listItemsStyle: {};
 };
 
 const TitledListView = <T,>({
@@ -19,7 +21,9 @@ const TitledListView = <T,>({
   renderItem,
   headerList,
   flexDirectionRow,
-  listHeight
+  listOverflow,
+  listHeight,
+  listItemsStyle,
 }: GPTitledListViewProps<T>) => {
   return (
     <Box>
@@ -36,14 +40,14 @@ const TitledListView = <T,>({
         >
           {headerList.map((header, index) => (
             <Grid xs={header.spacing} key={index}>
-              <Typography level="h4">
-                {header.title}
-              </Typography>
+              <Typography level="h4">{header.title}</Typography>
             </Grid>
           ))}
         </Grid>
       )}
-      <Box sx={{display: "flex", gap: 3, ...(flexDirectionRow ? {flexWrap: "wrap", justifyContent: "center"} : {flexDirection: "column",}), ...(listHeight ? {maxHeight: listHeight,  overflowY: "auto"} : {})}}>
+      <Box
+        sx={listItemsStyle}
+      >
         {itemsList && itemsList.map(renderItem)}
       </Box>
     </Box>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Typography } from "@mui/joy";
 import type { GPRecipeDataTypes } from "../utils/types";
 
@@ -13,7 +12,7 @@ const DietsAndIntolerances = ({
     border: "2px solid",
     borderRadius: "md",
     textAlign: "center",
-    color: "primary.50"
+    color: "primary.400"
   };
 
   return (

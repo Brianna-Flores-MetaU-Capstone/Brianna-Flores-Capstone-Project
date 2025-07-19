@@ -14,7 +14,7 @@ import ErrorState from "./ErrorState";
 import { useEventRec } from "../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../contexts/SelectedEventsContext";
-import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { ColumnOverflowTitledListStyle, MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 
 import { gapi } from "gapi-script";
@@ -84,6 +84,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
                 adjustedSuggestion={false}
               />
             )}
+            listItemsStyle={ColumnOverflowTitledListStyle}
           />
         </DialogContent>
         {message && <ErrorState error={message.error} message={message.message} />}          

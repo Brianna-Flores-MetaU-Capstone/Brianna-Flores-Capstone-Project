@@ -34,8 +34,7 @@ import RecipeDiffModal from "./RecipeDiffModal";
 import { updateRecipeWithPricing } from "../utils/utils";
 import LoadingModal from "./LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
-import { RecipeIngredientsDiff } from "../classes/DiffClass";
-import type { GPDiffReturnType } from "../classes/DiffClass";
+import { CenteredTitledListStyle } from "../utils/UIStyle";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -295,9 +294,10 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     (recipe) => recipe.apiId === meal.apiId
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
+                  cardSize={350}
                 />
               )}
-              flexDirectionRow={true}
+              listItemsStyle={CenteredTitledListStyle}
             />
             {/* if search clicked, add a generate more button */}
             <ButtonGroup buttonFlex={1} spacing={{ xs: 10 }} color="primary">

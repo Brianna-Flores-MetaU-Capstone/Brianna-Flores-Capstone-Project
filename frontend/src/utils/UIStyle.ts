@@ -146,6 +146,28 @@ const GPDiffHeaderStyle = {
   borderRadius: "lg",
 };
 
+const BaseListStyle = {
+  display: "flex",
+  gap: 3,
+}
+
+const RowOverflowTitledListStyle = {
+  ...BaseListStyle,
+  overflowX: "auto",
+}
+
+const ColumnOverflowTitledListStyle = {
+  ...BaseListStyle,
+  flexDirection: "column",
+  overflowY: "auto" 
+}
+
+const CenteredTitledListStyle = {
+  ...BaseListStyle,
+  flexWrap: "wrap",
+  justifyContent: "center",
+}
+
 const MUI_GRID_FULL_SPACE = 12;
 
-export { GPModalStyle, GPCenteredBoxStyle, GPDiffHeaderStyle, theme, MUI_GRID_FULL_SPACE };
+export { GPModalStyle, GPCenteredBoxStyle, GPDiffHeaderStyle, theme, MUI_GRID_FULL_SPACE, RowOverflowTitledListStyle, ColumnOverflowTitledListStyle, CenteredTitledListStyle };

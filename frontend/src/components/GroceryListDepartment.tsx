@@ -5,7 +5,7 @@ import type {
 import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { Box } from "@mui/joy";
-import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { ColumnOverflowTitledListStyle, MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientDataTypes[];
@@ -42,6 +42,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             onDelete={handleDeleteIngredient}
           />
         )}
+        listItemsStyle={ColumnOverflowTitledListStyle}
       />
     </Box>
   );

@@ -6,11 +6,12 @@ import AppHeader from "../components/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/IngredientModal";
-import { Button, Box, Grid, Typography } from "@mui/joy";
+import { Button, Box, Typography } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/TitledListView";
 import ErrorState from "../components/ErrorState";
 import { fetchGroceryList } from "../utils/databaseHelpers";
+import { CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
@@ -75,7 +76,7 @@ const GroceryList = () => {
               onGroceryCheck={toggleGroceryCheck}
             />
           )}
-          flexDirectionRow={true}
+          listItemsStyle={CenteredTitledListStyle}
         />
         </Box>
         <Typography level="h3">Estimated Cost</Typography>
