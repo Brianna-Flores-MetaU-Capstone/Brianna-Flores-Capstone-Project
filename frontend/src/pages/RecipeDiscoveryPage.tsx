@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
   GPRecipeDiscoveryCategories,
+  GPRecipeDataTypes,
 } from "../utils/types";
 import { fetchAllRecipeCategories } from "../utils/databaseHelpers";
 import TitledListView from "../components/TitledListView";
@@ -13,6 +14,7 @@ import {
   RowOverflowTitledListStyle,
 } from "../utils/UIStyle";
 import ErrorState from "../components/ErrorState";
+import MealInfoModal from "../components/MealInfoModal";
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
@@ -34,15 +36,23 @@ const RecipeDiscoveryPage = () => {
       vegan: [],
     });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
+    useState<GPRecipeDataTypes>();
 
   useEffect(() => {
     fetchAllRecipeCategories({
       setMessage,
       setRecipeDiscoveryResults,
       filters: recipeFilters,
-      offset: 0
+      offset: 0,
     });
   }, []);
+
+  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+    setRecipeInfoModalOpen((prev) => !prev);
+    setRecipeInfoModalInfo(recipe);
+  };
 
   return (
     <Box>
@@ -62,7 +72,7 @@ const RecipeDiscoveryPage = () => {
               <MealCard
                 key={meal.apiId}
                 index={index}
-                onMealCardClick={() => {}}
+                onMealCardClick={() => handleRecipeCardClick(meal)}
                 setMessage={setMessage}
                 parsedMealData={meal}
                 selected={false}
@@ -76,6 +86,11 @@ const RecipeDiscoveryPage = () => {
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
+      <MealInfoModal
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
+        modalOpen={recipeInfoModalOpen}
+        recipeInfo={recipeInfoModalInfo}
+      />
     </Box>
   );
 };
