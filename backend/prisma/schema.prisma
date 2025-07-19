@@ -23,7 +23,8 @@ model User {
   ownedIngredients OwnedIngredient[]
   groceryList      Json?
   groceryListCost  Decimal           @default(0.00)
-  recipes          Recipe[]
+  recipes          Recipe[] @relation("PlannedRecipes")
+  favoritedRecipes Recipe[] @relation("FavoritedRecipes")
 }
 
 model OwnedIngredient {
@@ -63,5 +64,6 @@ model Recipe {
   vegan          Boolean
   glutenFree     Boolean
   dairyFree      Boolean
-  users          User[]
+  users          User[] @relation("PlannedRecipes")
+  usersThatFavorited User[] @relation("FavoritedRecipes")
 }

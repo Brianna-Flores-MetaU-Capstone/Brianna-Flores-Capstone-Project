@@ -31,7 +31,7 @@ router.post("/convertUnits", isAuthenticated, async (req: Request, res: Response
 })
 
 // get a users recipes
-router.get("/", isAuthenticated, async (req: Request, res: Response) => {
+router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
   try {
     // get the user data
@@ -52,7 +52,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
 
 // add a new recipe for a user
 router.post(
-  "/:userId",
+  "/planned/:userId",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
@@ -132,7 +132,7 @@ router.post(
 );
 
 // update user to remove recipe
-router.put("/:apiId", async (req: Request, res: Response) => {
+router.put("/planned/:apiId", async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const recipeApiId = parseInt(req.params.apiId);
   try {

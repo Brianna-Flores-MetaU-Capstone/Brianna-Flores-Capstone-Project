@@ -12,11 +12,12 @@ const DietsAndIntolerances = ({
     border: "2px solid",
     borderRadius: "md",
     textAlign: "center",
+    alignSelf: "center",
     color: "primary.400"
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", justifyContent: "center"}}>
       {recipeInfo?.dairyFree && (
         <Typography level="body-xs" sx={listItemStyle}>
           Dairy Free
