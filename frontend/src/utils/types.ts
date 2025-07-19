@@ -38,7 +38,7 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
-  ingredientCost: number; 
+  ingredientCost: number;
   ingredientCostUnit: number;
 };
 
@@ -99,6 +99,14 @@ type GPPreferredBlockType = {
   end: string;
 };
 
+type GPRecipeDiscoveryCategories = {
+  all: GPRecipeDataTypes[];
+  dairyFree: GPRecipeDataTypes[];
+  glutenFree: GPRecipeDataTypes[];
+  vegetarian: GPRecipeDataTypes[];
+  vegan: GPRecipeDataTypes[];
+};
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -112,4 +120,5 @@ export type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
+  GPRecipeDiscoveryCategories
 };

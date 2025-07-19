@@ -14,7 +14,7 @@ router.post("/discover", async (req: Request, res: Response) => {
   const {filter, offset, numRequested} = req.body
   try {
     const recipeData = await prisma.recipe.findMany({
-      ...(filter ? {where: { [filter]: true }} : {}),
+      ...(filter !== "all" ? {where: { [filter]: true }} : {}),
       skip: parseInt(offset),
       take: parseInt(numRequested),
     })

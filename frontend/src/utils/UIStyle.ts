@@ -154,6 +154,7 @@ const BaseListStyle = {
 const RowOverflowTitledListStyle = {
   ...BaseListStyle,
   overflowX: "auto",
+  mb: 4
 }
 
 const ColumnOverflowTitledListStyle = {

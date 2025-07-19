@@ -67,7 +67,6 @@ const Homepage = () => {
                   presentButtons={false}
                 />
               )}
-              listHeight={LIST_HEIGHT}
               listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
@@ -84,7 +83,6 @@ const Homepage = () => {
                   presentButtons={false}
                 />
               )}
-              listHeight={LIST_HEIGHT}
               listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
@@ -104,7 +102,6 @@ const Homepage = () => {
                 cardSize={350}
               />
             )}
-            flexDirectionRow={true}
             listItemsStyle={RowOverflowTitledListStyle}
           />
         </Box>

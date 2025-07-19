@@ -4,12 +4,14 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
+  GPRecipeDiscoveryCategories,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+const DISCOVERY_NUM_TO_REQUEST = 20;
 
 const axiosConfig = {
   headers: {
@@ -243,21 +245,72 @@ const fetchGroceryList = async ({
 };
 
 type GPFetchDiscoverRecipesType = GPSetMessageType & {
-  setDiscoverRecipes: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void
-  offset: number
-  numRequested: number
-}
-const fetchDiscoverRecipes = async ({setMessage, setDiscoverRecipes, offset, numRequested}: GPFetchDiscoverRecipesType) => {
+  filter: string;
+  offset: number;
+  numRequested: number;
+};
+const fetchDiscoverRecipes = async ({
+  setMessage,
+  filter,
+  offset,
+  numRequested,
+}: GPFetchDiscoverRecipesType) => {
   try {
-    const response = await axios.post(`${databaseUrl}/recipes/discover`, {offset, numRequested}, axiosConfig);
-    setDiscoverRecipes(response.data)
+    const response = await axios.post(
+      `${databaseUrl}/recipes/discover`,
+      { filter, offset, numRequested },
+      axiosConfig
+    );
+    return response.data;
+  } catch (error) {
+    setMessage({
+      error: true,
+      message: `Error fetching ${filter} recipes`,
+    });
+  }
+};
+
+type GPFetchRecipeCategoryType = GPSetMessageType & {
+  setRecipeDiscoveryResults: (
+    value: React.SetStateAction<GPRecipeDiscoveryCategories>
+  ) => void;
+  filters: { filter: string; title: string }[];
+  offset: number;
+};
+const fetchAllRecipeCategories = async ({
+  setMessage,
+  setRecipeDiscoveryResults,
+  filters,
+  offset,
+}: GPFetchRecipeCategoryType) => {
+  try {
+    const recipeCategories: GPRecipeDiscoveryCategories = {
+      all: [],
+      dairyFree: [],
+      glutenFree: [],
+      vegetarian: [],
+      vegan: [],
+    };
+    await Promise.all(
+      filters.map(async (filter: { filter: string; title: string }) => {
+        const categoryRecipes = await fetchDiscoverRecipes({
+          setMessage,
+          filter: filter.filter,
+          offset,
+          numRequested: DISCOVERY_NUM_TO_REQUEST,
+        });
+        recipeCategories[filter.filter as keyof GPRecipeDiscoveryCategories] =
+          categoryRecipes;
+      })
+    );
+    setRecipeDiscoveryResults(recipeCategories);
   } catch (error) {
     setMessage({
       error: true,
       message: "Error fetching recipes",
     });
   }
-}
+};
 
 export {
   updateAccount,
@@ -272,5 +325,6 @@ export {
   updateUserRecipes,
   fetchGroceryList,
   fetchDiscoverRecipes,
+  fetchAllRecipeCategories,
   axiosConfig,
 };

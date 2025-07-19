@@ -1,42 +1,46 @@
 import AppHeader from "../components/AppHeader";
 import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
-import { fetchDiscoverRecipes } from "../utils/databaseHelpers";
+import type {
+  GPErrorMessageTypes,
+  GPRecipeDiscoveryCategories,
+} from "../utils/types";
+import { fetchAllRecipeCategories } from "../utils/databaseHelpers";
 import TitledListView from "../components/TitledListView";
 import MealCard from "../components/MealCard";
-import { MUI_GRID_FULL_SPACE, RowOverflowTitledListStyle } from "../utils/UIStyle";
-const NUM_TO_FETCH = 10;
+import {
+  MUI_GRID_FULL_SPACE,
+  RowOverflowTitledListStyle,
+} from "../utils/UIStyle";
+import ErrorState from "../components/ErrorState";
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
-type GPRecipeDiscoveryCategories = "all" | "dairyFree" | "glutenFree" | "vegetarian" | "vegan"
-
-interface GPRecipeDiscoveryCategory {
-    recipeList: GPRecipeDataTypes[]
-}
-
+const recipeFilters = [
+  { filter: "all", title: "Discover All Recipes" },
+  { filter: "dairyFree", title: "Dairy Free Recipes" },
+  { filter: "glutenFree", title: "Gluten Free Recipes" },
+  { filter: "vegetarian", title: "Vegetarian Recipes" },
+  { filter: "vegan", title: "Vegan Recipes" },
+];
 
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
-  const [discoverRecipes, setDiscoverRecipes] = useState<GPRecipeDataTypes[]>(
-    []
-  );
-  const [recipeDiscoveryCategoryResults, setRecipeDiscoveryCategoryResults] = useState<Record<GPRecipeDiscoveryCategories, GPRecipeDiscoveryCategory>>({
-    all: {recipeList: []},
-    dairyFree: {recipeList: []},
-    glutenFree: {recipeList: []},
-    vegetarian: {recipeList: []},
-    vegan: {recipeList: []},
-  })
+  const [recipeDiscoveryResults, setRecipeDiscoveryResults] =
+    useState<GPRecipeDiscoveryCategories>({
+      all: [],
+      dairyFree: [],
+      glutenFree: [],
+      vegetarian: [],
+      vegan: [],
+    });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    fetchDiscoverRecipes({
+    fetchAllRecipeCategories({
       setMessage,
-      offset,
-      numRequested: NUM_TO_FETCH,
-      setDiscoverRecipes,
+      setRecipeDiscoveryResults,
+      filters: recipeFilters,
+      offset: 0
     });
   }, []);
 
@@ -44,23 +48,34 @@ const RecipeDiscoveryPage = () => {
     <Box>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <TitledListView
-          itemsList={discoverRecipes}
-          headerList={[{title: "Discover Recipes", spacing: MUI_GRID_FULL_SPACE}]}
-          renderItem={(meal, index) => (
-            <MealCard
-              key={meal.apiId}
-              index={index}
-              onMealCardClick={() => {}}
-              setMessage={setMessage}
-              parsedMealData={meal}
-              selected={false}
-              cardSize={200}
+        {Object.keys(recipeDiscoveryResults).map((filter, i) => (
+          <TitledListView
+            itemsList={
+              recipeDiscoveryResults[
+                filter as keyof GPRecipeDiscoveryCategories
+              ]
+            }
+            headerList={[
+              { title: recipeFilters[i].title, spacing: MUI_GRID_FULL_SPACE },
+            ]}
+            renderItem={(meal, index) => (
+              <MealCard
+                key={meal.apiId}
+                index={index}
+                onMealCardClick={() => {}}
+                setMessage={setMessage}
+                parsedMealData={meal}
+                selected={false}
+                cardSize={200}
               />
             )}
             listItemsStyle={RowOverflowTitledListStyle}
-        />
+          />
+        ))}
       </Box>
+      {message && (
+        <ErrorState error={message.error} message={message.message} />
+      )}
     </Box>
   );
 };

@@ -10,9 +10,6 @@ type GPTitledListViewProps<T> = {
   itemsList: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   headerList?: GPHeaderListType[];
-  flexDirectionRow?: boolean;
-  listOverflow?: boolean;
-  listHeight?: number;
   listItemsStyle: {};
 };
 
@@ -20,9 +17,6 @@ const TitledListView = <T,>({
   itemsList,
   renderItem,
   headerList,
-  flexDirectionRow,
-  listOverflow,
-  listHeight,
   listItemsStyle,
 }: GPTitledListViewProps<T>) => {
   return (
