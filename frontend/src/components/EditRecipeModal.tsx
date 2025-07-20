@@ -18,7 +18,7 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TitledListView from "./TitledListView";
-import { CenteredTitledListStyle, MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { MUI_GRID_FULL_SPACE, RecipeTagsTitledListStyle } from "../utils/UIStyle";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;
@@ -29,6 +29,7 @@ type GPEditRecipeModalType = {
 const actions = {
   SET_RECIPE: "setRecipe",
   SET_INPUT: "setInput",
+  SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
   UPDATE_INSTRUCTION: "setInstruction",
   DELETE_ITEM: "deleteItem",
@@ -40,7 +41,7 @@ const recipeInputEditFields = [
   { label: "Servings", field: "servings" },
   { label: "Cook Time", field: "readyInMinutes" },
   { label: "Recipe URL", field: "sourceUrl" },
-  { label: "Editor Name/Username", field: "editingAuthor" },
+  { label: "Editor Username", field: "editingAuthor" },
 ] as const;
 
 const ingredientInputEditFields = [
@@ -48,6 +49,13 @@ const ingredientInputEditFields = [
   { label: "Quantity", field: "quantity", space: 2 },
   { label: "Unit", field: "unit", space: 3 },
 ] as const;
+
+const dietaryEditFields = [
+  { label: "Dairy Free", field: "dairyFree" },
+  { label: "Gluten Free", field: "glutenFree" },
+  { label: "Vegetarian", field: "vegetarian" },
+  { label: "Vegan", field: "vegan" },
+];
 
 const EditRecipeModal = ({
   recipe,
@@ -85,6 +93,10 @@ const EditRecipeModal = ({
         value: string;
       }
     | {
+        type: typeof actions.SET_DIETARY_TAGS;
+        dietTag: keyof GPRecipeDataTypes;
+      }
+    | {
         type: typeof actions.UPDATE_INGREDIENT;
         ingredientIndex: number;
         ingredientField: keyof GPIngredientDataTypes;
@@ -112,6 +124,8 @@ const EditRecipeModal = ({
         return { ...action.value };
       case actions.SET_INPUT:
         return { ...state, [action.recipeField]: action.value };
+      case actions.SET_DIETARY_TAGS:
+        return { ...state, [action.dietTag]: !state[action.dietTag] };
       case actions.UPDATE_INGREDIENT:
         return {
           ...state,
@@ -164,9 +178,8 @@ const EditRecipeModal = ({
   }, [recipe]);
 
   const handleRecipeSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-
-  }
+    event.preventDefault();
+  };
 
   return (
     <Modal open={modalOpen} onClose={toggleModal}>
@@ -187,15 +200,43 @@ const EditRecipeModal = ({
                         value: event.target.value,
                       })
                     }
-                    value={editedRecipeData[field.field]}
+                    value={editedRecipeData[field.field] ?? ""}
                   />
                 </FormControl>
               ))}
-              <TitledListView 
+              <TitledListView
+                itemsList={dietaryEditFields}
+                headerList={[
+                  { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
+                ]}
+                renderItem={(tag, index) => (
+                  <Button
+                    key={index}
+                    value={tag.field}
+                    variant={
+                      editedRecipeData[tag.field as keyof GPRecipeDataTypes]
+                        ? "solid"
+                        : "plain"
+                    }
+                    onClick={() =>
+                      dispatch({
+                        type: actions.SET_DIETARY_TAGS,
+                        dietTag: tag.field as keyof GPRecipeDataTypes,
+                      })
+                    }
+                  >
+                    {tag.label}
+                  </Button>
+                )}
+                listItemsStyle={RecipeTagsTitledListStyle}
+              />
+              <TitledListView
                 itemsList={editedRecipeData.ingredients}
-                headerList={[{title: "Ingredients", spacing: MUI_GRID_FULL_SPACE}]}
+                headerList={[
+                  { title: "Ingredients", spacing: MUI_GRID_FULL_SPACE },
+                ]}
                 renderItem={(ingredient, ingredientIndex) => (
-                    <Grid container key={ingredientIndex} alignItems="center">
+                  <Grid container key={ingredientIndex} alignItems="center">
                     {ingredientInputEditFields.map((field, fieldIndex) => (
                       <Grid key={fieldIndex} xs={field.space}>
                         <FormControl>
@@ -237,51 +278,60 @@ const EditRecipeModal = ({
                   dispatch({
                     type: actions.ADD_ITEM,
                     addedField: "ingredients",
-                    addedItem: {id: 0, ingredientName: "", quantity: 0, unit: "", department: "", isChecked: false}
+                    addedItem: {
+                      id: 0,
+                      ingredientName: "",
+                      quantity: 0,
+                      unit: "",
+                      department: "",
+                      isChecked: false,
+                    },
                   })
                 }
               >
                 <AddCircleOutlineIcon />
               </IconButton>
-              <TitledListView 
-                headerList={[{title: "Instructions", spacing: MUI_GRID_FULL_SPACE}]}
+              <TitledListView
+                headerList={[
+                  { title: "Instructions", spacing: MUI_GRID_FULL_SPACE },
+                ]}
                 itemsList={editedRecipeData.instructions}
                 renderItem={(step, index) => (
-                    <Grid container key={index} sx={{ alignItems: "center" }}>
-                  <Grid xs={1}>
-                    <Typography>#{index + 1}</Typography>
-                  </Grid>
-                  <Grid xs={10}>
-                    <FormControl>
-                      <Input
-                        required
-                        onChange={(event) =>
+                  <Grid container key={index} sx={{ alignItems: "center" }}>
+                    <Grid xs={1}>
+                      <Typography>#{index + 1}</Typography>
+                    </Grid>
+                    <Grid xs={10}>
+                      <FormControl>
+                        <Input
+                          required
+                          onChange={(event) =>
+                            dispatch({
+                              type: actions.UPDATE_INSTRUCTION,
+                              instructionIndex: index,
+                              value: event.target.value,
+                            })
+                          }
+                          value={step}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid xs={1}>
+                      <IconButton
+                        onClick={(event) =>
                           dispatch({
-                            type: actions.UPDATE_INSTRUCTION,
-                            instructionIndex: index,
-                            value: event.target.value,
+                            type: actions.DELETE_ITEM,
+                            deletedField: "instructions",
+                            itemIndex: index,
                           })
                         }
-                        value={step}
-                      />
-                    </FormControl>
+                      >
+                        <RemoveCircleOutlineIcon />
+                      </IconButton>
+                    </Grid>
                   </Grid>
-                  <Grid xs={1}>
-                    <IconButton
-                      onClick={(event) =>
-                        dispatch({
-                          type: actions.DELETE_ITEM,
-                          deletedField: "instructions",
-                          itemIndex: index,
-                        })
-                      }
-                    >
-                      <RemoveCircleOutlineIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
                 )}
-                />
+              />
               <IconButton
                 sx={{ justifySelf: "flex-end" }}
                 onClick={(event) =>
