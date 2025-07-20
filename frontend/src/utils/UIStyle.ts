@@ -169,16 +169,17 @@ const ColumnOverflowTitledListStyle = {
   maxHeight: 300,
 };
 
+const RecipeTagsTitledListStyle = {
+  ...BaseListStyle,
+  flexDirection: "column",
+  gap: 2,
+  mb: 2,
+};
+
 const CenteredTitledListStyle = {
   ...BaseListStyle,
   flexWrap: "wrap",
   justifyContent: "center",
-};
-
-const RecipeTagsTitledListStyle = {
-  ...BaseListStyle,
-  justifyContent: "space-between",
-  mb: 2,
 };
 
 const MUI_GRID_FULL_SPACE = 12;

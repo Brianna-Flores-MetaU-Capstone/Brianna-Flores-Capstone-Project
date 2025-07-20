@@ -18,7 +18,10 @@ import {
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TitledListView from "./TitledListView";
-import { MUI_GRID_FULL_SPACE, RecipeTagsTitledListStyle } from "../utils/UIStyle";
+import {
+  MUI_GRID_FULL_SPACE,
+  RecipeTagsTitledListStyle,
+} from "../utils/UIStyle";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;
@@ -37,11 +40,11 @@ const actions = {
 } as const;
 
 const recipeInputEditFields = [
-  { label: "Recipe Title", field: "recipeTitle" },
-  { label: "Servings", field: "servings" },
-  { label: "Cook Time", field: "readyInMinutes" },
-  { label: "Recipe URL", field: "sourceUrl" },
-  { label: "Editor Username", field: "editingAuthor" },
+  { label: "Recipe Title", field: "recipeTitle", spacing: 12 },
+  { label: "Servings", field: "servings", spacing: 2 },
+  { label: "Cook Time", field: "readyInMinutes", spacing: 4 },
+  { label: "Editor Username", field: "editingAuthor", spacing: 6 },
+  { label: "Recipe URL", field: "sourceUrl", spacing: 12 },
 ] as const;
 
 const ingredientInputEditFields = [
@@ -184,52 +187,73 @@ const EditRecipeModal = ({
   return (
     <Modal open={modalOpen} onClose={toggleModal}>
       <ModalDialog layout="fullscreen">
-        <ModalClose />
+        <ModalClose sx={{zIndex: 2}} />
         <DialogContent>
           <form onSubmit={handleRecipeSubmit}>
             <Box>
-              {recipeInputEditFields.map((field, index) => (
-                <FormControl key={index}>
-                  <FormLabel>{field.label}</FormLabel>
-                  <Input
-                    required
-                    onChange={(event) =>
-                      dispatch({
-                        type: actions.SET_INPUT,
-                        recipeField: field.field as keyof GPRecipeDataTypes,
-                        value: event.target.value,
-                      })
-                    }
-                    value={editedRecipeData[field.field] ?? ""}
-                  />
-                </FormControl>
-              ))}
-              <TitledListView
-                itemsList={dietaryEditFields}
-                headerList={[
-                  { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
-                ]}
-                renderItem={(tag, index) => (
-                  <Button
-                    key={index}
-                    value={tag.field}
-                    variant={
-                      editedRecipeData[tag.field as keyof GPRecipeDataTypes]
-                        ? "solid"
-                        : "plain"
-                    }
-                    onClick={() =>
-                      dispatch({
-                        type: actions.SET_DIETARY_TAGS,
-                        dietTag: tag.field as keyof GPRecipeDataTypes,
-                      })
-                    }
+                <Box sx={{m: 1}} >
+              <Grid container spacing={2} sx={{ alignItems: "flex-end" }}>
+                <Grid container xs={9}>
+                  <Grid
+                    sx={{
+                      flexGrow: 1,
+                      p: 2,
+                      bgcolor: "primary.300",
+                      borderRadius: "md",
+                    }}
                   >
-                    {tag.label}
-                  </Button>
-                )}
-                listItemsStyle={RecipeTagsTitledListStyle}
-              />
+                        <Typography level="h4">Edit Recipe</Typography>
+                  </Grid>
+                  {recipeInputEditFields.map((field, index) => (
+                    <Grid xs={field.spacing}>
+                      <FormControl key={index}>
+                        <FormLabel>{field.label}</FormLabel>
+                        <Input
+                          required
+                          onChange={(event) =>
+                            dispatch({
+                              type: actions.SET_INPUT,
+                              recipeField: field.field,
+                              value: event.target.value,
+                            })
+                          }
+                          value={editedRecipeData[field.field] ?? ""}
+                        />
+                      </FormControl>
+                    </Grid>
+                  ))}
+                </Grid>
+                <Grid xs={3}>
+                  <TitledListView
+                    itemsList={dietaryEditFields}
+                    headerList={[
+                      { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
+                    ]}
+                    renderItem={(tag, index) => (
+                      <Button
+                        key={index}
+                        sx={{ p: 1 }}
+                        value={tag.field}
+                        variant={
+                          editedRecipeData[tag.field as keyof GPRecipeDataTypes]
+                            ? "solid"
+                            : "plain"
+                        }
+                        onClick={() =>
+                          dispatch({
+                            type: actions.SET_DIETARY_TAGS,
+                            dietTag: tag.field as keyof GPRecipeDataTypes,
+                          })
+                        }
+                      >
+                        {tag.label}
+                      </Button>
+                    )}
+                    listItemsStyle={RecipeTagsTitledListStyle}
+                  />
+                </Grid>
+              </Grid>
+              </Box>
               <TitledListView
                 itemsList={editedRecipeData.ingredients}
                 headerList={[
@@ -258,7 +282,7 @@ const EditRecipeModal = ({
                     ))}
                     <Grid xs={1}>
                       <IconButton
-                        onClick={(event) =>
+                        onClick={() =>
                           dispatch({
                             type: actions.DELETE_ITEM,
                             deletedField: "ingredients",
@@ -274,7 +298,7 @@ const EditRecipeModal = ({
               />
               <IconButton
                 sx={{ justifySelf: "flex-end" }}
-                onClick={(event) =>
+                onClick={() =>
                   dispatch({
                     type: actions.ADD_ITEM,
                     addedField: "ingredients",
@@ -318,7 +342,7 @@ const EditRecipeModal = ({
                     </Grid>
                     <Grid xs={1}>
                       <IconButton
-                        onClick={(event) =>
+                        onClick={() =>
                           dispatch({
                             type: actions.DELETE_ITEM,
                             deletedField: "instructions",
