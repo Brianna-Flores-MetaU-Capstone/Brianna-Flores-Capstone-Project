@@ -67,8 +67,8 @@ const NewListPage = () => {
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
     try {
       await axios.put(
-        `${databaseUrl}/recipes/planned/${deletedRecipe.apiId}`,
-        {},
+        `${databaseUrl}/recipes/planned/remove`,
+        {deletedRecipe},
         axiosConfig
       );
       await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });

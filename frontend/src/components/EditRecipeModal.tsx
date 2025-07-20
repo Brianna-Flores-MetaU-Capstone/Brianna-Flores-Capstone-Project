@@ -72,9 +72,11 @@ const EditRecipeModal = ({
   toggleModal,
 }: GPEditRecipeModalType) => {
   const initialRecipeState = recipe ?? {
+    id: 0,
     apiId: 0,
     originalSource: "",
     editingAuthorName: "",
+    editingAuthorId: null,
     recipeTitle: "",
     previewImage:
       "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg",
@@ -228,8 +230,8 @@ const EditRecipeModal = ({
                       <Typography level="h4">Edit Recipe</Typography>
                     </Grid>
                     {recipeInputEditFields.map((field, index) => (
-                      <Grid xs={field.spacing}>
-                        <FormControl key={index}>
+                      <Grid  key={index} xs={field.spacing}>
+                        <FormControl>
                           <FormLabel>{field.label}</FormLabel>
                           <Input
                             required

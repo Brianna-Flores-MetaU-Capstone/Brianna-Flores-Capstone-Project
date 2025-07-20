@@ -329,8 +329,8 @@ const handleUnfavoriteRecipe = async ({
 }: GPUnfavoriteType) => {
   try {
     await axios.put(
-      `${databaseUrl}/recipes/favorited/${recipe.apiId}`,
-      {},
+      `${databaseUrl}/recipes/favorited/unfavorite`,
+      { selectedRecipe: recipe },
       axiosConfig
     );
   } catch (error) {
@@ -351,7 +351,7 @@ const handleFavoriteRecipe = async ({
   try {
     await axios.post(
       `${databaseUrl}/recipes/favorited/${userId}`,
-      { apiId: selectedRecipe.apiId },
+      { selectedRecipe },
       axiosConfig
     );
   } catch (error) {

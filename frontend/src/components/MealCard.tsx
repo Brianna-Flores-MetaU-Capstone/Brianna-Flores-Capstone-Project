@@ -15,6 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import PersonIcon from "@mui/icons-material/Person";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../utils/utils";
@@ -156,13 +157,12 @@ const MealCard: React.FC<GPMealCardProps> = ({
           <img src={parsedMealData.previewImage} />
         </AspectRatio>
         <CardContent sx={{ justifyContent: "flex-end" }}>
-          <Box
-            sx={{
-              color: "primary",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          ></Box>
+          {parsedMealData.editingAuthorName && (
+            <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
+              <PersonIcon />
+              <Typography>Edited by: {parsedMealData.editingAuthorName}</Typography>
+            </Box>
+          )}
           {onSelectRecipe && (
             <DietsAndIntolerances recipeInfo={parsedMealData} />
           )}
@@ -180,9 +180,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
               <DeleteIcon />
             </IconButton>
           )}
-          <Box
-            sx={{display: "flex", justifyContent: "space-between"}}
-          >
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
                 <Button
@@ -201,10 +199,12 @@ const MealCard: React.FC<GPMealCardProps> = ({
             )}
             {onEditRecipe && (
               <Tooltip title="Add your own edits!">
-                <IconButton onClick={(event) => {
-                  event.stopPropagation()
-                  onEditRecipe(parsedMealData)
-                }}>
+                <IconButton
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onEditRecipe(parsedMealData);
+                  }}
+                >
                   <EditIcon />
                 </IconButton>
               </Tooltip>

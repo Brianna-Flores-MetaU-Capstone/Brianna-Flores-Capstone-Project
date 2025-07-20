@@ -72,5 +72,6 @@ model Recipe {
   editingAuthorId    Int?
   editingAuthor      User?    @relation(fields: [editingAuthorId], references: [id])
 
+
   @@unique([apiId, editingAuthorId])
 }
