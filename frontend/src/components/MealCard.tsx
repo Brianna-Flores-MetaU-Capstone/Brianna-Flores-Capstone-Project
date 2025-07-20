@@ -62,7 +62,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
     setIngredientCostModalOpen((prev) => !prev);
   };
 
-  const handleCostEstimateClick = async () => {
+  const handleCostEstimateClick = async (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setLoading(true);
     const ownedIngredients = await fetchUserIngredientsHelper({
       setMessage: setMessage,
@@ -163,11 +164,12 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 <DeleteIcon />
               </IconButton>
             )}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box display="flex" justifyContent= {onLoadRecipeCost ? "space-between" : "center"}>
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
                 <Button
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation()
                     setMessage({
                       error: false,
                       message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
@@ -179,10 +181,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 </Button>
               </Tooltip>
             )}
-            {onSelectRecipe && parsedMealData.totalCost > 0 && (
+            {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
               <Button onClick={toggleModal}>See Pricing Details</Button>
             )}
-            {onSelectRecipe && parsedMealData.totalCost <= 0 && (
+            {onLoadRecipeCost && parsedMealData.totalCost <= 0 && (
               <Button loading={loading} onClick={handleCostEstimateClick}>
                 Get Estimated Cost
               </Button>

@@ -71,7 +71,7 @@ router.get(
         },
       });
       // return the users recipes
-      res.json(userData.recipes);
+      res.json(userData.favoritedRecipes);
     } catch (error) {
       res.status(500).send("Server Error");
     }

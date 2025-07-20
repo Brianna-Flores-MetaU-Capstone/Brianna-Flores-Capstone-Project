@@ -55,24 +55,25 @@ const RecipeDiscoveryPage = () => {
   );
 
   useEffect(() => {
+    const setRecipeLists = async () => {
     fetchAllRecipeCategories({
       setMessage,
       setRecipeDiscoveryResults,
       filters: recipeFilters,
       offset: 0,
     });
-    if (user) {
-      fetchRecipes({
+      const favoritedRecipesReturn = await fetchRecipes({
         setMessage,
         setRecipes: setFavoritedRecipes,
         recipeGroup: "favorited",
       });
       // set favorited recipes id
-      for (const elem of favoritedRecipes) {
-        favoritedRecipesId.add(elem.apiId);
+      for (const elem of favoritedRecipesReturn) {
+        setFavoritedRecipesId(prev => new Set(prev.add(elem.apiId)));
       }
     }
-  }, []);
+    setRecipeLists();
+}, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
     setRecipeInfoModalOpen((prev) => !prev);
@@ -96,14 +97,18 @@ const RecipeDiscoveryPage = () => {
     if (user) {
       if (favoritedRecipesId.has(recipe.apiId)) {
         handleUnfavoriteRecipe({ setMessage, recipe });
-        favoritedRecipesId.delete(recipe.apiId);
+        // Removing an element from set useState variable
+        setFavoritedRecipesId((prev) => {
+          prev.delete(recipe.apiId);
+          return new Set(prev);
+        });
       } else {
         handleFavoriteRecipe({
           setMessage,
           userId: user.id,
           selectedRecipe: recipe,
         });
-        favoritedRecipesId.add(recipe.apiId);
+        setFavoritedRecipesId(prev => new Set(prev.add(recipe.apiId)))
       }
       fetchRecipes({
         setMessage,
