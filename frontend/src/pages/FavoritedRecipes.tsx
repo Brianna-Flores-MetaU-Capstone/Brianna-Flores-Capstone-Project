@@ -35,7 +35,7 @@ const FavoritedRecipes = () => {
   const onFavoriteClick = (recipe: GPRecipeDataTypes) => {
     handleUnfavoriteRecipe({ setMessage, recipe });
     setFavoritedRecipes((prev) =>
-      prev.filter((elem) => elem.apiId !== recipe.apiId)
+      prev.filter((elem) => elem.id !== recipe.id)
     );
   };
 

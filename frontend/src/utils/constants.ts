@@ -26,6 +26,7 @@ const IngredientDataFields = {
 };
 
 const RecipeDataFields = {
+  ID: "id",
   API_ID: "apiId",
   TITLE: "recipeTitle",
   IMAGE: "previewImage",
