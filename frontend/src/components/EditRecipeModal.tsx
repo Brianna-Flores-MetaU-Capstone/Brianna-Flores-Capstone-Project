@@ -40,6 +40,7 @@ const recipeInputEditFields = [
   { label: "Servings", field: "servings" },
   { label: "Cook Time", field: "readyInMinutes" },
   { label: "Recipe URL", field: "sourceUrl" },
+  { label: "Editor Name/Username", field: "editingAuthor" },
 ] as const;
 
 const ingredientInputEditFields = [
@@ -55,6 +56,8 @@ const EditRecipeModal = ({
 }: GPEditRecipeModalType) => {
   const initialRecipeState = recipe ?? {
     apiId: 0,
+    originalSource: "",
+    editingAuthor: "",
     recipeTitle: "",
     previewImage:
       "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg",
@@ -160,12 +163,17 @@ const EditRecipeModal = ({
     }
   }, [recipe]);
 
+  const handleRecipeSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+
+  }
+
   return (
     <Modal open={modalOpen} onClose={toggleModal}>
       <ModalDialog layout="fullscreen">
         <ModalClose />
         <DialogContent>
-          <form>
+          <form onSubmit={handleRecipeSubmit}>
             <Box>
               {recipeInputEditFields.map((field, index) => (
                 <FormControl key={index}>
@@ -189,8 +197,8 @@ const EditRecipeModal = ({
                 renderItem={(ingredient, ingredientIndex) => (
                     <Grid container key={ingredientIndex} alignItems="center">
                     {ingredientInputEditFields.map((field, fieldIndex) => (
-                      <Grid xs={field.space}>
-                        <FormControl key={fieldIndex}>
+                      <Grid key={fieldIndex} xs={field.space}>
+                        <FormControl>
                           <FormHelperText>{field.label}</FormHelperText>
                           <Input
                             onChange={(event) =>

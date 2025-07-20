@@ -3,6 +3,8 @@ import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
   apiId: number;
+  originalSource: string;
+  editingAuthor: string;
   recipeTitle: string;
   previewImage: string;
   servings: number;
