@@ -52,7 +52,7 @@ model Ingredient {
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations
 model Recipe {
   id                 Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
-  apiId              Int      
+  apiId              Int
   originalSource     String
   editingAuthorName  String
   recipeTitle        String
@@ -71,5 +71,6 @@ model Recipe {
   usersThatFavorited User[]   @relation("FavoritedRecipes")
   editingAuthorId    Int?
   editingAuthor      User?    @relation(fields: [editingAuthorId], references: [id])
-  @@unique ([apiId, editingAuthorId])
+
+  @@unique([apiId, editingAuthorId])
 }
