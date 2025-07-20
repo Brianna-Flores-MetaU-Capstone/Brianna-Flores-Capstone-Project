@@ -38,8 +38,8 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
-  ingredientCost: number;
-  ingredientCostUnit: number;
+  ingredientCost?: number;
+  ingredientCostUnit?: number;
 };
 
 type GPCurrentUserTypes = {

@@ -5,19 +5,16 @@ import {
   Box,
   Card,
   CardContent,
-  Link,
   Typography,
   Checkbox,
   Tooltip,
   IconButton,
   AspectRatio,
-  Grid,
 } from "@mui/joy";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
-import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../utils/utils";
@@ -29,12 +26,13 @@ type GPMealCardProps = {
   parsedMealData: GPRecipeDataTypes;
   selectedToCompare: boolean;
   cardSize: number;
-  favorited: boolean
+  favorited: boolean;
   onMealCardClick: () => void;
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
+  onEditRecipe?: (data: GPRecipeDataTypes) => void;
   onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
   onLoadRecipeCost?: (data: GPRecipeDataTypes, index: number) => void;
   onCompareSelect?: (data: GPRecipeDataTypes) => void;
@@ -50,6 +48,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onMealCardClick,
   setMessage,
   onSelectRecipe,
+  onEditRecipe,
   onDeleteRecipe,
   onLoadRecipeCost,
   onCompareSelect,
@@ -62,7 +61,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
     setIngredientCostModalOpen((prev) => !prev);
   };
 
-  const handleCostEstimateClick = async (event: React.MouseEvent<HTMLElement>) => {
+  const handleCostEstimateClick = async (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
     event.stopPropagation();
     setLoading(true);
     const ownedIngredients = await fetchUserIngredientsHelper({
@@ -91,32 +92,61 @@ const MealCard: React.FC<GPMealCardProps> = ({
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card
         variant="outlined"
-        sx={{minWidth: cardSize, width: cardSize }}
+        sx={{ minWidth: cardSize, width: cardSize }}
         onClick={() => onMealCardClick()}
       >
-        <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
-          <Typography level="h4" sx={{
-            textAlign: "center",
-            textWrap: "nowrap",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}>{parsedMealData.recipeTitle}</Typography>
-          {onFavoriteClick && <Tooltip title={favorited ? "Remove from favorites" : "Add to favorites"}>
-            <IconButton
-              color="primary"
-              sx={{ zIndex: 2 }}
-              onClick={(event) => {
-                event.stopPropagation()
-                onFavoriteClick(parsedMealData)}}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography
+            level="h4"
+            sx={{
+              textAlign: "center",
+              textWrap: "nowrap",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {parsedMealData.recipeTitle}
+          </Typography>
+          {onFavoriteClick && (
+            <Tooltip
+              title={favorited ? "Remove from favorites" : "Add to favorites"}
             >
-              {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            </IconButton>
-          </Tooltip>}
+              <IconButton
+                color="primary"
+                sx={{ zIndex: 2 }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onFavoriteClick(parsedMealData);
+                }}
+              >
+                {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+            </Tooltip>
+          )}
+          {onCompareSelect && (
+            <Tooltip title="Compare recipes">
+              <Checkbox
+                sx={{ zIndex: 5 }}
+                size="lg"
+                checked={selectedToCompare}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onCompareSelect(parsedMealData);
+                }}
+              />
+            </Tooltip>
+          )}
         </Box>
         <Box sx={{ my: 0, display: "flex", justifyContent: "space-between" }}>
           <Typography>Servings: {parsedMealData.servings}</Typography>
-          {onSelectRecipe && parsedMealData.totalCost > 0 && (
+          {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
             <Typography>
               Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
             </Typography>
@@ -132,44 +162,32 @@ const MealCard: React.FC<GPMealCardProps> = ({
               display: "flex",
               justifyContent: "space-between",
             }}
-          >
-            {onCompareSelect && (
-              <Tooltip title="Compare recipes">
-                <Checkbox
-                  sx={{ zIndex: 5 }}
-                  size="lg"
-                  checked={selectedToCompare}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onCompareSelect(parsedMealData);
-                  }}
-                />
-              </Tooltip>
-            )}
-          </Box>
+          ></Box>
           {onSelectRecipe && (
             <DietsAndIntolerances recipeInfo={parsedMealData} />
           )}
-            {onDeleteRecipe && (
-              <IconButton
-                color="primary"
-                variant="plain"
-                size="lg"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDeleteRecipe?.(parsedMealData);
-                }}
-                sx={{ zIndex: 1, alignSelf: "flex-end" }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
-          <Box display="flex" justifyContent= {onLoadRecipeCost ? "space-between" : "center"}>
+          {onDeleteRecipe && (
+            <IconButton
+              color="primary"
+              variant="plain"
+              size="lg"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDeleteRecipe?.(parsedMealData);
+              }}
+              sx={{ zIndex: 1, alignSelf: "flex-end" }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+          <Box
+            sx={{display: "flex", justifyContent: "space-between"}}
+          >
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
                 <Button
                   onClick={(event) => {
-                    event.stopPropagation()
+                    event.stopPropagation();
                     setMessage({
                       error: false,
                       message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
@@ -179,6 +197,16 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 >
                   Select Recipe
                 </Button>
+              </Tooltip>
+            )}
+            {onEditRecipe && (
+              <Tooltip title="Add your own edits!">
+                <IconButton onClick={(event) => {
+                  event.stopPropagation()
+                  onEditRecipe(parsedMealData)
+                }}>
+                  <EditIcon />
+                </IconButton>
               </Tooltip>
             )}
             {onLoadRecipeCost && parsedMealData.totalCost > 0 && (

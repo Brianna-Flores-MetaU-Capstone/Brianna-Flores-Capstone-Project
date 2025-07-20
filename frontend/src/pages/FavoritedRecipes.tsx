@@ -32,26 +32,26 @@ const FavoritedRecipes = () => {
     });
   }, []);
 
-  const onFavoriteClick = (meal: GPRecipeDataTypes) => {
-    handleUnfavoriteRecipe({ setMessage, recipe: meal });
+  const onFavoriteClick = (recipe: GPRecipeDataTypes) => {
+    handleUnfavoriteRecipe({ setMessage, recipe });
     setFavoritedRecipes((prev) =>
-      prev.filter((recipe) => recipe.apiId !== meal.apiId)
+      prev.filter((elem) => elem.apiId !== recipe.apiId)
     );
   };
 
-  const handleRecipeCardClick = (meal: GPRecipeDataTypes) => {
+  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
     setRecipeInfoModalOpen((prev) => !prev);
-    setRecipeInfoModalInfo(meal);
+    setRecipeInfoModalInfo(recipe);
   };
 
-  const handleSelectRecipeToShop = async (meal: GPRecipeDataTypes) => {
+  const handleSelectRecipeToShop = async (recipe: GPRecipeDataTypes) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, selectedRecipe: meal, setMessage });
+      await updateUserRecipes({ userId, selectedRecipe: recipe, setMessage });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
@@ -63,16 +63,16 @@ const FavoritedRecipes = () => {
       <Box sx={{ my: 3 }}>
         <TitledListView
           itemsList={favoritedRecipes}
-          renderItem={(meal, index) => (
+          renderItem={(recipe, index) => (
             <MealCard
               key={index}
               index={index}
               favorited={true}
-              onFavoriteClick={() => onFavoriteClick(meal)}
-              onMealCardClick={() => handleRecipeCardClick(meal)}
-              onSelectRecipe={() => handleSelectRecipeToShop(meal)}
+              onFavoriteClick={() => onFavoriteClick(recipe)}
+              onMealCardClick={() => handleRecipeCardClick(recipe)}
+              onSelectRecipe={() => handleSelectRecipeToShop(recipe)}
               setMessage={setMessage}
-              parsedMealData={meal}
+              parsedMealData={recipe}
               selectedToCompare={false}
               cardSize={350}
             />
