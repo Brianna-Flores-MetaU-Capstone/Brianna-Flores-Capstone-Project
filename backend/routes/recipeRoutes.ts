@@ -54,6 +54,32 @@ router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
   }
 });
 
+// get a users favorite recipes ids
+router.get(
+  "/favoritedIds",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const userId = req.session.userId;
+    try {
+      // get the user data
+      const userData = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          favoritedRecipes: {
+            select: { apiId: true },
+          },
+        },
+      });
+      // return the users recipes
+      res.json(userData.favoritedRecipes);
+    } catch (error) {
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
 // get a users favorite recipes
 router.get(
   "/favorited",

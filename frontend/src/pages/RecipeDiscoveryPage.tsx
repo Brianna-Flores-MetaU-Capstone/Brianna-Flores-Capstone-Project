@@ -23,6 +23,7 @@ import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 
+
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },
@@ -46,9 +47,6 @@ const RecipeDiscoveryPage = () => {
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
     useState<GPRecipeDataTypes>();
-  const [favoritedRecipes, setFavoritedRecipes] = useState<GPRecipeDataTypes[]>(
-    []
-  );
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
     new Set()
@@ -62,10 +60,9 @@ const RecipeDiscoveryPage = () => {
       filters: recipeFilters,
       offset: 0,
     });
-      const favoritedRecipesReturn = await fetchRecipes({
+    const favoritedRecipesReturn = await fetchRecipes({
         setMessage,
-        setRecipes: setFavoritedRecipes,
-        recipeGroup: "favorited",
+        recipeGroup: "favoritedIds",
       });
       // set favorited recipes id
       for (const elem of favoritedRecipesReturn) {
@@ -110,11 +107,6 @@ const RecipeDiscoveryPage = () => {
         });
         setFavoritedRecipesId(prev => new Set(prev.add(recipe.apiId)))
       }
-      fetchRecipes({
-        setMessage,
-        setRecipes: setFavoritedRecipes,
-        recipeGroup: "favorited",
-      });
       fetchAllRecipeCategories({
         setMessage,
         setRecipeDiscoveryResults,
