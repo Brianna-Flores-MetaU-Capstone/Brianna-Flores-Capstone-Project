@@ -17,6 +17,8 @@ import {
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import TitledListView from "./TitledListView";
+import { CenteredTitledListStyle, MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;
@@ -181,9 +183,11 @@ const EditRecipeModal = ({
                   />
                 </FormControl>
               ))}
-              {editedRecipeData.ingredients.map(
-                (ingredient, ingredientIndex) => (
-                  <Grid container key={ingredientIndex} alignItems="center">
+              <TitledListView 
+                itemsList={editedRecipeData.ingredients}
+                headerList={[{title: "Ingredients", spacing: MUI_GRID_FULL_SPACE}]}
+                renderItem={(ingredient, ingredientIndex) => (
+                    <Grid container key={ingredientIndex} alignItems="center">
                     {ingredientInputEditFields.map((field, fieldIndex) => (
                       <Grid xs={field.space}>
                         <FormControl key={fieldIndex}>
@@ -217,8 +221,8 @@ const EditRecipeModal = ({
                       </IconButton>
                     </Grid>
                   </Grid>
-                )
-              )}
+                )}
+              />
               <IconButton
                 sx={{ justifySelf: "flex-end" }}
                 onClick={(event) =>
@@ -231,8 +235,11 @@ const EditRecipeModal = ({
               >
                 <AddCircleOutlineIcon />
               </IconButton>
-              {editedRecipeData.instructions.map((step, index) => (
-                <Grid container key={index} sx={{ alignItems: "center" }}>
+              <TitledListView 
+                headerList={[{title: "Instructions", spacing: MUI_GRID_FULL_SPACE}]}
+                itemsList={editedRecipeData.instructions}
+                renderItem={(step, index) => (
+                    <Grid container key={index} sx={{ alignItems: "center" }}>
                   <Grid xs={1}>
                     <Typography>#{index + 1}</Typography>
                   </Grid>
@@ -265,7 +272,8 @@ const EditRecipeModal = ({
                     </IconButton>
                   </Grid>
                 </Grid>
-              ))}
+                )}
+                />
               <IconButton
                 sx={{ justifySelf: "flex-end" }}
                 onClick={(event) =>
