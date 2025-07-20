@@ -1,5 +1,9 @@
-import { useReducer, useEffect } from "react";
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
+import { useReducer, useEffect, useState } from "react";
+import type {
+  GPErrorMessageTypes,
+  GPIngredientDataTypes,
+  GPRecipeDataTypes,
+} from "../utils/types";
 import {
   Button,
   Input,
@@ -22,6 +26,8 @@ import {
   MUI_GRID_FULL_SPACE,
   RecipeTagsTitledListStyle,
 } from "../utils/UIStyle";
+import { useUser } from "../contexts/UserContext";
+import { updateUserRecipes } from "../utils/databaseHelpers";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;
@@ -43,7 +49,7 @@ const recipeInputEditFields = [
   { label: "Recipe Title", field: "recipeTitle", spacing: 12 },
   { label: "Servings", field: "servings", spacing: 2 },
   { label: "Cook Time", field: "readyInMinutes", spacing: 4 },
-  { label: "Editor Username", field: "editingAuthor", spacing: 6 },
+  { label: "Editor Username", field: "editingAuthorName", spacing: 6 },
   { label: "Recipe URL", field: "sourceUrl", spacing: 12 },
 ] as const;
 
@@ -68,7 +74,7 @@ const EditRecipeModal = ({
   const initialRecipeState = recipe ?? {
     apiId: 0,
     originalSource: "",
-    editingAuthor: "",
+    editingAuthorName: "",
     recipeTitle: "",
     previewImage:
       "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg",
@@ -173,6 +179,8 @@ const EditRecipeModal = ({
   }
 
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { user } = useUser();
 
   useEffect(() => {
     if (recipe) {
@@ -180,79 +188,96 @@ const EditRecipeModal = ({
     }
   }, [recipe]);
 
-  const handleRecipeSubmit = (event: React.FormEvent) => {
+  const handleRecipeSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+    try {
+      const userId = user.id;
+      await updateUserRecipes({
+        editedRecipe: true,
+        userId,
+        selectedRecipe: editedRecipeData,
+        setMessage,
+      });
+    } catch (error) {
+      setMessage({ error: true, message: "Error adding recipe" });
+    }
   };
 
   return (
     <Modal open={modalOpen} onClose={toggleModal}>
       <ModalDialog layout="fullscreen">
-        <ModalClose sx={{zIndex: 2}} />
+        <ModalClose sx={{ zIndex: 2 }} />
         <DialogContent>
           <form onSubmit={handleRecipeSubmit}>
             <Box>
-                <Box sx={{m: 1}} >
-              <Grid container spacing={2} sx={{ alignItems: "flex-end" }}>
-                <Grid container xs={9}>
-                  <Grid
-                    sx={{
-                      flexGrow: 1,
-                      p: 2,
-                      bgcolor: "primary.300",
-                      borderRadius: "md",
-                    }}
-                  >
-                        <Typography level="h4">Edit Recipe</Typography>
+              <Box sx={{ m: 1 }}>
+                <Grid container spacing={2} sx={{ alignItems: "flex-end" }}>
+                  <Grid container xs={9}>
+                    <Grid
+                      sx={{
+                        flexGrow: 1,
+                        p: 2,
+                        bgcolor: "primary.300",
+                        borderRadius: "md",
+                      }}
+                    >
+                      <Typography level="h4">Edit Recipe</Typography>
+                    </Grid>
+                    {recipeInputEditFields.map((field, index) => (
+                      <Grid xs={field.spacing}>
+                        <FormControl key={index}>
+                          <FormLabel>{field.label}</FormLabel>
+                          <Input
+                            required
+                            onChange={(event) =>
+                              dispatch({
+                                type: actions.SET_INPUT,
+                                recipeField: field.field,
+                                value: event.target.value,
+                              })
+                            }
+                            value={editedRecipeData[field.field] ?? ""}
+                          />
+                        </FormControl>
+                      </Grid>
+                    ))}
                   </Grid>
-                  {recipeInputEditFields.map((field, index) => (
-                    <Grid xs={field.spacing}>
-                      <FormControl key={index}>
-                        <FormLabel>{field.label}</FormLabel>
-                        <Input
-                          required
-                          onChange={(event) =>
+                  <Grid xs={3}>
+                    <TitledListView
+                      itemsList={dietaryEditFields}
+                      headerList={[
+                        { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
+                      ]}
+                      renderItem={(tag, index) => (
+                        <Button
+                          key={index}
+                          sx={{ p: 1 }}
+                          value={tag.field}
+                          variant={
+                            editedRecipeData[
+                              tag.field as keyof GPRecipeDataTypes
+                            ]
+                              ? "solid"
+                              : "plain"
+                          }
+                          onClick={() =>
                             dispatch({
-                              type: actions.SET_INPUT,
-                              recipeField: field.field,
-                              value: event.target.value,
+                              type: actions.SET_DIETARY_TAGS,
+                              dietTag: tag.field as keyof GPRecipeDataTypes,
                             })
                           }
-                          value={editedRecipeData[field.field] ?? ""}
-                        />
-                      </FormControl>
-                    </Grid>
-                  ))}
+                        >
+                          {tag.label}
+                        </Button>
+                      )}
+                      listItemsStyle={RecipeTagsTitledListStyle}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid xs={3}>
-                  <TitledListView
-                    itemsList={dietaryEditFields}
-                    headerList={[
-                      { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
-                    ]}
-                    renderItem={(tag, index) => (
-                      <Button
-                        key={index}
-                        sx={{ p: 1 }}
-                        value={tag.field}
-                        variant={
-                          editedRecipeData[tag.field as keyof GPRecipeDataTypes]
-                            ? "solid"
-                            : "plain"
-                        }
-                        onClick={() =>
-                          dispatch({
-                            type: actions.SET_DIETARY_TAGS,
-                            dietTag: tag.field as keyof GPRecipeDataTypes,
-                          })
-                        }
-                      >
-                        {tag.label}
-                      </Button>
-                    )}
-                    listItemsStyle={RecipeTagsTitledListStyle}
-                  />
-                </Grid>
-              </Grid>
               </Box>
               <TitledListView
                 itemsList={editedRecipeData.ingredients}

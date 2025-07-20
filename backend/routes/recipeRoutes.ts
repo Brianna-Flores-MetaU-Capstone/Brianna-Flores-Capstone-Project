@@ -111,9 +111,10 @@ router.post(
   async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     const {
+      editedRecipe,
       apiId,
-      originalAuthor,
-      editingAuthor,
+      originalSource,
+      editingAuthorName,
       recipeTitle,
       previewImage,
       servings,
@@ -138,20 +139,26 @@ router.post(
       return res.status(400).send("Missing required recipe fields");
     }
     try {
-      // check if recipe already in database
-      let recipe = await prisma.Recipe.findUnique({
-        where: {
-          apiId: apiId,
-        },
-      });
+      // check if recipe already in database and not edited
+      let recipe = null;
+      if (!editedRecipe) {
+        // if recipe is edited, there will be 2 recipes with identical api ids
+        // not an edited recipe, look for api id
+        recipe = await prisma.Recipe.findFirst({
+          where: {
+            apiId: apiId,
+            editingAuthorId: null,
+          },
+        });
+      }
 
       if (!recipe) {
-        // no recipe found, make new recipe
-        recipe = await prisma.Recipe.create({
+        // no recipe found or editing, make new recipe
+        recipe = await prisma.recipe.create({
           data: {
             apiId,
-            originalAuthor,
-            editingAuthor,
+            originalSource,
+            editingAuthorName,
             recipeTitle,
             previewImage,
             servings,
@@ -170,16 +177,21 @@ router.post(
       if (!recipe) {
         return res.status(400).send("Error, failed to create recipe");
       }
+      const connector = editedRecipe
+        ? { editingAuthor: { connect: { id: userId } } }
+        : {
+            users: {
+              connect: {
+                id: userId,
+              },
+            },
+          };
       recipe = await prisma.recipe.update({
         where: {
-          apiId: apiId,
+          id: recipe.id
         },
         data: {
-          users: {
-            connect: {
-              id: userId,
-            },
-          },
+          ...connector,
         },
       });
       res.json(recipe);
@@ -200,14 +212,7 @@ router.post(
       return res.status(400).send("Missing recipe id");
     }
     try {
-      // check if recipe already in database
-      let recipe = await prisma.Recipe.findUnique({
-        where: {
-          apiId: apiId,
-        },
-      });
-
-      recipe = await prisma.recipe.update({
+      const recipe = await prisma.recipe.update({
         where: {
           apiId: apiId,
         },

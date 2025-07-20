@@ -48,7 +48,7 @@ const NewListPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, selectedRecipe, setMessage });
+      await updateUserRecipes({ editedRecipe: false, userId, selectedRecipe, setMessage });
       await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });

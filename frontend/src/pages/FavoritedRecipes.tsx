@@ -51,7 +51,7 @@ const FavoritedRecipes = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, selectedRecipe: recipe, setMessage });
+      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
