@@ -113,6 +113,11 @@ const theme = extendTheme({
         color: "error",
       },
     },
+    JoyIconButton: {
+      defaultProps: {
+         color: "primary"
+      }
+    }
   },
 });
 

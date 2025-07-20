@@ -157,7 +157,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setSearchClicked(false);
   };
 
-  const handleUpdateRecipe = (
+  const handleUpdateRecipeInfo = (
     updatedRecipeInfo: GPRecipeDataTypes,
     index: number
   ) => {
@@ -196,7 +196,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         const index = mealResults.findIndex(
           (element) => element.apiId === recipe.apiId
         );
-        handleUpdateRecipe(updatedRecipe, index);
+        handleUpdateRecipeInfo(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
       }
       const recipeDiffResults = getRecipeDiffResults({
@@ -285,12 +285,13 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 <MealCard
                   key={index}
                   index={index}
+                  favorited={false}
                   onMealCardClick={() => event?.preventDefault()}
                   setMessage={setMessage}
                   parsedMealData={meal}
                   onSelectRecipe={onSelectRecipe}
-                  onLoadRecipes={handleUpdateRecipe}
-                  selected={recipesToCompare.some(
+                  onLoadRecipeCost={handleUpdateRecipeInfo}
+                  selectedToCompare={recipesToCompare.some(
                     (recipe) => recipe.apiId === meal.apiId
                   )}
                   onCompareSelect={handleToggleCompareRecipe}

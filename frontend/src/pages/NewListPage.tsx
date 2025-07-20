@@ -49,14 +49,14 @@ const NewListPage = () => {
     try {
       const userId = user.id;
       await updateUserRecipes({ userId, selectedRecipe, setMessage });
-      await fetchRecipes({ setMessage, setSelectedRecipes });
+      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
   };
 
   useEffect(() => {
-    fetchRecipes({ setMessage, setSelectedRecipes });
+    fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
   }, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -71,7 +71,7 @@ const NewListPage = () => {
         {},
         axiosConfig
       );
-      await fetchRecipes({ setMessage, setSelectedRecipes });
+      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }
@@ -129,11 +129,13 @@ const NewListPage = () => {
               <MealCard
                 key={meal.apiId}
                 index={index}
+                // TODO enable favoriting across meal cards
+                favorited={false}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
                 setMessage={setMessage}
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
-                selected={false}
+                selectedToCompare={false}
                 cardSize={300}
               />
             )}

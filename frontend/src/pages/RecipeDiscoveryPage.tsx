@@ -6,7 +6,13 @@ import type {
   GPRecipeDiscoveryCategories,
   GPRecipeDataTypes,
 } from "../utils/types";
-import { fetchAllRecipeCategories } from "../utils/databaseHelpers";
+import {
+  fetchAllRecipeCategories,
+  fetchRecipes,
+  handleFavoriteRecipe,
+  handleUnfavoriteRecipe,
+  updateUserRecipes,
+} from "../utils/databaseHelpers";
 import TitledListView from "../components/TitledListView";
 import MealCard from "../components/MealCard";
 import {
@@ -15,6 +21,7 @@ import {
 } from "../utils/UIStyle";
 import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
+import { useUser } from "../contexts/UserContext";
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
@@ -39,6 +46,13 @@ const RecipeDiscoveryPage = () => {
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
     useState<GPRecipeDataTypes>();
+  const [favoritedRecipes, setFavoritedRecipes] = useState<GPRecipeDataTypes[]>(
+    []
+  );
+  const { user } = useUser();
+  const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
+    new Set()
+  );
 
   useEffect(() => {
     fetchAllRecipeCategories({
@@ -47,6 +61,17 @@ const RecipeDiscoveryPage = () => {
       filters: recipeFilters,
       offset: 0,
     });
+    if (user) {
+      fetchRecipes({
+        setMessage,
+        setRecipes: setFavoritedRecipes,
+        recipeGroup: "favorited",
+      });
+      // set favorited recipes id
+      for (const elem of favoritedRecipes) {
+        favoritedRecipesId.add(elem.apiId);
+      }
+    }
   }, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -54,29 +79,78 @@ const RecipeDiscoveryPage = () => {
     setRecipeInfoModalInfo(recipe);
   };
 
+  const handleSelectRecipeToShop = async (recipe: GPRecipeDataTypes) => {
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+    try {
+      const userId = user.id;
+      await updateUserRecipes({ userId, selectedRecipe: recipe, setMessage });
+    } catch (error) {
+      setMessage({ error: true, message: "Error adding recipe" });
+    }
+  };
+
+  const handleFavoriteClick = async (recipe: GPRecipeDataTypes) => {
+    if (user) {
+      if (favoritedRecipesId.has(recipe.apiId)) {
+        handleUnfavoriteRecipe({ setMessage, recipe });
+        favoritedRecipesId.delete(recipe.apiId);
+      } else {
+        handleFavoriteRecipe({
+          setMessage,
+          userId: user.id,
+          selectedRecipe: recipe,
+        });
+        favoritedRecipesId.add(recipe.apiId);
+      }
+      fetchRecipes({
+        setMessage,
+        setRecipes: setFavoritedRecipes,
+        recipeGroup: "favorited",
+      });
+      fetchAllRecipeCategories({
+        setMessage,
+        setRecipeDiscoveryResults,
+        filters: recipeFilters,
+        offset: 0,
+      });
+    }
+  };
+
   return (
     <Box>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        {Object.keys(recipeDiscoveryResults).map((filter, i) => (
+        {Object.keys(recipeDiscoveryResults).map((filter, index) => (
           <TitledListView
+            key={index}
             itemsList={
               recipeDiscoveryResults[
                 filter as keyof GPRecipeDiscoveryCategories
               ]
             }
             headerList={[
-              { title: recipeFilters[i].title, spacing: MUI_GRID_FULL_SPACE },
+              {
+                title: recipeFilters[index].title,
+                spacing: MUI_GRID_FULL_SPACE,
+              },
             ]}
             renderItem={(meal, index) => (
               <MealCard
-                key={meal.apiId}
+                key={index}
                 index={index}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
+                {...(user && {
+                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                })}
                 setMessage={setMessage}
                 parsedMealData={meal}
-                selected={false}
-                cardSize={200}
+                selectedToCompare={false}
+                {...(user && { onFavoriteClick: handleFavoriteClick })}
+                favorited={favoritedRecipesId.has(meal.apiId)}
+                cardSize={300}
               />
             )}
             listItemsStyle={RowOverflowTitledListStyle}
