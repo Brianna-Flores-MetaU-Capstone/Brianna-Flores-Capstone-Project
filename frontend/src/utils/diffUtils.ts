@@ -101,7 +101,7 @@ const getInstructionsLCS = ({ instructionsA, instructionsB }: GPLCSDiffTypes) =>
     }
   }
   // array of lines (unchanged, added, or deleted)
-  return instructionChanges;
+  return checkForChangedLines({instructionDifferences: instructionChanges});
 };
 
 type GPLevenshteinDistanceType = {
@@ -160,5 +160,5 @@ const checkForChangedLines = ({instructionDifferences}: GPOrderInstructionLineTy
   return detailedLineDiffResults
 }
 
-export { getRecipeDiffResults, getInstructionsLCS, getLevenshteinDistance, checkForChangedLines };
+export { getRecipeDiffResults, getInstructionsLCS, getLevenshteinDistance };
 export type { GPRecipeDiffType };

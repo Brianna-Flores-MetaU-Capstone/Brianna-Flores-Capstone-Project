@@ -17,7 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
-import { getInstructionsLCS, checkForChangedLines } from "../utils/diffUtils";
+import { getInstructionsLCS } from "../utils/diffUtils";
 import { fetchSingleRecipe } from "../utils/databaseHelpers";
 import { useState } from "react";
 
@@ -46,11 +46,10 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       setMessage,
       selectedRecipe: recipeInfo,
     });
-    const instructionDifferences = getInstructionsLCS({
+    const detailedDiff = getInstructionsLCS({
       instructionsA: recipeInfo.instructions,
       instructionsB: originalRecipe.instructions,
     });
-    const detailedDiff = checkForChangedLines({ instructionDifferences });
   };
 
   return (
