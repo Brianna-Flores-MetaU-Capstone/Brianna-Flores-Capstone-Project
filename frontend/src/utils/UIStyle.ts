@@ -188,6 +188,16 @@ const CenteredTitledListStyle = {
   justifyContent: "center",
 };
 
+const GPTagItemStyle = {
+  m: 1,
+  p: 1,
+  border: "2px solid",
+  borderRadius: "md",
+  textAlign: "center",
+  alignSelf: "center",
+  color: "primary.400",
+};
+
 const MUI_GRID_FULL_SPACE = 12;
 
 export {
@@ -201,4 +211,5 @@ export {
   ColumnOverflowTitledListStyle,
   CenteredTitledListStyle,
   RecipeTagsTitledListStyle,
+  GPTagItemStyle,
 };

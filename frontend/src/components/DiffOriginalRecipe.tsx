@@ -16,7 +16,7 @@ import {
 
 import { DiffRecipes } from "../classes/DiffRecipe";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
-import { GPCenteredBoxStyle, GPMealInfoModalTitleStyle } from "../utils/UIStyle";
+import { GPCenteredBoxStyle, GPMealInfoModalTitleStyle, GPTagItemStyle } from "../utils/UIStyle";
 import MealInfoModal from "./MealInfoModal";
 
 type GPDiffOriginalType = {
@@ -29,6 +29,7 @@ type GPDiffOriginalType = {
 type GPOriginalRecipeDiffType = {
   titleDiffResults: GPDiffLineInfoType[];
   servingsDiffResults: GPDiffLineInfoType[];
+  tagsDiffResults: GPDiffLineInfoType[];
   ingredientsDiffResults: GPDiffLineInfoType[];
   instructionsDiffResults: GPDiffLineInfoType[];
 };
@@ -90,6 +91,15 @@ const DiffOriginalRecipe = ({
                     />
                   )}
                 </Box>
+                {recipeDiffInfo && (
+                  <DiffOriginalContentDisplay
+                  xDiffResults={recipeDiffInfo.tagsDiffResults}
+                  parentComponent={Box}
+                  parentComponentProps={{ display: "flex", justifyContent: "center"}}
+                  childrenComponent={Typography}
+                  childComponentProps={GPTagItemStyle}
+                  />
+                )}
                 <Button onClick={handleViewOriginalRecipe}>
                   View Original Recipe
                 </Button>

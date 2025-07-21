@@ -87,6 +87,21 @@ abstract class DiffRecipeField<T> {
       }
     }
     // array of lines (unchanged, added, or deleted)
+    // add any leftover
+    while (i > 0) {
+      itemChanges = [
+        { status: DiffStatus.DELETED, line: this.itemAData[i - 1] },
+        ...itemChanges,
+      ];
+      i--;
+    }
+    while (j > 0) {
+      itemChanges = [
+        { status: DiffStatus.ADDED, line: this.itemBData[j - 1] },
+        ...itemChanges,
+      ];
+      j--;
+    }
     return itemChanges;
   }
 }
@@ -179,9 +194,9 @@ class DiffRecipes {
   recipeA: GPRecipeDataTypes;
   recipeB: GPRecipeDataTypes;
 
-  constructor (recipeA: GPRecipeDataTypes, recipeB: GPRecipeDataTypes) {
-    this.recipeA = recipeA
-    this.recipeB = recipeB
+  constructor(recipeA: GPRecipeDataTypes, recipeB: GPRecipeDataTypes) {
+    this.recipeA = recipeA;
+    this.recipeB = recipeB;
   }
 
   getRecipeDiff() {
@@ -203,10 +218,26 @@ class DiffRecipes {
     const diffServings = new DiffRecipeStringArray(
       [this.recipeA.servings.toString()],
       [this.recipeB.servings.toString()]
-    )
-    const servingsDiffResults = diffServings.getStringArrayDiff()
-    return {instructionsDiffResults, ingredientsDiffResults, titleDiffResults, servingsDiffResults}
+    );
+    const servingsDiffResults = diffServings.getStringArrayDiff();
+    const diffTags = new DiffRecipeStringArray(
+      this.recipeA.recipeTags,
+      this.recipeB.recipeTags
+    );
+    const tagsDiffResults = diffTags.getStringArrayDiff();
+    return {
+      instructionsDiffResults,
+      ingredientsDiffResults,
+      titleDiffResults,
+      servingsDiffResults,
+      tagsDiffResults,
+    };
   }
 }
 
-export { DiffRecipeField, DiffRecipeStringArray, DiffRecipeIngredients, DiffRecipes };
+export {
+  DiffRecipeField,
+  DiffRecipeStringArray,
+  DiffRecipeIngredients,
+  DiffRecipes,
+};
