@@ -200,7 +200,12 @@ class DiffRecipes {
       [this.recipeB.recipeTitle]
     );
     const titleDiffResults = diffTitle.getStringArrayDiff();
-    return {instructionsDiffResults, ingredientsDiffResults, titleDiffResults}
+    const diffServings = new DiffRecipeStringArray(
+      [this.recipeA.servings.toString()],
+      [this.recipeB.servings.toString()]
+    )
+    const servingsDiffResults = diffServings.getStringArrayDiff()
+    return {instructionsDiffResults, ingredientsDiffResults, titleDiffResults, servingsDiffResults}
   }
 }
 
