@@ -1,6 +1,6 @@
 import React from "react";
 import { GPModalStyle } from "../utils/UIStyle";
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
 import {
   Modal,
   Button,
@@ -17,6 +17,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
+import { getInstructionsLCS, checkForChangedLines } from "../utils/diffUtils";
+import { fetchSingleRecipe } from "../utils/databaseHelpers";
+import { useState } from "react";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -29,6 +32,27 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   modalOpen,
   recipeInfo,
 }) => {
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const onCompareWithOriginal = async () => {
+    // we are viewing the edited recipe, need to fetch original recipe
+    if (!recipeInfo) {
+      setMessage({
+        error: true,
+        message: "Error no recipe info set",
+      });
+      return;
+    }
+    const originalRecipe = await fetchSingleRecipe({
+      setMessage,
+      selectedRecipe: recipeInfo,
+    });
+    const instructionDifferences = getInstructionsLCS({
+      instructionsA: recipeInfo.instructions,
+      instructionsB: originalRecipe.instructions,
+    });
+    const detailedDiff = checkForChangedLines({ instructionDifferences });
+  };
+
   return (
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
@@ -44,12 +68,21 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <Box sx={GPCenteredBoxStyle}>
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             {recipeInfo?.editingAuthorName && (
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
                 <PersonIcon />
                 <Typography>
                   Edited by: {recipeInfo.editingAuthorName}
                 </Typography>
-                <Button>Compare With Original Recipe</Button>
+                <Button onClick={onCompareWithOriginal}>
+                  Compare With Original Recipe
+                </Button>
               </Box>
             )}
             <Typography>Servings: {recipeInfo?.servings}</Typography>

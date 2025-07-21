@@ -359,6 +359,25 @@ const handleFavoriteRecipe = async ({
   }
 };
 
+type GPFetchSingleRecipeType = GPSetMessageType & {
+  selectedRecipe: GPRecipeDataTypes;
+};
+
+const fetchSingleRecipe = async ({
+  setMessage,
+  selectedRecipe,
+}: GPFetchSingleRecipeType) => {
+  try {
+    const originalRecipe = await axios.get(
+      `${databaseUrl}/recipes/original/${selectedRecipe.apiId}`,
+      axiosConfig
+    );
+    return originalRecipe.data;
+  } catch (error) {
+    setMessage({ error: true, message: "Error fetching original recipe" });
+  }
+};
+
 export {
   updateAccount,
   getUserData,
@@ -375,5 +394,6 @@ export {
   fetchAllRecipeCategories,
   handleUnfavoriteRecipe,
   handleFavoriteRecipe,
+  fetchSingleRecipe,
   axiosConfig,
 };

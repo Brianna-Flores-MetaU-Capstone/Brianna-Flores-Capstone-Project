@@ -34,6 +34,24 @@ router.post(
   }
 );
 
+router.get("/original/:apiId", async (req: Request, res: Response) => {
+  const apiId = parseInt(req.params.apiId);
+  try {
+    const originalRecipe = await prisma.Recipe.findFirst({
+      where: {
+        apiId: apiId,
+        editingAuthorId: null,
+      },
+    });
+    if (!originalRecipe) {
+      res.status(404).send("Error, original recipe not found");
+    }
+    res.json(originalRecipe);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
+
 // get a users planned recipes
 router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
@@ -234,7 +252,7 @@ router.post(
 // update user to remove favorited recipe
 router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  const {selectedRecipe} = req.body;
+  const { selectedRecipe } = req.body;
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -255,7 +273,7 @@ router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
 // update user to remove recipe
 router.put("/planned/remove", async (req: Request, res: Response) => {
   const userId = req.session.userId;
-  const {deletedRecipe} = req.body
+  const { deletedRecipe } = req.body;
   try {
     const updatedUser = await prisma.user.update({
       where: {

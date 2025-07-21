@@ -1,5 +1,5 @@
 import AppHeader from "../components/AppHeader";
-import { Box, Button } from "@mui/joy";
+import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
@@ -23,8 +23,6 @@ import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/EditRecipeModal";
-import { getInstructionsLCS, checkForChangedLines } from "../utils/diffUtils";
-
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
