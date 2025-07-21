@@ -17,7 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
-import { getInstructionsLCS } from "../utils/diffUtils";
+import { checkForChangedLines, getIngredientsDiff, getInstructionsLCS } from "../utils/diffUtils";
 import { fetchSingleRecipe } from "../utils/databaseHelpers";
 import { useState } from "react";
 
@@ -46,10 +46,19 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       setMessage,
       selectedRecipe: recipeInfo,
     });
-    const detailedDiff = getInstructionsLCS({
+    const diffInstructionLines = getInstructionsLCS({
       instructionsA: recipeInfo.instructions,
       instructionsB: originalRecipe.instructions,
     });
+    if (!diffInstructionLines) {
+      setMessage({
+        error: true,
+        message: "Error during diff",
+      });
+      return;
+    }
+    const detailedDiffInstruction = checkForChangedLines({instructionDifferences: diffInstructionLines})
+    const ingredientsDiff = getIngredientsDiff({recipeA: recipeInfo, recipeB: originalRecipe})
   };
 
   return (
@@ -104,7 +113,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                     <Typography>
                       {ingredient.quantity % 1 === 0
                         ? ingredient.quantity
-                        : ingredient.quantity.toFixed(2)}{" "}
+                        : Number(ingredient.quantity).toFixed(2)}{" "}
                       {ingredient.unit}
                     </Typography>
                   </ListItemContent>

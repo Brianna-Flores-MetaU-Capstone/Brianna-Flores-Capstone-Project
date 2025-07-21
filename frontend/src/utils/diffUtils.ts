@@ -39,15 +39,18 @@ const DiffStatus = {
   UNCHANGED: "unchanged",
   CHANGED: "changed",
   ADDED: "added",
-  DELETED: "deleted"
-}
+  DELETED: "deleted",
+};
 
 type GPLCSDiffTypes = {
-  instructionsA: string[]
-  instructionsB: string[]
-}
+  instructionsA: string[];
+  instructionsB: string[];
+};
 
-const getInstructionsLCS = ({ instructionsA, instructionsB }: GPLCSDiffTypes) => {
+const getInstructionsLCS = ({
+  instructionsA,
+  instructionsB,
+}: GPLCSDiffTypes) => {
   // Adapted from https://www.geeksforgeeks.org/javascript/javascript-program-for-longest-common-subsequence/
   const n = instructionsA.length;
   const m = instructionsB.length;
@@ -79,36 +82,141 @@ const getInstructionsLCS = ({ instructionsA, instructionsB }: GPLCSDiffTypes) =>
   let i = n;
   let j = m;
   let index = len - 1;
-  let instructionChanges: {status: string, line: string}[] = []
+  let instructionChanges: { status: string; line: string }[] = [];
 
   while (i > 0 && j > 0) {
-    if (instructionsA[i - 1].toLowerCase() === instructionsB[j - 1].toLowerCase()) {
-      instructionChanges = [{status: DiffStatus.UNCHANGED, line: instructionsA[i - 1]}, ...instructionChanges];
+    if (
+      instructionsA[i - 1].toLowerCase() === instructionsB[j - 1].toLowerCase()
+    ) {
+      instructionChanges = [
+        { status: DiffStatus.UNCHANGED, line: instructionsA[i - 1] },
+        ...instructionChanges,
+      ];
       index--;
       i--;
       j--;
     } else if (dp[i - 1][j] === dp[i][j - 1]) {
       // line was simultaneously added and deleted (possible change)
-      instructionChanges = [{status: DiffStatus.ADDED, line: instructionsA[i - 1]}, {status: DiffStatus.DELETED, line: instructionsB[j - 1]}, ...instructionChanges];
+      instructionChanges = [
+        { status: DiffStatus.ADDED, line: instructionsA[i - 1] },
+        { status: DiffStatus.DELETED, line: instructionsB[j - 1] },
+        ...instructionChanges,
+      ];
       i--;
       j--;
     } else if (dp[i - 1][j] > dp[i][j - 1]) {
-      instructionChanges = [{status: DiffStatus.DELETED, line: instructionsA[i - 1]}, ...instructionChanges]
+      instructionChanges = [
+        { status: DiffStatus.DELETED, line: instructionsA[i - 1] },
+        ...instructionChanges,
+      ];
       i--;
     } else {
-      instructionChanges = [{status: DiffStatus.ADDED, line: instructionsB[j - 1]}, ...instructionChanges]
+      instructionChanges = [
+        { status: DiffStatus.ADDED, line: instructionsB[j - 1] },
+        ...instructionChanges,
+      ];
       j--;
     }
   }
   // array of lines (unchanged, added, or deleted)
-  return checkForChangedLines({instructionDifferences: instructionChanges});
+  return instructionChanges;
+};
+
+type GPDiffLineInfoType = {
+  status: string;
+  line: string;
+  lineDiffInfo?: GPDiffLineInfoType[];
+};
+
+type GPOrderInstructionLineType = {
+  instructionDifferences: GPDiffLineInfoType[];
+};
+
+const checkForChangedLines = ({
+  instructionDifferences,
+}: GPOrderInstructionLineType) => {
+  let prevLine: GPDiffLineInfoType | null = null;
+  let detailedLineDiffResults: GPDiffLineInfoType[] = [];
+  // loop through instruciton changes and see if there is a deleted instruction next to an added instruction
+  for (const instructionLine of instructionDifferences) {
+    if (
+      prevLine &&
+      ((instructionLine.status === DiffStatus.ADDED &&
+        prevLine.status === DiffStatus.DELETED) ||
+        (instructionLine.status === DiffStatus.DELETED &&
+          prevLine.status === DiffStatus.ADDED))
+    ) {
+      const instructionLineA = instructionLine.line.split(" ");
+      const instructionLineB = prevLine.line.split(" ");
+      const lineDifferenceReturn = getInstructionsLCS({
+        instructionsA: instructionLineA,
+        instructionsB: instructionLineB,
+      });
+      const newInstructionLine = {
+        status: DiffStatus.CHANGED,
+        line:
+          instructionLine.status === DiffStatus.ADDED
+            ? instructionLine.line
+            : prevLine.line,
+        lineDiffInfo: lineDifferenceReturn,
+      };
+      // remove the previous line in the array
+      detailedLineDiffResults = [
+        ...detailedLineDiffResults,
+        newInstructionLine,
+      ];
+      prevLine = null;
+    } else {
+      if (prevLine) {
+        detailedLineDiffResults = [...detailedLineDiffResults, prevLine];
+      }
+      prevLine = instructionLine;
+    }
+  }
+  if (prevLine) {
+    detailedLineDiffResults = [...detailedLineDiffResults, prevLine];
+  }
+  return detailedLineDiffResults;
+};
+
+type GPIngredientDiffTypes = {
+  recipeA: GPRecipeDataTypes;
+  recipeB: GPRecipeDataTypes;
+};
+
+const getIngredientsDiff = ({ recipeA, recipeB }: GPIngredientDiffTypes) => {
+  const ingredientsA = recipeA.ingredients;
+  const ingredientsB = recipeB.ingredients;
+  const parsedIngredientsA = ingredientsA.map(
+    (ingredient) =>
+      ingredient.ingredientName +
+      " " +
+      ingredient.quantity +
+      " " +
+      ingredient.unit
+  );
+  const parsedIngredientsB = ingredientsB.map(
+    (ingredient) =>
+      ingredient.ingredientName +
+      " " +
+      ingredient.quantity +
+      " " +
+      ingredient.unit
+  );
+  const diffIngredientLines = getInstructionsLCS({
+    instructionsA: parsedIngredientsA,
+    instructionsB: parsedIngredientsB,
+  });
+  const detailedIngredientsDiff = checkForChangedLines({
+    instructionDifferences: diffIngredientLines,
+  });
 };
 
 type GPLevenshteinDistanceType = {
-  strA: string
-  strB: string
-}
-const getLevenshteinDistance = ({strA, strB}: GPLevenshteinDistanceType) => {
+  strA: string;
+  strB: string;
+};
+const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
   if (!strA.length) return strB.length;
   if (!strB.length) return strA.length;
   const arr = [];
@@ -126,39 +234,13 @@ const getLevenshteinDistance = ({strA, strB}: GPLevenshteinDistanceType) => {
     }
   }
   return arr[strB.length][strA.length];
-}
+};
 
-type GPDiffLineInfoType = {
-  status: string
-  line: string
-  lineDiffInfo?: GPDiffLineInfoType[]
-}
-
-
-
-type GPOrderInstructionLineType = {
-  instructionDifferences: GPDiffLineInfoType[]
-}
-
-const checkForChangedLines = ({instructionDifferences}: GPOrderInstructionLineType) => {
-  let prevLine: GPDiffLineInfoType = {status: "", line: ""};
-  let detailedLineDiffResults: GPDiffLineInfoType[] = []
-  // loop through instruciton changes and see if there is a deleted instruction next to an added instruction
-  for (let index = 0; index < instructionDifferences.length; index++) {
-    let instructionLine = instructionDifferences[index]
-    if (prevLine && (instructionLine.status === DiffStatus.ADDED && prevLine.status === DiffStatus.DELETED) || (instructionLine.status === DiffStatus.DELETED && prevLine.status === DiffStatus.ADDED)) {
-      const instructionLineA = instructionLine.line.split(" ")
-      const instructionLineB = prevLine.line.split(" ")
-      const lineDifferenceReturn = getInstructionsLCS({instructionsA: instructionLineA, instructionsB: instructionLineB})
-      instructionLine = {...instructionLine, status: DiffStatus.CHANGED, lineDiffInfo: lineDifferenceReturn}
-      // remove the previous line in the array
-      detailedLineDiffResults.splice(index - 1, 1)
-    }
-    detailedLineDiffResults = [...detailedLineDiffResults, instructionLine]
-    prevLine = instructionLine
-  }
-  return detailedLineDiffResults
-}
-
-export { getRecipeDiffResults, getInstructionsLCS, getLevenshteinDistance };
+export {
+  getRecipeDiffResults,
+  getInstructionsLCS,
+  checkForChangedLines,
+  getLevenshteinDistance,
+  getIngredientsDiff,
+};
 export type { GPRecipeDiffType };
