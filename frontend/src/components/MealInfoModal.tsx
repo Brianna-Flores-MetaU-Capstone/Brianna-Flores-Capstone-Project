@@ -47,8 +47,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       selectedRecipe: recipeInfo,
     });
     const diffInstructionLines = getInstructionsLCS({
-      instructionsA: recipeInfo.instructions,
-      instructionsB: originalRecipe.instructions,
+      instructionsA: originalRecipe.instructions,
+      instructionsB: recipeInfo.instructions,
     });
     if (!diffInstructionLines) {
       setMessage({
@@ -58,7 +58,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       return;
     }
     const detailedDiffInstruction = checkForChangedLines({instructionDifferences: diffInstructionLines})
-    const ingredientsDiff = getIngredientsDiff({recipeA: recipeInfo, recipeB: originalRecipe})
+    const ingredientsDiff = getIngredientsDiff({recipeA: originalRecipe, recipeB: recipeInfo})
   };
 
   return (

@@ -98,8 +98,8 @@ const getInstructionsLCS = ({
     } else if (dp[i - 1][j] === dp[i][j - 1]) {
       // line was simultaneously added and deleted (possible change)
       instructionChanges = [
-        { status: DiffStatus.ADDED, line: instructionsA[i - 1] },
-        { status: DiffStatus.DELETED, line: instructionsB[j - 1] },
+        { status: DiffStatus.DELETED, line: instructionsA[i - 1] },
+        { status: DiffStatus.ADDED, line: instructionsB[j - 1] },
         ...instructionChanges,
       ];
       i--;
