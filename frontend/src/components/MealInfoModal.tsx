@@ -17,15 +17,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
-import {
-  checkForChangedLines,
-  getIngredientsDiff,
-  getInstructionsLCS,
-} from "../utils/diffUtils";
 import type { GPDiffLineInfoType } from "../utils/diffUtils";
 import { fetchSingleRecipe } from "../utils/databaseHelpers";
 import { useState } from "react";
 import DiffOriginalRecipe from "./DiffOriginalRecipe";
+import { DiffRecipeString, DiffRecipeIngredients } from "../classes/DiffRecipe";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -46,6 +42,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     GPDiffLineInfoType[]
   >([]);
   const [diffModalOpen, setDiffModalOpen] = useState(false);
+  const [originalRecipeInfo, setOriginalRecipeInfo] =
+    useState<GPRecipeDataTypes>();
 
   const onCompareWithOriginal = async () => {
     // we are viewing the edited recipe, need to fetch original recipe
@@ -60,26 +58,19 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       setMessage,
       selectedRecipe: recipeInfo,
     });
-    const diffInstructionLines = getInstructionsLCS({
-      instructionsA: originalRecipe.instructions,
-      instructionsB: recipeInfo.instructions,
-    });
-    if (!diffInstructionLines) {
-      setMessage({
-        error: true,
-        message: "Error during diff",
-      });
-      return;
-    }
-    const detailedDiffInstruction = checkForChangedLines({
-      instructionDifferences: diffInstructionLines,
-    });
-    setInstructionsDiffInfo(detailedDiffInstruction);
-    const ingredientsDiff = getIngredientsDiff({
-      recipeA: originalRecipe,
-      recipeB: recipeInfo,
-    });
-    setIngredientsDiffInfo(ingredientsDiff);
+    setOriginalRecipeInfo(originalRecipe);
+    const instructionsDiff = new DiffRecipeString(
+      originalRecipe.instructions,
+      recipeInfo.instructions
+    );
+    const detailedDiffInstructions = instructionsDiff.getStringDiff();
+    setInstructionsDiffInfo(detailedDiffInstructions);
+    const ingredientsDiff = new DiffRecipeIngredients(
+      originalRecipe.ingredients,
+      recipeInfo.ingredients
+    );
+    const detailedDiffIngredients = ingredientsDiff.getIngredientsDiff();
+    setIngredientsDiffInfo(detailedDiffIngredients);
     setDiffModalOpen(true);
   };
 
@@ -153,12 +144,16 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           </Box>
         </Sheet>
       </Modal>
-      <DiffOriginalRecipe
-        instructionsDiffInfo={instructionsDiffInfo}
-        ingredientsDiffInfo={ingredientsDiffInfo}
-        modalOpen={diffModalOpen}
-        setModalOpen={() => setDiffModalOpen((prev) => !prev)}
-      />
+      {originalRecipeInfo && recipeInfo && (
+        <DiffOriginalRecipe
+          originalRecipeInfo={originalRecipeInfo}
+          editedRecipeInfo={recipeInfo}
+          instructionsDiffInfo={instructionsDiffInfo}
+          ingredientsDiffInfo={ingredientsDiffInfo}
+          modalOpen={diffModalOpen}
+          setModalOpen={() => setDiffModalOpen((prev) => !prev)}
+        />
+      )}
     </>
   );
 };
