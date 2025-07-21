@@ -264,12 +264,12 @@ const EditRecipeModal = ({
                           <Input
                             required
                             type={
-                              field.field === EditRecipeFieldsEnum.SERVINGS
+                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
                                 ? "number"
                                 : "text"
                             }
                             onChange={(event) => {
-                              field.field === EditRecipeFieldsEnum.SERVINGS
+                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
                                 ? dispatch({
                                     type: actions.SET_INPUT_NUM,
                                     recipeField: field.field,

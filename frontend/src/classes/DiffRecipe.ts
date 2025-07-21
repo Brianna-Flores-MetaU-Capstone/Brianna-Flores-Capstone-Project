@@ -225,12 +225,18 @@ class DiffRecipes {
       this.recipeB.recipeTags
     );
     const tagsDiffResults = diffTags.getStringArrayDiff();
+    const diffCookTime = new DiffRecipeStringArray(
+      [this.recipeA.readyInMinutes.toString()],
+      [this.recipeB.readyInMinutes.toString()]
+    );
+    const cookTimeDiffResults = diffCookTime.getStringArrayDiff();
     return {
       instructionsDiffResults,
       ingredientsDiffResults,
       titleDiffResults,
       servingsDiffResults,
       tagsDiffResults,
+      cookTimeDiffResults,
     };
   }
 }

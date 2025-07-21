@@ -16,7 +16,11 @@ import {
 
 import { DiffRecipes } from "../classes/DiffRecipe";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
-import { GPCenteredBoxStyle, GPMealInfoModalTitleStyle, GPTagItemStyle } from "../utils/UIStyle";
+import {
+  GPCenteredBoxStyle,
+  GPMealInfoModalTitleStyle,
+  GPTagItemStyle,
+} from "../utils/UIStyle";
 import MealInfoModal from "./MealInfoModal";
 
 type GPDiffOriginalType = {
@@ -30,6 +34,7 @@ type GPOriginalRecipeDiffType = {
   titleDiffResults: GPDiffLineInfoType[];
   servingsDiffResults: GPDiffLineInfoType[];
   tagsDiffResults: GPDiffLineInfoType[];
+  cookTimeDiffResults: GPDiffLineInfoType[];
   ingredientsDiffResults: GPDiffLineInfoType[];
   instructionsDiffResults: GPDiffLineInfoType[];
 };
@@ -87,17 +92,29 @@ const DiffOriginalRecipe = ({
                       xDiffResults={recipeDiffInfo.servingsDiffResults}
                       parentComponent={Box}
                       childrenComponent={Typography}
-                      childComponentProps={{ level: "" }}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography>Cook Time:</Typography>
+                  {recipeDiffInfo && (
+                    <DiffOriginalContentDisplay
+                      xDiffResults={recipeDiffInfo.cookTimeDiffResults}
+                      parentComponent={Box}
+                      childrenComponent={Typography}
                     />
                   )}
                 </Box>
                 {recipeDiffInfo && (
                   <DiffOriginalContentDisplay
-                  xDiffResults={recipeDiffInfo.tagsDiffResults}
-                  parentComponent={Box}
-                  parentComponentProps={{ display: "flex", justifyContent: "center"}}
-                  childrenComponent={Typography}
-                  childComponentProps={GPTagItemStyle}
+                    xDiffResults={recipeDiffInfo.tagsDiffResults}
+                    parentComponent={Box}
+                    parentComponentProps={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                    childrenComponent={Typography}
+                    childComponentProps={GPTagItemStyle}
                   />
                 )}
                 <Button onClick={handleViewOriginalRecipe}>
