@@ -18,6 +18,7 @@ type GPRecipeDataTypes = {
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
+  recipeTags: string[];
   ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
 };

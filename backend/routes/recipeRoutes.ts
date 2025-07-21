@@ -144,6 +144,7 @@ router.post(
       vegan,
       glutenFree,
       dairyFree,
+      recipeTags,
     } = req.body;
     if (
       !apiId ||
@@ -188,6 +189,7 @@ router.post(
             vegan,
             glutenFree,
             dairyFree,
+            recipeTags,
           },
         });
       }

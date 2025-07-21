@@ -101,6 +101,7 @@ const EditRecipeModal = ({
     vegan: false,
     glutenFree: false,
     dairyFree: false,
+    recipeTags: [],
     ingredientCostInfo: [],
     totalCost: 0,
   };
@@ -123,6 +124,7 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.SET_DIETARY_TAGS;
         dietTag: keyof GPRecipeDataTypes;
+        dietLabel: string;
       }
     | {
         type: typeof actions.UPDATE_INGREDIENT;
@@ -155,7 +157,14 @@ const EditRecipeModal = ({
       case actions.SET_INPUT_NUM:
         return { ...state, [action.recipeField]: action.value };
       case actions.SET_DIETARY_TAGS:
-        return { ...state, [action.dietTag]: !state[action.dietTag] };
+        let updatedRecipeTags = [...state.recipeTags]
+        if (state[action.dietTag]) { // previously selected, remove from recipe tags
+          const index = updatedRecipeTags.indexOf(action.dietLabel)
+          updatedRecipeTags.splice(index, 1)
+        } else {
+          updatedRecipeTags = [...state.recipeTags, action.dietLabel]
+        }
+        return { ...state, [action.dietTag]: !state[action.dietTag], recipeTags: updatedRecipeTags };
       case actions.UPDATE_INGREDIENT:
         return {
           ...state,
@@ -300,6 +309,7 @@ const EditRecipeModal = ({
                             dispatch({
                               type: actions.SET_DIETARY_TAGS,
                               dietTag: tag.field as keyof GPRecipeDataTypes,
+                              dietLabel: tag.label
                             })
                           }
                         >
