@@ -44,7 +44,6 @@ const DiffOriginalRecipe = ({
     const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
     const recipeDiffInfo = recipeDiff.getRecipeDiff();
     setRecipeDiffInfo(recipeDiffInfo);
-    console.log(recipeDiffInfo);
   }, [modalOpen]);
 
   return (

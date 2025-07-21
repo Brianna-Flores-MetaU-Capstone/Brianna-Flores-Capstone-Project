@@ -38,6 +38,7 @@ type GPEditRecipeModalType = {
 const actions = {
   SET_RECIPE: "setRecipe",
   SET_INPUT: "setInput",
+  SET_INPUT_NUM: "setInputNum",
   SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
   UPDATE_INSTRUCTION: "setInstruction",
@@ -53,8 +54,8 @@ const EditRecipeFieldsEnum = {
   URL: "sourceUrl",
   ING_NAME: "ingredientName",
   ING_QUANTITY: "quantity",
-  ING_UNIT: "unit"
-} as const
+  ING_UNIT: "unit",
+} as const;
 
 const recipeInputEditFields = [
   { label: "Recipe Title", field: EditRecipeFieldsEnum.TITLE, spacing: 12 },
@@ -115,6 +116,11 @@ const EditRecipeModal = ({
         value: string;
       }
     | {
+        type: typeof actions.SET_INPUT_NUM;
+        recipeField: keyof GPRecipeDataTypes;
+        value: number;
+      }
+    | {
         type: typeof actions.SET_DIETARY_TAGS;
         dietTag: keyof GPRecipeDataTypes;
       }
@@ -145,6 +151,8 @@ const EditRecipeModal = ({
       case actions.SET_RECIPE:
         return { ...action.value };
       case actions.SET_INPUT:
+        return { ...state, [action.recipeField]: action.value };
+      case actions.SET_INPUT_NUM:
         return { ...state, [action.recipeField]: action.value };
       case actions.SET_DIETARY_TAGS:
         return { ...state, [action.dietTag]: !state[action.dietTag] };
@@ -241,19 +249,29 @@ const EditRecipeModal = ({
                       <Typography level="h4">Edit Recipe</Typography>
                     </Grid>
                     {recipeInputEditFields.map((field, index) => (
-                      <Grid  key={index} xs={field.spacing}>
+                      <Grid key={index} xs={field.spacing}>
                         <FormControl>
                           <FormLabel>{field.label}</FormLabel>
                           <Input
                             required
-                            type={field.field === EditRecipeFieldsEnum.SERVINGS ? "number" : "text"}
-                            onChange={(event) =>
-                              dispatch({
-                                type: actions.SET_INPUT,
-                                recipeField: field.field,
-                                value: event.target.value,
-                              })
+                            type={
+                              field.field === EditRecipeFieldsEnum.SERVINGS
+                                ? "number"
+                                : "text"
                             }
+                            onChange={(event) => {
+                              field.field === EditRecipeFieldsEnum.SERVINGS
+                                ? dispatch({
+                                    type: actions.SET_INPUT_NUM,
+                                    recipeField: field.field,
+                                    value: parseInt(event.target.value),
+                                  })
+                                : dispatch({
+                                    type: actions.SET_INPUT,
+                                    recipeField: field.field,
+                                    value: event.target.value,
+                                  });
+                            }}
                             value={editedRecipeData[field.field] ?? ""}
                           />
                         </FormControl>
@@ -305,7 +323,11 @@ const EditRecipeModal = ({
                         <FormControl>
                           <FormHelperText>{field.label}</FormHelperText>
                           <Input
-                            type={field.field === EditRecipeFieldsEnum.ING_QUANTITY ? "number" : "text"}
+                            type={
+                              field.field === EditRecipeFieldsEnum.ING_QUANTITY
+                                ? "number"
+                                : "text"
+                            }
                             onChange={(event) =>
                               dispatch({
                                 type: actions.UPDATE_INGREDIENT,
