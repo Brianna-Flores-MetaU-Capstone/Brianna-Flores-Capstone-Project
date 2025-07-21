@@ -73,7 +73,7 @@ const DiffOriginalRecipe = ({
           <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
           <DialogContent sx={{ m: 4 }}>
             <Box sx={GPMealInfoModalTitleStyle}>
-              <AspectRatio ratio="1" sx={{ width: 400, borderRadius: "md" }}>
+              <AspectRatio ratio="1" sx={{ width: 350, borderRadius: "md" }}>
                 <img src={originalRecipeInfo.previewImage} />
               </AspectRatio>
               <Box sx={GPCenteredBoxStyle}>
@@ -117,7 +117,7 @@ const DiffOriginalRecipe = ({
                     childComponentProps={GPTagItemStyle}
                   />
                 )}
-                <Button onClick={handleViewOriginalRecipe}>
+                <Button size="lg" onClick={handleViewOriginalRecipe}>
                   View Original Recipe
                 </Button>
               </Box>
