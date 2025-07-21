@@ -5,6 +5,7 @@ import {
   AspectRatio,
   List,
   ListItem,
+  Button,
   Box,
   Modal,
   ModalClose,
@@ -15,6 +16,8 @@ import {
 
 import { DiffRecipes } from "../classes/DiffRecipe";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
+import { GPCenteredBoxStyle } from "../utils/UIStyle";
+import MealInfoModal from "./MealInfoModal";
 
 type GPDiffOriginalType = {
   originalRecipeInfo: GPRecipeDataTypes;
@@ -39,6 +42,7 @@ const DiffOriginalRecipe = ({
   const [recipeDiffInfo, setRecipeDiffInfo] =
     useState<GPOriginalRecipeDiffType>();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [viewOriginalModalOpen, setViewOriginalModalOpen] = useState(false);
 
   useEffect(() => {
     const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
@@ -46,57 +50,78 @@ const DiffOriginalRecipe = ({
     setRecipeDiffInfo(recipeDiffInfo);
   }, [modalOpen]);
 
+  const handleViewOriginalRecipe = () => {
+    setModalOpen();
+    setViewOriginalModalOpen(true);
+  };
+
   return (
-    <Modal
-      aria-labelledby="modal-title"
-      aria-describedby="modal-desc"
-      open={modalOpen}
-      onClose={setModalOpen}
-    >
-      <ModalDialog layout="fullscreen">
-        <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
-        <DialogContent sx={{ my: 4 }}>
-          <AspectRatio ratio="1" sx={{ width: "20%", borderRadius: "md" }}>
-            <img src={originalRecipeInfo.previewImage} />
-          </AspectRatio>
-          {recipeDiffInfo && (
-            <DiffOriginalContentDisplay
-              xDiffResults={recipeDiffInfo.titleDiffResults}
-              parentComponent={Box}
-              childrenComponent={Typography}
-              childComponentProps={{ level: "h2" }}
-            />
-          )}
-          <Typography>Servings: </Typography>
-          {recipeDiffInfo && (
-            <DiffOriginalContentDisplay
-              xDiffResults={recipeDiffInfo.servingsDiffResults}
-              parentComponent={Box}
-              childrenComponent={Typography}
-              childComponentProps={{ level: "" }}
-            />
-          )}
-          <Typography level="h3">Ingredients</Typography>
-          {recipeDiffInfo && (
-            <DiffOriginalContentDisplay
-              xDiffResults={recipeDiffInfo.ingredientsDiffResults}
-              parentComponent={List}
-              parentComponentProps={{ marker: "circle" }}
-              childrenComponent={ListItem}
-            />
-          )}
-          <Typography level="h3">Instructions</Typography>
-          {recipeDiffInfo && (
-            <DiffOriginalContentDisplay
-              xDiffResults={recipeDiffInfo.instructionsDiffResults}
-              parentComponent={List}
-              parentComponentProps={{ marker: "decimal" }}
-              childrenComponent={ListItem}
-            />
-          )}
-        </DialogContent>
-      </ModalDialog>
-    </Modal>
+    <>
+      <Modal
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        open={modalOpen}
+        onClose={setModalOpen}
+      >
+        <ModalDialog layout="fullscreen">
+          <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
+          <DialogContent sx={{ m: 4 }}>
+            <Box sx={{display: "flex", justifyContent: "space-around"}}>
+              <AspectRatio ratio="1" sx={{ width: 450, borderRadius: "md" }}>
+                <img src={originalRecipeInfo.previewImage} />
+              </AspectRatio>
+              <Box sx={GPCenteredBoxStyle}>
+                {recipeDiffInfo && (
+                  <DiffOriginalContentDisplay
+                    xDiffResults={recipeDiffInfo.titleDiffResults}
+                    parentComponent={Box}
+                    childrenComponent={Typography}
+                    childComponentProps={{ level: "h2" }}
+                  />
+                )}
+                <Box sx={{ display: "flex" }}>
+                  <Typography>Servings: </Typography>
+                  {recipeDiffInfo && (
+                    <DiffOriginalContentDisplay
+                      xDiffResults={recipeDiffInfo.servingsDiffResults}
+                      parentComponent={Box}
+                      childrenComponent={Typography}
+                      childComponentProps={{ level: "" }}
+                    />
+                  )}
+                </Box>
+                <Button onClick={handleViewOriginalRecipe}>
+                  View Original Recipe
+                </Button>
+              </Box>
+            </Box>
+            <Typography level="h3">Ingredients</Typography>
+            {recipeDiffInfo && (
+              <DiffOriginalContentDisplay
+                xDiffResults={recipeDiffInfo.ingredientsDiffResults}
+                parentComponent={List}
+                parentComponentProps={{ marker: "circle" }}
+                childrenComponent={ListItem}
+              />
+            )}
+            <Typography level="h3">Instructions</Typography>
+            {recipeDiffInfo && (
+              <DiffOriginalContentDisplay
+                xDiffResults={recipeDiffInfo.instructionsDiffResults}
+                parentComponent={List}
+                parentComponentProps={{ marker: "decimal" }}
+                childrenComponent={ListItem}
+              />
+            )}
+          </DialogContent>
+        </ModalDialog>
+      </Modal>
+      <MealInfoModal
+        toggleModal={() => setViewOriginalModalOpen((prev) => !prev)}
+        modalOpen={viewOriginalModalOpen}
+        recipeInfo={originalRecipeInfo}
+      />
+    </>
   );
 };
 
