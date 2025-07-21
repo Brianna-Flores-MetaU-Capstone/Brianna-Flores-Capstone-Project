@@ -16,7 +16,7 @@ import {
 
 import { DiffRecipes } from "../classes/DiffRecipe";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
-import { GPCenteredBoxStyle } from "../utils/UIStyle";
+import { GPCenteredBoxStyle, GPMealInfoModalTitleStyle } from "../utils/UIStyle";
 import MealInfoModal from "./MealInfoModal";
 
 type GPDiffOriginalType = {
@@ -66,8 +66,8 @@ const DiffOriginalRecipe = ({
         <ModalDialog layout="fullscreen">
           <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
           <DialogContent sx={{ m: 4 }}>
-            <Box sx={{display: "flex", justifyContent: "space-around"}}>
-              <AspectRatio ratio="1" sx={{ width: 450, borderRadius: "md" }}>
+            <Box sx={GPMealInfoModalTitleStyle}>
+              <AspectRatio ratio="1" sx={{ width: 400, borderRadius: "md" }}>
                 <img src={originalRecipeInfo.previewImage} />
               </AspectRatio>
               <Box sx={GPCenteredBoxStyle}>
@@ -79,8 +79,8 @@ const DiffOriginalRecipe = ({
                     childComponentProps={{ level: "h2" }}
                   />
                 )}
-                <Box sx={{ display: "flex" }}>
-                  <Typography>Servings: </Typography>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography>Servings:</Typography>
                   {recipeDiffInfo && (
                     <DiffOriginalContentDisplay
                       xDiffResults={recipeDiffInfo.servingsDiffResults}

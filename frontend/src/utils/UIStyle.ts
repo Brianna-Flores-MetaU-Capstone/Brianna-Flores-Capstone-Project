@@ -135,6 +135,12 @@ const GPModalStyle = {
   borderRadius: "lg",
 };
 
+const GPMealInfoModalTitleStyle = {
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+};
+
 const GPCenteredBoxStyle = {
   display: "flex",
   flexDirection: "column",
@@ -186,6 +192,7 @@ const MUI_GRID_FULL_SPACE = 12;
 
 export {
   GPModalStyle,
+  GPMealInfoModalTitleStyle,
   GPCenteredBoxStyle,
   GPDiffHeaderStyle,
   theme,
@@ -193,5 +200,5 @@ export {
   RowOverflowTitledListStyle,
   ColumnOverflowTitledListStyle,
   CenteredTitledListStyle,
-  RecipeTagsTitledListStyle
+  RecipeTagsTitledListStyle,
 };
