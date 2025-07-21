@@ -17,11 +17,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
-import type { GPDiffLineInfoType } from "../utils/diffUtils";
 import { fetchSingleRecipe } from "../utils/databaseHelpers";
 import { useState } from "react";
 import DiffOriginalRecipe from "./DiffOriginalRecipe";
-import { DiffRecipeString, DiffRecipeIngredients } from "../classes/DiffRecipe";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -35,12 +33,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   recipeInfo,
 }) => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const [instructionsDiffInfo, setInstructionsDiffInfo] = useState<
-    GPDiffLineInfoType[]
-  >([]);
-  const [ingredientsDiffInfo, setIngredientsDiffInfo] = useState<
-    GPDiffLineInfoType[]
-  >([]);
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [originalRecipeInfo, setOriginalRecipeInfo] =
     useState<GPRecipeDataTypes>();
@@ -59,18 +51,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       selectedRecipe: recipeInfo,
     });
     setOriginalRecipeInfo(originalRecipe);
-    const instructionsDiff = new DiffRecipeString(
-      originalRecipe.instructions,
-      recipeInfo.instructions
-    );
-    const detailedDiffInstructions = instructionsDiff.getStringDiff();
-    setInstructionsDiffInfo(detailedDiffInstructions);
-    const ingredientsDiff = new DiffRecipeIngredients(
-      originalRecipe.ingredients,
-      recipeInfo.ingredients
-    );
-    const detailedDiffIngredients = ingredientsDiff.getIngredientsDiff();
-    setIngredientsDiffInfo(detailedDiffIngredients);
     setDiffModalOpen(true);
   };
 
@@ -148,8 +128,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         <DiffOriginalRecipe
           originalRecipeInfo={originalRecipeInfo}
           editedRecipeInfo={recipeInfo}
-          instructionsDiffInfo={instructionsDiffInfo}
-          ingredientsDiffInfo={ingredientsDiffInfo}
           modalOpen={diffModalOpen}
           setModalOpen={() => setDiffModalOpen((prev) => !prev)}
         />

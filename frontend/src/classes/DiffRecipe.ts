@@ -1,4 +1,4 @@
-import type { GPIngredientDataTypes } from "../utils/types";
+import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
 
 const DiffStatus = {
   UNCHANGED: "unchanged",
@@ -13,7 +13,7 @@ type GPDiffLineInfoType<T> = {
   lineDiffInfo?: GPDiffLineInfoType<T>[];
 };
 
-abstract class DiffRecipe<T> {
+abstract class DiffRecipeField<T> {
   itemAData: T[];
   itemBData: T[];
 
@@ -91,8 +91,8 @@ abstract class DiffRecipe<T> {
   }
 }
 
-class DiffRecipeString extends DiffRecipe<string> {
-  getStringDiff(): GPDiffLineInfoType<string>[] {
+class DiffRecipeStringArray extends DiffRecipeField<string> {
+  getStringArrayDiff(): GPDiffLineInfoType<string>[] {
     const lineDifferences = this.getLcsDiff();
     let prevLine: GPDiffLineInfoType<string> | null = null;
     let detailedLineDiffResults: GPDiffLineInfoType<string>[] = [];
@@ -113,7 +113,7 @@ class DiffRecipeString extends DiffRecipe<string> {
           prevLine.status === DiffStatus.ADDED
             ? prevLine.line.split(" ")
             : diffLine.line.split(" ");
-        const newDiff = new DiffRecipeString(
+        const newDiff = new DiffRecipeStringArray(
           instructionLineA,
           instructionLineB
         );
@@ -146,7 +146,7 @@ class DiffRecipeString extends DiffRecipe<string> {
   }
 }
 
-class DiffRecipeIngredients extends DiffRecipe<GPIngredientDataTypes> {
+class DiffRecipeIngredients extends DiffRecipeField<GPIngredientDataTypes> {
   getIngredientsDiff(): GPDiffLineInfoType<string>[] {
     const ingredientsA = this.itemAData;
     const ingredientsB = this.itemBData;
@@ -166,13 +166,42 @@ class DiffRecipeIngredients extends DiffRecipe<GPIngredientDataTypes> {
         " " +
         ingredient.unit
     );
-    const ingredientDiff = new DiffRecipeString(
+    const ingredientDiff = new DiffRecipeStringArray(
       parsedIngredientsA,
       parsedIngredientsB
     );
-    const detailedIngredientsDiff = ingredientDiff.getStringDiff();
+    const detailedIngredientsDiff = ingredientDiff.getStringArrayDiff();
     return detailedIngredientsDiff;
   }
 }
 
-export { DiffRecipe, DiffRecipeString, DiffRecipeIngredients };
+class DiffRecipes {
+  recipeA: GPRecipeDataTypes;
+  recipeB: GPRecipeDataTypes;
+
+  constructor (recipeA: GPRecipeDataTypes, recipeB: GPRecipeDataTypes) {
+    this.recipeA = recipeA
+    this.recipeB = recipeB
+  }
+
+  getRecipeDiff() {
+    const diffInstructions = new DiffRecipeStringArray(
+      this.recipeA.instructions,
+      this.recipeB.instructions
+    );
+    const instructionsDiffResults = diffInstructions.getStringArrayDiff();
+    const diffIngredients = new DiffRecipeIngredients(
+      this.recipeA.ingredients,
+      this.recipeB.ingredients
+    );
+    const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
+    const diffTitle = new DiffRecipeStringArray(
+      [this.recipeA.recipeTitle],
+      [this.recipeB.recipeTitle]
+    );
+    const titleDiffResults = diffTitle.getStringArrayDiff();
+    return {instructionsDiffResults, ingredientsDiffResults, titleDiffResults}
+  }
+}
+
+export { DiffRecipeField, DiffRecipeStringArray, DiffRecipeIngredients, DiffRecipes };
