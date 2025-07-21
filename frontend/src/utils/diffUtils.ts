@@ -35,7 +35,7 @@ const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   return recipeDiffResults;
 };
 
-const getLCS = ({ recipeA, recipeB }: GPDiffType) => {
+const getInstructionsLCS = ({ recipeA, recipeB }: GPDiffType) => {
   const instructionsA = recipeA.instructions;
   const instructionsB = recipeB.instructions;
   const n = instructionsA.length;
@@ -68,27 +68,30 @@ const getLCS = ({ recipeA, recipeB }: GPDiffType) => {
   let i = n;
   let j = m;
   let index = len - 1;
-  let unchanged: string[] = [];
-  let added: string[] = [];
-  let deleted: string[] = []
+  let instructionChanges: {status: string, line: string}[] = []
 
   while (i > 0 && j > 0) {
     if (instructionsA[i - 1] === instructionsB[j - 1]) {
-      unchanged = [instructionsA[i - 1], ...unchanged];
+      instructionChanges = [{status: "unchanged", line: instructionsA[i - 1]}, ...instructionChanges];
       index--;
       i--;
       j--;
     } else if (dp[i - 1][j] > dp[i][j - 1]) {
-      deleted = [instructionsA[i - 1], ...deleted]
+      instructionChanges = [{status: "deleted", line: instructionsA[i - 1]}, ...instructionChanges]
       i--;
     } else {
-      added = [instructionsB[j - 1], ...added]
+      instructionChanges = [{status: "added", line: instructionsB[j - 1]}, ...instructionChanges]
       j--;
     }
   }
   // array of unchanged lines
-  return unchanged;
+  return instructionChanges;
 };
 
-export { getRecipeDiffResults, getLCS };
+
+
+
+
+
+export { getRecipeDiffResults, getInstructionsLCS };
 export type { GPRecipeDiffType };
