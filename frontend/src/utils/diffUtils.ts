@@ -146,8 +146,8 @@ const checkForChangedLines = ({
         (instructionLine.status === DiffStatus.DELETED &&
           prevLine.status === DiffStatus.ADDED))
     ) {
-      const instructionLineA = instructionLine.line.split(" ");
-      const instructionLineB = prevLine.line.split(" ");
+      const instructionLineA = instructionLine.status === DiffStatus.DELETED ? instructionLine.line.split(" ") : prevLine.line.split(" ");
+      const instructionLineB = prevLine.status === DiffStatus.ADDED ? prevLine.line.split(" ") : instructionLine.line.split(" ");
       const lineDifferenceReturn = getInstructionsLCS({
         instructionsA: instructionLineA,
         instructionsB: instructionLineB,
@@ -210,6 +210,7 @@ const getIngredientsDiff = ({ recipeA, recipeB }: GPIngredientDiffTypes) => {
   const detailedIngredientsDiff = checkForChangedLines({
     instructionDifferences: diffIngredientLines,
   });
+  return detailedIngredientsDiff
 };
 
 type GPLevenshteinDistanceType = {
@@ -242,5 +243,6 @@ export {
   checkForChangedLines,
   getLevenshteinDistance,
   getIngredientsDiff,
+  DiffStatus
 };
-export type { GPRecipeDiffType };
+export type { GPRecipeDiffType, GPDiffLineInfoType };
