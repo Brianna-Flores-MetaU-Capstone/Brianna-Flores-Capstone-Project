@@ -23,7 +23,7 @@ import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/EditRecipeModal";
-import { getInstructionsLCS } from "../utils/diffUtils";
+import { getInstructionsLCS, checkForChangedLines } from "../utils/diffUtils";
 
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
