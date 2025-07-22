@@ -1,5 +1,5 @@
 import React from "react";
-import type { GPIngredientDataTypes } from "../utils/types";
+import type { GPIngredientDataTypes } from "../../utils/types";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPIngredientCostTypes = {

@@ -1,8 +1,11 @@
 import { Box, Grid, Typography } from "@mui/joy";
 import RecipeDiffTable from "./RecipeDiffTable";
-import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
-import { GPDiffHeaderStyle } from "../utils/UIStyle";
+import type { GPDiffReturnType } from "../../classes/recipeDiffClasses/DiffClass";
+import type {
+  GPIngredientDataTypes,
+  GPRecipeDataTypes,
+} from "../../utils/types";
+import { GPDiffHeaderStyle } from "../../utils/UIStyle";
 
 type GPRecipeDiffInfo = {
   recipeA: GPRecipeDataTypes;

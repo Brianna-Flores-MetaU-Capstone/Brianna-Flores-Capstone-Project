@@ -1,14 +1,14 @@
 import React from "react";
 import { useState } from "react";
-import MealCard from "./MealCard";
+import MealCard from "./recipeDisplay/MealCard";
 import {
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
 import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
-import ErrorState from "./ErrorState";
-import TitledListView from "./TitledListView";
+import ErrorState from "./utils/ErrorState";
+import TitledListView from "./utils/TitledListView";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import {
@@ -27,9 +27,9 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import type { GPRecipeDiffType } from "../utils/diffUtils";
-import RecipeDiffModal from "./RecipeDiffModal";
+import RecipeDiffModal from "./recipeDiff/RecipeDiffModal";
 import { updateRecipeWithPricing } from "../utils/utils";
-import LoadingModal from "./LoadingModal";
+import LoadingModal from "./utils/LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 

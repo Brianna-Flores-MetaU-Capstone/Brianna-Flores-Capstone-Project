@@ -1,7 +1,7 @@
 import React from "react";
-import TitledListView from "./TitledListView";
+import TitledListView from "../utils/TitledListView";
 import { Button } from "@mui/joy";
-import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { CenteredTitledListStyle } from "../../utils/UIStyle";
 
 type GPUserPreferenceButtonsProps = {
   listName: string;

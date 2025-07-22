@@ -1,6 +1,6 @@
 import React from "react";
-import AppHeader from "../components/AppHeader";
-import RegistrationPreferenceButtons from "../components/RegistrationPreferenceButtons";
+import AppHeader from "../components/utils/AppHeader";
+import RegistrationPreferenceButtons from "../components/authentication/RegistrationPreferenceButtons";
 import type { GPErrorMessageTypes } from "../utils/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
@@ -18,8 +18,8 @@ import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
 } from "../utils/constants";
-import AuthenticatePassword from "../components/AuthenticatePassword";
-import ErrorState from "../components/ErrorState";
+import AuthenticatePassword from "../components/authentication/AuthenticatePassword";
+import ErrorState from "../components/utils/ErrorState";
 import {
   Button,
   Box,

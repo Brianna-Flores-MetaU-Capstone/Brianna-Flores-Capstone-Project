@@ -1,9 +1,9 @@
 import { Box, Typography, IconButton } from "@mui/joy";
-import type { GPRecipeEventOptionType } from "../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types";
 import CalendarEventCard from "./CalendarEventCard";
-import TitledListView from "./TitledListView";
+import TitledListView from "../utils/TitledListView";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { CenteredTitledListStyle } from "../../utils/UIStyle";
 
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];

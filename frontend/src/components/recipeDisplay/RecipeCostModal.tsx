@@ -1,8 +1,8 @@
-import type { GPIngredientDataTypes } from "../utils/types";
-import TitledListView from "./TitledListView";
-import IngredientCost from "./IngredientCost";
+import type { GPIngredientDataTypes } from "../../utils/types";
+import TitledListView from "../utils/TitledListView";
+import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
-import { ColumnOverflowTitledListStyle } from "../utils/UIStyle";
+import { ColumnOverflowTitledListStyle } from "../../utils/UIStyle";
 
 type GPLoadingModalTypes = {
   ingredientsCostInformation: GPIngredientDataTypes[];

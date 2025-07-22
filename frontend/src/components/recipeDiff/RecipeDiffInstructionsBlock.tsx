@@ -1,6 +1,6 @@
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPRecipeDataTypes } from "../../utils/types";
 import { Box, Grid, Typography, List, ListItem } from "@mui/joy";
-import { GPDiffHeaderStyle } from "../utils/UIStyle";
+import { GPDiffHeaderStyle } from "../../utils/UIStyle";
 
 type GPInstructionsDiffTypes = {
   recipeA: GPRecipeDataTypes;

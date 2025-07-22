@@ -8,7 +8,7 @@ import {
   Grid,
 } from "@mui/joy";
 import RecipeDiffBlock from "./RecipeDiffBlock";
-import type { GPRecipeDiffType } from "../utils/diffUtils";
+import type { GPRecipeDiffType } from "../../utils/diffUtils";
 import RecipeDiffInstructionsBlock from "./RecipeDiffInstructionsBlock";
 
 const servingsStyle = {

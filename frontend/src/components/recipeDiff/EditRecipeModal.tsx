@@ -3,7 +3,7 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-} from "../utils/types";
+} from "../../utils/types";
 import {
   Button,
   Input,
@@ -21,13 +21,13 @@ import {
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TitledListView from "./TitledListView";
+import TitledListView from "../utils/TitledListView";
 import {
   MUI_GRID_FULL_SPACE,
   RecipeTagsTitledListStyle,
-} from "../utils/UIStyle";
-import { useUser } from "../contexts/UserContext";
-import { updateUserRecipes } from "../utils/databaseHelpers";
+} from "../../utils/UIStyle";
+import { useUser } from "../../contexts/UserContext";
+import { updateUserRecipes } from "../../utils/databaseHelpers";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;

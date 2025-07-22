@@ -1,9 +1,9 @@
 import React from "react";
-import { errorCodes } from "../utils/firebase";
+import { errorCodes } from "../../utils/firebase";
 import Alert from "@mui/joy/Alert";
 import ReportIcon from "@mui/icons-material/Report";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import type { GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types";
 
 const ErrorState: React.FC<GPErrorMessageTypes> = ({ error, message }) => {
   const displayedMessage = errorCodes[message] ?? message;

@@ -1,15 +1,15 @@
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/utils/AppHeader";
 import { useState, useEffect } from "react";
-import IngredientModal from "../components/IngredientModal";
+import IngredientModal from "../components/ingredients/IngredientModal";
 import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { Box, Button, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
-import TitledListView from "../components/TitledListView";
-import Ingredient from "../components/Ingredient";
-import ErrorState from "../components/ErrorState";
+import TitledListView from "../components/utils/TitledListView";
+import Ingredient from "../components/ingredients/Ingredient";
+import ErrorState from "../components/utils/ErrorState";
 import {
   fetchUserIngredientsHelper,
   deleteIngredient,

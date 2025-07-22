@@ -8,19 +8,19 @@ import {
   Typography,
 } from "@mui/joy";
 import CalendarOptionGroup from "./CalendarOptionGroup";
-import TitledListView from "./TitledListView";
-import LoadingModal from "./LoadingModal";
-import ErrorState from "./ErrorState";
-import { useEventRec } from "../contexts/EventRecContext";
+import TitledListView from "../utils/TitledListView";
+import LoadingModal from "../utils/LoadingModal";
+import ErrorState from "../utils/ErrorState";
+import { useEventRec } from "../../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { useSelectedEvents } from "../contexts/SelectedEventsContext";
+import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import {
   ColumnOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
-} from "../utils/UIStyle";
+} from "../../utils/UIStyle";
 
 import { gapi } from "gapi-script";
-import type { GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;

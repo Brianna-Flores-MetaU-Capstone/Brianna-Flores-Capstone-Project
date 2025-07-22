@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 import { useLocation } from "react-router";
 import { Button, Box, Grid, Typography } from "@mui/joy";
 

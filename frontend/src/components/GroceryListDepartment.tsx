@@ -1,7 +1,7 @@
 import React from "react";
 import type { GPIngredientDataTypes } from "../utils/types";
-import TitledListView from "./TitledListView";
-import Ingredient from "./Ingredient";
+import TitledListView from "./utils/TitledListView";
+import Ingredient from "./ingredients/Ingredient";
 import { Box } from "@mui/joy";
 import {
   ColumnOverflowTitledListStyle,

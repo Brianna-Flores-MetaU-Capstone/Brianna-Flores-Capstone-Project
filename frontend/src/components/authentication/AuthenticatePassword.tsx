@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthenticationFieldEnum } from "../utils/constants";
+import { AuthenticationFieldEnum } from "../../utils/constants";
 import {
   Button,
   FormControl,

@@ -1,4 +1,4 @@
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPRecipeDataTypes } from "../../utils/types";
 import { useState } from "react";
 import {
   Button,
@@ -18,9 +18,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
-import { estimateRecipeCost } from "../utils/utils";
-import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
-import type { GPErrorMessageTypes } from "../utils/types";
+import { estimateRecipeCost } from "../../utils/utils";
+import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
+import type { GPErrorMessageTypes } from "../../utils/types";
 
 type GPMealCardProps = {
   index: number;

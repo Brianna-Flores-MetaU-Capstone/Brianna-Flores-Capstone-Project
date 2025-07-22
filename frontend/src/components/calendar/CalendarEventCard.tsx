@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GPRecipeEventOptionType } from "../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types";
 import {
   Button,
   Box,
@@ -10,10 +10,10 @@ import {
   AspectRatio,
   Tooltip,
 } from "@mui/joy";
-import { DaysOfWeek } from "../utils/enum";
+import { DaysOfWeek } from "../../utils/enum";
 import CalendarTimeModal from "./CalendarTimeModal";
-import { useSelectedEvents } from "../contexts/SelectedEventsContext";
-import TimeBlock from "../../../backend/classes/TimeBlock";
+import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
+import TimeBlock from "../../../../backend/classes/TimeBlock";
 
 type GPCalendarOption = {
   eventOption: GPRecipeEventOptionType;

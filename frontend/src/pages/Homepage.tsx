@@ -3,12 +3,12 @@ import type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
-import AppHeader from "../components/AppHeader";
-import TitledListView from "../components/TitledListView";
+import AppHeader from "../components/utils/AppHeader";
+import TitledListView from "../components/utils/TitledListView";
 import { PreviewConstants } from "../utils/constants";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
-import Ingredient from "../components/Ingredient";
-import MealCard from "../components/MealCard";
+import Ingredient from "../components/ingredients/Ingredient";
+import MealCard from "../components/recipeDisplay/MealCard";
 import {
   fetchGroceryList,
   fetchUserIngredientsHelper,

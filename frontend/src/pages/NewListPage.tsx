@@ -3,13 +3,13 @@ import type {
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
 } from "../utils/types";
-import AppHeader from "../components/AppHeader";
-import MealCard from "../components/MealCard";
-import MealInfoModal from "../components/MealInfoModal";
+import AppHeader from "../components/utils/AppHeader";
+import MealCard from "../components/recipeDisplay/MealCard";
+import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import TitledListView from "../components/TitledListView";
-import ErrorState from "../components/ErrorState";
+import TitledListView from "../components/utils/TitledListView";
+import ErrorState from "../components/utils/ErrorState";
 import { useUser } from "../contexts/UserContext";
 import {
   fetchRecipes,
@@ -17,12 +17,12 @@ import {
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
 import { useNavigate } from "react-router";
-import LoadingModal from "../components/LoadingModal";
+import LoadingModal from "../components/utils/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
-import ConnectCalendar from "../components/ConnectCalendar";
-import CalendarModal from "../components/CalendarModal";
+import ConnectCalendar from "../components/calendar/ConnectCalendar";
+import CalendarModal from "../components/calendar/CalendarModal";
 import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 

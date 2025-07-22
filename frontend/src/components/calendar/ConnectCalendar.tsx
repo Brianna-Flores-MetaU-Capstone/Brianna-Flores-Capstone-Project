@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
-import { parseUserEvents } from "../utils/calendarUtils";
+import { parseUserEvents } from "../../utils/calendarUtils";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
-import { axiosConfig } from "../utils/databaseHelpers";
+import { axiosConfig } from "../../utils/databaseHelpers";
 
-import type { GPUserEventTypes, GPPreferredBlockType } from "../utils/types";
-import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
-import { useEventRec } from "../contexts/EventRecContext";
+import type { GPUserEventTypes, GPPreferredBlockType } from "../../utils/types";
+import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
+import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
-import LoadingModal from "./LoadingModal";
+import LoadingModal from "../utils/LoadingModal";
 
 // TODO change requested days to have user input
 const REQUESTED_DAYS = 7;

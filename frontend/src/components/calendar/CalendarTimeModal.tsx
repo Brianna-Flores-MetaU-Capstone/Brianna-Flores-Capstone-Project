@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import type {
   GPPreferredBlockType,
   GPRecipeEventOptionType,
-} from "../utils/types";
+} from "../../utils/types";
 import {
   Box,
   Button,
@@ -20,9 +20,9 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { EventTimeEnum } from "../utils/constants";
-import { useEventRec } from "../contexts/EventRecContext";
-import TimeBlock from "../../../backend/classes/TimeBlock";
+import { EventTimeEnum } from "../../utils/constants";
+import { useEventRec } from "../../contexts/EventRecContext";
+import TimeBlock from "../../../../backend/classes/TimeBlock";
 
 type GPEventTimeModal = {
   editMode: boolean;

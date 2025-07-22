@@ -1,5 +1,5 @@
 import { Box } from "@mui/joy";
-import { DiffStatus, type GPDiffLineInfoType } from "../utils/diffUtils";
+import { DiffStatus, type GPDiffLineInfoType } from "../../utils/diffUtils";
 
 type GPDiffOriginalDisplayType = {
   xDiffResults: GPDiffLineInfoType[];
