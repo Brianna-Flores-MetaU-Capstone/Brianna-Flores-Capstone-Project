@@ -1,4 +1,3 @@
-import type { GPRecipeDataTypes } from "../../utils/types";
 import { useState } from "react";
 import {
   Button,
@@ -21,10 +20,11 @@ import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../../utils/utils";
 import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types";
+import { Recipe } from "../../classes/recipe/Recipe";
 
 type GPMealCardProps = {
   index: number;
-  parsedMealData: GPRecipeDataTypes;
+  parsedMealData: Recipe;
   selectedToCompare: boolean;
   cardSize: number;
   favorited: boolean;
@@ -32,12 +32,12 @@ type GPMealCardProps = {
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
-  onSelectRecipe?: (data: GPRecipeDataTypes) => void;
-  onEditRecipe?: (data: GPRecipeDataTypes) => void;
-  onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
-  onLoadRecipeCost?: (data: GPRecipeDataTypes, index: number) => void;
-  onCompareSelect?: (data: GPRecipeDataTypes) => void;
-  onFavoriteClick?: (data: GPRecipeDataTypes) => void;
+  onSelectRecipe?: (data: Recipe) => void;
+  onEditRecipe?: (data: Recipe) => void;
+  onDeleteRecipe?: (data: Recipe) => void;
+  onLoadRecipeCost?: (data: Recipe, index: number) => void;
+  onCompareSelect?: (data: Recipe) => void;
+  onFavoriteClick?: (data: Recipe) => void;
 };
 
 const MealCard: React.FC<GPMealCardProps> = ({
@@ -74,14 +74,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
       ownedIngredients,
       recipeIngredients: parsedMealData.ingredients,
     });
-    // update list of meal data
-    const updatedRecipeInfo = {
-      ...parsedMealData,
-      ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
-      totalCost: estimatedRecipeCostInfo.estimatedCost,
-    };
+    parsedMealData.ingredientCostInfo = estimatedRecipeCostInfo.ingredientCostInfo
+    parsedMealData.totalCost = estimatedRecipeCostInfo.estimatedCost
     if (onLoadRecipeCost) {
-      onLoadRecipeCost(updatedRecipeInfo, index);
+      onLoadRecipeCost(parsedMealData, index);
     }
     setLoading(false);
     toggleModal();

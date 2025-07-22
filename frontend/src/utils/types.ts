@@ -1,5 +1,6 @@
 import type { User } from "firebase/auth";
 import TimeBlock from "../../../backend/classes/TimeBlock";
+import type { Recipe } from "../classes/recipe/Recipe";
 
 type GPRecipeDataTypes = {
   id: number;
@@ -19,8 +20,8 @@ type GPRecipeDataTypes = {
   glutenFree: boolean;
   dairyFree: boolean;
   recipeTags: string[];
-  ingredientCostInfo: GPIngredientDataTypes[];
-  totalCost: number;
+  ingredientCostInfo?: GPIngredientDataTypes[];
+  totalCost?: number;
 };
 
 type GPAccountInfoTypes = {
@@ -91,15 +92,15 @@ type GPPrepBlockType = {
 type GPRecipeEventOptionType = {
   name: string;
   timeOptions: TimeBlock[];
-  recipe: GPRecipeDataTypes | GPPrepBlockType;
+  recipe: Recipe | GPPrepBlockType;
 };
 
 type GPRecipeDiscoveryCategories = {
-  all: GPRecipeDataTypes[];
-  dairyFree: GPRecipeDataTypes[];
-  glutenFree: GPRecipeDataTypes[];
-  vegetarian: GPRecipeDataTypes[];
-  vegan: GPRecipeDataTypes[];
+  all: Recipe[];
+  dairyFree: Recipe[];
+  glutenFree: Recipe[];
+  vegetarian: Recipe[];
+  vegan: Recipe[];
 };
 
 export type {

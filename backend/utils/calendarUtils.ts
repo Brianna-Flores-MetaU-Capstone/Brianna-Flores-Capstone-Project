@@ -1,6 +1,5 @@
 import type {
   GPUserEventTypes,
-  GPRecipeDataTypes,
   GPRecipeEventOptionType,
 } from "../../frontend/src/utils/types";
 import { TimePreferenceString } from "../../frontend/src/classes/timePreference/TimePreferenceString";
@@ -9,6 +8,7 @@ const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
 
 import TimeBlock from "../classes/TimeBlock";
+import { Recipe } from "../../frontend/src/classes/recipe/Recipe";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
@@ -47,7 +47,7 @@ const getShoppingTimeOptions = ({
 
 type GPRecipeEventTypes = {
   userFreeTime: GPUserEventTypes[];
-  userRecipes: GPRecipeDataTypes[];
+  userRecipes: Recipe[];
   userPreferences: TimePreferenceString[];
   servingsPerDay: number;
 };

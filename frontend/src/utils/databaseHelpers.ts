@@ -3,7 +3,6 @@ import type {
   GPAccountInfoTypes,
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPRecipeDataTypes,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
@@ -13,6 +12,7 @@ import {
   recipeFiltersList,
   type recipeFilterType,
 } from "../classes/filters/RecipeFilters";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const DISCOVERY_NUM_TO_REQUEST = 20;
@@ -175,7 +175,7 @@ const updateIngredientDatabase = async ({
 };
 
 type GPFetchRecipeTypes = GPSetMessageType & {
-  setRecipes?: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
+  setRecipes?: (value: React.SetStateAction<Recipe[]>) => void;
   recipeGroup: string;
 };
 const fetchRecipes = async ({
@@ -199,7 +199,7 @@ const fetchRecipes = async ({
 
 type GPUpdateUserRecipesTypes = GPSetMessageType & {
   editedRecipe: boolean;
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
   userId: string;
 };
 const updateUserRecipes = async ({
@@ -316,7 +316,7 @@ const fetchAllRecipeCategories = async ({
 };
 
 type GPUnfavoriteType = GPSetMessageType & {
-  recipe: GPRecipeDataTypes;
+  recipe: Recipe;
 };
 
 const handleUnfavoriteRecipe = async ({
@@ -336,7 +336,7 @@ const handleUnfavoriteRecipe = async ({
 
 type GPFavoriteType = GPSetMessageType & {
   userId: string;
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
 };
 
 const handleFavoriteRecipe = async ({
@@ -356,7 +356,7 @@ const handleFavoriteRecipe = async ({
 };
 
 type GPFetchSingleRecipeType = GPSetMessageType & {
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
 };
 
 const fetchSingleRecipe = async ({

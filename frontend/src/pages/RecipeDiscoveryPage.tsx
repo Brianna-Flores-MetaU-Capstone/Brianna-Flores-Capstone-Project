@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
   GPRecipeDiscoveryCategories,
-  GPRecipeDataTypes,
 } from "../utils/types";
 import {
   fetchAllRecipeCategories,
@@ -24,6 +23,7 @@ import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
 import { RecipeFilter } from "../classes/filters/RecipeFilters";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },
@@ -41,12 +41,12 @@ const RecipeDiscoveryPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
-    useState<GPRecipeDataTypes>();
+    useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
     new Set()
   );
-  const [editRecipeInfo, setEditRecipeInfo] = useState<GPRecipeDataTypes>();
+  const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
 
   useEffect(() => {
@@ -68,12 +68,12 @@ const RecipeDiscoveryPage = () => {
     setRecipeLists();
   }, []);
 
-  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+  const handleRecipeCardClick = (recipe: Recipe) => {
     setRecipeInfoModalOpen((prev) => !prev);
     setRecipeInfoModalInfo(recipe);
   };
 
-  const handleSelectRecipeToShop = async (recipe: GPRecipeDataTypes) => {
+  const handleSelectRecipeToShop = async (recipe: Recipe) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;
@@ -91,7 +91,7 @@ const RecipeDiscoveryPage = () => {
     }
   };
 
-  const handleFavoriteClick = async (recipe: GPRecipeDataTypes) => {
+  const handleFavoriteClick = async (recipe: Recipe) => {
     if (user) {
       if (favoritedRecipesId.has(recipe.id)) {
         handleUnfavoriteRecipe({ setMessage, recipe });
@@ -116,7 +116,7 @@ const RecipeDiscoveryPage = () => {
     }
   };
 
-  const handleEditRecipe = (recipe: GPRecipeDataTypes) => {
+  const handleEditRecipe = (recipe: Recipe) => {
     setEditRecipeModalOpen((prev) => !prev);
     setEditRecipeInfo(recipe);
   };
