@@ -196,8 +196,9 @@ const CenteredTitledListStyle = {
 
 const LeftAlignedTitledListStyle = {
   ...BaseListStyle,
+  flexDirection: "column",
   justifyContent: "flex-start",
-  m: 1
+  m: 1,
 };
 
 const GPTagItemStyle = {

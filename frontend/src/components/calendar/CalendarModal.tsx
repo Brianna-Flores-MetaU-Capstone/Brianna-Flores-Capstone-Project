@@ -26,10 +26,14 @@ import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 type GPCalendarModalTypes = {
   modalOpen: boolean;
   toggleModal: () => void;
-  setCreatedEvents: (value: CalendarEvent[]) => void
+  setCreatedEvents: (value: CalendarEvent[]) => void;
 };
 
-const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarModalTypes) => {
+const CalendarModal = ({
+  modalOpen,
+  toggleModal,
+  setCreatedEvents,
+}: GPCalendarModalTypes) => {
   const { eventOptions } = useEventRec();
   const { selectedEvents, setSelectedEvents } = useSelectedEvents();
   const [loading, setLoading] = useState(false);
@@ -73,13 +77,23 @@ const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarM
         resource: newEvent,
       });
       const eventData = request.result;
-      if (eventData.htmlLink && eventData.summary && eventData.start?.dateTime && eventData.end?.dateTime) {
-        const newEvent = new CalendarEvent(eventData.summary, eventData.start.dateTime, eventData.end.dateTime, eventData.htmlLink)
+      if (
+        eventData.htmlLink &&
+        eventData.summary &&
+        eventData.start?.dateTime &&
+        eventData.end?.dateTime
+      ) {
+        const newEvent = new CalendarEvent(
+          eventData.summary,
+          eventData.start.dateTime,
+          eventData.end.dateTime,
+          eventData.htmlLink,
+        );
         createdEvents = [...createdEvents, newEvent];
       }
     }
     // reset selected events to prevent multiple events being added
-    setCreatedEvents(createdEvents)
+    setCreatedEvents(createdEvents);
     setLoading(false);
     toggleModal();
   };

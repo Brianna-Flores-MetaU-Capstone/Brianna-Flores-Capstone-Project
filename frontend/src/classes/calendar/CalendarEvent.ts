@@ -8,7 +8,7 @@ class CalendarEvent {
     eventTitle: string,
     start: string,
     end: string,
-    eventLink: string
+    eventLink: string,
   ) {
     this.eventTitle = eventTitle;
     this.start = new Date(start);
@@ -21,14 +21,17 @@ class CalendarEvent {
   }
 
   getFormattedTime() {
-    return this.start.toLocaleTimeString([], {
-      hour: "numeric",
-      minute: "numeric",
-    }) + "-" +
-    this.end.toLocaleTimeString([], {
-      hour: "numeric",
-      minute: "numeric",
-    });
+    return (
+      this.start.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "numeric",
+      }) +
+      "-" +
+      this.end.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "numeric",
+      })
+    );
   }
 }
 
