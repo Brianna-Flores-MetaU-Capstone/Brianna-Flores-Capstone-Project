@@ -1,6 +1,7 @@
 import { DiffRecipeStringArray } from "./DiffRecipeStringArray";
 import { DiffRecipeIngredients } from "./DiffRecipeIngredients";
 import type { Recipe } from "../recipe/Recipe";
+import { DiffStatus, type GPDiffLineInfoType } from "./DiffRecipeFieldAbstract";
 
 const GPDiffOptionsEnum = {
   TITLE: "Diff Title",
@@ -11,6 +12,9 @@ const GPDiffOptionsEnum = {
   INSTRUCTIONS: "Diff Instructions",
 } as const;
 
+type DiffOptionsKeys = keyof typeof GPDiffOptionsEnum;
+type DiffOptionsType = (typeof GPDiffOptionsEnum)[DiffOptionsKeys];
+
 class DiffRecipes {
   recipeA: Recipe;
   recipeB: Recipe;
@@ -20,9 +24,16 @@ class DiffRecipes {
     this.recipeB = recipeB;
   }
 
-  getRequestedDiff(diffRequest: string[], diffFromOriginal: boolean) {
+  getRequestedDiff(diffRequest: string[], noDiffFields: string[]) {
+    const chosenDiffFieldResults = this.getChosenDiffFields(diffRequest);
+    const noDiffFieldResults = this.getNoDiffFields(noDiffFields);
+    return { ...chosenDiffFieldResults, ...noDiffFieldResults };
+  }
+
+  // get diff results for fields chosen by user
+  getChosenDiffFields(chosenDiffFields: string[]) {
     let requestedFields = {};
-    for (const request of diffRequest) {
+    for (const request of chosenDiffFields) {
       switch (request) {
         case GPDiffOptionsEnum.TITLE:
           const titleDiffResults = this.getTitleDiff();
@@ -41,35 +52,72 @@ class DiffRecipes {
           requestedFields = { ...requestedFields, tagsDiffResults };
           break;
         case GPDiffOptionsEnum.INSTRUCTIONS:
-          const instructionsDiffResults = diffFromOriginal
-            ? this.getInstructionDiff()
-            : this.getCourseInstrictionDiff();
+          const instructionsDiffResults = this.getInstructionDiff();
           requestedFields = { ...requestedFields, instructionsDiffResults };
           break;
         case GPDiffOptionsEnum.INGREDIENTS:
-          const ingredientsDiffResults = diffFromOriginal
-            ? this.getIngredientsDiff()
-            : this.getCourseIngredientsDiff();
+          const ingredientsDiffResults = this.getIngredientsDiff();
           requestedFields = { ...requestedFields, ingredientsDiffResults };
           break;
       }
     }
-    return requestedFields
+    return requestedFields;
+  }
+
+  // get results for edited recipe in "diff line" format
+  getNoDiffFields(noDiffFields: string[]) {
+    let noDiffFieldResults = {};
+    for (const request of noDiffFields) {
+      switch (request) {
+        case GPDiffOptionsEnum.TITLE:
+          const titleDiffResults = this.getTitleNoDiff();
+          noDiffFieldResults = { ...noDiffFieldResults, titleDiffResults };
+          break;
+        case GPDiffOptionsEnum.SERVINGS:
+          const servingsDiffResults = this.getServingsNoDiff();
+          noDiffFieldResults = { ...noDiffFieldResults, servingsDiffResults };
+          break;
+        case GPDiffOptionsEnum.COOK_TIME:
+          const cookTimeDiffResults = this.getCookTimeNoDiff();
+          noDiffFieldResults = { ...noDiffFieldResults, cookTimeDiffResults };
+          break;
+        case GPDiffOptionsEnum.TAGS:
+          const tagsDiffResults = this.getTagNoDiff();
+          noDiffFieldResults = { ...noDiffFieldResults, tagsDiffResults };
+          break;
+        case GPDiffOptionsEnum.INSTRUCTIONS:
+          const instructionsDiffResults = this.getInstructionNoDiff();
+          noDiffFieldResults = {
+            ...noDiffFieldResults,
+            instructionsDiffResults,
+          };
+          break;
+        case GPDiffOptionsEnum.INGREDIENTS:
+          const ingredientsDiffResults = this.getIngredientsNoDiff();
+          noDiffFieldResults = {
+            ...noDiffFieldResults,
+            ingredientsDiffResults,
+          };
+          break;
+      }
+    }
+    return noDiffFieldResults;
   }
 
   getCourseIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients
+      this.recipeB.ingredients,
     );
-    const ingredinetsDiffResults = diffIngredients.getIngredientsComparisonDiff();
+    const ingredinetsDiffResults =
+      diffIngredients.getIngredientsComparisonDiff();
     return ingredinetsDiffResults;
   }
 
   getCourseInstrictionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions
+      this.recipeB.instructions,
     );
     const instructionsDiffResults = diffInstructions.getLcsDiff();
     return instructionsDiffResults;
@@ -78,16 +126,36 @@ class DiffRecipes {
   getInstructionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions
+      this.recipeB.instructions,
     );
     const instructionsDiffResults = diffInstructions.getStringArrayDiff();
+    return instructionsDiffResults;
+  }
+
+  getInstructionNoDiff() {
+    let instructionsDiffResults: GPDiffLineInfoType<string>[] = [];
+    for (const instruction of this.recipeB.instructions) {
+      instructionsDiffResults = [
+        ...instructionsDiffResults,
+        { status: DiffStatus.UNCHANGED, line: instruction },
+      ];
+    }
     return instructionsDiffResults;
   }
 
   getIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients
+      this.recipeB.ingredients,
+    );
+    const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
+    return ingredientsDiffResults;
+  }
+
+  getIngredientsNoDiff() {
+    const diffIngredients = new DiffRecipeIngredients(
+      this.recipeA.ingredients,
+      this.recipeA.ingredients,
     );
     const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
     return ingredientsDiffResults;
@@ -96,37 +164,62 @@ class DiffRecipes {
   getTitleDiff() {
     const diffTitle = new DiffRecipeStringArray(
       [this.recipeA.recipeTitle],
-      [this.recipeB.recipeTitle]
+      [this.recipeB.recipeTitle],
     );
     const titleDiffResults = diffTitle.getStringArrayDiff();
     return titleDiffResults;
   }
 
+  getTitleNoDiff() {
+    return [{ status: DiffStatus.UNCHANGED, line: this.recipeB.recipeTitle }];
+  }
+
   getServingsDiff() {
     const diffServings = new DiffRecipeStringArray(
       [this.recipeA.servings.toString()],
-      [this.recipeB.servings.toString()]
+      [this.recipeB.servings.toString()],
     );
     const servingsDiffResults = diffServings.getStringArrayDiff();
     return servingsDiffResults;
   }
 
+  getServingsNoDiff() {
+    return [{ status: DiffStatus.UNCHANGED, line: this.recipeB.servings }];
+  }
+
   getTagDiff() {
     const diffTags = new DiffRecipeStringArray(
       this.recipeA.recipeTags,
-      this.recipeB.recipeTags
+      this.recipeB.recipeTags,
     );
     const tagsDiffResults = diffTags.getStringArrayDiff();
     return tagsDiffResults;
   }
 
+  getTagNoDiff() {
+    let tagDiffResults: GPDiffLineInfoType<string>[] = [];
+    for (const tag of this.recipeB.recipeTags) {
+      tagDiffResults = [
+        ...tagDiffResults,
+        { status: DiffStatus.UNCHANGED, line: tag },
+      ];
+    }
+    return tagDiffResults;
+  }
+
   getCookTimeDiff() {
     const diffCookTime = new DiffRecipeStringArray(
       [this.recipeA.readyInMinutes.toString()],
-      [this.recipeB.readyInMinutes.toString()]
+      [this.recipeB.readyInMinutes.toString()],
     );
     const cookTimeDiffResults = diffCookTime.getStringArrayDiff();
     return cookTimeDiffResults;
+  }
+
+  getCookTimeNoDiff() {
+    return [
+      { status: DiffStatus.UNCHANGED, line: this.recipeB.readyInMinutes },
+    ];
   }
 
   getFullRecipeDiff() {
@@ -148,4 +241,4 @@ class DiffRecipes {
   }
 }
 
-export { DiffRecipes };
+export { DiffRecipes, GPDiffOptionsEnum };

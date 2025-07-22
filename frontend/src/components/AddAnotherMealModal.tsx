@@ -62,8 +62,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipesToCompare, setRecipesToCompare] = useState<Recipe[]>([]);
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
   const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
-  const [userDiffChoicesOpen, setUserDiffChoicesOpen] = useState(false);
-  const [userDiffChoices, setUserDiffChoices] = useState(new Set<string>())
 
   const { user } = useUser();
 
@@ -179,27 +177,22 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   };
 
-  const compareRecipesClick = () => {
-    setUserDiffChoicesOpen(true);
-  };
-
-  const onUserDiffOptionsSubmit = async (userDiffChoices: Set<string>) => {
-    setUserDiffChoices(userDiffChoices)
+  const compareRecipesClick = async () => {
     if (recipesToCompare.length === 2) {
       setLoadingModal(true);
       let updatedRecipesToCompare: Recipe[] = [];
       for (const recipe of recipesToCompare) {
-          const updatedRecipe = await updateRecipeWithPricing({
-            setMessage,
-            recipe,
-          });
-          updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
-          // find index of recipe in meal results so we can also update the recipe information there too
-          const index = mealResults.findIndex(
-            (element) => element.apiId === recipe.apiId,
-          );
-          handleUpdateRecipeInfo(updatedRecipe, index);
-          setRecipesToCompare(updatedRecipesToCompare);
+        const updatedRecipe = await updateRecipeWithPricing({
+          setMessage,
+          recipe,
+        });
+        updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
+        // find index of recipe in meal results so we can also update the recipe information there too
+        const index = mealResults.findIndex(
+          (element) => element.apiId === recipe.apiId,
+        );
+        handleUpdateRecipeInfo(updatedRecipe, index);
+        setRecipesToCompare(updatedRecipesToCompare);
       }
       const compareRecipeResults = getRecipeDiffResults({
         recipeA: updatedRecipesToCompare[0],
@@ -324,11 +317,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         modalOpen={recipeDiffModalOpen}
         toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
         recipeDiffData={recipeDiffData}
-      />
-      <UserDiffOptions
-        modalOpen={userDiffChoicesOpen}
-        toggleModal={() => setUserDiffChoicesOpen((prev) => !prev)}
-        onSubmit={onUserDiffOptionsSubmit}
       />
     </>
   );

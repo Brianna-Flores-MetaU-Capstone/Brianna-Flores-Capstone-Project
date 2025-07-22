@@ -4,6 +4,7 @@ import {
   type GPDiffLineInfoType,
 } from "./DiffRecipeFieldAbstract";
 import type { GPIngredientDataTypes } from "../../utils/types";
+import { formatQuantity } from "../../utils/utils";
 
 type GPQuantityChangeType<T> = {
   itemA: T;
@@ -27,13 +28,13 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataType
       this.itemAData.map((ingredient) => [
         ingredient.ingredientName,
         ingredient,
-      ])
+      ]),
     );
     let ingredientsBMap = new Map(
       this.itemBData.map((ingredient) => [
         ingredient.ingredientName,
         ingredient,
-      ])
+      ]),
     );
 
     for (const ingredientA of this.itemAData) {
@@ -72,21 +73,21 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataType
       (ingredient) =>
         ingredient.ingredientName +
         " " +
-        ingredient.quantity +
+        formatQuantity(ingredient.quantity) +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const parsedIngredientsB = ingredientsB.map(
       (ingredient) =>
         ingredient.ingredientName +
         " " +
-        ingredient.quantity +
+        formatQuantity(ingredient.quantity) +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const ingredientDiff = new DiffRecipeStringArray(
       parsedIngredientsA,
-      parsedIngredientsB
+      parsedIngredientsB,
     );
     const detailedIngredientsDiff = ingredientDiff.getStringArrayDiff();
     return detailedIngredientsDiff;

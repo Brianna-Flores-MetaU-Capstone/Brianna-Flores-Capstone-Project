@@ -1,6 +1,7 @@
 import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
 import type { GPIngredientDataTypes } from "../../utils/types";
 import { Box, Table } from "@mui/joy";
+import { formatQuantity } from "../../utils/utils";
 
 type GPRecipeDiffInfo = {
   first: boolean;
@@ -9,12 +10,6 @@ type GPRecipeDiffInfo = {
 };
 
 const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
-  const formatQuantity = (ingredientQuantity: number) => {
-    return ingredientQuantity % 1 === 0
-      ? ingredientQuantity
-      : ingredientQuantity.toFixed(2);
-  };
-
   return (
     <Box>
       <Table

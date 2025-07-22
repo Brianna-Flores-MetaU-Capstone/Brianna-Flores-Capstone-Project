@@ -14,24 +14,13 @@ import {
   MUI_GRID_FULL_SPACE,
 } from "../../utils/UIStyle";
 import { useState } from "react";
+import { GPDiffOptionsEnum } from "../../classes/recipeDiffClasses/DiffRecipes";
 
 type GPUserDiffOptionsType = {
   modalOpen: boolean;
   toggleModal: () => void;
-  onSubmit: (value: Set<string>) => void;
+  onSubmit: (value: Set<string>, noDiff: Set<string>) => void;
 };
-
-const GPDiffOptionsEnum = {
-  TITLE: "Diff Title",
-  SERVINGS: "Diff Servings",
-  COOK_TIME: "Diff Cook Time",
-  TAGS: "Diff Recipe Tags",
-  INGREDIENTS: "Diff Ingredients",
-  INSTRUCTIONS: "Diff Instructions",
-} as const;
-
-type DiffOptionsKeys = keyof typeof GPDiffOptionsEnum;
-type DiffOptionsType = (typeof GPDiffOptionsEnum)[DiffOptionsKeys];
 
 const UserDiffOptions = ({
   modalOpen,
@@ -39,6 +28,18 @@ const UserDiffOptions = ({
   onSubmit,
 }: GPUserDiffOptionsType) => {
   const [userDiffChoices, setUserDiffChoices] = useState(new Set<string>());
+
+  const submitUserDiffOptions = () => {
+    const noDiffFields = new Set<string>();
+    for (const request of Object.values(GPDiffOptionsEnum)) {
+      if (!userDiffChoices.has(request)) {
+        noDiffFields.add(request);
+      }
+    }
+    onSubmit(userDiffChoices, noDiffFields);
+    setUserDiffChoices(new Set());
+  };
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -46,18 +47,26 @@ const UserDiffOptions = ({
       open={modalOpen}
       onClose={toggleModal}
     >
-      <ModalDialog>
-        <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
-        <DialogContent sx={{ my: 4 }}>
+      <ModalDialog maxWidth={500}>
+        <ModalClose
+          onClick={() => setUserDiffChoices(new Set())}
+          variant="plain"
+          sx={{ zIndex: 2, m: 1 }}
+        />
+        <DialogContent sx={{ my: 3 }}>
           <TitledListView
             headerList={[
-              { title: "Choose What to Diff", spacing: MUI_GRID_FULL_SPACE },
+              {
+                title: "What would you like to diff?",
+                spacing: MUI_GRID_FULL_SPACE,
+              },
             ]}
             itemsList={Object.values(GPDiffOptionsEnum)}
             renderItem={(diffOption, index) => (
               <Checkbox
                 key={index}
                 label={diffOption}
+                value={diffOption}
                 onChange={(event) => {
                   if (event.target.checked) {
                     setUserDiffChoices((prev) => new Set(prev.add(diffOption)));
@@ -72,12 +81,14 @@ const UserDiffOptions = ({
             )}
             listItemsStyle={CenteredTitledListStyle}
           />
-          <Button onClick={() => onSubmit(userDiffChoices)}>Submit!</Button>
+          <Button sx={{ mt: 3 }} onClick={submitUserDiffOptions}>
+            Submit!
+          </Button>
         </DialogContent>
       </ModalDialog>
     </Modal>
   );
 };
 
-export { GPDiffOptionsEnum }
+export { GPDiffOptionsEnum };
 export default UserDiffOptions;

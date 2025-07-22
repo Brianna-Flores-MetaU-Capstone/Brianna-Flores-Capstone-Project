@@ -23,6 +23,7 @@ import {
 } from "../../utils/UIStyle";
 import MealInfoModal from "../recipeDisplay/MealInfoModal";
 import type { Recipe } from "../../classes/recipe/Recipe";
+import { GPDiffOptionsEnum } from "../../classes/recipeDiffClasses/DiffRecipes";
 
 type GPDiffOriginalType = {
   originalRecipeInfo: Recipe;
@@ -30,7 +31,8 @@ type GPDiffOriginalType = {
   modalOpen: boolean;
   setModalOpen: () => void;
   fineGrainedDiff: boolean;
-  userDiffChoices: string[]
+  userDiffChoices: string[];
+  noDiffFields: string[];
 };
 
 type GPOriginalRecipeDiffType = {
@@ -48,7 +50,8 @@ const DiffOriginalRecipe = ({
   modalOpen,
   setModalOpen,
   fineGrainedDiff,
-  userDiffChoices
+  userDiffChoices,
+  noDiffFields,
 }: GPDiffOriginalType) => {
   const [recipeDiffInfo, setRecipeDiffInfo] =
     useState<GPOriginalRecipeDiffType>();
@@ -57,12 +60,17 @@ const DiffOriginalRecipe = ({
 
   useEffect(() => {
     const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
-    if (userDiffChoices) {
+    // user requested to get diff of all fields, just call get full recipe diff
+    if (userDiffChoices.length === Object.values(GPDiffOptionsEnum).length) {
       const recipeDiffInfo = recipeDiff.getFullRecipeDiff();
       setRecipeDiffInfo(recipeDiffInfo);
     } else {
-      const recipeDiffInfo = recipeDiff.getRequestedDiff(userDiffChoices, false)
-      setRecipeDiffInfo(recipeDiffInfo)
+      // otherwise diff only requested fields
+      const recipeDiffInfo = recipeDiff.getRequestedDiff(
+        userDiffChoices,
+        noDiffFields,
+      );
+      setRecipeDiffInfo(recipeDiffInfo);
     }
   }, [modalOpen]);
 

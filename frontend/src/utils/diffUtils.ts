@@ -15,10 +15,18 @@ type GPDiffType = {
   recipeB: Recipe;
 };
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
-  const diffRecipeIngredients = new DiffRecipeIngredients(recipeA.ingredients, recipeB.ingredients);
-  const diffRecipeIngredientsResults = diffRecipeIngredients.getIngredientsComparisonDiff();
-  const diffIngredientsToPurchase = new DiffRecipeIngredients(recipeA.ingredientCostInfo, recipeB.ingredientCostInfo);
-  const diffIngredientsToPurchaseResults = diffIngredientsToPurchase.getIngredientsComparisonDiff();
+  const diffRecipeIngredients = new DiffRecipeIngredients(
+    recipeA.ingredients,
+    recipeB.ingredients,
+  );
+  const diffRecipeIngredientsResults =
+    diffRecipeIngredients.getIngredientsComparisonDiff();
+  const diffIngredientsToPurchase = new DiffRecipeIngredients(
+    recipeA.ingredientCostInfo,
+    recipeB.ingredientCostInfo,
+  );
+  const diffIngredientsToPurchaseResults =
+    diffIngredientsToPurchase.getIngredientsComparisonDiff();
   const diffServingsResults = recipeA.servings !== recipeB.servings;
   const recipeDiffResults: GPRecipeDiffType = {
     recipeA,
