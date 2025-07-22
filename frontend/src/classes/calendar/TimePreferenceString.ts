@@ -25,6 +25,11 @@ class TimePreferenceString {
     this.end = newEnd;
   }
 
+  /**
+   * Set a users time preference on input change
+   * @param timeField the field to set (start or end)
+   * @param newValue the value to set the field to
+   */
   setTime(timeField: GPTimePreferenceType, newValue: string) {
     this[timeField] = newValue;
   }
