@@ -22,7 +22,6 @@ import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types";
 import { Recipe } from "../../classes/recipe/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
-import CalendarModal from "../calendar/CalendarModal";
 
 type GPMealCardProps = {
   index: number;
@@ -235,12 +234,6 @@ const MealCard: React.FC<GPMealCardProps> = ({
           ingredientsCostInformation={parsedMealData.ingredientCostInfo}
           modalOpen={ingredientCostModalOpen}
           onClose={toggleModal}
-        />
-      )}
-      {toggleCalendarTimeModal && (
-        <CalendarModal
-          modalOpen={calendarTimeModalOpen ?? false}
-          toggleModal={toggleCalendarTimeModal}
         />
       )}
     </>
