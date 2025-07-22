@@ -53,7 +53,7 @@ const DiffOriginalRecipe = ({
 
   useEffect(() => {
     const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
-    const recipeDiffInfo = recipeDiff.getRecipeDiff();
+    const recipeDiffInfo = recipeDiff.getFullRecipeDiff();
     setRecipeDiffInfo(recipeDiffInfo);
   }, [modalOpen]);
 

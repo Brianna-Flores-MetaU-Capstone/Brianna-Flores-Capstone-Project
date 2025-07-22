@@ -33,6 +33,7 @@ import LoadingModal from "./utils/LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { Recipe } from "../classes/recipe/Recipe";
+import UserDiffOptions from "./recipeDiff/UserDiffOptions";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -60,6 +61,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipesToCompare, setRecipesToCompare] = useState<Recipe[]>([]);
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
   const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
+  const [userDiffChoicesOpen, setUserDiffChoicesOpen] = useState(false);
 
   const { user } = useUser();
 
@@ -175,7 +177,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   };
 
-  const compareRecipesClick = async () => {
+  const compareRecipesClick = () => {
+    setUserDiffChoicesOpen(true);
+  };
+
+  const onUserDiffOptionsSubmit = async (userDiffChoices: Set<string>) => {
     if (recipesToCompare.length === 2) {
       setLoadingModal(true);
       let updatedRecipesToCompare: Recipe[] = [];
@@ -333,6 +339,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
             },
           }
         }
+      />
+      <UserDiffOptions
+        modalOpen={userDiffChoicesOpen}
+        toggleModal={() => setUserDiffChoicesOpen((prev) => !prev)}
+        onSubmit={onUserDiffOptionsSubmit}
       />
     </>
   );

@@ -11,7 +11,7 @@ class DiffRecipes {
     this.recipeB = recipeB;
   }
 
-  getRecipeDiff() {
+  getFullRecipeDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
       this.recipeB.instructions,
