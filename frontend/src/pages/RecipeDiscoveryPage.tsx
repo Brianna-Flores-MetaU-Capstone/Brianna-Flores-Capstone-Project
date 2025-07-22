@@ -23,8 +23,8 @@ import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/EditRecipeModal";
+import { RecipeFilter } from "../classes/RecipeFilters";
 
-// https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },
   { filter: "dairyFree", title: "Dairy Free Recipes" },
@@ -35,14 +35,9 @@ const recipeFilters = [
 
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
-  const [recipeDiscoveryResults, setRecipeDiscoveryResults] =
-    useState<GPRecipeDiscoveryCategories>({
-      all: [],
-      dairyFree: [],
-      glutenFree: [],
-      vegetarian: [],
-      vegan: [],
-    });
+  const [recipeDiscoveryResults, setRecipeDiscoveryResults] = useState(
+    new RecipeFilter()
+  );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
@@ -51,28 +46,27 @@ const RecipeDiscoveryPage = () => {
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
     new Set()
   );
-  const [editRecipeInfo, setEditRecipeInfo] = useState<GPRecipeDataTypes>()
-  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false)
+  const [editRecipeInfo, setEditRecipeInfo] = useState<GPRecipeDataTypes>();
+  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
 
   useEffect(() => {
     const setRecipeLists = async () => {
-    fetchAllRecipeCategories({
-      setMessage,
-      setRecipeDiscoveryResults,
-      filters: recipeFilters,
-      offset: 0,
-    });
-    const favoritedRecipesReturn = await fetchRecipes({
+      fetchAllRecipeCategories({
+        setMessage,
+        setRecipeDiscoveryResults,
+        offset: 0,
+      });
+      const favoritedRecipesReturn = await fetchRecipes({
         setMessage,
         recipeGroup: "favoritedIds",
       });
       // set favorited recipes id
       for (const elem of favoritedRecipesReturn) {
-        setFavoritedRecipesId(prev => new Set(prev.add(elem.id)));
+        setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));
       }
-    }
+    };
     setRecipeLists();
-}, []);
+  }, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
     setRecipeInfoModalOpen((prev) => !prev);
@@ -86,7 +80,12 @@ const RecipeDiscoveryPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
+      await updateUserRecipes({
+        userId,
+        editedRecipe: false,
+        selectedRecipe: recipe,
+        setMessage,
+      });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
@@ -107,21 +106,20 @@ const RecipeDiscoveryPage = () => {
           userId: user.id,
           selectedRecipe: recipe,
         });
-        setFavoritedRecipesId(prev => new Set(prev.add(recipe.id)))
+        setFavoritedRecipesId((prev) => new Set(prev.add(recipe.id)));
       }
       fetchAllRecipeCategories({
         setMessage,
         setRecipeDiscoveryResults,
-        filters: recipeFilters,
         offset: 0,
       });
     }
   };
 
   const handleEditRecipe = (recipe: GPRecipeDataTypes) => {
-    setEditRecipeModalOpen((prev) => !prev)
-    setEditRecipeInfo(recipe)
-  }
+    setEditRecipeModalOpen((prev) => !prev);
+    setEditRecipeInfo(recipe);
+  };
 
   return (
     <Box>
@@ -176,7 +174,7 @@ const RecipeDiscoveryPage = () => {
         recipe={editRecipeInfo}
         modalOpen={editRecipeModalOpen}
         toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
-        />
+      />
     </Box>
   );
 };
