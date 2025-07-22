@@ -94,11 +94,6 @@ type GPRecipeEventOptionType = {
   recipe: GPRecipeDataTypes | GPPrepBlockType;
 };
 
-type GPPreferredBlockType = {
-  start: string;
-  end: string;
-};
-
 type GPRecipeDiscoveryCategories = {
   all: GPRecipeDataTypes[];
   dairyFree: GPRecipeDataTypes[];
@@ -118,6 +113,5 @@ export type {
   GPIngredientApiInfoType,
   GPUserEventTypes,
   GPRecipeEventOptionType,
-  GPPreferredBlockType,
   GPRecipeDiscoveryCategories,
 };
