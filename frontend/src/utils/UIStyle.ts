@@ -195,7 +195,8 @@ const CenteredTitledListStyle = {
 };
 
 const GPTagItemStyle = {
-  m: 1,
+  mx: 0.5,
+  my: 1,
   p: 1,
   border: "2px solid",
   borderRadius: "md",
