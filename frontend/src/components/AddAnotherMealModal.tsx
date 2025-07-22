@@ -6,7 +6,7 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
-import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./utils/ErrorState";
 import TitledListView from "./utils/TitledListView";
 import axios from "axios";
@@ -32,13 +32,14 @@ import { updateRecipeWithPricing } from "../utils/utils";
 import LoadingModal from "./utils/LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 
 type GPAddAnotherMealProps = {
   toggleModal: () => void;
-  onSelectRecipe: (data: GPRecipeDataTypes) => void;
+  onSelectRecipe: (data: Recipe) => void;
   modalOpen: boolean;
 };
 
@@ -48,7 +49,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   modalOpen,
 }) => {
   const [recipeRequest, setRecipeRequest] = useState("");
-  const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
+  const [mealResults, setMealResults] = useState<Recipe[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
   const [loadingSearchButton, setLoadingSearchButton] = useState(false);
@@ -56,7 +57,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
-  const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>(
+  const [recipesToCompare, setRecipesToCompare] = useState<Recipe[]>(
     []
   );
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
@@ -155,7 +156,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   };
 
   const handleUpdateRecipeInfo = (
-    updatedRecipeInfo: GPRecipeDataTypes,
+    updatedRecipeInfo: Recipe,
     index: number
   ) => {
     const updatedFetchedMeals = [
@@ -166,7 +167,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setMealResults(updatedFetchedMeals);
   };
 
-  const handleToggleCompareRecipe = (clickedRecipe: GPRecipeDataTypes) => {
+  const handleToggleCompareRecipe = (clickedRecipe: Recipe) => {
     if (
       !recipesToCompare.some((recipe) => recipe.apiId === clickedRecipe.apiId)
     ) {
@@ -182,7 +183,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const compareRecipesClick = async () => {
     if (recipesToCompare.length === 2) {
       setLoadingModal(true);
-      let updatedRecipesToCompare: GPRecipeDataTypes[] = [];
+      let updatedRecipesToCompare: Recipe[] = [];
       for (const recipe of recipesToCompare) {
         const updatedRecipe = await updateRecipeWithPricing({
           setMessage,

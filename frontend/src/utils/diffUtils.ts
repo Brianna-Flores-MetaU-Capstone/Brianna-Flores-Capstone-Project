@@ -1,17 +1,18 @@
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "./types";
+import type { GPIngredientDataTypes } from "./types";
 import { RecipeIngredientsDiff } from "../classes/recipeDiffClasses/DiffClass";
 import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
+import { Recipe } from "../classes/recipe/Recipe";
 
 type GPRecipeDiffType = {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
   servingsDiff: boolean;
   recipeIngredientDiff: GPDiffReturnType<GPIngredientDataTypes>;
   purchasedIngredientsDiff: GPDiffReturnType<GPIngredientDataTypes>;
 };
 type GPDiffType = {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
 };
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   const diffRecipeIngredients = new RecipeIngredientsDiff();

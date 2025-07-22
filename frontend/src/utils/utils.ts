@@ -1,44 +1,44 @@
 import type {
-  GPAuthFormDataTypes,
   GPIngredientDataTypes,
-  GPRecipeDataTypes,
   GPRecipeIngredientTypes,
   GPErrorMessageTypes,
 } from "./types";
 import axios from "axios";
 import { axiosConfig, fetchUserIngredientsHelper } from "./databaseHelpers";
+import {
+  AuthFormData,
+  type GPAuthFormType,
+} from "../classes/authentication/AuthFormData";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const parseRecipeData = async (recipeData: any) => {
   return await Promise.all(
     recipeData.map(async (recipe: any) => {
-      const parsedIngredinets = parseIngredients(recipe.extendedIngredients);
+      const parsedIngredients = parseIngredients(recipe.extendedIngredients);
       const parsedInstructions = parseInstructions(
         recipe.analyzedInstructions[0].steps
       );
       const parsedTags = parseTags(recipe);
-      return {
-        apiId: recipe.id,
-        originalSource: recipe.sourceName,
-        editingAuthorName: "",
-        editingAuthorId: null,
-        recipeTitle: recipe.title,
-        previewImage: recipe.image,
-        servings: recipe.servings,
-        ingredients: parsedIngredinets,
-        instructions: parsedInstructions,
-        sourceUrl: recipe.sourceUrl,
-        readyInMinutes: recipe.readyInMinutes,
-        vegetarian: recipe.vegetarian,
-        vegan: recipe.vegan,
-        glutenFree: recipe.glutenFree,
-        dairyFree: recipe.dairyFree,
-        recipeTags: parsedTags,
-        ingredientCostInfo: [],
-        totalCost: 0,
-        isChecked: false,
-      };
+      const newRecipe = new Recipe(
+        recipe.id,
+        recipe.sourceName,
+        recipe.title,
+        recipe.image,
+        recipe.servings,
+        parsedIngredients,
+        parsedInstructions,
+        recipe.sourceUrl,
+        recipe.readyInMinutes,
+        recipe.vegetarian,
+        recipe.vegan,
+        recipe.glutenFree,
+        recipe.dairyFree,
+        parsedTags,
+        null
+      );
+      return newRecipe;
     })
   );
 };
@@ -103,7 +103,7 @@ const estimateRecipeCost = async ({
   }
 };
 
-const validateInput = (formData: GPAuthFormDataTypes) => {
+const validateInput = (formData: AuthFormData) => {
   if (!formData.email || !formData.password) {
     return { type: "error", text: "Email and password are required" };
   }
@@ -119,12 +119,15 @@ const validateInput = (formData: GPAuthFormDataTypes) => {
 
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<GPAuthFormDataTypes>>
+  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>
 ) => {
-  const credential = event.target.dataset
-    .credential as keyof GPAuthFormDataTypes;
+  const credential = event.target.dataset.credential as GPAuthFormType;
   const value = event.target.value;
-  setFormData((prev) => ({ ...prev, [credential]: value }));
+  setFormData((prev) => {
+    const newAuth = new AuthFormData(prev.getEmail, prev.getPassword);
+    newAuth.setAuthField(credential, value);
+    return newAuth;
+  });
 };
 
 const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {
@@ -141,7 +144,7 @@ type GPUpdateRecipePricingTypes = {
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
-  recipe: GPRecipeDataTypes;
+  recipe: Recipe;
 };
 
 const updateRecipeWithPricing = async ({
@@ -151,17 +154,16 @@ const updateRecipeWithPricing = async ({
   const ownedIngredients = await fetchUserIngredientsHelper({
     setMessage: setMessage,
   });
-  const estimatedRecipeCostInfo = await estimateRecipeCost({
+  const estimatedRecipeCostInfo: {
+    ingredientCostInfo: GPIngredientDataTypes[];
+    estimatedCost: number;
+  } = await estimateRecipeCost({
     ownedIngredients,
     recipeIngredients: recipe.ingredients,
   });
-  // update list of meal data
-  const updatedRecipe = {
-    ...recipe,
-    ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo ?? 0,
-    totalCost: estimatedRecipeCostInfo.estimatedCost,
-  };
-  return updatedRecipe;
+  recipe.setIngredientCostInfo = estimatedRecipeCostInfo.ingredientCostInfo;
+  recipe.setTotalCost = estimatedRecipeCostInfo.estimatedCost;
+  return recipe;
 };
 
 export {

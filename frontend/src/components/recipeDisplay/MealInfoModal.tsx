@@ -1,6 +1,6 @@
 import React from "react";
 import { GPMealInfoModalTitleStyle, GPModalStyle } from "../../utils/UIStyle";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types";
 import {
   Modal,
   Button,
@@ -20,11 +20,12 @@ import { GPCenteredBoxStyle } from "../../utils/UIStyle";
 import { fetchSingleRecipe } from "../../utils/databaseHelpers";
 import { useState } from "react";
 import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
+import { Recipe } from "../../classes/recipe/Recipe";
 
 type GPMealModalProps = {
   modalOpen: boolean;
   toggleModal: () => void;
-  recipeInfo: GPRecipeDataTypes | undefined;
+  recipeInfo: Recipe | undefined;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
@@ -35,7 +36,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [originalRecipeInfo, setOriginalRecipeInfo] =
-    useState<GPRecipeDataTypes>();
+    useState<Recipe>();
 
   const onCompareWithOriginal = async () => {
     // we are viewing the edited recipe, need to fetch original recipe

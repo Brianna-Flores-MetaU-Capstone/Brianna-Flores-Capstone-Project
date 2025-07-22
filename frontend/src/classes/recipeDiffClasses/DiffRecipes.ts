@@ -1,12 +1,12 @@
-import type { GPRecipeDataTypes } from "../../utils/types";
 import { DiffRecipeStringArray } from "./DiffRecipeStringArray";
 import { DiffRecipeIngredients } from "./DiffRecipeIngredients";
+import type { Recipe } from "../recipe/Recipe";
 
 class DiffRecipes {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
 
-  constructor(recipeA: GPRecipeDataTypes, recipeB: GPRecipeDataTypes) {
+  constructor(recipeA: Recipe, recipeB: Recipe) {
     this.recipeA = recipeA;
     this.recipeB = recipeB;
   }

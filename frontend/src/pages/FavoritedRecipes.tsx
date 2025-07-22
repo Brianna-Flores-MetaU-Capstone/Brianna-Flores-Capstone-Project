@@ -1,7 +1,7 @@
 import AppHeader from "../components/utils/AppHeader";
 import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types";
 import {
   fetchRecipes,
   handleUnfavoriteRecipe,
@@ -13,15 +13,16 @@ import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { useUser } from "../contexts/UserContext";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const FavoritedRecipes = () => {
-  const [favoritedRecipes, setFavoritedRecipes] = useState<GPRecipeDataTypes[]>(
+  const [favoritedRecipes, setFavoritedRecipes] = useState<Recipe[]>(
     []
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
-    useState<GPRecipeDataTypes>();
+    useState<Recipe>();
   const { user } = useUser();
 
   useEffect(() => {
@@ -32,17 +33,17 @@ const FavoritedRecipes = () => {
     });
   }, []);
 
-  const onFavoriteClick = (recipe: GPRecipeDataTypes) => {
+  const onFavoriteClick = (recipe: Recipe) => {
     handleUnfavoriteRecipe({ setMessage, recipe });
     setFavoritedRecipes((prev) => prev.filter((elem) => elem.id !== recipe.id));
   };
 
-  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+  const handleRecipeCardClick = (recipe: Recipe) => {
     setRecipeInfoModalOpen((prev) => !prev);
     setRecipeInfoModalInfo(recipe);
   };
 
-  const handleSelectRecipeToShop = async (recipe: GPRecipeDataTypes) => {
+  const handleSelectRecipeToShop = async (recipe: Recipe) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;

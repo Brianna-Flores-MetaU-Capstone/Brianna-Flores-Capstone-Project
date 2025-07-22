@@ -3,7 +3,6 @@ import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import type {
   GPAccountInfoTypes,
-  GPAuthFormDataTypes,
   GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
@@ -13,12 +12,10 @@ import ErrorState from "../components/utils/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
 import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
+import { AuthFormData } from "../classes/authentication/AuthFormData";
 
 const SignupForm = () => {
-  const [formData, setFormData] = useState<GPAuthFormDataTypes>({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState<AuthFormData>(new AuthFormData());
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { setUser } = useUser();
 
@@ -29,7 +26,7 @@ const SignupForm = () => {
     userIntolerances: string[];
     userDiets: string[];
   }) {
-    createUserWithEmailAndPassword(auth, formData.email, formData.password)
+    createUserWithEmailAndPassword(auth, formData.getEmail, formData.getPassword)
       .then(async (userCredential) => {
         const user = userCredential.user;
         if (!user.uid || !user.email) {

@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/joy";
-import type { GPRecipeDataTypes } from "../../utils/types";
 import { GPTagItemStyle } from "../../utils/UIStyle";
+import type { Recipe } from "../../classes/recipe/Recipe";
 
 const DietsAndIntolerances = ({
   recipeInfo,
 }: {
-  recipeInfo: GPRecipeDataTypes | undefined;
+  recipeInfo: Recipe | undefined;
 }) => {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>

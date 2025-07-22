@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types";
 import type { GPDiffLineInfoType } from "../../utils/diffUtils";
 import {
   AspectRatio,
@@ -22,10 +22,11 @@ import {
   GPTagItemStyle,
 } from "../../utils/UIStyle";
 import MealInfoModal from "../recipeDisplay/MealInfoModal";
+import type { Recipe } from "../../classes/recipe/Recipe";
 
 type GPDiffOriginalType = {
-  originalRecipeInfo: GPRecipeDataTypes;
-  editedRecipeInfo: GPRecipeDataTypes;
+  originalRecipeInfo: Recipe;
+  editedRecipeInfo: Recipe;
   modalOpen: boolean;
   setModalOpen: () => void;
 };
