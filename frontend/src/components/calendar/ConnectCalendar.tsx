@@ -13,6 +13,7 @@ import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
 import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "../utils/LoadingModal";
+import { TimePreferenceString } from "../../classes/timePreference/TimePreferenceString";
 
 // TODO change requested days to have user input
 const REQUESTED_DAYS = 7;
@@ -123,7 +124,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }
 
   async function getUserFreeTime(
-    userPreferences: GPPreferredBlockType[],
+    userPreferences: TimePreferenceString[],
     singleDayPrep: boolean,
     servingsPerDay: number
   ) {
@@ -176,7 +177,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }
 
   const getUserTimePreferences = async (
-    preferences: GPPreferredBlockType[],
+    preferences: TimePreferenceString[],
     singleDayPrep: boolean,
     servingsPerDay: number
   ) => {

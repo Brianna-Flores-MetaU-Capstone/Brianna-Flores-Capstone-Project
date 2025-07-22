@@ -23,6 +23,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { EventTimeEnum } from "../../utils/constants";
 import { useEventRec } from "../../contexts/EventRecContext";
 import TimeBlock from "../../../../backend/classes/TimeBlock";
+import { TimePreferenceString, type GPTimePreferenceType } from "../../classes/timePreference/TimePreferenceString";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -31,7 +32,7 @@ type GPEventTimeModal = {
   modalOpen: boolean;
   toggleModal: () => void;
   onSubmit?: (
-    preferences: GPPreferredBlockType[],
+    preferences: TimePreferenceString[],
     singleDayPrep: boolean,
     servingsPerDay: number
   ) => void;
@@ -64,9 +65,7 @@ const CalendarTimeModal = ({
     })
   );
   const [inputError, setInputError] = useState(false);
-  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
-    GPPreferredBlockType[]
-  >([{ start: "", end: "" }]);
+  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<TimePreferenceString[]>([new TimePreferenceString()])
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
   const [date, setDate] = useState(
@@ -76,7 +75,7 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getDate().toString().padStart(2, "0")
   );
-  const { eventOptions, setEventOptions } = useEventRec();
+  const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
@@ -94,10 +93,7 @@ const CalendarTimeModal = ({
     } else {
       setPreferredTimeBlocks((prev) => {
         const updatedBlocks = [...prev];
-        updatedBlocks[index] = {
-          ...updatedBlocks[index],
-          [timeField]: newValue,
-        };
+        updatedBlocks[index].setTime(timeField as GPTimePreferenceType, newValue)
         return updatedBlocks;
       });
     }
@@ -134,7 +130,7 @@ const CalendarTimeModal = ({
   };
 
   const addAnotherTimeBlock = () => {
-    setPreferredTimeBlocks((prev) => [...prev, { start: "", end: "" }]);
+    setPreferredTimeBlocks((prev) => [...prev, new TimePreferenceString()]);
   };
 
   return (
