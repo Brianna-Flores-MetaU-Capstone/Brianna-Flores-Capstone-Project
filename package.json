@@ -7,5 +7,11 @@
     "@types/etag": "^1.8.4",
     "axios": "^1.10.0",
     "dotenv": "^17.0.0"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  },
+  "scripts": {
+    "format": "prettier --write ."
   }
 }

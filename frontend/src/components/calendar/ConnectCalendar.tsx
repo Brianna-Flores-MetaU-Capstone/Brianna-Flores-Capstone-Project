@@ -41,7 +41,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
   const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(
-    null
+    null,
   );
 
   // load on mount
@@ -126,14 +126,14 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   async function getUserFreeTime(
     userPreferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
       const startDate = new Date();
       const endDate = new Date(
-        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
+        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
       );
       const response = await axios.get(
         `${calendarUrl}/calendar/v3/calendars/primary/events`,
@@ -147,7 +147,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
             timeMin: startDate.toISOString(),
             timeMax: endDate.toISOString(),
           },
-        }
+        },
       );
       const userEvents = response.data.items;
       // parse events to extract out only needed information
@@ -163,7 +163,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       const recommendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
         { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
-        axiosConfig
+        axiosConfig,
       );
       // get back a list of possible options for each event (shopping + each recipe)
       const eventOptions = recommendedEvents.data;
@@ -179,7 +179,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const getUserTimePreferences = async (
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) => {
     await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
   };

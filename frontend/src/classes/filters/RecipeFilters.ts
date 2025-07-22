@@ -8,8 +8,8 @@ const recipeFiltersList = {
   VEGAN: "vegan",
 } as const;
 
-type recipeFilterKeys = keyof typeof recipeFiltersList
-type recipeFilterType = (typeof recipeFiltersList)[recipeFilterKeys]
+type recipeFilterKeys = keyof typeof recipeFiltersList;
+type recipeFilterType = (typeof recipeFiltersList)[recipeFilterKeys];
 
 class RecipeFilter {
   all: Recipe[];
@@ -43,7 +43,7 @@ class RecipeFilter {
   }
 
   getFilteredList(filter: recipeFilterType) {
-    return this[filter]
+    return this[filter];
   }
 
   setFilteredList(filter: recipeFilterType, value: Recipe[]) {

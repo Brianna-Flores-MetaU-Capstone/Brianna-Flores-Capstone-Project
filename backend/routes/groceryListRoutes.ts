@@ -41,7 +41,7 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
     const clearedList = user.groceryList.filter(
       (ingredientItem: GPIngredientDataTypes) => {
         return !ingredientItem.isChecked;
-      }
+      },
     );
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -74,7 +74,7 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
               ...ingredientItem,
               isChecked: !ingredientItem.isChecked,
             }
-          : ingredientItem
+          : ingredientItem,
     );
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -103,7 +103,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error approximating ingredients cost");
     }
-  }
+  },
 );
 
 router.post(
@@ -139,7 +139,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Failure to update user with grocery list");
     }
-  }
+  },
 );
 
 module.exports = router;

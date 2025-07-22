@@ -42,7 +42,7 @@ const GroceryList = () => {
     await axios.put(
       `${databaseUrl}/generateList/check`,
       { ingredientName: groceryItem },
-      axiosConfig
+      axiosConfig,
     );
     fetchGroceryList({
       setMessage,

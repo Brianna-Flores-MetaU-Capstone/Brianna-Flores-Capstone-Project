@@ -40,7 +40,7 @@ class Recipe {
     id?: number,
     editingAuthorName?: string,
     ingredientCostInfo?: GPIngredientDataTypes[],
-    totalCost?: number
+    totalCost?: number,
   ) {
     this.apiId = apiId;
     this.originalSource = originalSource;

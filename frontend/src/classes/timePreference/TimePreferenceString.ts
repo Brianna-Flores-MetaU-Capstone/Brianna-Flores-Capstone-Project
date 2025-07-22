@@ -1,4 +1,4 @@
-type GPTimePreferenceType = "start" | "end"
+type GPTimePreferenceType = "start" | "end";
 
 class TimePreferenceString {
   start: string;
@@ -26,7 +26,7 @@ class TimePreferenceString {
   }
 
   setTime(timeField: GPTimePreferenceType, newValue: string) {
-    this[timeField] = newValue
+    this[timeField] = newValue;
   }
 }
 

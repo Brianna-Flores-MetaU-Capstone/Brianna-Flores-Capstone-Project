@@ -1,8 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import type {
-  GPRecipeEventOptionType,
-} from "../../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types";
 import {
   Box,
   Button,
@@ -22,7 +20,10 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { EventTimeEnum } from "../../utils/constants";
 import { useEventRec } from "../../contexts/EventRecContext";
 import TimeBlock from "../../../../backend/classes/TimeBlock";
-import { TimePreferenceString, type GPTimePreferenceType } from "../../classes/timePreference/TimePreferenceString";
+import {
+  TimePreferenceString,
+  type GPTimePreferenceType,
+} from "../../classes/timePreference/TimePreferenceString";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -33,7 +34,7 @@ type GPEventTimeModal = {
   onSubmit?: (
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) => void;
 };
 
@@ -54,17 +55,19 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    })
+    }),
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    })
+    }),
   );
   const [inputError, setInputError] = useState(false);
-  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<TimePreferenceString[]>([new TimePreferenceString()])
+  const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
+    TimePreferenceString[]
+  >([new TimePreferenceString()]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
   const [date, setDate] = useState(
@@ -72,14 +75,14 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getMonth().toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0")
+      eventStartTime.getDate().toString().padStart(2, "0"),
   );
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string
+    newValue: string,
   ) => {
     if (editMode) {
       if (timeField === EventTimeEnum.START) {
@@ -92,7 +95,10 @@ const CalendarTimeModal = ({
     } else {
       setPreferredTimeBlocks((prev) => {
         const updatedBlocks = [...prev];
-        updatedBlocks[index].setTime(timeField as GPTimePreferenceType, newValue)
+        updatedBlocks[index].setTime(
+          timeField as GPTimePreferenceType,
+          newValue,
+        );
         return updatedBlocks;
       });
     }
@@ -183,7 +189,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     value={editMode ? start : block.start}
@@ -203,7 +209,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     value={editMode ? end : block.end}

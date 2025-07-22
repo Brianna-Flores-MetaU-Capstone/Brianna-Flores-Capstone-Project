@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type {
-  GPAccountInfoTypes,
-  GPErrorMessageTypes,
-} from "../utils/types";
+import type { GPAccountInfoTypes, GPErrorMessageTypes } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
 import AuthForm from "../components/authentication/AuthForm";
 import AppHeader from "../components/utils/AppHeader";
@@ -26,7 +23,11 @@ const SignupForm = () => {
     userIntolerances: string[];
     userDiets: string[];
   }) {
-    createUserWithEmailAndPassword(auth, formData.getEmail, formData.getPassword)
+    createUserWithEmailAndPassword(
+      auth,
+      formData.getEmail,
+      formData.getPassword,
+    )
       .then(async (userCredential) => {
         const user = userCredential.user;
         if (!user.uid || !user.email) {

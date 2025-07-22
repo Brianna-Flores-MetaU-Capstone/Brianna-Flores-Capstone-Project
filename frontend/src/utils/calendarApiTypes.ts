@@ -56,7 +56,7 @@ type GPCalendarJSONType = {
       responseStatus: string;
       comment: string;
       additionalGuests: number;
-    }
+    },
   ];
   attendeesOmitted: boolean;
   extendedProperties: {
@@ -88,7 +88,7 @@ type GPCalendarJSONType = {
         meetingCode: string;
         passcode: string;
         password: string;
-      }
+      },
     ];
     conferenceSolution: {
       key: {
@@ -125,7 +125,7 @@ type GPCalendarJSONType = {
       {
         method: string;
         minutes: number;
-      }
+      },
     ];
   };
   source: {
@@ -162,7 +162,7 @@ type GPCalendarJSONType = {
       mimeType: string;
       iconLink: string;
       fileId: string;
-    }
+    },
   ];
   birthdayProperties: {
     contact: string;

@@ -15,7 +15,7 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataType
         " " +
         ingredient.quantity +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const parsedIngredientsB = ingredientsB.map(
       (ingredient) =>
@@ -23,11 +23,11 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataType
         " " +
         ingredient.quantity +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const ingredientDiff = new DiffRecipeStringArray(
       parsedIngredientsA,
-      parsedIngredientsB
+      parsedIngredientsB,
     );
     const detailedIngredientsDiff = ingredientDiff.getStringArrayDiff();
     return detailedIngredientsDiff;

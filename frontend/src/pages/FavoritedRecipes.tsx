@@ -16,13 +16,10 @@ import { useUser } from "../contexts/UserContext";
 import { Recipe } from "../classes/recipe/Recipe";
 
 const FavoritedRecipes = () => {
-  const [favoritedRecipes, setFavoritedRecipes] = useState<Recipe[]>(
-    []
-  );
+  const [favoritedRecipes, setFavoritedRecipes] = useState<Recipe[]>([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
-  const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
-    useState<Recipe>();
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
 
   useEffect(() => {

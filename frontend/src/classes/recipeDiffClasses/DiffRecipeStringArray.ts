@@ -28,7 +28,7 @@ class DiffRecipeStringArray extends DiffRecipeFieldAbstract<string> {
             : diffLine.line.split(" ");
         const newDiff = new DiffRecipeStringArray(
           instructionLineA,
-          instructionLineB
+          instructionLineB,
         );
         const lineDifferenceReturn = newDiff.getLcsDiff();
         const newInstructionLine = {

@@ -35,8 +35,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 }) => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
-  const [originalRecipeInfo, setOriginalRecipeInfo] =
-    useState<Recipe>();
+  const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
 
   const onCompareWithOriginal = async () => {
     // we are viewing the edited recipe, need to fetch original recipe

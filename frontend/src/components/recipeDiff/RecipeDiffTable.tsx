@@ -57,7 +57,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                   {formatQuantity(
                     first
                       ? ingredient.itemA.quantity
-                      : ingredient.itemB.quantity
+                      : ingredient.itemB.quantity,
                   )}{" "}
                   {first ? ingredient.itemA.unit : ingredient.itemB.unit}
                 </Box>

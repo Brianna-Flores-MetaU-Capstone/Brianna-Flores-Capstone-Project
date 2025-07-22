@@ -1,4 +1,4 @@
-type GPAuthFormType = "email" | "password"
+type GPAuthFormType = "email" | "password";
 class AuthFormData {
   email: string;
   password: string;
@@ -13,12 +13,12 @@ class AuthFormData {
   }
 
   get getPassword() {
-    return this.password
+    return this.password;
   }
 
-  setAuthField (field: GPAuthFormType, value: string){
-    this[field] = value
+  setAuthField(field: GPAuthFormType, value: string) {
+    this[field] = value;
   }
 }
 
-export {AuthFormData, type GPAuthFormType}
+export { AuthFormData, type GPAuthFormType };

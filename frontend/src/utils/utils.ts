@@ -18,7 +18,7 @@ const parseRecipeData = async (recipeData: any) => {
     recipeData.map(async (recipe: any) => {
       const parsedIngredients = parseIngredients(recipe.extendedIngredients);
       const parsedInstructions = parseInstructions(
-        recipe.analyzedInstructions[0].steps
+        recipe.analyzedInstructions[0].steps,
       );
       const parsedTags = parseTags(recipe);
       const newRecipe = new Recipe(
@@ -36,10 +36,10 @@ const parseRecipeData = async (recipeData: any) => {
         recipe.glutenFree,
         recipe.dairyFree,
         parsedTags,
-        null
+        null,
       );
       return newRecipe;
-    })
+    }),
   );
 };
 
@@ -94,7 +94,7 @@ const estimateRecipeCost = async ({
     const response = await axios.post(
       `${databaseUrl}/generateList/estimateCost`,
       { ownedIngredients, recipeIngredients },
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -119,7 +119,7 @@ const validateInput = (formData: AuthFormData) => {
 
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>
+  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>,
 ) => {
   const credential = event.target.dataset.credential as GPAuthFormType;
   const value = event.target.value;
@@ -142,7 +142,7 @@ const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {
 
 type GPUpdateRecipePricingTypes = {
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
   recipe: Recipe;
 };

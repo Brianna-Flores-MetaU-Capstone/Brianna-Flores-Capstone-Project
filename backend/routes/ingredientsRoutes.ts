@@ -41,7 +41,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
         unit: ingredient.unit,
         department: ingredient.ingredient.department,
         expirationDate: ingredient.expirationDate,
-      })
+      }),
     );
     res.json(parsedIngredients);
   } catch (error) {
@@ -142,7 +142,7 @@ router.post(
     } catch (error) {
       res.status(500).send("An error occurred while creating the ingredient");
     }
-  }
+  },
 );
 
 router.put(
@@ -187,7 +187,7 @@ router.put(
     } catch (error) {
       res.status(500).send("Failed to update ingredient");
     }
-  }
+  },
 );
 
 router.delete(
@@ -226,7 +226,7 @@ router.delete(
     } catch (error) {
       res.status(500).send("Failed to delete ingredient");
     }
-  }
+  },
 );
 
 type GPIngredientDatabaseTypes = {

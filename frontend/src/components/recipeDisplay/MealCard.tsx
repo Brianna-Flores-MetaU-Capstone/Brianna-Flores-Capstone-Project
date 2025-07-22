@@ -30,7 +30,7 @@ type GPMealCardProps = {
   favorited: boolean;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -63,7 +63,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>
+    event: React.MouseEvent<HTMLElement>,
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -74,8 +74,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
       ownedIngredients,
       recipeIngredients: parsedMealData.ingredients,
     });
-    parsedMealData.ingredientCostInfo = estimatedRecipeCostInfo.ingredientCostInfo
-    parsedMealData.totalCost = estimatedRecipeCostInfo.estimatedCost
+    parsedMealData.ingredientCostInfo =
+      estimatedRecipeCostInfo.ingredientCostInfo;
+    parsedMealData.totalCost = estimatedRecipeCostInfo.estimatedCost;
     if (onLoadRecipeCost) {
       onLoadRecipeCost(parsedMealData, index);
     }

@@ -72,7 +72,7 @@ const AccountPage = () => {
   };
 
   const handlePreferenceClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const { category, selection } = (event.currentTarget as HTMLButtonElement)
       .dataset;
@@ -119,7 +119,7 @@ const AccountPage = () => {
         // validate credentials to update account
         const credential = EmailAuthProvider.credential(
           user.email,
-          userPassword
+          userPassword,
         );
         reauthenticateWithCredential(user, credential)
           .then(() => {
@@ -156,7 +156,7 @@ const AccountPage = () => {
         {},
         {
           withCredentials: true,
-        }
+        },
       );
       setUser(null);
       setMessage({ error: false, message: "Successfully logged out" });

@@ -32,7 +32,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
   const [userDiets, setUserDiets] = useState<string[]>([]);
 
   const handlePreferenceClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const { category, selection } = (event.currentTarget as HTMLButtonElement)
       .dataset;

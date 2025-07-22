@@ -22,10 +22,10 @@ class RecipeIngredientsDiff extends Diff<GPIngredientDataTypes> {
     let deleted: GPIngredientDataTypes[] = [];
     let unchanged: GPIngredientDataTypes[] = [];
     let ingredientsAMap = new Map(
-      itemA.map((ingredient) => [ingredient.ingredientName, ingredient])
+      itemA.map((ingredient) => [ingredient.ingredientName, ingredient]),
     );
     let ingredientsBMap = new Map(
-      itemB.map((ingredient) => [ingredient.ingredientName, ingredient])
+      itemB.map((ingredient) => [ingredient.ingredientName, ingredient]),
     );
 
     for (const ingredientA of itemA) {

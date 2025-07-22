@@ -5,7 +5,7 @@ import { Response, NextFunction } from "express";
 const isAuthenticated = (
   req: includeSession,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.session.userId) {
     return res

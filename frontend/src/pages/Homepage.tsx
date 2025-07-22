@@ -31,9 +31,7 @@ const Homepage = () => {
   const [userIngredientList, setUserIngredientList] = useState<
     GPIngredientDataTypes[]
   >([]);
-  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>(
-    []
-  );
+  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
 
   const { user } = useUser();
   const navigate = useNavigate();
