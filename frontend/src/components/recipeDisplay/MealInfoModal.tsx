@@ -146,7 +146,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           editedRecipeInfo={recipeInfo}
           modalOpen={diffModalOpen}
           setModalOpen={() => setDiffModalOpen((prev) => !prev)}
-          fineGrainedDiff={true}
           userDiffChoices={[...userDiffChoices]}
           noDiffFields={[...noDiffFields]}
         />

@@ -33,8 +33,6 @@ import LoadingModal from "./utils/LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { Recipe } from "../classes/recipe/Recipe";
-import UserDiffOptions from "./recipeDiff/UserDiffOptions";
-import { DiffRecipes } from "../classes/recipeDiffClasses/DiffRecipes";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;

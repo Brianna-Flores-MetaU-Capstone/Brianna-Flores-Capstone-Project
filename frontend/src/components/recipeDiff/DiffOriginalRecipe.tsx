@@ -30,7 +30,6 @@ type GPDiffOriginalType = {
   editedRecipeInfo: Recipe;
   modalOpen: boolean;
   setModalOpen: () => void;
-  fineGrainedDiff: boolean;
   userDiffChoices: string[];
   noDiffFields: string[];
 };
@@ -49,7 +48,6 @@ const DiffOriginalRecipe = ({
   editedRecipeInfo,
   modalOpen,
   setModalOpen,
-  fineGrainedDiff,
   userDiffChoices,
   noDiffFields,
 }: GPDiffOriginalType) => {
