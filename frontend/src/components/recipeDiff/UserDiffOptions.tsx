@@ -25,6 +25,7 @@ const GPDiffOptionsEnum = {
   TITLE: "Diff Title",
   SERVINGS: "Diff Servings",
   COOK_TIME: "Diff Cook Time",
+  TAGS: "Diff Recipe Tags",
   INGREDIENTS: "Diff Ingredients",
   INSTRUCTIONS: "Diff Instructions",
 } as const;
@@ -78,4 +79,5 @@ const UserDiffOptions = ({
   );
 };
 
+export { GPDiffOptionsEnum }
 export default UserDiffOptions;

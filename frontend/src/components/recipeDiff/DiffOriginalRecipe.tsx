@@ -29,15 +29,17 @@ type GPDiffOriginalType = {
   editedRecipeInfo: Recipe;
   modalOpen: boolean;
   setModalOpen: () => void;
+  fineGrainedDiff: boolean;
+  userDiffChoices: string[]
 };
 
 type GPOriginalRecipeDiffType = {
-  titleDiffResults: GPDiffLineInfoType[];
-  servingsDiffResults: GPDiffLineInfoType[];
-  tagsDiffResults: GPDiffLineInfoType[];
-  cookTimeDiffResults: GPDiffLineInfoType[];
-  ingredientsDiffResults: GPDiffLineInfoType[];
-  instructionsDiffResults: GPDiffLineInfoType[];
+  titleDiffResults?: GPDiffLineInfoType[];
+  servingsDiffResults?: GPDiffLineInfoType[];
+  tagsDiffResults?: GPDiffLineInfoType[];
+  cookTimeDiffResults?: GPDiffLineInfoType[];
+  ingredientsDiffResults?: GPDiffLineInfoType[];
+  instructionsDiffResults?: GPDiffLineInfoType[];
 };
 
 const DiffOriginalRecipe = ({
@@ -45,6 +47,8 @@ const DiffOriginalRecipe = ({
   editedRecipeInfo,
   modalOpen,
   setModalOpen,
+  fineGrainedDiff,
+  userDiffChoices
 }: GPDiffOriginalType) => {
   const [recipeDiffInfo, setRecipeDiffInfo] =
     useState<GPOriginalRecipeDiffType>();
@@ -53,8 +57,13 @@ const DiffOriginalRecipe = ({
 
   useEffect(() => {
     const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
-    const recipeDiffInfo = recipeDiff.getFullRecipeDiff();
-    setRecipeDiffInfo(recipeDiffInfo);
+    if (userDiffChoices) {
+      const recipeDiffInfo = recipeDiff.getFullRecipeDiff();
+      setRecipeDiffInfo(recipeDiffInfo);
+    } else {
+      const recipeDiffInfo = recipeDiff.getRequestedDiff(userDiffChoices, false)
+      setRecipeDiffInfo(recipeDiffInfo)
+    }
   }, [modalOpen]);
 
   const handleViewOriginalRecipe = () => {
@@ -78,9 +87,9 @@ const DiffOriginalRecipe = ({
                 <img src={originalRecipeInfo.previewImage} />
               </AspectRatio>
               <Box sx={GPCenteredBoxStyle}>
-                {recipeDiffInfo && (
+                {recipeDiffInfo?.titleDiffResults && (
                   <DiffOriginalContentDisplay
-                    xDiffResults={recipeDiffInfo.titleDiffResults}
+                    xDiffResults={recipeDiffInfo.titleDiffResults ?? []}
                     parentComponent={Box}
                     childrenComponent={Typography}
                     childComponentProps={{ level: "h2" }}
@@ -88,9 +97,9 @@ const DiffOriginalRecipe = ({
                 )}
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography>Servings:</Typography>
-                  {recipeDiffInfo && (
+                  {recipeDiffInfo?.servingsDiffResults && (
                     <DiffOriginalContentDisplay
-                      xDiffResults={recipeDiffInfo.servingsDiffResults}
+                      xDiffResults={recipeDiffInfo.servingsDiffResults ?? []}
                       parentComponent={Box}
                       childrenComponent={Typography}
                     />
@@ -98,17 +107,17 @@ const DiffOriginalRecipe = ({
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography>Cook Time:</Typography>
-                  {recipeDiffInfo && (
+                  {recipeDiffInfo?.cookTimeDiffResults && (
                     <DiffOriginalContentDisplay
-                      xDiffResults={recipeDiffInfo.cookTimeDiffResults}
+                      xDiffResults={recipeDiffInfo.cookTimeDiffResults ?? []}
                       parentComponent={Box}
                       childrenComponent={Typography}
                     />
                   )}
                 </Box>
-                {recipeDiffInfo && (
+                {recipeDiffInfo?.tagsDiffResults && (
                   <DiffOriginalContentDisplay
-                    xDiffResults={recipeDiffInfo.tagsDiffResults}
+                    xDiffResults={recipeDiffInfo.tagsDiffResults ?? []}
                     parentComponent={Box}
                     parentComponentProps={{
                       display: "flex",
@@ -124,18 +133,18 @@ const DiffOriginalRecipe = ({
               </Box>
             </Box>
             <Typography level="h3">Ingredients</Typography>
-            {recipeDiffInfo && (
+            {recipeDiffInfo?.ingredientsDiffResults && (
               <DiffOriginalContentDisplay
-                xDiffResults={recipeDiffInfo.ingredientsDiffResults}
+                xDiffResults={recipeDiffInfo.ingredientsDiffResults ?? []}
                 parentComponent={List}
                 parentComponentProps={{ marker: "circle" }}
                 childrenComponent={ListItem}
               />
             )}
             <Typography level="h3">Instructions</Typography>
-            {recipeDiffInfo && (
+            {recipeDiffInfo?.instructionsDiffResults && (
               <DiffOriginalContentDisplay
-                xDiffResults={recipeDiffInfo.instructionsDiffResults}
+                xDiffResults={recipeDiffInfo.instructionsDiffResults ?? []}
                 parentComponent={List}
                 parentComponentProps={{ marker: "decimal" }}
                 childrenComponent={ListItem}

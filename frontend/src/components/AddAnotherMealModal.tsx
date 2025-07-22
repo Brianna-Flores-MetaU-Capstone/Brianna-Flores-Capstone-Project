@@ -34,6 +34,7 @@ import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { Recipe } from "../classes/recipe/Recipe";
 import UserDiffOptions from "./recipeDiff/UserDiffOptions";
+import { DiffRecipes } from "../classes/recipeDiffClasses/DiffRecipes";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -62,6 +63,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
   const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
   const [userDiffChoicesOpen, setUserDiffChoicesOpen] = useState(false);
+  const [userDiffChoices, setUserDiffChoices] = useState(new Set<string>())
 
   const { user } = useUser();
 
@@ -182,27 +184,28 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   };
 
   const onUserDiffOptionsSubmit = async (userDiffChoices: Set<string>) => {
+    setUserDiffChoices(userDiffChoices)
     if (recipesToCompare.length === 2) {
       setLoadingModal(true);
       let updatedRecipesToCompare: Recipe[] = [];
       for (const recipe of recipesToCompare) {
-        const updatedRecipe = await updateRecipeWithPricing({
-          setMessage,
-          recipe,
-        });
-        updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
-        // find index of recipe in meal results so we can also update the recipe information there too
-        const index = mealResults.findIndex(
-          (element) => element.apiId === recipe.apiId,
-        );
-        handleUpdateRecipeInfo(updatedRecipe, index);
-        setRecipesToCompare(updatedRecipesToCompare);
+          const updatedRecipe = await updateRecipeWithPricing({
+            setMessage,
+            recipe,
+          });
+          updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
+          // find index of recipe in meal results so we can also update the recipe information there too
+          const index = mealResults.findIndex(
+            (element) => element.apiId === recipe.apiId,
+          );
+          handleUpdateRecipeInfo(updatedRecipe, index);
+          setRecipesToCompare(updatedRecipesToCompare);
       }
-      const recipeDiffResults = getRecipeDiffResults({
+      const compareRecipeResults = getRecipeDiffResults({
         recipeA: updatedRecipesToCompare[0],
         recipeB: updatedRecipesToCompare[1],
       });
-      setRecipeDiffData(recipeDiffResults);
+      setRecipeDiffData(compareRecipeResults);
       setLoadingModal(false);
       setRecipeDiffModalOpen(true);
     }
@@ -320,25 +323,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       <RecipeDiffModal
         modalOpen={recipeDiffModalOpen}
         toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
-        recipeDiffData={
-          recipeDiffData ?? {
-            recipeA: recipesToCompare[0],
-            recipeB: recipesToCompare[1],
-            servingsDiff: false,
-            recipeIngredientDiff: {
-              added: [],
-              deleted: [],
-              changed: [],
-              unchanged: [],
-            },
-            purchasedIngredientsDiff: {
-              added: [],
-              deleted: [],
-              changed: [],
-              unchanged: [],
-            },
-          }
-        }
+        recipeDiffData={recipeDiffData}
       />
       <UserDiffOptions
         modalOpen={userDiffChoicesOpen}
