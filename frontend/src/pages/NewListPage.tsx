@@ -25,6 +25,7 @@ import CalendarModal from "../components/calendar/CalendarModal";
 import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../classes/recipe/Recipe";
+import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -35,6 +36,8 @@ const NewListPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
+  const [createdEvents, setCreatedEvents] = useState<CalendarEvent[]>()
+  const [eventSummaryModalOpen, setEventSummaryModalOpen] = useState(false)
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -116,6 +119,10 @@ const NewListPage = () => {
     }
   };
 
+  const handleEventsCreated = (createdEvents: CalendarEvent[]) => {
+    setCreatedEvents(createdEvents)
+  }
+
   return (
     <Box>
       <AppHeader />
@@ -183,7 +190,9 @@ const NewListPage = () => {
       <CalendarModal
         modalOpen={calendarModalOpen}
         toggleModal={() => setCalendarModalOpen((prev) => !prev)}
+        setCreatedEvents={handleEventsCreated}
       />
+
     </Box>
   );
 };

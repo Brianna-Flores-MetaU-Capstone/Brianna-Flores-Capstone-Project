@@ -13,7 +13,7 @@ import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
 import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "../utils/LoadingModal";
-import { TimePreferenceString } from "../../classes/timePreference/TimePreferenceString";
+import { TimePreferenceString } from "../../classes/calendar/TimePreferenceString";
 import type { Recipe } from "../../classes/recipe/Recipe";
 
 const REQUESTED_DAYS = 7;

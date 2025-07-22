@@ -23,7 +23,7 @@ import TimeBlock from "../../../../backend/classes/TimeBlock";
 import {
   TimePreferenceString,
   type GPTimePreferenceType,
-} from "../../classes/timePreference/TimePreferenceString";
+} from "../../classes/calendar/TimePreferenceString";
 
 type GPEventTimeModal = {
   editMode: boolean;
