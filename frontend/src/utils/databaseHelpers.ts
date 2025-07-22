@@ -8,7 +8,11 @@ import type {
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
-import { RecipeFilter, recipeFiltersList, type recipeFilterType } from "../classes/RecipeFilters";
+import {
+  RecipeFilter,
+  recipeFiltersList,
+  type recipeFilterType,
+} from "../classes/filters/RecipeFilters";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const DISCOVERY_NUM_TO_REQUEST = 20;
@@ -297,7 +301,10 @@ const fetchAllRecipeCategories = async ({
         offset,
         numRequested: DISCOVERY_NUM_TO_REQUEST,
       });
-      createdRecipeFilter.setFilteredList(filter as recipeFilterType, categoryRecipes);
+      createdRecipeFilter.setFilteredList(
+        filter as recipeFilterType,
+        categoryRecipes
+      );
     }
     setRecipeDiscoveryResults(new RecipeFilter(createdRecipeFilter));
   } catch (error) {

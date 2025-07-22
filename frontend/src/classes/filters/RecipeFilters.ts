@@ -1,4 +1,4 @@
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPRecipeDataTypes } from "../../utils/types";
 
 const recipeFiltersList = {
   ALL: "all",
@@ -7,10 +7,14 @@ const recipeFiltersList = {
   VEGETARIAN: "vegetarian",
   VEGAN: "vegan",
 };
-type recipeFilterType = "all" | "dairyFree" | "glutenFree" | "vegetarian" | "vegan"
+type recipeFilterType =
+  | "all"
+  | "dairyFree"
+  | "glutenFree"
+  | "vegetarian"
+  | "vegan";
 
 class RecipeFilter {
-
   all: GPRecipeDataTypes[];
   dairyFree: GPRecipeDataTypes[];
   glutenFree: GPRecipeDataTypes[];
@@ -42,7 +46,7 @@ class RecipeFilter {
   }
 
   setFilteredList(filter: recipeFilterType, value: GPRecipeDataTypes[]) {
-    this[filter] = value
+    this[filter] = value;
   }
 
   set allRecipes(value: GPRecipeDataTypes[]) {

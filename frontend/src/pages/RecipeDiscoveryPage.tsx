@@ -23,7 +23,7 @@ import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/EditRecipeModal";
-import { RecipeFilter } from "../classes/RecipeFilters";
+import { RecipeFilter } from "../classes/filters/RecipeFilters";
 
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },

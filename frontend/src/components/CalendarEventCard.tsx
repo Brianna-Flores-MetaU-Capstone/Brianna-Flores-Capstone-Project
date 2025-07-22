@@ -13,7 +13,7 @@ import {
 import { DaysOfWeek } from "../utils/enum";
 import CalendarTimeModal from "./CalendarTimeModal";
 import { useSelectedEvents } from "../contexts/SelectedEventsContext";
-import TimeBlock from "../../../backend/utils/TimeBlockClass";
+import TimeBlock from "../../../backend/classes/TimeBlock";
 
 type GPCalendarOption = {
   eventOption: GPRecipeEventOptionType;

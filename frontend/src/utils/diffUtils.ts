@@ -1,6 +1,6 @@
 import type { GPIngredientDataTypes, GPRecipeDataTypes } from "./types";
-import { RecipeIngredientsDiff } from "../classes/DiffClass";
-import type { GPDiffReturnType } from "../classes/DiffClass";
+import { RecipeIngredientsDiff } from "../classes/recipeDiffClasses/DiffClass";
+import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
 
 type GPRecipeDiffType = {
   recipeA: GPRecipeDataTypes;
@@ -72,8 +72,5 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
   return arr[strB.length][strA.length];
 };
 
-export {
-  getRecipeDiffResults,
-  DiffStatus
-};
+export { getRecipeDiffResults, DiffStatus };
 export type { GPRecipeDiffType, GPDiffLineInfoType };

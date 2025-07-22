@@ -1,8 +1,8 @@
 import type { User } from "firebase/auth";
-import TimeBlock from "../../../backend/utils/TimeBlockClass";
+import TimeBlock from "../../../backend/classes/TimeBlock";
 
 type GPRecipeDataTypes = {
-  id: number,
+  id: number;
   apiId: number;
   originalSource: string;
   editingAuthorName: string;
@@ -112,6 +112,8 @@ type GPRecipeDiscoveryCategories = {
   vegan: GPRecipeDataTypes[];
 };
 
+
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -125,5 +127,5 @@ export type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
-  GPRecipeDiscoveryCategories
+  GPRecipeDiscoveryCategories,
 };

@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/joy";
 
-import { DiffRecipes } from "../classes/DiffRecipe";
+import { DiffRecipes } from "../classes/recipeDiffClasses/DiffRecipes";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
 import {
   GPCenteredBoxStyle,
