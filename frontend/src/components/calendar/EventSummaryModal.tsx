@@ -9,7 +9,8 @@ import {
 } from "@mui/joy";
 import TitledListView from "../utils/TitledListView";
 import {
-  CenteredTitledListStyle,
+  GPModalStyle,
+  LeftAlignedTitledListStyle,
   MUI_GRID_FULL_SPACE,
 } from "../../utils/UIStyle";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
@@ -32,7 +33,7 @@ const EventSummaryModal = ({
       open={modalOpen}
       onClose={toggleModal}
     >
-      <ModalDialog maxWidth={500}>
+      <ModalDialog maxWidth={500} sx={GPModalStyle}>
         <ModalClose
           onClick={toggleModal}
           variant="plain"
@@ -55,7 +56,7 @@ const EventSummaryModal = ({
                 <Link key={index} href={event.eventLink}>Take me there!</Link>
               </Box>
             )}
-            listItemsStyle={CenteredTitledListStyle}
+            listItemsStyle={LeftAlignedTitledListStyle}
           />
         </DialogContent>
       </ModalDialog>

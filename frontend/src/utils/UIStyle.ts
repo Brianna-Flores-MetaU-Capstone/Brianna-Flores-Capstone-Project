@@ -194,6 +194,12 @@ const CenteredTitledListStyle = {
   justifyContent: "center",
 };
 
+const LeftAlignedTitledListStyle = {
+  ...BaseListStyle,
+  justifyContent: "flex-start",
+  m: 1
+};
+
 const GPTagItemStyle = {
   mx: 0.5,
   my: 1,
@@ -218,6 +224,7 @@ export {
   ColumnOverflowTitledListStyle,
   ColumnNoOverflowTitledListStyle,
   CenteredTitledListStyle,
+  LeftAlignedTitledListStyle,
   RecipeTagsTitledListStyle,
   GPTagItemStyle,
 };
