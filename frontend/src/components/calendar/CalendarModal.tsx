@@ -51,6 +51,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
       return;
     }
     setLoading(true);
+    let eventLinks: string[] = [];
     for (const eventInfo of selectedEvents) {
       const newEvent = {
         summary: `Cook ${eventInfo.name}`,
@@ -69,6 +70,9 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
         calendarId: "primary",
         resource: newEvent,
       });
+      if (request.result.htmlLink) {
+        eventLinks = [...eventLinks, request.result.htmlLink];
+      }
     }
     setLoading(false);
     toggleModal();
