@@ -115,7 +115,6 @@ const Homepage = () => {
                 parsedMealData={meal}
                 setMessage={setMessage}
                 selectedToCompare={false}
-                cardSize={350}
               />
             )}
             listItemsStyle={RowOverflowTitledListStyle}

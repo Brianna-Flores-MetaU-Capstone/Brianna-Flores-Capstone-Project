@@ -211,6 +211,7 @@ const GPTagItemStyle = {
   color: "primary.400",
 };
 
+const CARD_WIDTH = 350;
 const MUI_GRID_FULL_SPACE = 12;
 
 export {
@@ -227,4 +228,5 @@ export {
   LeftAlignedTitledListStyle,
   RecipeTagsTitledListStyle,
   GPTagItemStyle,
+  CARD_WIDTH,
 };

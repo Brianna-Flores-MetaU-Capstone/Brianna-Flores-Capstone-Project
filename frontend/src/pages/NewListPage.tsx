@@ -156,7 +156,6 @@ const NewListPage = () => {
                 index={index}
                 // TODO enable favoriting across meal cards
                 favorited={false}
-                calendarTimeModalOpen={calendarModalOpen}
                 toggleCalendarTimeModal={() =>
                   setCalendarModalOpen((prev) => !prev)
                 }
@@ -165,7 +164,6 @@ const NewListPage = () => {
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
                 selectedToCompare={false}
-                cardSize={300}
               />
             )}
             listItemsStyle={CenteredTitledListStyle}

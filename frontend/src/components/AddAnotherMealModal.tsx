@@ -288,7 +288,6 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     (recipe) => recipe.apiId === meal.apiId,
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
-                  cardSize={350}
                 />
               )}
               listItemsStyle={CenteredTitledListStyle}
