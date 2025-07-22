@@ -13,7 +13,9 @@ const RecipeDiffInstructionsBlock = ({
 }: GPInstructionsDiffTypes) => {
   return (
     <Box>
-      <Typography sx={GPDiffHeaderStyle} level="h2">Compare Instructions</Typography>
+      <Typography sx={GPDiffHeaderStyle} level="h2">
+        Compare Instructions
+      </Typography>
       <Grid container spacing={2}>
         <Grid xs={6}>
           <List component="ol" marker="decimal">

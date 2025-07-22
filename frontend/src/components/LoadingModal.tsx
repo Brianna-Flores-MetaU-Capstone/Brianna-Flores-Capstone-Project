@@ -6,7 +6,7 @@ import CircularProgress from "@mui/joy/CircularProgress";
 
 type GPLoadingModalTypes = {
   modalOpen: boolean;
-  message: string
+  message: string;
 };
 const LoadingModal = ({ modalOpen, message }: GPLoadingModalTypes) => {
   return (

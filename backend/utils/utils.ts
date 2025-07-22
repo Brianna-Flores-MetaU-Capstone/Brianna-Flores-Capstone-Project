@@ -76,7 +76,7 @@ const getTotalQuantity = ({
       }
     }
   } else {
-    totalQuantity = recipeIngredient.quantity
+    totalQuantity = recipeIngredient.quantity;
   }
   return totalQuantity;
 };
@@ -135,7 +135,10 @@ const getListOfMissingIngredients = ({
         recipeIngredient,
         recipeIngredients,
       });
-      const updatedIngredient = { ...recipeIngredient, quantity: totalQuantity }
+      const updatedIngredient = {
+        ...recipeIngredient,
+        quantity: totalQuantity,
+      };
       if (
         ownedIngredientsNames.indexOf(
           recipeIngredient.ingredientName.toLowerCase()
@@ -183,7 +186,7 @@ const estimateListCost = async ({
     ingredientCostInfo = [
       ...ingredientCostInfo,
       {
-        ...ingredient, 
+        ...ingredient,
         isChecked: false,
         ...ingredientApiInfo,
       },

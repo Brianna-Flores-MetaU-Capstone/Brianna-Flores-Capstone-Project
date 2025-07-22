@@ -1,11 +1,12 @@
 import React from "react";
-import type {
-  GPIngredientDataTypes,
-} from "../utils/types";
+import type { GPIngredientDataTypes } from "../utils/types";
 import TitledListView from "./TitledListView";
 import Ingredient from "./Ingredient";
 import { Box } from "@mui/joy";
-import { ColumnOverflowTitledListStyle, MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import {
+  ColumnOverflowTitledListStyle,
+  MUI_GRID_FULL_SPACE,
+} from "../utils/UIStyle";
 
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientDataTypes[];
@@ -26,9 +27,17 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   ) => {};
 
   return (
-    <Box sx={{p: 2, width: 500, borderRadius: "md", border: "2px solid", borderColor: "primary.300"}}>
+    <Box
+      sx={{
+        p: 2,
+        width: 500,
+        borderRadius: "md",
+        border: "2px solid",
+        borderColor: "primary.300",
+      }}
+    >
       <TitledListView
-        headerList={[{title: department, spacing: MUI_GRID_FULL_SPACE}]}
+        headerList={[{ title: department, spacing: MUI_GRID_FULL_SPACE }]}
         itemsList={filteredGroceries}
         renderItem={(itemInfo, index) => (
           <Ingredient
@@ -37,7 +46,10 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentGroceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            ingredientCost={{ingredientCost: itemInfo.ingredientCost, ingredientCostUnit: itemInfo.ingredientCostUnit}}
+            ingredientCost={{
+              ingredientCost: itemInfo?.ingredientCost ?? 0,
+              ingredientCostUnit: itemInfo.ingredientCostUnit ?? 0,
+            }}
             onGroceryCheck={onGroceryCheck}
             onDelete={handleDeleteIngredient}
           />

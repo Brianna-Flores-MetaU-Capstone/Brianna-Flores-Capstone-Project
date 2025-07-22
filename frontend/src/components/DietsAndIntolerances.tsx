@@ -7,9 +7,8 @@ const DietsAndIntolerances = ({
 }: {
   recipeInfo: GPRecipeDataTypes | undefined;
 }) => {
-
   return (
-    <Box sx={{ display: "flex", justifyContent: "center"}}>
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
       {recipeInfo?.dairyFree && (
         <Typography level="body-xs" sx={GPTagItemStyle}>
           Dairy Free

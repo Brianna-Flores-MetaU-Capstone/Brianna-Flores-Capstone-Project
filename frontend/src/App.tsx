@@ -19,7 +19,7 @@ function App() {
   const AuthIngredientsList = WithAuth(IngredientsPage);
   const AuthGroceryList = WithAuth(GroceryList);
   const AuthAccountPage = WithAuth(AccountPage);
-  const AuthFavoritedPage = WithAuth(FavoritedRecipes)
+  const AuthFavoritedPage = WithAuth(FavoritedRecipes);
 
   return (
     <CssVarsProvider theme={theme}>

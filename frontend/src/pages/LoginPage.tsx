@@ -11,7 +11,6 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
-
 const LoginPage = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
@@ -45,9 +44,7 @@ const LoginPage = () => {
     <Box>
       <AppHeader />
       <Box>
-        <Card
-          sx={{ mt: 30, mx: "auto" }}
-        >
+        <Card sx={{ mt: 30, mx: "auto" }}>
           <AuthForm
             handleLoginSubmit={handleSubmit}
             handleAuthInputChange={(event) =>

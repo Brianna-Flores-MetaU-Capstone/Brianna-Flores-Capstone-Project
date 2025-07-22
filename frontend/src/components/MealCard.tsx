@@ -158,9 +158,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
         </AspectRatio>
         <CardContent sx={{ justifyContent: "flex-end" }}>
           {parsedMealData.editingAuthorName && (
-            <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <PersonIcon />
-              <Typography>Edited by: {parsedMealData.editingAuthorName}</Typography>
+              <Typography>
+                Edited by: {parsedMealData.editingAuthorName}
+              </Typography>
             </Box>
           )}
           {onSelectRecipe && (

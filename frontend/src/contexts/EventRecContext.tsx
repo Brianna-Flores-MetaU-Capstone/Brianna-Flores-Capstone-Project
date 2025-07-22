@@ -3,7 +3,9 @@ import type { GPRecipeEventOptionType } from "../utils/types";
 
 type GPEventContextType = {
   eventOptions: GPRecipeEventOptionType[][] | null;
-  setEventOptions: React.Dispatch<React.SetStateAction<GPRecipeEventOptionType[][]>>;
+  setEventOptions: React.Dispatch<
+    React.SetStateAction<GPRecipeEventOptionType[][]>
+  >;
 };
 
 const EventRecContext = createContext<GPEventContextType>({
@@ -11,13 +13,19 @@ const EventRecContext = createContext<GPEventContextType>({
   setEventOptions: () => {},
 });
 
-export const EventRecProvider = ({children}: {children: React.ReactNode}) => {
-    const [eventOptions, setEventOptions] = useState<GPRecipeEventOptionType[][]>([]);
-    return (
-        <EventRecContext.Provider value={{eventOptions, setEventOptions}}>
-            {children}
-        </EventRecContext.Provider>
-    )
-}
+export const EventRecProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [eventOptions, setEventOptions] = useState<GPRecipeEventOptionType[][]>(
+    []
+  );
+  return (
+    <EventRecContext.Provider value={{ eventOptions, setEventOptions }}>
+      {children}
+    </EventRecContext.Provider>
+  );
+};
 
-export const useEventRec = () => useContext(EventRecContext)
+export const useEventRec = () => useContext(EventRecContext);

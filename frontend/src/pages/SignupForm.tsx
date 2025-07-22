@@ -14,7 +14,6 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 
-
 const SignupForm = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
     email: "",
@@ -34,7 +33,10 @@ const SignupForm = () => {
       .then(async (userCredential) => {
         const user = userCredential.user;
         if (!user.uid || !user.email) {
-          setMessage({error: true, message: "Unable to create account, missing required information"})
+          setMessage({
+            error: true,
+            message: "Unable to create account, missing required information",
+          });
           return;
         }
 

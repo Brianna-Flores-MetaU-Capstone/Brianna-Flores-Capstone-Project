@@ -6,10 +6,7 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
-import type {
-  GPRecipeDataTypes,
-  GPErrorMessageTypes,
-} from "../utils/types";
+import type { GPRecipeDataTypes, GPErrorMessageTypes } from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import axios from "axios";

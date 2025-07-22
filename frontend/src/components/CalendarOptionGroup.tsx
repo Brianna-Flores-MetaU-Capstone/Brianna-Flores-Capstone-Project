@@ -18,7 +18,13 @@ const CalendarOptionGroup = ({
 }: GPCalendarOptionGroup) => {
   return (
     <Box>
-      <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography>Option Group #{groupNum}</Typography>
         <IconButton
           disabled={adjustedSuggestion}
@@ -28,13 +34,17 @@ const CalendarOptionGroup = ({
           size="lg"
         >
           <CheckCircleOutlineIcon />
-        <Typography>Accept All</Typography>
+          <Typography>Accept All</Typography>
         </IconButton>
       </Box>
       <TitledListView
         itemsList={eventOptions}
         renderItem={(event, index) => (
-          <CalendarEventCard key={index} eventOption={event} groupNum={groupNum - 1}/>
+          <CalendarEventCard
+            key={index}
+            eventOption={event}
+            groupNum={groupNum - 1}
+          />
         )}
         listItemsStyle={CenteredTitledListStyle}
       />

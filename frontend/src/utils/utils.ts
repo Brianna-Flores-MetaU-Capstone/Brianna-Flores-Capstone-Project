@@ -44,21 +44,21 @@ const parseRecipeData = async (recipeData: any) => {
 };
 
 const parseTags = (unparsedRecipeData: any) => {
-  let recipeTags:string[] = []
+  let recipeTags: string[] = [];
   if (unparsedRecipeData.vegetarian) {
-    recipeTags = [...recipeTags, "Vegetarian"]
-  } 
+    recipeTags = [...recipeTags, "Vegetarian"];
+  }
   if (unparsedRecipeData.vegan) {
-    recipeTags = [...recipeTags, "Vegan"]
-  } 
+    recipeTags = [...recipeTags, "Vegan"];
+  }
   if (unparsedRecipeData.dairyFree) {
-    recipeTags = [...recipeTags, "Dairy Free"]
-  } 
+    recipeTags = [...recipeTags, "Dairy Free"];
+  }
   if (unparsedRecipeData.glutenFree) {
-    recipeTags = [...recipeTags, "Gluten Free"]
-  } 
+    recipeTags = [...recipeTags, "Gluten Free"];
+  }
   return recipeTags;
-}
+};
 
 const parseIngredients = (ingredientsData: any) => {
   return ingredientsData.map((ingredient: any) => ({

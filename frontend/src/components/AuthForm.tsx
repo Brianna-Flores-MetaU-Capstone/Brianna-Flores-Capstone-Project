@@ -77,7 +77,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           onChange={handleAuthInputChange}
         />
       </FormControl>
-      <FormControl sx={{my: 2}}>
+      <FormControl sx={{ my: 2 }}>
         <FormLabel>Enter Password</FormLabel>
         <Input
           required
@@ -110,7 +110,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           />
         </Box>
       )}
-      <Button type="submit" sx={{display: "block", mx: "auto", mt: 1}}>
+      <Button type="submit" sx={{ display: "block", mx: "auto", mt: 1 }}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

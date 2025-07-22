@@ -23,7 +23,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
-import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle} from "../utils/UIStyle";
+import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -48,15 +48,28 @@ const NewListPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ editedRecipe: false, userId, selectedRecipe, setMessage });
-      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+      await updateUserRecipes({
+        editedRecipe: false,
+        userId,
+        selectedRecipe,
+        setMessage,
+      });
+      await fetchRecipes({
+        setMessage,
+        setRecipes: setSelectedRecipes,
+        recipeGroup: "planned",
+      });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
   };
 
   useEffect(() => {
-    fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+    fetchRecipes({
+      setMessage,
+      setRecipes: setSelectedRecipes,
+      recipeGroup: "planned",
+    });
   }, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -68,10 +81,14 @@ const NewListPage = () => {
     try {
       await axios.put(
         `${databaseUrl}/recipes/planned/remove`,
-        {deletedRecipe},
+        { deletedRecipe },
         axiosConfig
       );
-      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+      await fetchRecipes({
+        setMessage,
+        setRecipes: setSelectedRecipes,
+        recipeGroup: "planned",
+      });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }

@@ -47,18 +47,19 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
-        <Box sx={{width: "100%", overflowY: "auto"}}>
-        <TitledListView
-          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "For Amount", spacing: 2}]}
-          itemsList={ingredientsCostInformation}
-          renderItem={(ingredientInfo, index) => (
-            <IngredientCost
-              key={index}
-              ingredientCostInfo={ingredientInfo}
-            />
-          )}
-          listItemsStyle={ColumnOverflowTitledListStyle}
-        />
+        <Box sx={{ width: "100%", overflowY: "auto" }}>
+          <TitledListView
+            headerList={[
+              { title: "Ingredient", spacing: 8 },
+              { title: "Cost", spacing: 2 },
+              { title: "For Amount", spacing: 2 },
+            ]}
+            itemsList={ingredientsCostInformation}
+            renderItem={(ingredientInfo, index) => (
+              <IngredientCost key={index} ingredientCostInfo={ingredientInfo} />
+            )}
+            listItemsStyle={ColumnOverflowTitledListStyle}
+          />
         </Box>
       </Sheet>
     </Modal>

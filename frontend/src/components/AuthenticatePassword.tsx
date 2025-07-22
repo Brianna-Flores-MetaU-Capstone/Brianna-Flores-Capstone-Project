@@ -1,20 +1,25 @@
 import React from "react";
 import { AuthenticationFieldEnum } from "../utils/constants";
-import { Button, FormControl, FormHelperText, FormLabel, Input } from "@mui/joy";
-import InfoOutlined from "@mui/icons-material/InfoOutlined"
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+} from "@mui/joy";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 type GPPasswordAuthenticationProps = {
   handleAccountSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  passwordInputError: boolean
+  passwordInputError: boolean;
 };
 
 const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
   handleAccountSubmit,
   handleInputChange,
-  passwordInputError
+  passwordInputError,
 }) => {
-
   return (
     <form onSubmit={handleAccountSubmit}>
       <FormControl error={passwordInputError}>
@@ -29,12 +34,14 @@ const AuthenticatePassword: React.FC<GPPasswordAuthenticationProps> = ({
           onChange={handleInputChange}
           type="password"
         />
-        {passwordInputError && <FormHelperText>
-          <InfoOutlined />
-          Enter password to update account
-        </FormHelperText>}
+        {passwordInputError && (
+          <FormHelperText>
+            <InfoOutlined />
+            Enter password to update account
+          </FormHelperText>
+        )}
       </FormControl>
-      <Button sx={{display: "block", mx: "auto", mt: 1}} type="submit">
+      <Button sx={{ display: "block", mx: "auto", mt: 1 }} type="submit">
         Update Account!
       </Button>
     </form>

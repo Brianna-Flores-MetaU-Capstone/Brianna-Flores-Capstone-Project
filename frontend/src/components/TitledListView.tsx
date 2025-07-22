@@ -39,11 +39,7 @@ const TitledListView = <T,>({
           ))}
         </Grid>
       )}
-      <Box
-        sx={listItemsStyle}
-      >
-        {itemsList && itemsList.map(renderItem)}
-      </Box>
+      <Box sx={listItemsStyle}>{itemsList && itemsList.map(renderItem)}</Box>
     </Box>
   );
 };

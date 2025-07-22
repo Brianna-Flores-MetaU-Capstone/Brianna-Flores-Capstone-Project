@@ -58,10 +58,14 @@ const IngredientsPage = () => {
   return (
     <Sheet>
       <AppHeader />
-      <Box sx={{m: 2}}>
+      <Box sx={{ m: 2 }}>
         <Button onClick={addIngredientClick}>Add Ingredient</Button>
         <TitledListView
-          headerList={[{title: "Ingredient", spacing: 4}, {title: "Quantity", spacing: 3}, {title: "Expiration", spacing: 5}]}
+          headerList={[
+            { title: "Ingredient", spacing: 4 },
+            { title: "Quantity", spacing: 3 },
+            { title: "Expiration", spacing: 5 },
+          ]}
           itemsList={userIngredients}
           renderItem={(ingredient, index) => (
             <Ingredient

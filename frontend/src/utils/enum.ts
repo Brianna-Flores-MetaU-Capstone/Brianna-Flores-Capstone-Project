@@ -66,6 +66,6 @@ const DaysOfWeek = [
   "Thursday",
   "Friday",
   "Saturday",
-]
+];
 
 export { IngredientUnitOptions, Intolerances, Diets, Departments, DaysOfWeek };

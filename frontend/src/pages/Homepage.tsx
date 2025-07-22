@@ -18,7 +18,10 @@ import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
-import { ColumnOverflowTitledListStyle, RowOverflowTitledListStyle } from "../utils/UIStyle";
+import {
+  ColumnOverflowTitledListStyle,
+  RowOverflowTitledListStyle,
+} from "../utils/UIStyle";
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -33,16 +36,20 @@ const Homepage = () => {
   );
 
   const { user } = useUser();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const setUserListPreviews = async () => {
-        fetchGroceryList({ setMessage, setUserGroceryList });
-        const userIngredients = await fetchUserIngredientsHelper({
-          setMessage,
-        });
-        setUserIngredientList(userIngredients);
-        await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+      fetchGroceryList({ setMessage, setUserGroceryList });
+      const userIngredients = await fetchUserIngredientsHelper({
+        setMessage,
+      });
+      setUserIngredientList(userIngredients);
+      await fetchRecipes({
+        setMessage,
+        setRecipes: setSelectedRecipes,
+        recipeGroup: "planned",
+      });
     };
     setUserListPreviews();
   }, []);
@@ -51,10 +58,15 @@ const Homepage = () => {
     <Box>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <Grid container spacing={2} sx={{my: 2}}>
+        <Grid container spacing={2} sx={{ my: 2 }}>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.INGREDIENT, spacing: MUI_GRID_FULL_SPACE }]}
+              headerList={[
+                {
+                  title: PreviewConstants.INGREDIENT,
+                  spacing: MUI_GRID_FULL_SPACE,
+                },
+              ]}
               itemsList={userIngredientList}
               renderItem={(ingredient, index) => (
                 <Ingredient
@@ -70,7 +82,12 @@ const Homepage = () => {
           </Grid>
           <Grid xs={6}>
             <TitledListView
-              headerList={[{ title: PreviewConstants.GROCERY, spacing: MUI_GRID_FULL_SPACE }]}
+              headerList={[
+                {
+                  title: PreviewConstants.GROCERY,
+                  spacing: MUI_GRID_FULL_SPACE,
+                },
+              ]}
               itemsList={userGroceryList}
               renderItem={(item, index) => (
                 <Ingredient
@@ -87,7 +104,9 @@ const Homepage = () => {
         </Grid>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
+            headerList={[
+              { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
+            ]}
             itemsList={selectedRecipes}
             renderItem={(meal, index) => (
               <MealCard

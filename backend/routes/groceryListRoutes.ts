@@ -72,7 +72,7 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
         ingredientItem.ingredientName === ingredientName
           ? {
               ...ingredientItem,
-                isChecked: !ingredientItem.isChecked,
+              isChecked: !ingredientItem.isChecked,
             }
           : ingredientItem
     );

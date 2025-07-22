@@ -34,9 +34,7 @@ const FavoritedRecipes = () => {
 
   const onFavoriteClick = (recipe: GPRecipeDataTypes) => {
     handleUnfavoriteRecipe({ setMessage, recipe });
-    setFavoritedRecipes((prev) =>
-      prev.filter((elem) => elem.id !== recipe.id)
-    );
+    setFavoritedRecipes((prev) => prev.filter((elem) => elem.id !== recipe.id));
   };
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -51,7 +49,12 @@ const FavoritedRecipes = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
+      await updateUserRecipes({
+        userId,
+        editedRecipe: false,
+        selectedRecipe: recipe,
+        setMessage,
+      });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
