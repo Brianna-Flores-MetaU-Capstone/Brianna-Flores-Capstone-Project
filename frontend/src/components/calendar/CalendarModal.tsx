@@ -15,7 +15,7 @@ import { useEventRec } from "../../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import {
-  CenteredTitledListStyle,
+  ColumnNoOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
 } from "../../utils/UIStyle";
 
@@ -90,7 +90,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
                   adjustedSuggestion={false}
                 />
               )}
-              listItemsStyle={CenteredTitledListStyle}
+              listItemsStyle={ColumnNoOverflowTitledListStyle}
             />
           </DialogContent>
           {message && (
