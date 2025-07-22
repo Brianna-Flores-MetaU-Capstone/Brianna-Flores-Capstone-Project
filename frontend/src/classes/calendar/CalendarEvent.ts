@@ -16,10 +16,18 @@ class CalendarEvent {
     this.eventLink = eventLink;
   }
 
+  /**
+   * Returns date of event formatted as Day Month Date Year
+   * @returns date as string
+   */
   getFormattedDate() {
     return this.start.toDateString();
   }
 
+  /**
+   * Returns time of event formatted as XX:XX AM/PM - XX:XX AM/PM
+   * @returns event time range as string
+   */
   getFormattedTime() {
     return (
       this.start.toLocaleTimeString([], {

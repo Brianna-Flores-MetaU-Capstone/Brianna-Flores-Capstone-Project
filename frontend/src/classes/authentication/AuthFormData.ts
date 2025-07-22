@@ -16,6 +16,11 @@ class AuthFormData {
     return this.password;
   }
 
+  /**
+   * On input change, sets the given field (either email or password) to the given value
+   * @param field the field to set
+   * @param value the value to set the field to
+   */
   setAuthField(field: GPAuthFormType, value: string) {
     this[field] = value;
   }
