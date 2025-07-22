@@ -79,7 +79,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/planned/remove`,
         { deletedRecipe },
-        axiosConfig,
+        axiosConfig
       );
       await fetchRecipes({
         setMessage,
@@ -108,7 +108,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig,
+        axiosConfig
       );
       navigate("/grocery-list");
     } catch (error) {
@@ -131,6 +131,8 @@ const NewListPage = () => {
           </Box>
           <ConnectCalendar
             onClick={() => setCalendarModalOpen((prev) => !prev)}
+            singleRecipe={false}
+            recipeInfo={null}
           />
         </Box>
         <Box>
@@ -145,6 +147,10 @@ const NewListPage = () => {
                 index={index}
                 // TODO enable favoriting across meal cards
                 favorited={false}
+                calendarTimeModalOpen={calendarModalOpen}
+                toggleCalendarTimeModal={() =>
+                  setCalendarModalOpen((prev) => !prev)
+                }
                 onMealCardClick={() => handleRecipeCardClick(meal)}
                 setMessage={setMessage}
                 parsedMealData={meal}

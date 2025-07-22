@@ -13,6 +13,7 @@ import {
 } from "../utils/calendarUtils";
 const SHOPPING_TIME = 60;
 const NUM_SCHEDULE_OPTIONS = 3;
+const SINGLE_RECIPE_SCHEDULE_OPTIONS = 1;
 
 router.post(
   "/reccomendEvents",
@@ -54,7 +55,24 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  },
+  }
+);
+
+router.post(
+  "/single/reccomendEvents",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const { parsedFreeTime, userPreferences, recipeInfo } = req.body;
+    const recipeScheduleOptions = getMultipleScheduleOptions({
+      userFreeTime: parsedFreeTime,
+      userRecipes: [recipeInfo],
+      userPreferences: userPreferences,
+      singleDayPrep: false,
+      servingsPerDay: 1,
+      numOptions: SINGLE_RECIPE_SCHEDULE_OPTIONS,
+    });
+    res.json(recipeScheduleOptions);
+  }
 );
 
 module.exports = router;

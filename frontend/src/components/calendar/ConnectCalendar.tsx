@@ -14,17 +14,23 @@ import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "../utils/LoadingModal";
 import { TimePreferenceString } from "../../classes/timePreference/TimePreferenceString";
+import type { Recipe } from "../../classes/recipe/Recipe";
 
-// TODO change requested days to have user input
 const REQUESTED_DAYS = 7;
 
 // Code adapted from https://developers.google.com/workspace/calendar/api/quickstart/js
 
 type GPConnectCalendarTypes = {
   onClick: () => void;
+  singleRecipe: boolean;
+  recipeInfo: Recipe | null;
 };
 
-const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
+const ConnectCalendar = ({
+  onClick,
+  singleRecipe,
+  recipeInfo,
+}: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC = `${calendarUrl}/discovery/v1/apis/calendar/v3/rest`;
@@ -36,12 +42,12 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [timeModalOpen, setTimeModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
   const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(
-    null,
+    null
   );
 
   // load on mount
@@ -79,24 +85,9 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
           if (resp.error !== undefined) {
             throw resp;
           }
-          setModalOpen(true);
+          setTimeModalOpen(true);
         },
       });
-    }
-    if (gapiInited && gisInited) {
-      const token = gapi.client.getToken();
-      if (token) {
-        setModalOpen(true);
-      }
-    }
-  }, [gapiInited, gisInited]);
-
-  useEffect(() => {
-    if (gapiInited && gisInited) {
-      const token = gapi.client.getToken();
-      if (token) {
-        setModalOpen(true);
-      }
     }
   }, [gapiInited, gisInited]);
 
@@ -111,29 +102,21 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
       tokenClientVar.current.requestAccessToken({ prompt: "consent" });
     } else {
       // Skip display of account chooser and consent dialog for an existing session.
-      setModalOpen(true);
-    }
-  }
-
-  function handleSignoutClick() {
-    const token = gapi.client.getToken();
-    if (token !== null) {
-      google.accounts.oauth2.revoke(token.access_token, () => {});
-      gapi.client.setToken(null);
+      setTimeModalOpen(true);
     }
   }
 
   async function getUserFreeTime(
     userPreferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
       const startDate = new Date();
       const endDate = new Date(
-        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
+        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
       );
       const response = await axios.get(
         `${calendarUrl}/calendar/v3/calendars/primary/events`,
@@ -147,7 +130,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
             timeMin: startDate.toISOString(),
             timeMax: endDate.toISOString(),
           },
-        },
+        }
       );
       const userEvents = response.data.items;
       // parse events to extract out only needed information
@@ -160,14 +143,26 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
         REQUESTED_DAYS,
       });
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
-      const recommendedEvents = await axios.post(
-        `${databaseUrl}/calendar/reccomendEvents`,
-        { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
-        axiosConfig,
-      );
-      // get back a list of possible options for each event (shopping + each recipe)
-      const eventOptions = recommendedEvents.data;
-      setEventOptions(eventOptions);
+      if (singleRecipe && recipeInfo) {
+        // suggest events for a single recipe
+        const recommendedEvents = await axios.post(
+          `${databaseUrl}/calendar/single/reccomendEvents`,
+          { parsedFreeTime, userPreferences, recipeInfo },
+          axiosConfig
+        );
+        const eventOptions = recommendedEvents.data;
+        setEventOptions(eventOptions);
+      } else {
+        // suggest events for all saved recipes
+        const recommendedEvents = await axios.post(
+          `${databaseUrl}/calendar/reccomendEvents`,
+          { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
+          axiosConfig
+        );
+        // get back a list of possible options for each event (shopping + each recipe)
+        const eventOptions = recommendedEvents.data;
+        setEventOptions(eventOptions);
+      }
       onClick();
       setLoading(false);
     } catch (err) {
@@ -179,7 +174,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const getUserTimePreferences = async (
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => {
     await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
   };
@@ -187,14 +182,18 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   return (
     <Box>
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
-        <Button onClick={handleSignoutClick}>Signout of Google</Button>
+        <Button onClick={handleAddToCalendarClick}>
+          {singleRecipe
+            ? "Add Recipe To Calendar"
+            : "Add All Recipes to Calendar!"}
+        </Button>
       </Box>
       <CalendarTimeModal
         editMode={false}
-        modalOpen={modalOpen}
-        toggleModal={() => setModalOpen((prev) => !prev)}
+        modalOpen={timeModalOpen}
+        toggleModal={() => setTimeModalOpen((prev) => !prev)}
         onSubmit={getUserTimePreferences}
+        singleRecipe={singleRecipe}
       />
       <LoadingModal modalOpen={loading} message={"Generating Schedule"} />
     </Box>
