@@ -30,11 +30,6 @@ type GPAccountInfoTypes = {
   diets: string[];
 };
 
-type GPAuthFormDataTypes = {
-  email: string;
-  password: string;
-};
-
 type GPIngredientDataTypes = {
   id: number;
   ingredientName: string;
@@ -114,7 +109,6 @@ type GPRecipeDiscoveryCategories = {
 
 export type {
   GPAccountInfoTypes,
-  GPAuthFormDataTypes,
   GPCurrentUserTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,

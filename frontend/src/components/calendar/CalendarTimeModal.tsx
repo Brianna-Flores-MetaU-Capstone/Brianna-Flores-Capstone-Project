@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import type {
-  GPPreferredBlockType,
   GPRecipeEventOptionType,
 } from "../../utils/types";
 import {

@@ -6,13 +6,10 @@ const recipeFiltersList = {
   GLUTEN_FREE: "glutenFree",
   VEGETARIAN: "vegetarian",
   VEGAN: "vegan",
-};
-type recipeFilterType =
-  | "all"
-  | "dairyFree"
-  | "glutenFree"
-  | "vegetarian"
-  | "vegan";
+} as const;
+
+type recipeFilterKeys = keyof typeof recipeFiltersList
+type recipeFilterType = (typeof recipeFiltersList)[recipeFilterKeys]
 
 class RecipeFilter {
   all: GPRecipeDataTypes[];
@@ -33,16 +30,20 @@ class RecipeFilter {
     return this.all;
   }
   get dairyFreeRecipes(): GPRecipeDataTypes[] {
-    return this.all;
+    return this.dairyFree;
   }
   get glutenFreeRecipes(): GPRecipeDataTypes[] {
-    return this.all;
+    return this.glutenFree;
   }
   get vegetarianRecipes(): GPRecipeDataTypes[] {
-    return this.all;
+    return this.vegetarian;
   }
   get veganRecipes(): GPRecipeDataTypes[] {
-    return this.all;
+    return this.vegan;
+  }
+
+  getFilteredList(filter: recipeFilterType) {
+    return this[filter]
   }
 
   setFilteredList(filter: recipeFilterType, value: GPRecipeDataTypes[]) {

@@ -1,5 +1,4 @@
 import type {
-  GPAuthFormDataTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPRecipeIngredientTypes,
@@ -7,6 +6,7 @@ import type {
 } from "./types";
 import axios from "axios";
 import { axiosConfig, fetchUserIngredientsHelper } from "./databaseHelpers";
+import { AuthFormData, type GPAuthFormType } from "../classes/authentication/AuthFormData";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -103,7 +103,7 @@ const estimateRecipeCost = async ({
   }
 };
 
-const validateInput = (formData: GPAuthFormDataTypes) => {
+const validateInput = (formData: AuthFormData) => {
   if (!formData.email || !formData.password) {
     return { type: "error", text: "Email and password are required" };
   }
@@ -119,12 +119,16 @@ const validateInput = (formData: GPAuthFormDataTypes) => {
 
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<GPAuthFormDataTypes>>
+  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>
 ) => {
   const credential = event.target.dataset
-    .credential as keyof GPAuthFormDataTypes;
+    .credential as GPAuthFormType;
   const value = event.target.value;
-  setFormData((prev) => ({ ...prev, [credential]: value }));
+  setFormData((prev) => {
+    const newAuth = new AuthFormData(prev.getEmail, prev.getPassword)
+    newAuth.setAuthField(credential, value)
+    return newAuth;
+  });
 };
 
 const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {

@@ -16,7 +16,6 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import {
   CenteredTitledListStyle,
-  ColumnOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
 } from "../../utils/UIStyle";
 

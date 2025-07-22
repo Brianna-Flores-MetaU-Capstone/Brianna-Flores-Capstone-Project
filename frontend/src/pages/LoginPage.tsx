@@ -2,7 +2,7 @@ import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
-import type { GPAuthFormDataTypes, GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types";
 import { validateUserToken } from "../utils/databaseHelpers";
 import AppHeader from "../components/utils/AppHeader";
 import ErrorState from "../components/utils/ErrorState";
@@ -10,19 +10,17 @@ import AuthForm from "../components/authentication/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
 import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
+import { AuthFormData } from "../classes/authentication/AuthFormData";
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState<GPAuthFormDataTypes>({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState<AuthFormData>(new AuthFormData());
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const navigate = useNavigate();
   const { setUser } = useUser();
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    signInWithEmailAndPassword(auth, formData.email, formData.password)
+    signInWithEmailAndPassword(auth, formData.getEmail, formData.getPassword)
       .then(async () => {
         const user = auth.currentUser;
         if (user) {
