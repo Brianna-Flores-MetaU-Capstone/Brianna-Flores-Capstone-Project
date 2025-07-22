@@ -50,7 +50,9 @@ const EventSummaryModal = ({
             renderItem={(event, index) => (
               <Box>
                 <Typography>{event.eventTitle}</Typography>
-                <Link key={index}>{event.eventLink}</Link>
+                <Typography>{event.getFormattedDate()}</Typography>
+                <Typography>{event.getFormattedTime()}</Typography>
+                <Link key={index} href={event.eventLink}>Take me there!</Link>
               </Box>
             )}
             listItemsStyle={CenteredTitledListStyle}

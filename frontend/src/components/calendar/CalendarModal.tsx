@@ -31,7 +31,7 @@ type GPCalendarModalTypes = {
 
 const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarModalTypes) => {
   const { eventOptions } = useEventRec();
-  const { selectedEvents } = useSelectedEvents();
+  const { selectedEvents, setSelectedEvents } = useSelectedEvents();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
 
@@ -78,6 +78,8 @@ const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarM
         createdEvents = [...createdEvents, newEvent];
       }
     }
+    // reset selected events to prevent multiple events being added
+    setSelectedEvents([])
     setCreatedEvents(createdEvents)
     setLoading(false);
     toggleModal();
