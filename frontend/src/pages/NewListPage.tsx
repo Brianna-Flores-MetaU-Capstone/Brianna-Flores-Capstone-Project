@@ -37,8 +37,8 @@ const NewListPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
-  const [createdEvents, setCreatedEvents] = useState<CalendarEvent[]>([])
-  const [eventSummaryModalOpen, setEventSummaryModalOpen] = useState(false)
+  const [createdEvents, setCreatedEvents] = useState<CalendarEvent[]>([]);
+  const [eventSummaryModalOpen, setEventSummaryModalOpen] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -121,9 +121,9 @@ const NewListPage = () => {
   };
 
   const handleEventsCreated = (createdEvents: CalendarEvent[]) => {
-    setCreatedEvents(createdEvents)
-    setEventSummaryModalOpen(true)
-  }
+    setCreatedEvents(createdEvents);
+    setEventSummaryModalOpen(true);
+  };
 
   return (
     <Box>
@@ -195,8 +195,10 @@ const NewListPage = () => {
       <EventSummaryModal
         events={createdEvents}
         modalOpen={eventSummaryModalOpen}
-        toggleModal={() => setEventSummaryModalOpen((prev) => !prev)}
-         />
+        toggleModal={() => {
+          setEventSummaryModalOpen((prev) => !prev);
+        }}
+      />
     </Box>
   );
 };

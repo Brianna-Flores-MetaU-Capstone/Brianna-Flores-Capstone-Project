@@ -79,7 +79,6 @@ const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarM
       }
     }
     // reset selected events to prevent multiple events being added
-    setSelectedEvents([])
     setCreatedEvents(createdEvents)
     setLoading(false);
     toggleModal();

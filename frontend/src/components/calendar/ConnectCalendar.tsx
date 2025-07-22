@@ -15,6 +15,7 @@ import CalendarTimeModal from "./CalendarTimeModal";
 import LoadingModal from "../utils/LoadingModal";
 import { TimePreferenceString } from "../../classes/calendar/TimePreferenceString";
 import type { Recipe } from "../../classes/recipe/Recipe";
+import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 
 const REQUESTED_DAYS = 7;
 
@@ -32,6 +33,7 @@ const ConnectCalendar = ({
   recipeInfo,
 }: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
+  const { setSelectedEvents } = useSelectedEvents();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC = `${calendarUrl}/discovery/v1/apis/calendar/v3/rest`;
 
@@ -92,6 +94,8 @@ const ConnectCalendar = ({
   }, [gapiInited, gisInited]);
 
   function handleAddToCalendarClick() {
+    // reset selected events to ensure clean slate each time
+    setSelectedEvents([]);
     if (!tokenClientVar.current) {
       return;
     }

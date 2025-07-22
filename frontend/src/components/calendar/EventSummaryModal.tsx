@@ -35,7 +35,6 @@ const EventSummaryModal = ({
     >
       <ModalDialog maxWidth={500} sx={GPModalStyle}>
         <ModalClose
-          onClick={toggleModal}
           variant="plain"
           sx={{ zIndex: 2, m: 1 }}
         />
