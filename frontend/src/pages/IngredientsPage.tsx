@@ -15,7 +15,7 @@ import {
   deleteIngredient,
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
-import { ColumnOverflowTitledListStyle } from "../utils/style/UIStyle";
+import { ColumnNoOverflowTitledListStyle } from "../utils/style/UIStyle";
 
 const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
@@ -59,7 +59,7 @@ const IngredientsPage = () => {
     <Sheet>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <Button onClick={addIngredientClick}>Add Ingredient</Button>
+        <Button onClick={addIngredientClick} sx={{mb: 2}}>Add Ingredient</Button>
         <TitledListView
           headerList={[
             { title: "Ingredient", spacing: 4 },
@@ -78,7 +78,7 @@ const IngredientsPage = () => {
               onDelete={() => handleDeleteIngredient(ingredient)}
             />
           )}
-          listItemsStyle={ColumnOverflowTitledListStyle}
+          listItemsStyle={ColumnNoOverflowTitledListStyle}
         />
         {message && (
           <ErrorState error={message.error} message={message.message} />

@@ -132,7 +132,7 @@ const deleteIngredient = async ({
   }
 };
 
-type GPAddIngredientTypes = GPSetMessageType & {
+type GPAddIngredientTypes =  {
   userId: string;
   newIngredientData: GPIngredientDataTypes;
 };
@@ -140,7 +140,6 @@ type GPAddIngredientTypes = GPSetMessageType & {
 const addIngredientDatabase = async ({
   userId,
   newIngredientData,
-  setMessage,
 }: GPAddIngredientTypes) => {
   try {
     await axios.post(
@@ -148,9 +147,9 @@ const addIngredientDatabase = async ({
       newIngredientData,
       axiosConfig,
     );
-    setMessage({ error: false, message: "Sucessfully created ingredient" });
+    return true;
   } catch (error) {
-    setMessage({ error: true, message: "Failed to create ingredient" });
+    return false;
   }
 };
 
