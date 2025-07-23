@@ -44,6 +44,26 @@ router.post(
   }
 );
 
+router.get("/calendarEvents", isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.session.userId;
+  try {
+    const userCalendarEvents = await prisma.calendarEvent.findMany({
+      where: {
+        userId: userId
+      }, 
+      include: {
+        recipe: true
+      }
+    })
+    if (!userCalendarEvents) {
+      res.status(404).send("Error, calendar events not found");
+    }
+    res.json(userCalendarEvents)
+  } catch (error) {
+    res.status(500).send("Server Error")
+  }
+})
+
 router.post(
   "/reccomendEvents",
   isAuthenticated,

@@ -12,7 +12,7 @@ import {
   recipeFiltersList,
   type recipeFilterType,
 } from "../classes/filters/RecipeFilters";
-import { Recipe } from "../classes/recipe/Recipe";
+import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -388,7 +388,7 @@ const saveCalendarEvent = async ({
   try {
     const savedCalendarEvent = await axios.post(
       `${databaseUrl}/calendar/createEvent`,
-      {selectedRecipe, ...calendarEvent},
+      { selectedRecipe, ...calendarEvent },
       axiosConfig
     );
     return savedCalendarEvent.data;

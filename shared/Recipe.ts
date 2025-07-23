@@ -1,4 +1,4 @@
-import type { GPIngredientDataTypes } from "../../utils/types";
+import type { GPIngredientDataTypes } from "../frontend/src/utils/types";
 
 class Recipe {
   readonly id: number;
@@ -40,7 +40,7 @@ class Recipe {
     id?: number,
     editingAuthorName?: string,
     ingredientCostInfo?: GPIngredientDataTypes[],
-    totalCost?: number,
+    totalCost?: number
   ) {
     this.apiId = apiId;
     this.originalSource = originalSource;

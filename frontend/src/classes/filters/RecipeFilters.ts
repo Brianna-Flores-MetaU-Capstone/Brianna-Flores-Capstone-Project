@@ -1,4 +1,4 @@
-import type { Recipe } from "../recipe/Recipe";
+import type { Recipe } from "../../../../shared/Recipe";
 
 const recipeFiltersList = {
   ALL: "all",

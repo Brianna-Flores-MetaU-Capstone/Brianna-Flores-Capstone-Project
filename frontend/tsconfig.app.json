@@ -26,6 +26,7 @@
   "include": [
     "src",
     "../backend/types/convert-units.d.ts",
-    "../backend/classes/TimeBlock.ts"
+    "../backend/classes/TimeBlock.ts",
+    "../shared/Recipe.ts"
   ]
 }

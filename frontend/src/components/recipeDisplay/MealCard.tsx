@@ -20,7 +20,7 @@ import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../../utils/utils";
 import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types";
-import { Recipe } from "../../classes/recipe/Recipe";
+import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
 import { CARD_WIDTH } from "../../utils/UIStyle";
 
@@ -32,7 +32,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -65,7 +65,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);

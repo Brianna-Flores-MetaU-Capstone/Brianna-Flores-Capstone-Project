@@ -21,7 +21,7 @@ import {
   ColumnOverflowTitledListStyle,
   RowOverflowTitledListStyle,
 } from "../utils/UIStyle";
-import { Recipe } from "../classes/recipe/Recipe";
+import { Recipe } from "../../../shared/Recipe";
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();

@@ -8,7 +8,7 @@ const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
 
 import TimeBlock from "../classes/TimeBlock";
-import { Recipe } from "../../frontend/src/classes/recipe/Recipe";
+import { Recipe } from "../../shared/Recipe";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
