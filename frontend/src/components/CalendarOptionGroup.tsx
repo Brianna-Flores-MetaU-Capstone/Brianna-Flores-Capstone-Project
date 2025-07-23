@@ -1,6 +1,6 @@
 import { Box, Typography, IconButton } from "@mui/joy";
 import type { GPRecipeEventOptionType } from "../utils/types";
-import CalendarEventOption from "./CalendarEventOption";
+import CalendarEventCard from "./CalendarEventCard";
 import TitledListView from "./TitledListView";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
@@ -32,8 +32,8 @@ const CalendarOptionGroup = ({
       </Box>
       <TitledListView
         list={eventOptions}
-        renderItem={(event) => (
-          <CalendarEventOption key={event.recipe.apiId} eventOption={event} groupNum={groupNum - 1}/>
+        renderItem={(event, index) => (
+          <CalendarEventCard key={index} eventOption={event} groupNum={groupNum - 1}/>
         )}
         flexDirectionRow
       />

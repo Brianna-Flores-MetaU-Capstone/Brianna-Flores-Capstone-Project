@@ -12,13 +12,14 @@ import {
   getMultipleScheduleOptions,
 } from "../utils/calendarUtils";
 const SHOPPING_TIME = 60;
+const NUM_SCHEDULE_OPTIONS = 3
 
 router.post(
   "/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { parsedFreeTime, userPreferences } = req.body;
+    const { parsedFreeTime, userPreferences, singleDayPrep } = req.body;
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
@@ -43,6 +44,9 @@ router.post(
       const recipeScheduleOptions = getMultipleScheduleOptions({
         userFreeTime: parsedFreeTime,
         userRecipes: userSelectedRecipes,
+        userPreferences: userPreferences, 
+        singleDayPrep: singleDayPrep,
+        numOptions: NUM_SCHEDULE_OPTIONS
       });
       res.json(recipeScheduleOptions);
     } catch (error) {
