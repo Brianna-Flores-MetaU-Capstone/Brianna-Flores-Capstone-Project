@@ -1,11 +1,12 @@
 import type {
   GPAuthFormDataTypes,
   GPIngredientDataTypes,
+  GPRecipeDataTypes,
   GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes,
+  GPErrorMessageTypes,
 } from "./types";
 import axios from "axios";
-import { axiosConfig } from "./databaseHelpers";
+import { axiosConfig, fetchUserIngredientsHelper } from "./databaseHelpers";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
@@ -104,16 +105,41 @@ const handleAuthInputChange = (
   setFormData((prev) => ({ ...prev, [credential]: value }));
 };
 
-const parseGroceryListDepartments = (
-  groceryList: GPIngredientWithCostInfoTypes[]
-) => {
+const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {
   let departments: string[] = [];
   for (const grocery of groceryList) {
-    if (!departments.includes(grocery.ingredient.department)) {
-      departments = [...departments, grocery.ingredient.department];
+    if (!departments.includes(grocery.department)) {
+      departments = [...departments, grocery.department];
     }
   }
   return departments;
+};
+
+type GPUpdateRecipePricingTypes = {
+  setMessage: (
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+  ) => void;
+  recipe: GPRecipeDataTypes;
+};
+
+const updateRecipeWithPricing = async ({
+  setMessage,
+  recipe,
+}: GPUpdateRecipePricingTypes) => {
+  const ownedIngredients = await fetchUserIngredientsHelper({
+    setMessage: setMessage,
+  });
+  const estimatedRecipeCostInfo = await estimateRecipeCost({
+    ownedIngredients,
+    recipeIngredients: recipe.ingredients,
+  });
+  // update list of meal data
+  const updatedRecipe = {
+    ...recipe,
+    ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo ?? 0,
+    totalCost: estimatedRecipeCostInfo.estimatedCost,
+  };
+  return updatedRecipe;
 };
 
 export {
@@ -122,4 +148,5 @@ export {
   handleAuthInputChange,
   parseGroceryListDepartments,
   estimateRecipeCost,
+  updateRecipeWithPricing,
 };

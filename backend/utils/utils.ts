@@ -169,14 +169,10 @@ type GPEstimateListCostTypes = {
   ingredientsToPurchase: GPRecipeIngredientTypes[];
 };
 
-type GPIngredientCostInfoTypes = {
-  ingredient: GPRecipeIngredientTypes;
-  ingredientApiInfo: { ingredientCost: number; ingredientAmount: number };
-};
 const estimateListCost = async ({
   ingredientsToPurchase,
 }: GPEstimateListCostTypes) => {
-  let ingredientCostInfo: GPIngredientCostInfoTypes[] = [];
+  let ingredientCostInfo: GPIngredientDataTypes[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
     const ingredientApiInfo = await getCostForAmountOfIngredient({
@@ -187,8 +183,9 @@ const estimateListCost = async ({
     ingredientCostInfo = [
       ...ingredientCostInfo,
       {
-        ingredient: { ...ingredient, isChecked: false },
-        ingredientApiInfo,
+        ...ingredient, 
+        isChecked: false,
+        ...ingredientApiInfo,
       },
     ];
   }
@@ -205,9 +202,9 @@ const getCostForAmountOfIngredient = async ({
   const searchResults = await searchWalmart(ingredient.ingredientName);
   // get the cost of the first result (most rellevant)
   const ingredientCost = searchResults?.items[0].salePrice ?? 0.0;
-  const ingredientAmount = searchResults?.items[0]?.size ?? "Not Found";
+  const ingredientCostUnit = searchResults?.items[0]?.size ?? "Not Found";
   // TODO implement check for item[0].size of item using convert quantity
-  return { ingredientCost, ingredientAmount };
+  return { ingredientCost, ingredientCostUnit };
 };
 
 export {
@@ -216,5 +213,4 @@ export {
   quantityNeeded,
   getListOfMissingIngredients,
   estimateListCost,
-  type GPIngredientCostInfoTypes,
 };

@@ -1,7 +1,6 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPIngredientWithCostInfoTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
@@ -25,7 +24,7 @@ const LIST_HEIGHT = 250
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientWithCostInfoTypes[]
+    GPIngredientDataTypes[]
   >([]);
   const [userIngredientList, setUserIngredientList] = useState<
     GPIngredientDataTypes[]
@@ -77,7 +76,7 @@ const Homepage = () => {
               renderItem={(item, index) => (
                 <Ingredient
                   key={index}
-                  ingredient={item?.ingredient}
+                  ingredient={item}
                   presentGroceryCheck={true}
                   presentExpiration={false}
                   presentButtons={false}
@@ -91,11 +90,14 @@ const Homepage = () => {
           <TitledListView
             headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
             itemsList={selectedRecipes}
-            renderItem={(meal) => (
+            renderItem={(meal, index) => (
               <MealCard
                 key={meal.apiId}
+                index={index}
                 onMealCardClick={() => navigate("/new-list")}
                 parsedMealData={meal}
+                setMessage={setMessage}
+                selected={false}
               />
             )}
             flexDirectionRow={true}
