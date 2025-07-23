@@ -16,6 +16,7 @@ import LoadingModal from "../utils/LoadingModal";
 import { TimePreferenceString } from "../../classes/calendar/TimePreferenceString";
 import type { Recipe } from "../../../../shared/Recipe";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
+import { ZERO_OUT_START_DATE } from "../../utils/constants";
 
 const REQUESTED_DAYS = 7;
 
@@ -119,7 +120,10 @@ const ConnectCalendar = ({
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
-      const startDate = new Date();
+      let startDate = new Date(`${preferredStartDate}${ZERO_OUT_START_DATE}`);
+      if (startDate.toLocaleDateString() === new Date().toLocaleDateString()) {
+        startDate = new Date()
+      }
       const endDate = new Date(
         startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
       );
