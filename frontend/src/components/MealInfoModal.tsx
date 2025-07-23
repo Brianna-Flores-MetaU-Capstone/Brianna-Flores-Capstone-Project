@@ -9,8 +9,10 @@ import {
   ListItem,
   ListItemContent,
   Box,
+  Link,
   AspectRatio,
 } from "@mui/joy";
+import LinkIcon from '@mui/icons-material/Link';
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
@@ -43,15 +45,16 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
             <Typography>Servings: {recipeInfo?.servings}</Typography>
             <DietsAndIntolerances recipeInfo={recipeInfo} />
+            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon/>}>Recipe link</Link>
           </Box>
         </Box>
         <Box>
           <Typography level="h3">Ingredients</Typography>
           <List marker="circle">
-            {(recipeInfo?.ingredients ?? []).map((ingredient) => {
+            {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
               return (
                 <ListItem
-                  key={ingredient.id}
+                  key={index}
                 >
                   <ListItemContent
                     sx={{ display: "flex", justifyContent: "space-between" }}

@@ -8,6 +8,13 @@ const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 import { isAuthenticated } from "../utils/authMiddleware";
+import { convertUnits } from "../utils/utils";
+
+router.post("/convertUnits", isAuthenticated, async (req: Request, res: Response) => {
+  const { convertTo, converting } = req.body;
+  const converted = convertUnits({convertTo, converting});
+  res.json(converted)
+})
 
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;

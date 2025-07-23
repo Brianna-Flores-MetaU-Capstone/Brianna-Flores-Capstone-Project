@@ -3,11 +3,12 @@ import type {
   GPRecipeDataTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
-  GPTimeBlockType,
 } from "../../frontend/src/utils/types";
 
 const TO_MILLISECONDS = 1000 * 60;
-const TIME_BLOCK_INCREMENT = 15
+const TIME_BLOCK_INCREMENT = 15;
+
+import TimeBlock from "./TimeBlockClass";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
@@ -66,8 +67,8 @@ const getMealPrepTimeOptions = ({
   }
   // heuristic: 70% of total cook time
   const estimatedCookTime = sumAllCookTimes * 0.7;
-  let preferedOptions: GPTimeBlockType[] = [];
-  let fallbackOptions: GPTimeBlockType[] = [];
+  let preferedOptions: TimeBlock[] = [];
+  let fallbackOptions: TimeBlock[] = [];
   for (const freeBlock of userFreeTime) {
     const timeOptions = fitsUserPreferences({
       freeBlock,
@@ -121,8 +122,8 @@ const getRecipeTimeOptions = ({
   currentDay.setDate(currentDay.getDate() + 1);
   currentDay.setHours(0, 0, 0, 0);
   for (const recipe of userRecipes) {
-    let fallbackOptions: GPTimeBlockType[] = [];
-    let preferredOptions: GPTimeBlockType[] = [];
+    let fallbackOptions: TimeBlock[] = [];
+    let preferredOptions: TimeBlock[] = [];
     for (const freeBlock of userFreeTime) {
       let endTime = new Date(freeBlock.end);
       if (endTime.getTime() >= currentDay.getTime()) {
@@ -173,21 +174,22 @@ type GPAnyBlockTypes = {
 };
 
 const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   let freeBlockStart = startAsDate.getTime();
   const freeBlockEnd = endAsDate.getTime();
-  let optionArray: GPTimeBlockType[] = [];
+  let optionArray: TimeBlock[] = [];
 
-  while (freeBlockStart + readyInMinutes * 1000 * 60 <= freeBlockEnd) {
+  while (freeBlockStart + readyInMilliseconds <= freeBlockEnd) {
     optionArray = [
       ...optionArray,
-      {
-        start: new Date(freeBlockStart),
-        end: new Date(freeBlockStart + readyInMinutes * 1000 * 60),
-      },
+      new TimeBlock(
+        new Date(freeBlockStart),
+        new Date(freeBlockStart + readyInMilliseconds)
+      ),
     ];
-    freeBlockStart += 15 * 60 * 1000;
+    freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
     if (optionArray.length >= 2) {
       break;
     }
@@ -206,12 +208,10 @@ const fitsUserPreferences = ({
   readyInMinutes,
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
-  // loop through user preferences
-  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS;
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
-  const freeBlockStart = startAsDate.getTime();
-  const freeBlockEnd = endAsDate.getTime();
+  const freeTimeBlock = new TimeBlock(startAsDate, endAsDate);
   for (const preference of userPreferences) {
     const tempPrefStart = new Date(freeBlock.start);
     tempPrefStart.setHours(0, 0, 0, 0);
@@ -220,7 +220,6 @@ const fitsUserPreferences = ({
       (parseInt(preference.start.substring(0, 2)) * 60 +
         parseInt(preference.start.substring(3))) *
         TO_MILLISECONDS;
-
     const tempPrefEnd = new Date(freeBlock.end);
     tempPrefEnd.setHours(0, 0, 0, 0);
     const preferredEnd =
@@ -228,54 +227,28 @@ const fitsUserPreferences = ({
       (parseInt(preference.end.substring(0, 2)) * 60 +
         parseInt(preference.end.substring(3))) *
         TO_MILLISECONDS;
-    if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
-      continue;
-    }
-    let start = 0;
-    let end = 0;
-    if (freeBlockStart <= preferredStart && freeBlockEnd >= preferredEnd) {
-      // preferred block completely within free block
-      start = preferredStart;
-      end = preferredEnd;
-    }
-    if (preferredStart <= freeBlockStart && preferredEnd >= freeBlockEnd) {
-      // free block is completely within prefered block
-      start = freeBlockStart;
-      end = freeBlockEnd;
-    }
-    if (
-      freeBlockStart < preferredStart &&
-      freeBlockEnd > preferredStart &&
-      freeBlockEnd < preferredEnd
-    ) {
-      // free block starts before prefered block and ends within prefered block
-      start = preferredStart;
-      end = freeBlockEnd;
-    }
-    if (
-      freeBlockStart > preferredStart &&
-      freeBlockStart < preferredEnd &&
-      freeBlockEnd > preferredEnd
-    ) {
-      // free block starts within prefered block and ends after it
-      start = freeBlockStart;
-      end = preferredEnd;
-    }
-    if (end - start >= readyInMilliseconds) {
+    
+    const userPreferenceTimeBlock = new TimeBlock(
+      new Date(preferredStart),
+      new Date(preferredEnd)
+    );
+    const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
+
+    if (overlap.end - overlap.start > readyInMilliseconds) {
       let optionArray = [
-        {
-          start: new Date(start),
-          end: new Date(start + readyInMilliseconds),
-        },
+        new TimeBlock(
+          new Date(overlap.start),
+          new Date(overlap.start + readyInMilliseconds)
+        ),
       ];
-      start = start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
-      if (end - start >= readyInMilliseconds) {
+      const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
+      if (overlap.end - newStart >= readyInMilliseconds) {
         optionArray = [
           ...optionArray,
-          {
-            start: new Date(start),
-            end: new Date(start + readyInMilliseconds),
-          },
+          new TimeBlock(
+            new Date(newStart),
+            new Date(newStart + readyInMilliseconds)
+          ),
         ];
       }
       return optionArray;
