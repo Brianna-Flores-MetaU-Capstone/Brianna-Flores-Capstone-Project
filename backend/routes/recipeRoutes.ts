@@ -67,6 +67,9 @@ router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
             calendarEvents: {
               where: {
                 userId: userId,
+                start: {
+                  gte: new Date()
+                }
               },
             },
           },

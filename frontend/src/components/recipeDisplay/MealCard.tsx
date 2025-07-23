@@ -9,6 +9,7 @@ import {
   Tooltip,
   IconButton,
   AspectRatio,
+  Link
 } from "@mui/joy";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -23,6 +24,8 @@ import type { GPErrorMessageTypes } from "../../utils/types";
 import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
 import { CARD_WIDTH } from "../../utils/UIStyle";
+import LinkIcon from '@mui/icons-material/Link';
+
 
 type GPMealCardProps = {
   index: number;
@@ -169,7 +172,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {parsedMealData.calendarEvents.length > 0 ? (
                 <Box>
-                  <Typography level="h4">Scheduled For</Typography>
+                  <Link endDecorator={<LinkIcon/>} href={parsedMealData.calendarEvents[0].eventLink} level="h4">Scheduled For</Link>
                   <Typography>{parsedMealData.calendarEvents[0].getFormattedDate()}</Typography>
                   <Typography>
                     {parsedMealData.calendarEvents[0].getFormattedTime()}
