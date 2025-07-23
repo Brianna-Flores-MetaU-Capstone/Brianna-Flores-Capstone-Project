@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import type { GPRecipeEventOptionType } from "../utils/types";
 import {
   Modal,
   ModalClose,
@@ -13,6 +11,7 @@ import TitledListView from "./TitledListView";
 import { useEventRec } from "../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../contexts/SelectedEventsContext";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -38,8 +37,8 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
         <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
         <DialogContent sx={{ my: 4 }}>
           <TitledListView
-            headerList={[{ title: "Event Option Groups", spacing: 12 }]}
-            list={eventOptions ?? []}
+            headerList={[{ title: "Event Option Groups", spacing: MUI_GRID_FULL_SPACE }]}
+            itemsList={eventOptions ?? []}
             renderItem={(optionGroup, index) => (
               <CalendarOptionGroup
                 key={index}
@@ -51,7 +50,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
           />
         </DialogContent>
           <IconButton
-            aria-label="Accept Event Group Reccomendation"
+            aria-label="Accept Event Group Recommendation"
             variant="outlined"
             color="success"
             size="lg"

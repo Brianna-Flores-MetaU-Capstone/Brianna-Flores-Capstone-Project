@@ -35,7 +35,7 @@ router.post(
       }
       // now we have the users list of recipes
       const userSelectedRecipes = user.recipes;
-      // determine reccomended time slots to shop
+      // determine recommended time slots to shop
       // approximate shopping time to be 1 hour
       const shoppingTimeOptions = getShoppingTimeOptions({
         userFreeTime: parsedFreeTime,

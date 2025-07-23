@@ -4,6 +4,7 @@ import { Box, Button } from "@mui/joy";
 import { parseUserEvents } from "../utils/calendarUtils";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 
@@ -29,11 +30,11 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
   const DISCOVERY_DOC =
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+    `${calendarUrl}/discovery/v1/apis/calendar/v3/rest`;
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+  const SCOPES = `${calendarUrl}/auth/calendar.readonly`;
 
   const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID;
   const API_KEY = import.meta.env.VITE_GCAL_API_KEY;
@@ -132,7 +133,7 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
         startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
       );
       const response = await axios.get(
-        "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+        `${calendarUrl}/calendar/v3/calendars/primary/events`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -156,13 +157,13 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
         REQUESTED_DAYS,
       });
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
-      const reccomendedEvents = await axios.post(
+      const recommendedEvents = await axios.post(
         `${databaseUrl}/calendar/reccomendEvents`,
         { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
         axiosConfig
       );
       // get back a list of possible options for each event (shopping + each recipe)
-      const eventOptions = reccomendedEvents.data;
+      const eventOptions = recommendedEvents.data;
       setEventOptions(eventOptions);
       onClick();
       // TODO set state variable held within new-list-page to hold the list of generated event options

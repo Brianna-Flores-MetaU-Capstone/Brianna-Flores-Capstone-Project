@@ -139,4 +139,7 @@ const GPCenteredBoxStyle = {
   gap: 3,
 };
 
-export { GPModalStyle, GPCenteredBoxStyle, theme };
+const MUI_GRID_FULL_SPACE = 12
+
+
+export { GPModalStyle, GPCenteredBoxStyle, theme, MUI_GRID_FULL_SPACE };

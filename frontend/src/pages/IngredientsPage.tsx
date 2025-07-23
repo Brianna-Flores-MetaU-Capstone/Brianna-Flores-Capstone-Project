@@ -62,7 +62,7 @@ const IngredientsPage = () => {
         <Button onClick={addIngredientClick}>Add Ingredient</Button>
         <TitledListView
           headerList={[{title: "Ingredient", spacing: 4}, {title: "Quantity", spacing: 3}, {title: "Expiration", spacing: 5}]}
-          list={userIngredients}
+          itemsList={userIngredients}
           renderItem={(ingredient) => (
             <Ingredient
               key={uuidv4()}

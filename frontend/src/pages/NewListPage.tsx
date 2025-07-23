@@ -23,6 +23,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
+import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -120,8 +121,8 @@ const NewListPage = () => {
         </Box>
         <Box>
           <TitledListView
-            headerList={[{ title: "Selected Meals", spacing: 12 }]}
-            list={selectedRecipes}
+            headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
+            itemsList={selectedRecipes}
             renderItem={(meal) => (
               <MealCard
                 key={meal.apiId}
