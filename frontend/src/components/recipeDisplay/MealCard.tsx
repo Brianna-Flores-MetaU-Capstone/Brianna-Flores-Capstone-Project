@@ -167,11 +167,21 @@ const MealCard: React.FC<GPMealCardProps> = ({
           <Button onClick={() => onMealCardClick()}>View Recipe Details</Button>
           {toggleCalendarTimeModal && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <ConnectCalendar
-                onClick={toggleCalendarTimeModal}
-                singleRecipe={true}
-                recipeInfo={parsedMealData}
-              />
+              {parsedMealData.calendarEvents.length > 0 ? (
+                <Box>
+                  <Typography level="h4">Scheduled For</Typography>
+                  <Typography>{parsedMealData.calendarEvents[0].getFormattedDate()}</Typography>
+                  <Typography>
+                    {parsedMealData.calendarEvents[0].getFormattedTime()}
+                  </Typography>
+                </Box>
+              ) : (
+                <ConnectCalendar
+                  onClick={toggleCalendarTimeModal}
+                  singleRecipe={true}
+                  recipeInfo={parsedMealData}
+                />
+              )}
               <IconButton
                 color="primary"
                 variant="plain"

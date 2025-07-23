@@ -1,3 +1,4 @@
+import type { CalendarEvent } from "../frontend/src/classes/calendar/CalendarEvent";
 import type { GPIngredientDataTypes } from "../frontend/src/utils/types";
 
 class Recipe {
@@ -20,6 +21,7 @@ class Recipe {
   readonly recipeTags: string[];
   ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
+  calendarEvents: CalendarEvent[];
 
   constructor(
     apiId: number,
@@ -40,7 +42,8 @@ class Recipe {
     id?: number,
     editingAuthorName?: string,
     ingredientCostInfo?: GPIngredientDataTypes[],
-    totalCost?: number
+    totalCost?: number,
+    calendarEvents?: CalendarEvent[]
   ) {
     this.apiId = apiId;
     this.originalSource = originalSource;
@@ -61,6 +64,7 @@ class Recipe {
     this.editingAuthorId = editingAuthorId ?? null;
     this.ingredientCostInfo = ingredientCostInfo ?? [];
     this.totalCost = totalCost ?? 0;
+    this.calendarEvents = calendarEvents ?? [];
   }
 
   set setIngredientCostInfo(value: GPIngredientDataTypes[]) {

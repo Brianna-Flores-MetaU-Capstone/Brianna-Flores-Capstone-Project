@@ -189,10 +189,42 @@ const fetchRecipes = async ({
       `${databaseUrl}/recipes/${recipeGroup}`,
       axiosConfig
     );
+    const recipesWithCalendarInfo = response.data.map((recipe: Recipe) => {
+      return new Recipe(
+        recipe.apiId,
+        recipe.originalSource,
+        recipe.recipeTitle,
+        recipe.previewImage,
+        recipe.servings,
+        recipe.ingredients,
+        recipe.instructions,
+        recipe.sourceUrl,
+        recipe.readyInMinutes,
+        recipe.vegetarian,
+        recipe.vegan,
+        recipe.glutenFree,
+        recipe.dairyFree,
+        recipe.recipeTags,
+        recipe.editingAuthorId,
+        recipe.id,
+        recipe.editingAuthorName,
+        recipe.ingredientCostInfo,
+        recipe.totalCost,
+        recipe.calendarEvents.map(
+          (eventInfo) =>
+            new CalendarEvent(
+              eventInfo.eventTitle,
+              eventInfo.start.toString(),
+              eventInfo.end.toString(),
+              eventInfo.eventLink
+            )
+        )
+      );
+    });
     if (setRecipes) {
-      setRecipes(response.data);
+      setRecipes(recipesWithCalendarInfo);
     }
-    return response.data;
+    return recipesWithCalendarInfo;
   } catch (error) {
     setMessage({ error: true, message: "Failed to fetch user recipes" });
   }
