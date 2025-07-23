@@ -10,7 +10,6 @@ import { PreviewConstants } from "../utils/constants";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
 import Ingredient from "../components/Ingredient";
 import MealCard from "../components/MealCard";
-import { v4 as uuidv4 } from "uuid";
 import {
   fetchGroceryList,
   fetchUserIngredientsHelper,
@@ -59,9 +58,9 @@ const Homepage = () => {
             <TitledListView
               headerList={[{ title: PreviewConstants.INGREDIENT, spacing: MUI_GRID_FULL_SPACE }]}
               itemsList={userIngredientList}
-              renderItem={(ingredient) => (
+              renderItem={(ingredient, index) => (
                 <Ingredient
-                  key={uuidv4()}
+                  key={index}
                   ingredient={ingredient}
                   presentGroceryCheck={false}
                   presentExpiration={false}
@@ -75,9 +74,9 @@ const Homepage = () => {
             <TitledListView
               headerList={[{ title: PreviewConstants.GROCERY, spacing: MUI_GRID_FULL_SPACE }]}
               itemsList={userGroceryList}
-              renderItem={(item) => (
+              renderItem={(item, index) => (
                 <Ingredient
-                  key={uuidv4()}
+                  key={index}
                   ingredient={item?.ingredient}
                   presentGroceryCheck={true}
                   presentExpiration={false}

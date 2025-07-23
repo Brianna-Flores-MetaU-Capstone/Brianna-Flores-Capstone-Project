@@ -93,6 +93,7 @@ type GPPrepBlockType = {
   readyInMinutes: number;
   servings: number;
   previewImage: string;
+  sourceUrl: string
 }
 
 type GPRecipeEventOptionType = {
