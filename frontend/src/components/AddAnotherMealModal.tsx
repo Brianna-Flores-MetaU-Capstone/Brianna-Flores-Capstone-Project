@@ -130,7 +130,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           (prev) =>
             prev +
             GROUP_OF_DISPLAYED_CARDS -
-            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS),
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS)
         );
       }
     }
@@ -168,7 +168,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
       );
     }
   };
@@ -185,7 +185,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
         // find index of recipe in meal results so we can also update the recipe information there too
         const index = apiMealResults.findIndex(
-          (element) => element.apiId === recipe.apiId,
+          (element) => element.apiId === recipe.apiId
         );
         handleUpdateRecipeInfo(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
@@ -241,7 +241,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     <Switch
                       checked={usePreferences}
                       onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>,
+                        event: React.ChangeEvent<HTMLInputElement>
                       ) => {
                         setUsePreferences(event.target.checked);
                       }}
@@ -282,7 +282,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   onSelectRecipe={onSelectRecipe}
                   onLoadRecipeCost={handleUpdateRecipeInfo}
                   selectedToCompare={recipesToCompare.some(
-                    (recipe) => recipe.apiId === meal.apiId,
+                    (recipe) => recipe.apiId === meal.apiId
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
                 />

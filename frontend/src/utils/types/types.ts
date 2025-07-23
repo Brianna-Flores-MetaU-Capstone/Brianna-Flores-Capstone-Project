@@ -81,14 +81,6 @@ type GPUserEventTypes = {
   end: Date;
 };
 
-type GPPrepBlockType = {
-  recipeTitle: string;
-  readyInMinutes: number;
-  servings: number;
-  previewImage: string;
-  sourceUrl: string;
-};
-
 type GPRecipeEventOptionType = {
   name: string;
   timeOptions: TimeBlock[];

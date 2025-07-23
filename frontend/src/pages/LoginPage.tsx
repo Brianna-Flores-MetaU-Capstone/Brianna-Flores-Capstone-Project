@@ -11,6 +11,8 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import { AuthFormData } from "../classes/authentication/AuthFormData";
+import axios from "axios";
+const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<AuthFormData>(new AuthFormData());
@@ -26,8 +28,18 @@ const LoginPage = () => {
         if (user) {
           const userData = await validateUserToken(user);
           if (userData) {
-            setUser(userData);
-            setMessage({ error: false, message: "Successfully logged in!" });
+            try {
+              const userExtendedData = await axios.get(`${databaseUrl}/me`, {
+                withCredentials: true,
+              });
+              if (userExtendedData.data.id) {
+                setUser(userExtendedData.data);
+              }
+              setMessage({ error: false, message: "Successfully logged in!" });
+            } catch (error) {
+              setUser(null);
+              setMessage({ error: true, message: "Error saving login" });
+            }
           }
         } else {
           setMessage({ error: true, message: "Account not found" });
