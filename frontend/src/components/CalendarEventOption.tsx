@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { GPRecipeEventOptionType } from "../utils/types";
 import {
+  Button,
   Box,
   Card,
   IconButton,
@@ -20,6 +22,7 @@ const CalendarEventOption = ({
   eventOption,
   groupNum
 }: GPCalendarOption) => {
+  const [modalOpen, setModalOpen] = useState(false)
   const recipe = eventOption.recipe;
   const startDate = new Date(eventOption.start);
   const formattedStart = startDate
@@ -93,9 +96,21 @@ const CalendarEventOption = ({
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Button
+        size="md"
+        color="primary"
+        aria-label="Adjust event recommendation"
+        sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
+        onClick={() => setModalOpen(true)}
+      >
+        Adjust Time
+      </Button>
             <AdjustEventTimeModal
+              editMode={true}
               eventInfo={eventOption}
               groupNum={groupNum}
+              modalOpen={modalOpen}
+              toggleModal={() => setModalOpen((prev) => !prev)}
             />
             <IconButton
               aria-label="Accept Event Reccomendation"

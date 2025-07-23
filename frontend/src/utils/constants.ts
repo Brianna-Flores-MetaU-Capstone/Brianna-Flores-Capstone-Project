@@ -10,8 +10,8 @@ const AuthenticationFieldEnum = {
 };
 
 const EventTimeEnum = {
-  START: "startTime",
-  END: "endTime"
+  START: "start",
+  END: "end"
 }
 
 const IngredientDataFields = {
