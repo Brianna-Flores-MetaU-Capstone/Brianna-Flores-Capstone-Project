@@ -4,16 +4,18 @@ import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 import { ColumnOverflowTitledListStyle } from "../../utils/style/UIStyle";
 
-type GPLoadingModalTypes = {
+type GPRecipeCostModalTypes = {
   ingredientsCostInformation: GPIngredientDataTypes[];
+  totalCost: number;
   modalOpen: boolean;
   onClose: () => void;
 };
 const RecipeCostModal = ({
   ingredientsCostInformation,
+  totalCost,
   modalOpen,
   onClose,
-}: GPLoadingModalTypes) => {
+}: GPRecipeCostModalTypes) => {
   return (
     // Code based on MUI documentation: https://mui.com/joy-ui/react-modal/
     <Modal
@@ -47,7 +49,8 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
-        <Box sx={{ width: "100%", overflowY: "auto" }}>
+        <Box sx={{ width: "100%" }}>
+          <Box>
           <TitledListView
             headerList={[
               { title: "Ingredient", spacing: 8 },
@@ -60,6 +63,9 @@ const RecipeCostModal = ({
             )}
             listItemsStyle={ColumnOverflowTitledListStyle}
           />
+          </Box>
+          <Typography level="h3">Total Cost</Typography>
+          <Typography>${totalCost.toFixed(2)}</Typography>
         </Box>
       </Sheet>
     </Modal>

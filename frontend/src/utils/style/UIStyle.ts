@@ -172,7 +172,7 @@ const ColumnOverflowTitledListStyle = {
   ...BaseListStyle,
   flexDirection: "column",
   overflowY: "auto",
-  maxHeight: 300,
+  maxHeight: 250,
 };
 
 const ColumnNoOverflowTitledListStyle = {

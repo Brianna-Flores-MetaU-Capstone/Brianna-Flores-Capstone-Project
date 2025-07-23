@@ -1,4 +1,3 @@
-import React from "react";
 import type { GPIngredientDataTypes } from "../../utils/types/types";
 import { Box, Grid, Typography } from "@mui/joy";
 

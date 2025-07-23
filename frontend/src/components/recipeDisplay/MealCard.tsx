@@ -251,6 +251,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       {ingredientCostModalOpen && (
         <RecipeCostModal
           ingredientsCostInformation={parsedMealData.ingredientCostInfo}
+          totalCost={parsedMealData.totalCost}
           modalOpen={ingredientCostModalOpen}
           onClose={toggleModal}
         />

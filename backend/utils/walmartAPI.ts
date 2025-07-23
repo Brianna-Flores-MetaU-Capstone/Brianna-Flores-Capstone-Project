@@ -31,7 +31,7 @@ const searchWalmart = async (searchQuery: string) => {
   if (consumerId) {
     try {
       const response = await axios.get(
-        `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=3`,
+        `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=1`,
         {
           headers: {
             "WM_SEC.KEY_VERSION": keyVersion,
