@@ -49,9 +49,7 @@ const EventSummaryModal = ({
                 <Typography level="h4">{event.eventTitle}</Typography>
                 <Typography>{event.getFormattedDate()}</Typography>
                 <Typography>{event.getFormattedTime()}</Typography>
-                <Link href={event.eventLink}>
-                  Take me there!
-                </Link>
+                <Link href={event.eventLink}>Take me there!</Link>
               </Box>
             )}
             listItemsStyle={LeftAlignedTitledListStyle}

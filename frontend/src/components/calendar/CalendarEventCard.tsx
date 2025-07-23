@@ -90,7 +90,10 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
           alt=""
         />
       </AspectRatio>
-      <CardContent orientation="horizontal" sx={{display: "flex", justifyContent: "center"}}>
+      <CardContent
+        orientation="horizontal"
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -99,46 +102,51 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
             width: "100%",
           }}
         >
-            <ButtonGroup sx={{width: '100%'}} color="primary" orientation="vertical" size="sm" spacing={1}>
-              {eventOption.timeOptions.map((option, index) => {
-                const formattedStart = new Date(option.start)
-                  .toLocaleTimeString([], {
-                    hour: "numeric",
-                    minute: "numeric",
-                  })
-                const formattedEnd = new Date(option.end).toLocaleTimeString(
-                  [],
-                  {
-                    hour: "numeric",
-                    minute: "numeric",
-                  },
-                );
-                const clickedEvent: GPRecipeEventOptionType = {
-                  ...eventOption,
-                  timeOptions: [option],
-                };
-                const isSelected = selectedEvents.filter(
-                  (selectedEvent) =>
-                    selectedEvent.name === clickedEvent.name &&
-                    selectedEvent.timeOptions[0].start ===
-                      clickedEvent.timeOptions[0].start &&
-                    selectedEvent.timeOptions[0].end ===
-                      clickedEvent.timeOptions[0].end,
-                );
-                return (
-                  <Tooltip key={index} title="Select time">
-                    <Button
-                      variant={isSelected.length === 0 ? "outlined" : "solid"}
-                      onClick={() => toggleSelection(option)}
-                      key={index}
-                    >
-                      {startDate.toDateString()}: {formattedStart}-{formattedEnd}
-                    </Button>
-                  </Tooltip>
-                );
-              })}
-              <Button onClick={() => setModalOpen(true)}>Adjust Time</Button>
-            </ButtonGroup>
+          <ButtonGroup
+            sx={{ width: "100%" }}
+            color="primary"
+            orientation="vertical"
+            size="sm"
+            spacing={1}
+          >
+            {eventOption.timeOptions.map((option, index) => {
+              const formattedStart = new Date(option.start).toLocaleTimeString(
+                [],
+                {
+                  hour: "numeric",
+                  minute: "numeric",
+                },
+              );
+              const formattedEnd = new Date(option.end).toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "numeric",
+              });
+              const clickedEvent: GPRecipeEventOptionType = {
+                ...eventOption,
+                timeOptions: [option],
+              };
+              const isSelected = selectedEvents.filter(
+                (selectedEvent) =>
+                  selectedEvent.name === clickedEvent.name &&
+                  selectedEvent.timeOptions[0].start ===
+                    clickedEvent.timeOptions[0].start &&
+                  selectedEvent.timeOptions[0].end ===
+                    clickedEvent.timeOptions[0].end,
+              );
+              return (
+                <Tooltip key={index} title="Select time">
+                  <Button
+                    variant={isSelected.length === 0 ? "outlined" : "solid"}
+                    onClick={() => toggleSelection(option)}
+                    key={index}
+                  >
+                    {startDate.toDateString()}: {formattedStart}-{formattedEnd}
+                  </Button>
+                </Tooltip>
+              );
+            })}
+            <Button onClick={() => setModalOpen(true)}>Adjust Time</Button>
+          </ButtonGroup>
           <CalendarTimeModal
             editMode={true}
             eventInfo={eventOption}

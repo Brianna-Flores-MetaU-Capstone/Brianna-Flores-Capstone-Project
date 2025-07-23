@@ -9,7 +9,7 @@ import {
   Tooltip,
   IconButton,
   AspectRatio,
-  Link
+  Link,
 } from "@mui/joy";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -24,8 +24,7 @@ import type { GPErrorMessageTypes } from "../../utils/types";
 import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
 import { CARD_WIDTH } from "../../utils/UIStyle";
-import LinkIcon from '@mui/icons-material/Link';
-
+import LinkIcon from "@mui/icons-material/Link";
 
 type GPMealCardProps = {
   index: number;
@@ -35,7 +34,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -68,7 +67,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>
+    event: React.MouseEvent<HTMLElement>,
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -172,8 +171,16 @@ const MealCard: React.FC<GPMealCardProps> = ({
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {parsedMealData.calendarEvents.length > 0 ? (
                 <Box>
-                  <Link endDecorator={<LinkIcon/>} href={parsedMealData.calendarEvents[0].eventLink} level="h4">Scheduled For</Link>
-                  <Typography>{parsedMealData.calendarEvents[0].getFormattedDate()}</Typography>
+                  <Link
+                    endDecorator={<LinkIcon />}
+                    href={parsedMealData.calendarEvents[0].eventLink}
+                    level="h4"
+                  >
+                    Scheduled For
+                  </Link>
+                  <Typography>
+                    {parsedMealData.calendarEvents[0].getFormattedDate()}
+                  </Typography>
                   <Typography>
                     {parsedMealData.calendarEvents[0].getFormattedTime()}
                   </Typography>

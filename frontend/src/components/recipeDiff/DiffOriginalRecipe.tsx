@@ -66,7 +66,7 @@ const DiffOriginalRecipe = ({
       // otherwise diff only requested fields
       const recipeDiffInfo = recipeDiff.getRequestedDiff(
         userDiffChoices,
-        noDiffFields
+        noDiffFields,
       );
       setRecipeDiffInfo(recipeDiffInfo);
     }

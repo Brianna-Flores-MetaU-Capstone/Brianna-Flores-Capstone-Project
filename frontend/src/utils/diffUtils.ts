@@ -17,13 +17,13 @@ type GPDiffType = {
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   const diffRecipeIngredients = new DiffRecipeIngredients(
     recipeA.ingredients,
-    recipeB.ingredients
+    recipeB.ingredients,
   );
   const diffRecipeIngredientsResults =
     diffRecipeIngredients.getIngredientsComparisonDiff();
   const diffIngredientsToPurchase = new DiffRecipeIngredients(
     recipeA.ingredientCostInfo,
-    recipeB.ingredientCostInfo
+    recipeB.ingredientCostInfo,
   );
   const diffIngredientsToPurchaseResults =
     diffIngredientsToPurchase.getIngredientsComparisonDiff();
@@ -68,7 +68,7 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
           : Math.min(
               arr[i - 1][j] + 1,
               arr[i][j - 1] + 1,
-              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1)
+              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1),
             );
     }
   }
