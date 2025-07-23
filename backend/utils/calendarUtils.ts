@@ -7,6 +7,7 @@ import { TimePreferenceString } from "../../frontend/src/classes/calendar/TimePr
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
 
+
 import TimeBlock from "../classes/TimeBlock";
 import { Recipe } from "../../shared/Recipe";
 
@@ -127,7 +128,7 @@ const getRecipeTimeOptions = ({
 }: GPRecipeEventTypes) => {
   let eventOptions: GPRecipeEventOptionType[] = [];
   let currentDay = new Date(userFreeTime[0].start);
-  currentDay.setDate(currentDay.getDate() + 1);
+  // currentDay.setDate(currentDay.getDate());
   currentDay.setHours(0, 0, 0, 0);
   for (const recipe of userRecipes) {
     let fallbackOptions: TimeBlock[] = [];
@@ -170,7 +171,6 @@ const getRecipeTimeOptions = ({
       eventOptions = [...eventOptions, bestOption];
       const incrementDays = Math.ceil(recipe.servings / servingsPerDay);
       currentDay.setDate(currentDay.getDate() + incrementDays);
-      currentDay.setHours(8, 0, 0, 0);
     }
   }
   return eventOptions;
@@ -339,4 +339,6 @@ export {
   getShoppingTimeOptions,
   getRecipeTimeOptions,
   getMultipleScheduleOptions,
+  START_OF_DAY_TIME,
+  END_OF_DAY_TIME,
 };
