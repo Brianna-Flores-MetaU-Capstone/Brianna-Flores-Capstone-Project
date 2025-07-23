@@ -127,7 +127,7 @@ const getListOfMissingIngredients = ({
   for (const recipeIngredient of recipeIngredients) {
     const alreadyInGroceryList = ingredientsToPurchase.find(
       (ingredient) =>
-        ingredient.ingredientName === recipeIngredient.ingredientName,
+        ingredient.ingredientName.toLowerCase() === recipeIngredient.ingredientName.toLowerCase(),
     );
     if (!alreadyInGroceryList) {
       const totalQuantity = getTotalQuantity({
@@ -149,7 +149,7 @@ const getListOfMissingIngredients = ({
         // user has ingredient, check if they have enough
         const ingredientOnHand =
           ownedIngredients[
-            ownedIngredientsNames.indexOf(recipeIngredient.ingredientName)
+            ownedIngredientsNames.indexOf(recipeIngredient.ingredientName.toLowerCase())
           ];
         const quantityUserNeeds = quantityNeeded({
           ingredientOnHand,

@@ -60,11 +60,14 @@ const IngredientsPage = () => {
       <AppHeader />
       <Box sx={{ m: 2 }}>
         <Button onClick={addIngredientClick} sx={{mb: 2}}>Add Ingredient</Button>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
         <TitledListView
           headerList={[
             { title: "Ingredient", spacing: 4 },
             { title: "Quantity", spacing: 3 },
-            { title: "Expiration", spacing: 5 },
+            { title: "Expiration", spacing: 3 },
           ]}
           itemsList={userIngredients}
           renderItem={(ingredient, index) => (
@@ -80,9 +83,6 @@ const IngredientsPage = () => {
           )}
           listItemsStyle={ColumnNoOverflowTitledListStyle}
         />
-        {message && (
-          <ErrorState error={message.error} message={message.message} />
-        )}
       </Box>
       {addIngredientModalOpen && (
         <IngredientModal

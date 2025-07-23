@@ -1,6 +1,6 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import type {
   GPIngredientApiInfoType,
   GPIngredientDataTypes,
@@ -14,9 +14,9 @@ import {
   Typography,
 } from "@mui/joy";
 
-const GRID_EXP_QUANT_SPACING = 3;
 const GRID_NAME_COST_SPACING = 4;
-const GRID_BUTTON_SPACING = 2;
+const GRID_EXP_QUANT_SPACING = 3;
+const GRID_BUTTON_SPACING = 1;
 
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
@@ -48,8 +48,6 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       <Grid
         container
         alignItems="center"
-        justifyContent="space-between"
-        spacing={2}
       >
         {presentGroceryCheck && (
           <Grid xs={1}>
@@ -79,12 +77,12 @@ const Ingredient: React.FC<GPIngredientProps> = ({
         )}
         {presentButtons && (
           <Grid xs={GRID_BUTTON_SPACING}>
-            <ButtonGroup>
+            <ButtonGroup spacing={2}>
               <IconButton onClick={() => onEdit?.(ingredient)}>
-                <FontAwesomeIcon icon={faPenToSquare} />
+                <EditIcon />
               </IconButton>
               <IconButton onClick={() => onDelete?.(ingredient)}>
-                <FontAwesomeIcon icon={faTrash} />
+                <DeleteIcon />
               </IconButton>
             </ButtonGroup>
           </Grid>
