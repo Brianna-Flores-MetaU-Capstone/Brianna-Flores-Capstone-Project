@@ -192,18 +192,20 @@ const MealCard: React.FC<GPMealCardProps> = ({
                   recipeInfo={parsedMealData}
                 />
               )}
-              <IconButton
-                color="primary"
-                variant="plain"
-                size="lg"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDeleteRecipe?.(parsedMealData);
-                }}
-                sx={{ zIndex: 1, alignSelf: "flex-end" }}
-              >
-                <DeleteIcon />
-              </IconButton>
+              <Tooltip title="Remove recipe">
+                <IconButton
+                  color="primary"
+                  variant="plain"
+                  size="lg"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onDeleteRecipe?.(parsedMealData);
+                  }}
+                  sx={{ zIndex: 1, alignSelf: "flex-end" }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </Box>
           )}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
