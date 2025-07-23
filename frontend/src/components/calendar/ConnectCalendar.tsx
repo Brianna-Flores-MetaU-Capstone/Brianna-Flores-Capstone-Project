@@ -111,6 +111,7 @@ const ConnectCalendar = ({
   }
 
   async function getUserFreeTime(
+    preferredStartDate: string,
     userPreferences: TimePreferenceString[],
     singleDayPrep: boolean,
     servingsPerDay: number,
@@ -151,7 +152,7 @@ const ConnectCalendar = ({
         // suggest events for a single recipe
         const recommendedEvents = await axios.post(
           `${databaseUrl}/calendar/single/reccomendEvents`,
-          { parsedFreeTime, userPreferences, recipeInfo },
+          { preferredStartDate, parsedFreeTime, userPreferences, recipeInfo },
           axiosConfig,
         );
         const eventOptions = recommendedEvents.data;
@@ -160,7 +161,7 @@ const ConnectCalendar = ({
         // suggest events for all saved recipes
         const recommendedEvents = await axios.post(
           `${databaseUrl}/calendar/reccomendEvents`,
-          { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
+          { preferredStartDate, parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
           axiosConfig,
         );
         // get back a list of possible options for each event (shopping + each recipe)
@@ -176,11 +177,12 @@ const ConnectCalendar = ({
   }
 
   const getUserTimePreferences = async (
+    preferredStartDate: string,
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
     servingsPerDay: number,
   ) => {
-    await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
+    await getUserFreeTime(preferredStartDate, preferences, singleDayPrep, servingsPerDay);
   };
 
   return (

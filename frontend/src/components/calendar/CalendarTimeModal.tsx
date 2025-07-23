@@ -17,7 +17,7 @@ import {
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { EventTimeEnum } from "../../utils/constants";
+import { EventTimeEnum, ZERO_OUT_START_DATE } from "../../utils/constants";
 import { useEventRec } from "../../contexts/EventRecContext";
 import TimeBlock from "../../../../backend/classes/TimeBlock";
 import {
@@ -32,9 +32,10 @@ type GPEventTimeModal = {
   modalOpen: boolean;
   toggleModal: () => void;
   onSubmit?: (
+    preferredStartDate: string,
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => void;
   singleRecipe: boolean;
 };
@@ -57,14 +58,14 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
@@ -77,22 +78,22 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getMonth().toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0"),
+      eventStartTime.getDate().toString().padStart(2, "0")
   );
   const [servingsInputError, setServingsInputError] = useState(false);
+  const [dateInputError, setDateInputError] = useState(false);
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string,
+    newValue: string
   ) => {
     if (timeField === EventTimeEnum.START) {
       setStart(newValue);
     } else if (timeField === EventTimeEnum.END) {
       setEnd(newValue);
-    }
-    if (editMode && timeField === EventTimeEnum.DATE) {
+    } else if (timeField === EventTimeEnum.DATE) {
       setDate(newValue);
     }
     if (!editMode) {
@@ -100,7 +101,7 @@ const CalendarTimeModal = ({
         const updatedBlocks = [...prev];
         updatedBlocks[index].setTime(
           timeField as GPTimePreferenceType,
-          newValue,
+          newValue
         );
         return updatedBlocks;
       });
@@ -114,6 +115,13 @@ const CalendarTimeModal = ({
   useEffect(() => {
     setServingsInputError(servingsPerDay < 1);
   }, [servingsPerDay]);
+
+  useEffect(() => {
+    const userInputDate = new Date(`${date}${ZERO_OUT_START_DATE}`);
+    const todayDate = new Date();
+    todayDate.setHours(0, 0, 0, 0);
+    setDateInputError(userInputDate.getTime() < todayDate.getTime());
+  }, [date]);
 
   const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -136,7 +144,7 @@ const CalendarTimeModal = ({
   const onSubmitPreferences = (event: React.FormEvent) => {
     event.preventDefault();
     if (onSubmit) {
-      onSubmit(preferredTimeBlocks, singleDayPrep, servingsPerDay);
+      onSubmit(date, preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
     setPreferredTimeBlocks([new TimePreferenceString()]);
     toggleModal();
@@ -169,24 +177,30 @@ const CalendarTimeModal = ({
             {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
           <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
-            {editMode && (
-              <FormControl error={inputError}>
-                <FormLabel>New Date</FormLabel>
-                <Input
-                  type="date"
-                  onChange={(event) =>
-                    handleTimeChange(0, EventTimeEnum.DATE, event.target.value)
-                  }
-                  value={date}
-                  slotProps={{
-                    input: {
-                      "data-time": EventTimeEnum.DATE,
-                    },
-                  }}
-                  required
-                />
-              </FormControl>
-            )}
+            <FormControl error={dateInputError}>
+              <FormLabel>
+                {editMode ? "New Date" : "Begin Scheduling Events From"}
+              </FormLabel>
+              <Input
+                type="date"
+                onChange={(event) =>
+                  handleTimeChange(0, EventTimeEnum.DATE, event.target.value)
+                }
+                value={date}
+                slotProps={{
+                  input: {
+                    "data-time": EventTimeEnum.DATE,
+                  },
+                }}
+                required
+              />
+              {dateInputError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  Date cannot be in the past
+                </FormHelperText>
+              )}
+            </FormControl>
             {preferredTimeBlocks.map((block, index) => (
               <Box key={index}>
                 <FormControl error={inputError}>
@@ -197,7 +211,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? start : block.start}
@@ -217,7 +231,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? end : block.end}
@@ -263,7 +277,6 @@ const CalendarTimeModal = ({
                     Cook on a single day
                   </Button>
                 </ButtonGroup>
-
                 <FormControl error={servingsInputError}>
                   <FormLabel>Servings eaten per day</FormLabel>
                   <Input
@@ -285,7 +298,7 @@ const CalendarTimeModal = ({
             )}
             <Button
               type="submit"
-              disabled={inputError || servingsInputError}
+              disabled={inputError || servingsInputError || dateInputError}
               sx={{ display: "flex", mx: "auto", mt: 2 }}
             >
               {editMode ? "Adjust Time" : "Submit Preferences!"}

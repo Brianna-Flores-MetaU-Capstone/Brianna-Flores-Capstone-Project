@@ -6,7 +6,7 @@ import { TimePreferenceString } from "../../frontend/src/classes/calendar/TimePr
 
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
-
+const ZERO_OUT_DATE_HOURS = "T00:00:00"
 
 import TimeBlock from "../classes/TimeBlock";
 import { Recipe } from "../../shared/Recipe";
@@ -47,6 +47,7 @@ const getShoppingTimeOptions = ({
 };
 
 type GPRecipeEventTypes = {
+  preferredStartDate: string;
   userFreeTime: GPUserEventTypes[];
   userRecipes: Recipe[];
   userPreferences: TimePreferenceString[];
@@ -54,6 +55,7 @@ type GPRecipeEventTypes = {
 };
 
 const getMealPrepTimeOptions = ({
+  preferredStartDate,
   userRecipes,
   userFreeTime,
   userPreferences,
@@ -61,23 +63,26 @@ const getMealPrepTimeOptions = ({
   let eventOptions: GPRecipeEventOptionType[] = [];
   // if single day prep, estimate time to cook all recipes
   let sumAllCookTimes = 0;
-  let totalServings = 0;
+  let sumAllServings = 0;
   for (const recipe of userRecipes) {
     sumAllCookTimes += recipe.readyInMinutes;
-    totalServings += recipe.servings;
+    sumAllServings += recipe.servings;
   }
   // heuristic: 70% of total cook time
   const estimatedCookTime = sumAllCookTimes * 0.7;
   let preferredOptions: TimeBlock[] = [];
   let fallbackOptions: TimeBlock[] = [];
   for (const freeBlock of userFreeTime) {
+    if (new Date(freeBlock.end).getTime() < new Date(`${preferredStartDate}${ZERO_OUT_DATE_HOURS}`).getTime()) {
+      continue;
+    }
     const timeOptions = fitsUserPreferences({
       freeBlock,
       userPreferences,
       readyInMinutes: estimatedCookTime,
     });
     if (timeOptions) {
-      preferredOptions = timeOptions;
+      preferredOptions = [...preferredOptions, ...timeOptions];
     }
     if (
       preferredOptions.length > 0 &&
@@ -102,7 +107,7 @@ const getMealPrepTimeOptions = ({
         "",
         "Prep Block",
         "https://images.pexels.com/photos/1435910/pexels-photo-1435910.jpeg",
-        totalServings,
+        sumAllServings,
         [],
         [],
         "https://www.goodhousekeeping.com/food-recipes/a28377603/how-to-meal-prep/",
@@ -121,14 +126,14 @@ const getMealPrepTimeOptions = ({
 };
 
 const getRecipeTimeOptions = ({
+  preferredStartDate,
   userFreeTime,
   userRecipes,
   userPreferences,
   servingsPerDay,
 }: GPRecipeEventTypes) => {
   let eventOptions: GPRecipeEventOptionType[] = [];
-  let currentDay = new Date(userFreeTime[0].start);
-  // currentDay.setDate(currentDay.getDate());
+  let currentDay = new Date(`${preferredStartDate}${ZERO_OUT_DATE_HOURS}`);
   currentDay.setHours(0, 0, 0, 0);
   for (const recipe of userRecipes) {
     let fallbackOptions: TimeBlock[] = [];
@@ -281,6 +286,7 @@ type GPMultipleScheduleTypes = GPRecipeEventTypes & {
 };
 
 const getMultipleScheduleOptions = ({
+  preferredStartDate,
   userFreeTime,
   userRecipes,
   userPreferences,
@@ -294,6 +300,7 @@ const getMultipleScheduleOptions = ({
   for (let i = 0; i < numOptions; i++) {
     if (singleDayPrep) {
       const option = getMealPrepTimeOptions({
+        preferredStartDate,
         userFreeTime: freeTimeArray,
         userRecipes: userRecipes,
         userPreferences: userPreferences,
@@ -303,6 +310,7 @@ const getMultipleScheduleOptions = ({
       freeTimeArray = shuffleArray(freeTimeArray);
     } else {
       const option = getRecipeTimeOptions({
+        preferredStartDate,
         userFreeTime: userFreeTime,
         userRecipes: recipeArray,
         userPreferences,
@@ -339,6 +347,4 @@ export {
   getShoppingTimeOptions,
   getRecipeTimeOptions,
   getMultipleScheduleOptions,
-  START_OF_DAY_TIME,
-  END_OF_DAY_TIME,
 };

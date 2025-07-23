@@ -41,7 +41,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 router.get(
@@ -65,7 +65,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 router.post(
@@ -73,8 +73,14 @@ router.post(
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay } =
-      req.body;
+    const {
+      preferredStartDate,
+      parsedFreeTime,
+      userPreferences,
+      singleDayPrep,
+      servingsPerDay,
+    } = req.body;
+
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
@@ -97,6 +103,7 @@ router.post(
         shoppingTime: SHOPPING_TIME,
       });
       const recipeScheduleOptions = getMultipleScheduleOptions({
+        preferredStartDate: preferredStartDate,
         userFreeTime: parsedFreeTime,
         userRecipes: userSelectedRecipes,
         userPreferences: userPreferences,
@@ -108,15 +115,17 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  },
+  }
 );
 
 router.post(
   "/single/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const { parsedFreeTime, userPreferences, recipeInfo } = req.body;
+    const { preferredStartDate, parsedFreeTime, userPreferences, recipeInfo } =
+      req.body;
     const recipeScheduleOptions = getMultipleScheduleOptions({
+      preferredStartDate: preferredStartDate,
       userFreeTime: parsedFreeTime,
       userRecipes: [recipeInfo],
       userPreferences: userPreferences,
@@ -125,7 +134,7 @@ router.post(
       numOptions: SINGLE_RECIPE_SCHEDULE_OPTIONS,
     });
     res.json(recipeScheduleOptions);
-  },
+  }
 );
 
 module.exports = router;
