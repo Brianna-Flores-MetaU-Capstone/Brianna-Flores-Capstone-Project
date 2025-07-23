@@ -45,9 +45,9 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
       setSelectedEvents((prev) =>
         prev.filter(
           (selectedEvent) =>
-            selectedEvent.name !== clickedEvent.name &&
+            selectedEvent.name !== clickedEvent.name ||
             selectedEvent.timeOptions[0].start !==
-              clickedEvent.timeOptions[0].start &&
+              clickedEvent.timeOptions[0].start ||
             selectedEvent.timeOptions[0].end !==
               clickedEvent.timeOptions[0].end,
         ),

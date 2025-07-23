@@ -133,6 +133,7 @@ const CalendarTimeModal = ({
     if (onSubmit) {
       onSubmit(preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
+    setPreferredTimeBlocks([new TimePreferenceString()])
     toggleModal();
   };
 
