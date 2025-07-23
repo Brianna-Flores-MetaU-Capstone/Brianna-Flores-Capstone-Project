@@ -202,7 +202,6 @@ const updateUserRecipes = async ({
       selectedRecipe,
       axiosConfig
     );
-    setMessage({ error: false, message: "Sucessfully saved recipe" });
   } catch (error) {
     setMessage({ error: true, message: "Failed to save recipe" });
   }

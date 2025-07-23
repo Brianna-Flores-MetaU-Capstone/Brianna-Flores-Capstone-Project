@@ -18,12 +18,12 @@ import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
 type GPMealModalProps = {
   modalOpen: boolean;
-  handleModalClose: () => void;
+  toggleModal: () => void;
   recipeInfo: GPRecipeDataTypes | undefined;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
-  handleModalClose,
+  toggleModal,
   modalOpen,
   recipeInfo,
 }) => {
@@ -31,7 +31,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
       open={modalOpen}
-      onClose={handleModalClose}
+      onClose={toggleModal}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet variant="outlined" sx={GPModalStyle}>

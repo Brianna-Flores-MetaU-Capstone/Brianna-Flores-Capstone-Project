@@ -24,7 +24,6 @@ import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
 import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
-import { getDiffResults } from "../utils/diffUtils";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -126,12 +125,15 @@ const NewListPage = () => {
               { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
             ]}
             itemsList={selectedRecipes}
-            renderItem={(meal) => (
+            renderItem={(meal, index) => (
               <MealCard
                 key={meal.apiId}
+                index={index}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
+                setMessage={setMessage}
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
+                selected={false}
               />
             )}
             flexDirectionRow
@@ -142,12 +144,12 @@ const NewListPage = () => {
         )}
       </Box>
       <AddAnotherMealModal
-        handleModalClose={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
+        toggleModal={() => setAddAnotherRecipeModalOpen((prev) => !prev)}
         onSelectRecipe={handleSelectRecipe}
         modalOpen={addAnotherRecipeModalOpen}
       />
       <MealInfoModal
-        handleModalClose={() => setRecipeInfoModalOpen((prev) => !prev)}
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />

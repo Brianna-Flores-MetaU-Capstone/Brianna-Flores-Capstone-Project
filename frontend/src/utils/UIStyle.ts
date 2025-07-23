@@ -41,28 +41,28 @@ const theme = extendTheme({
           "900": "#171717",
         },
         danger: {
-          "50": "#fdf2f8",
-          "100": "#fce7f3",
-          "200": "#fbcfe8",
-          "300": "#f9a8d4",
-          "400": "#f472b6",
-          "500": "#ec4899",
-          "600": "#db2777",
-          "700": "#be185d",
-          "800": "#9d174d",
-          "900": "#831843",
+          50: "#FEE1E3",
+          100: "#FDCED1",
+          200: "#FBA7AD",
+          300: "#F98088",
+          400: "#F75964",
+          500: "#F53240",
+          600: "#E40B1B",
+          700: "#AE0914",
+          800: "#79060E",
+          900: "#430308",
         },
         success: {
-          "50": "#f0fdfa",
-          "100": "#ccfbf1",
-          "200": "#99f6e4",
-          "300": "#5eead4",
-          "400": "#2dd4bf",
-          "500": "#14b8a6",
-          "600": "#0d9488",
-          "700": "#0f766e",
-          "800": "#115e59",
-          "900": "#134e4a",
+          50: "#33FDDB",
+          100: "#1FFDD8",
+          200: "#02F0C9",
+          300: "#02C8A7",
+          400: "#019079",
+          500: "#01594A",
+          600: "#00211C",
+          700: "#000000",
+          800: "#000000",
+          900: "#000000",
         },
         warning: {
           "50": "#fff8e1",
@@ -110,9 +110,9 @@ const theme = extendTheme({
     },
     JoyFormHelperText: {
       defaultProps: {
-        color: "error"
-      }
-    }
+        color: "error",
+      },
+    },
   },
 });
 
@@ -139,7 +139,6 @@ const GPCenteredBoxStyle = {
   gap: 3,
 };
 
-const MUI_GRID_FULL_SPACE = 12
-
+const MUI_GRID_FULL_SPACE = 12;
 
 export { GPModalStyle, GPCenteredBoxStyle, theme, MUI_GRID_FULL_SPACE };

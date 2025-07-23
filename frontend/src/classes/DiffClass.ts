@@ -59,3 +59,4 @@ class RecipeIngredientsDiff extends Diff<GPIngredientDataTypes> {
 }
 
 export { RecipeIngredientsDiff };
+export type { GPDiffReturnType };
