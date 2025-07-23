@@ -20,10 +20,10 @@ import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../../utils/utils";
 import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
-import type { GPErrorMessageTypes } from "../../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
-import { CARD_WIDTH } from "../../utils/UIStyle";
+import { CARD_WIDTH } from "../../utils/style/UIStyle";
 import LinkIcon from "@mui/icons-material/Link";
 
 type GPMealCardProps = {

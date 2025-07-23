@@ -21,7 +21,6 @@ type IngredientOnHand = {
 
 // retrieve all ingredients for a given user
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
-  // check that user is authenticated
   const userId = req.session.userId;
   try {
     const ingredients = await prisma.OwnedIngredient.findMany({
@@ -32,7 +31,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
         ingredient: true,
       },
     });
-    // use map function to format ingredients for frontend use
+    // Format ingredients for frontend use
     const parsedIngredients = ingredients.map(
       (ingredient: IngredientOnHand) => ({
         id: ingredient.ingredientId,
@@ -49,7 +48,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   }
 });
 
-// Get a specific ingredient by the name
+// Get a specific ingredient by name
 router.get("/:ingredientName", async (req: Request, res: Response) => {
   const ingredientName = req.params.ingredientName;
   const { quantity, unit, department, expirationDate } = req.body;
@@ -64,7 +63,7 @@ router.get("/:ingredientName", async (req: Request, res: Response) => {
   }
 });
 
-// Add an ingredient to a users list
+// Add ingredient to a users list on owned ingredients
 router.post(
   "/:userId",
   isAuthenticated,
@@ -82,15 +81,13 @@ router.post(
       return res.status(400).send("Missing required ingredient fields");
     }
     try {
-      // check to see if ingredient is in database
-      let ingredient = await checkIngredientInDatabase({
+      let ingredientInDatabase = await checkIngredientInDatabase({
         ingredientName,
         department,
       });
 
-      // if ingredient not found, make it
-      if (!ingredient) {
-        ingredient = await prisma.Ingredient.create({
+      if (!ingredientInDatabase) {
+        ingredientInDatabase = await prisma.Ingredient.create({
           data: {
             ingredientName,
             department,
@@ -98,15 +95,14 @@ router.post(
         });
       }
 
-      if (!ingredient) {
+      if (!ingredientInDatabase) {
         return res.status(400).send("Error, failed to create ingredient");
       }
-      // check if user has ingredient
       let ingredientInUsersPantry = await prisma.OwnedIngredient.findUnique({
         where: {
           userId_ingredientId: {
             userId,
-            ingredientId: ingredient.id,
+            ingredientId: ingredientInDatabase.id,
           },
         },
       });
@@ -117,11 +113,11 @@ router.post(
           .send("Error, ingredient already in pantry, try to update :)");
       }
 
-      // create mapping in table from user to ingredient
+      // mapping ingredient to user
       ingredientInUsersPantry = await prisma.OwnedIngredient.create({
         data: {
           userId: userId,
-          ingredientId: ingredient.id,
+          ingredientId: ingredientInDatabase.id,
           quantity: parseFloat(quantity),
           unit,
           expirationDate,

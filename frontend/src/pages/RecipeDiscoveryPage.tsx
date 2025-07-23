@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
   GPRecipeDiscoveryCategories,
-} from "../utils/types";
+} from "../utils/types/types";
 import {
   fetchAllRecipeCategories,
   fetchRecipes,
@@ -17,7 +17,7 @@ import MealCard from "../components/recipeDisplay/MealCard";
 import {
   MUI_GRID_FULL_SPACE,
   RowOverflowTitledListStyle,
-} from "../utils/UIStyle";
+} from "../utils/style/UIStyle";
 import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";

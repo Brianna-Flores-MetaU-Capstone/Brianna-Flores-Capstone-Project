@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes } from "../../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import type { GPDiffLineInfoType } from "../../utils/diffUtils";
 import {
   AspectRatio,
@@ -20,7 +20,7 @@ import {
   GPCenteredBoxStyle,
   GPMealInfoModalTitleStyle,
   GPTagItemStyle,
-} from "../../utils/UIStyle";
+} from "../../utils/style/UIStyle";
 import MealInfoModal from "../recipeDisplay/MealInfoModal";
 import type { Recipe } from "../../../../shared/Recipe";
 import { GPDiffOptionsEnum } from "../../classes/recipeDiffClasses/DiffRecipes";

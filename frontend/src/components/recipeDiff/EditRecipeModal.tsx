@@ -3,7 +3,7 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-} from "../../utils/types";
+} from "../../utils/types/types";
 import {
   Button,
   Input,
@@ -25,7 +25,7 @@ import TitledListView from "../utils/TitledListView";
 import {
   MUI_GRID_FULL_SPACE,
   RecipeTagsTitledListStyle,
-} from "../../utils/UIStyle";
+} from "../../utils/style/UIStyle";
 import { useUser } from "../../contexts/UserContext";
 import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";

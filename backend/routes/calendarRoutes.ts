@@ -41,7 +41,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  }
+  },
 );
 
 router.get(
@@ -65,14 +65,13 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  }
+  },
 );
 
 router.post(
   "/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
-    // get parsed list of events from google calendar
     const {
       preferredStartDate,
       parsedFreeTime,
@@ -94,10 +93,7 @@ router.post(
       if (!user) {
         return res.status(404).send("User not found");
       }
-      // now we have the users list of recipes
       const userSelectedRecipes = user.recipes;
-      // determine recommended time slots to shop
-      // approximate shopping time to be 1 hour
       const shoppingTimeOptions = getShoppingTimeOptions({
         userFreeTime: parsedFreeTime,
         shoppingTime: SHOPPING_TIME,
@@ -115,7 +111,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  }
+  },
 );
 
 router.post(
@@ -134,7 +130,7 @@ router.post(
       numOptions: SINGLE_RECIPE_SCHEDULE_OPTIONS,
     });
     res.json(recipeScheduleOptions);
-  }
+  },
 );
 
 module.exports = router;

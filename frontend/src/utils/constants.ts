@@ -50,7 +50,9 @@ const GROCERY_MODAL = "grocery-page";
 
 const START_OF_DAY_TIME = 8;
 const END_OF_DAY_TIME = 20;
-const ZERO_OUT_START_DATE = "T00:00:00"
+const ZERO_OUT_START_DATE = "T00:00:00";
+
+const MIN_PASSWORD_LENGTH = 8;
 
 const PreviewConstants = {
   GROCERY: "Grocery List",
@@ -70,5 +72,6 @@ export {
   GROCERY_MODAL,
   START_OF_DAY_TIME,
   END_OF_DAY_TIME,
-  ZERO_OUT_START_DATE
+  ZERO_OUT_START_DATE,
+  MIN_PASSWORD_LENGTH,
 };

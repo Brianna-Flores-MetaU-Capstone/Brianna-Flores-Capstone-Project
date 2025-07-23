@@ -1,4 +1,4 @@
-import type { GPCalendarJSONType } from "./calendarApiTypes";
+import type { GPCalendarJSONType } from "./types/calendarApiTypes";
 
 // Parse user events to extract only necessary data
 const parseUserEvents = (userEventsData: GPCalendarJSONType[]) => {
@@ -9,7 +9,7 @@ const parseUserEvents = (userEventsData: GPCalendarJSONType[]) => {
   }));
 };
 
-import type { GPUserEventTypes } from "./types";
+import type { GPUserEventTypes } from "./types/types";
 import { START_OF_DAY_TIME, END_OF_DAY_TIME } from "./constants";
 
 type GPFreeSpaceTypes = {

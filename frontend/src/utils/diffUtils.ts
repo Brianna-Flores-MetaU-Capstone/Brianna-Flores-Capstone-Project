@@ -1,4 +1,4 @@
-import type { GPIngredientDataTypes } from "./types";
+import type { GPIngredientDataTypes } from "./types/types";
 import type { GPRecipeComparisonReturnType } from "../classes/recipeDiffClasses/DiffRecipeIngredients";
 import { Recipe } from "../../../shared/Recipe";
 import { DiffRecipeIngredients } from "../classes/recipeDiffClasses/DiffRecipeIngredients";

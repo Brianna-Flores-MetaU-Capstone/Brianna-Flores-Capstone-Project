@@ -17,10 +17,10 @@ import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import {
   ColumnNoOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
-} from "../../utils/UIStyle";
+} from "../../utils/style/UIStyle";
 
 import { gapi } from "gapi-script";
-import type { GPErrorMessageTypes } from "../../utils/types";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 import { saveCalendarEvent } from "../../utils/databaseHelpers";
 

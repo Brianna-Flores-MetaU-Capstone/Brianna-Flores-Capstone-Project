@@ -1,7 +1,7 @@
 import type {
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
-} from "../utils/types";
+} from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import MealCard from "../components/recipeDisplay/MealCard";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
@@ -22,7 +22,10 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/calendar/ConnectCalendar";
 import CalendarModal from "../components/calendar/CalendarModal";
-import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
+import {
+  MUI_GRID_FULL_SPACE,
+  CenteredTitledListStyle,
+} from "../utils/style/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
@@ -159,7 +162,6 @@ const NewListPage = () => {
               <MealCard
                 key={meal.apiId}
                 index={index}
-                // TODO enable favoriting across meal cards
                 favorited={false}
                 toggleCalendarTimeModal={() =>
                   setCalendarModalOpen((prev) => !prev)

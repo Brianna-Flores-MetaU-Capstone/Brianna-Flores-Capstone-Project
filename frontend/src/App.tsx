@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { CssVarsProvider } from "@mui/joy";
-import { theme } from "./utils/UIStyle";
+import { theme } from "./utils/style/UIStyle";
 
 import Homepage from "./pages/Homepage";
 import NewListPage from "./pages/NewListPage";

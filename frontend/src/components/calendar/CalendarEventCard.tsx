@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GPRecipeEventOptionType } from "../../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types/types";
 import {
   Button,
   Box,

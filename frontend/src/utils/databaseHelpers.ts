@@ -3,7 +3,7 @@ import type {
   GPAccountInfoTypes,
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-} from "./types";
+} from "./types/types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";

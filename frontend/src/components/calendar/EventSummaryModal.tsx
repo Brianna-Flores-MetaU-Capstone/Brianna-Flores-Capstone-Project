@@ -12,7 +12,7 @@ import {
   GPModalStyle,
   LeftAlignedTitledListStyle,
   MUI_GRID_FULL_SPACE,
-} from "../../utils/UIStyle";
+} from "../../utils/style/UIStyle";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 
 type GPCalendarLinkTypes = {

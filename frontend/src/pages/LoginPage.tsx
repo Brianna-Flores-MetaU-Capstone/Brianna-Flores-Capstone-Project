@@ -2,7 +2,7 @@ import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
-import type { GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import { validateUserToken } from "../utils/databaseHelpers";
 import AppHeader from "../components/utils/AppHeader";
 import ErrorState from "../components/utils/ErrorState";

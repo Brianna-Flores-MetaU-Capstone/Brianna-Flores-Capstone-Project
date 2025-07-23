@@ -2,7 +2,7 @@ import type {
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
   GPErrorMessageTypes,
-} from "./types";
+} from "./types/types";
 import axios from "axios";
 import { axiosConfig, fetchUserIngredientsHelper } from "./databaseHelpers";
 import {
@@ -10,6 +10,7 @@ import {
   type GPAuthFormType,
 } from "../classes/authentication/AuthFormData";
 import { Recipe } from "../../../shared/Recipe";
+import { MIN_PASSWORD_LENGTH } from "./constants";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const parseRecipeData = async (recipeData: any) => {
@@ -107,10 +108,10 @@ const validateInput = (formData: AuthFormData) => {
     return { type: "error", text: "Email and password are required" };
   }
 
-  if (formData.password.length < PASS) {
+  if (formData.password.length < MIN_PASSWORD_LENGTH) {
     return {
       type: "error",
-      text: "Password must be at least 8 characters long",
+      text: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
     };
   }
   return { type: "", text: "" };

@@ -1,5 +1,5 @@
 import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
-import type { GPIngredientDataTypes } from "../../utils/types";
+import type { GPIngredientDataTypes } from "../../utils/types/types";
 import { Box, Table } from "@mui/joy";
 import { formatQuantity } from "../../utils/utils";
 

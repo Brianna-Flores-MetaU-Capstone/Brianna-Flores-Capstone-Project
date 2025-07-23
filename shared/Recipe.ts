@@ -1,5 +1,5 @@
 import type { CalendarEvent } from "../frontend/src/classes/calendar/CalendarEvent";
-import type { GPIngredientDataTypes } from "../frontend/src/utils/types";
+import type { GPIngredientDataTypes } from "../frontend/src/utils/types/types";
 
 class Recipe {
   readonly id: number;

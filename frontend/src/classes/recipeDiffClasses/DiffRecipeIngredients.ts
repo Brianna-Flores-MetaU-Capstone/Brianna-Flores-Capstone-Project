@@ -3,7 +3,7 @@ import {
   DiffRecipeFieldAbstract,
   type GPDiffLineInfoType,
 } from "./DiffRecipeFieldAbstract";
-import type { GPIngredientDataTypes } from "../../utils/types";
+import type { GPIngredientDataTypes } from "../../utils/types/types";
 import { formatQuantity } from "../../utils/utils";
 
 type GPQuantityChangeType<T> = {

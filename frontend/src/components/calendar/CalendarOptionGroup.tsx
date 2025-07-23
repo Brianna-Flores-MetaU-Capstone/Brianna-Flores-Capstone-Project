@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/joy";
-import type { GPRecipeEventOptionType } from "../../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types/types";
 import CalendarEventCard from "./CalendarEventCard";
 import TitledListView from "../utils/TitledListView";
-import { CenteredTitledListStyle } from "../../utils/UIStyle";
+import { CenteredTitledListStyle } from "../../utils/style/UIStyle";
 
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];
