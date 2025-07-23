@@ -227,7 +227,7 @@ const fitsUserPreferences = ({
       (parseInt(preference.end.substring(0, 2)) * 60 +
         parseInt(preference.end.substring(3))) *
         TO_MILLISECONDS;
-
+    
     const userPreferenceTimeBlock = new TimeBlock(
       new Date(preferredStart),
       new Date(preferredEnd)
