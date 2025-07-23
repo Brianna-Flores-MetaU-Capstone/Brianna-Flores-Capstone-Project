@@ -74,7 +74,7 @@ const NewListPage = () => {
   }, []);
 
   const handleRecipeCardClick = (recipe: Recipe) => {
-\    setRecipeInfoModalOpen((prev) => !prev);
+    setRecipeInfoModalOpen((prev) => !prev);
     setRecipeInfoModalInfo(recipe);
   };
 
