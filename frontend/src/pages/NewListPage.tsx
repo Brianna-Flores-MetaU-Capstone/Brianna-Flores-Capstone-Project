@@ -120,9 +120,14 @@ const NewListPage = () => {
     }
   };
 
-  const handleEventsCreated = (createdEvents: CalendarEvent[]) => {
+  const handleEventsCreated = async (createdEvents: CalendarEvent[]) => {
     setCreatedEvents(createdEvents);
     setEventSummaryModalOpen(true);
+    await fetchRecipes({
+      setMessage,
+      setRecipes: setSelectedRecipes,
+      recipeGroup: "planned",
+    });
   };
 
   return (
