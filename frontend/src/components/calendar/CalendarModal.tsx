@@ -90,6 +90,7 @@ const CalendarModal = ({
           eventData.htmlLink,
         );
         createdEvents = [...createdEvents, newEvent];
+        // TODO add event to database
       }
     }
     // reset selected events to prevent multiple events being added
