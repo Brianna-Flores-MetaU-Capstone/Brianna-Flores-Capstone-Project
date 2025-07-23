@@ -5,6 +5,12 @@ import {
 } from "./DiffRecipeFieldAbstract";
 
 class DiffRecipeStringArray extends DiffRecipeFieldAbstract<string> {
+  /**
+   * Iterates through the resulting array from the initial getLcsDiff() call
+   * Neighboring ADDED/DELETED lines are marked as changed
+   * Line is then split and getLcsDiff() is run again on resulting objects to find a finer grained delta
+   * @returns array of status/line objects which contains a nested array of status/line objects for CHANGED lines
+   */
   getStringArrayDiff(): GPDiffLineInfoType<string>[] {
     const lineDifferences = this.getLcsDiff();
     let prevLine: GPDiffLineInfoType<string> | null = null;
