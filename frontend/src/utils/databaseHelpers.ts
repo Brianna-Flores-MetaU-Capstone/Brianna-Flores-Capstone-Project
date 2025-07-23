@@ -15,7 +15,7 @@ import {
 import { Recipe } from "../classes/recipe/Recipe";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
-const DISCOVERY_NUM_TO_REQUEST = 20;
+const DISCOVERY_NUM_TO_REQUEST = 40;
 
 const axiosConfig = {
   headers: {
