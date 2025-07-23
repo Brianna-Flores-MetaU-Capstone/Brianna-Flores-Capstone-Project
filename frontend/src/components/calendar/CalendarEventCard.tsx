@@ -61,15 +61,6 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
           level="title-lg"
           sx={{
             textAlign: "center",
-            width: "100%",
-          }}
-        >
-          {DaysOfWeek[startDate.getDay()]}
-        </Typography>
-        <Typography
-          level="title-lg"
-          sx={{
-            textAlign: "center",
             textWrap: "nowrap",
             overflow: "hidden",
             whiteSpace: "nowrap",
@@ -99,18 +90,16 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
           alt=""
         />
       </AspectRatio>
-      <CardContent orientation="horizontal">
+      <CardContent orientation="horizontal" sx={{display: "flex", justifyContent: "center"}}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
             width: "100%",
           }}
         >
-          <Box>
-            <Typography level="body-sm">{startDate.toDateString()}</Typography>
-            <ButtonGroup color="primary" size="sm" spacing={2}>
+            <ButtonGroup sx={{width: '100%'}} color="primary" orientation="vertical" size="sm" spacing={1}>
               {eventOption.timeOptions.map((option, index) => {
                 const formattedStart = new Date(option.start)
                   .toLocaleTimeString([], {
@@ -143,14 +132,13 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
                       onClick={() => toggleSelection(option)}
                       key={index}
                     >
-                      {formattedStart}-{formattedEnd}
+                      {startDate.toDateString()}: {formattedStart}-{formattedEnd}
                     </Button>
                   </Tooltip>
                 );
               })}
               <Button onClick={() => setModalOpen(true)}>Adjust Time</Button>
             </ButtonGroup>
-          </Box>
           <CalendarTimeModal
             editMode={true}
             eventInfo={eventOption}

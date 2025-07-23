@@ -291,7 +291,7 @@ const getMultipleScheduleOptions = ({
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
   let recipeArray = [...userRecipes];
   let freeTimeArray = [...userFreeTime];
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < numOptions; i++) {
     if (singleDayPrep) {
       const option = getMealPrepTimeOptions({
         userFreeTime: freeTimeArray,
