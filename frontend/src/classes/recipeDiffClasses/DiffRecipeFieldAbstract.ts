@@ -21,7 +21,7 @@ abstract class DiffRecipeFieldAbstract<T> {
   }
 
   /**
-   * Utilizes the longest common substring algorithm as a basis to derive an algorithm applicable to an array and 
+   * Utilizes the longest common substring algorithm as a basis to derive an algorithm applicable to an array and
    * find the items that were unchanged, added, or deleted between the two lists to compare
    * @returns An array containing which items in the array are unchanged, added, or deleted
    */

@@ -125,7 +125,7 @@ class DiffRecipes {
   getCourseIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients
+      this.recipeB.ingredients,
     );
     const ingredinetsDiffResults =
       diffIngredients.getIngredientsComparisonDiff();
@@ -135,7 +135,7 @@ class DiffRecipes {
   getCourseInstrictionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions
+      this.recipeB.instructions,
     );
     const instructionsDiffResults = diffInstructions.getLcsDiff();
     return instructionsDiffResults;
@@ -148,7 +148,7 @@ class DiffRecipes {
   getInstructionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions
+      this.recipeB.instructions,
     );
     const instructionsDiffResults = diffInstructions.getStringArrayDiff();
     return instructionsDiffResults;
@@ -156,7 +156,7 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's instructions in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getInstructionNoDiff() {
     let instructionsDiffResults: GPDiffLineInfoType<string>[] = [];
@@ -176,7 +176,7 @@ class DiffRecipes {
   getIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients
+      this.recipeB.ingredients,
     );
     const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
     return ingredientsDiffResults;
@@ -184,12 +184,12 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's ingredients in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getIngredientsNoDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeA.ingredients
+      this.recipeA.ingredients,
     );
     const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
     return ingredientsDiffResults;
@@ -202,7 +202,7 @@ class DiffRecipes {
   getTitleDiff() {
     const diffTitle = new DiffRecipeStringArray(
       [this.recipeA.recipeTitle],
-      [this.recipeB.recipeTitle]
+      [this.recipeB.recipeTitle],
     );
     const titleDiffResults = diffTitle.getStringArrayDiff();
     return titleDiffResults;
@@ -210,7 +210,7 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's title in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getTitleNoDiff() {
     return [{ status: DiffStatus.UNCHANGED, line: this.recipeB.recipeTitle }];
@@ -223,7 +223,7 @@ class DiffRecipes {
   getServingsDiff() {
     const diffServings = new DiffRecipeStringArray(
       [this.recipeA.servings.toString()],
-      [this.recipeB.servings.toString()]
+      [this.recipeB.servings.toString()],
     );
     const servingsDiffResults = diffServings.getStringArrayDiff();
     return servingsDiffResults;
@@ -231,7 +231,7 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's servings in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getServingsNoDiff() {
     return [{ status: DiffStatus.UNCHANGED, line: this.recipeB.servings }];
@@ -244,7 +244,7 @@ class DiffRecipes {
   getTagDiff() {
     const diffTags = new DiffRecipeStringArray(
       this.recipeA.recipeTags,
-      this.recipeB.recipeTags
+      this.recipeB.recipeTags,
     );
     const tagsDiffResults = diffTags.getStringArrayDiff();
     return tagsDiffResults;
@@ -252,7 +252,7 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's tags in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getTagNoDiff() {
     let tagDiffResults: GPDiffLineInfoType<string>[] = [];
@@ -272,7 +272,7 @@ class DiffRecipes {
   getCookTimeDiff() {
     const diffCookTime = new DiffRecipeStringArray(
       [this.recipeA.readyInMinutes.toString()],
-      [this.recipeB.readyInMinutes.toString()]
+      [this.recipeB.readyInMinutes.toString()],
     );
     const cookTimeDiffResults = diffCookTime.getStringArrayDiff();
     return cookTimeDiffResults;
@@ -280,7 +280,7 @@ class DiffRecipes {
 
   /**
    * Format the edited recipe's cook time in diff format with status unchanged
-   * @returns array of status/line objects 
+   * @returns array of status/line objects
    */
   getCookTimeNoDiff() {
     return [
