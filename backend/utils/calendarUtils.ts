@@ -6,6 +6,9 @@ import type {
   GPTimeBlockType,
 } from "../../frontend/src/utils/types";
 
+const TO_MILLISECONDS = 1000 * 60;
+const TIME_BLOCK_INCREMENT = 15
+
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
   shoppingTime: number;
@@ -27,7 +30,7 @@ const getShoppingTimeOptions = ({
       const option = {
         name: `Option ${choices + 1}`,
         start: startTime,
-        end: new Date(startTime.getTime() + 1000 * 60 * shoppingTime),
+        end: new Date(startTime.getTime() + TO_MILLISECONDS * shoppingTime),
       };
       eventOptions = [...eventOptions, option];
       blockTime -= shoppingTime;
@@ -204,6 +207,7 @@ const fitsUserPreferences = ({
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
   // loop through user preferences
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS;
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   const freeBlockStart = startAsDate.getTime();
@@ -215,8 +219,7 @@ const fitsUserPreferences = ({
       tempPrefStart.getTime() +
       (parseInt(preference.start.substring(0, 2)) * 60 +
         parseInt(preference.start.substring(3))) *
-        60 *
-        1000;
+        TO_MILLISECONDS;
 
     const tempPrefEnd = new Date(freeBlock.end);
     tempPrefEnd.setHours(0, 0, 0, 0);
@@ -224,8 +227,7 @@ const fitsUserPreferences = ({
       tempPrefEnd.getTime() +
       (parseInt(preference.end.substring(0, 2)) * 60 +
         parseInt(preference.end.substring(3))) *
-        60 *
-        1000;
+        TO_MILLISECONDS;
     if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
       continue;
     }
@@ -259,20 +261,20 @@ const fitsUserPreferences = ({
       start = freeBlockStart;
       end = preferredEnd;
     }
-    if (end - start >= readyInMinutes * 1000 * 60) {
+    if (end - start >= readyInMilliseconds) {
       let optionArray = [
         {
           start: new Date(start),
-          end: new Date(start + readyInMinutes * 1000 * 60),
+          end: new Date(start + readyInMilliseconds),
         },
       ];
-      start = start + 1000 * 60 * 15;
-      if (end - start >= readyInMinutes * 1000 * 60) {
+      start = start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
+      if (end - start >= readyInMilliseconds) {
         optionArray = [
           ...optionArray,
           {
             start: new Date(start),
-            end: new Date(start + readyInMinutes * 1000 * 60),
+            end: new Date(start + readyInMilliseconds),
           },
         ];
       }
