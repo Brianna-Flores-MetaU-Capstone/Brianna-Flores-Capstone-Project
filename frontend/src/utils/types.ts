@@ -92,7 +92,7 @@ type GPPrepBlockType = {
 type GPRecipeEventOptionType = {
   name: string;
   timeOptions: TimeBlock[];
-  recipe: Recipe | GPPrepBlockType;
+  recipe: Recipe
 };
 
 type GPRecipeDiscoveryCategories = {

@@ -31,7 +31,6 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
       ...eventOption,
       timeOptions: [timeBlock],
     };
-    // if not already in the set, add
     const isSelected = selectedEvents.filter(
       (selectedEvent) =>
         selectedEvent.name === clickedEvent.name &&

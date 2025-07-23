@@ -19,13 +19,13 @@ router.post(
   "/createEvent",
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const { recipe, eventTitle, start, end, eventLink } = req.body;
+    const { selectedRecipe, eventTitle, start, end, eventLink } = req.body;
     const userId = req.session.userId;
     try {
       const newEvent = await prisma.calendarEvent.create({
         data: {
           userId: userId,
-          recipeId: recipe.id,
+          recipeId: selectedRecipe.id,
           eventTitle: eventTitle,
           start: start,
           end: end,
