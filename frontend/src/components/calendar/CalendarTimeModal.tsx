@@ -285,7 +285,7 @@ const CalendarTimeModal = ({
             )}
             <Button
               type="submit"
-              disabled={inputError}
+              disabled={inputError || servingsInputError}
               sx={{ display: "flex", mx: "auto", mt: 2 }}
             >
               {editMode ? "Adjust Time" : "Submit Preferences!"}
