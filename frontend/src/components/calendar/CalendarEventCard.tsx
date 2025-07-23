@@ -111,15 +111,13 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
         >
           <Box>
             <Typography level="body-sm">{startDate.toDateString()}</Typography>
-            <ButtonGroup color="primary" size="sm">
+            <ButtonGroup color="primary" size="sm" spacing={2}>
               {eventOption.timeOptions.map((option, index) => {
                 const formattedStart = new Date(option.start)
                   .toLocaleTimeString([], {
                     hour: "numeric",
                     minute: "numeric",
                   })
-                  .replace(" PM", "")
-                  .replace(" AM", "");
                 const formattedEnd = new Date(option.end).toLocaleTimeString(
                   [],
                   {
