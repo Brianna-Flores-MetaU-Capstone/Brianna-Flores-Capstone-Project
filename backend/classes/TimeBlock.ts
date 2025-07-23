@@ -53,7 +53,7 @@ class TimeBlock {
       end = preferredEnd;
     }
     if (preferredStart <= freeBlockStart && preferredEnd >= freeBlockEnd) {
-      // free block is completely within prefered block
+      // free block is completely within preferred block
       start = freeBlockStart;
       end = freeBlockEnd;
     }
@@ -62,7 +62,7 @@ class TimeBlock {
       freeBlockEnd > preferredStart &&
       freeBlockEnd < preferredEnd
     ) {
-      // free block starts before prefered block and ends within prefered block
+      // free block starts before preferred block and ends within preferred block
       start = preferredStart;
       end = freeBlockEnd;
     }
@@ -71,7 +71,7 @@ class TimeBlock {
       freeBlockStart < preferredEnd &&
       freeBlockEnd > preferredEnd
     ) {
-      // free block starts within prefered block and ends after it
+      // free block starts within preferred block and ends after it
       start = freeBlockStart;
       end = preferredEnd;
     }

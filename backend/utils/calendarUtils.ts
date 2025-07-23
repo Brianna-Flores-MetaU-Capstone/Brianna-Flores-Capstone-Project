@@ -67,7 +67,7 @@ const getMealPrepTimeOptions = ({
   }
   // heuristic: 70% of total cook time
   const estimatedCookTime = sumAllCookTimes * 0.7;
-  let preferedOptions: TimeBlock[] = [];
+  let preferredOptions: TimeBlock[] = [];
   let fallbackOptions: TimeBlock[] = [];
   for (const freeBlock of userFreeTime) {
     const timeOptions = fitsUserPreferences({
@@ -76,21 +76,22 @@ const getMealPrepTimeOptions = ({
       readyInMinutes: estimatedCookTime,
     });
     if (timeOptions) {
-      preferedOptions = timeOptions;
+      preferredOptions = timeOptions;
     }
     if (
-      preferedOptions.length > 0 &&
-      preferedOptions.length + fallbackOptions.length >= 2
+      preferredOptions.length > 0 &&
+      preferredOptions.length + fallbackOptions.length >= 2
     ) {
       break;
     }
     const otherFreeTimes = getAnyFreeTime({
+      preferredOptions,
       freeBlock,
       readyInMinutes: estimatedCookTime,
     });
     fallbackOptions = [...fallbackOptions, ...otherFreeTimes];
   }
-  const combinedTimes = [...preferedOptions, ...fallbackOptions];
+  const combinedTimes = [...preferredOptions, ...fallbackOptions];
   if (combinedTimes.length > 0) {
     const bestBlock = {
       name: "Prep Block",
@@ -124,7 +125,6 @@ const getRecipeTimeOptions = ({
   userPreferences,
   servingsPerDay,
 }: GPRecipeEventTypes) => {
-  // cook one recipe max per day
   let eventOptions: GPRecipeEventOptionType[] = [];
   let currentDay = new Date(userFreeTime[0].start);
   currentDay.setDate(currentDay.getDate() + 1);
@@ -132,17 +132,18 @@ const getRecipeTimeOptions = ({
   for (const recipe of userRecipes) {
     let fallbackOptions: TimeBlock[] = [];
     let preferredOptions: TimeBlock[] = [];
+    const tempCurrentDay = new Date(currentDay);
     for (const freeBlock of userFreeTime) {
       let endTime = new Date(freeBlock.end);
-      if (endTime.getTime() >= currentDay.getTime()) {
+      if (endTime.getTime() >= tempCurrentDay.getTime()) {
         // block is after current day
         const timeOptions = fitsUserPreferences({
           freeBlock,
           userPreferences,
           readyInMinutes: recipe.readyInMinutes,
         });
-        if (timeOptions && preferredOptions.length <= 0) {
-          preferredOptions = timeOptions;
+        if (timeOptions) {
+          preferredOptions = [...preferredOptions, ...timeOptions];
         }
         if (
           preferredOptions.length > 0 &&
@@ -152,6 +153,7 @@ const getRecipeTimeOptions = ({
         }
         // look for any fallback options
         const otherFreeTimes = getAnyFreeTime({
+          preferredOptions,
           freeBlock,
           readyInMinutes: recipe.readyInMinutes,
         });
@@ -166,10 +168,8 @@ const getRecipeTimeOptions = ({
         recipe: recipe,
       };
       eventOptions = [...eventOptions, bestOption];
-      currentDay.setDate(
-        bestOption.timeOptions[0].start.getDate() +
-          Math.ceil(recipe.servings / servingsPerDay)
-      );
+      const incrementDays = Math.ceil(recipe.servings / servingsPerDay);
+      currentDay.setDate(currentDay.getDate() + incrementDays);
       currentDay.setHours(8, 0, 0, 0);
     }
   }
@@ -177,26 +177,36 @@ const getRecipeTimeOptions = ({
 };
 
 type GPAnyBlockTypes = {
+  preferredOptions: TimeBlock[];
   freeBlock: GPUserEventTypes;
   readyInMinutes: number;
 };
 
-const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
+const getAnyFreeTime = ({
+  preferredOptions,
+  freeBlock,
+  readyInMinutes,
+}: GPAnyBlockTypes) => {
   const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS;
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   let freeBlockStart = startAsDate.getTime();
   const freeBlockEnd = endAsDate.getTime();
   let optionArray: TimeBlock[] = [];
+  const preferredStarts = new Set(
+    preferredOptions.map((option) => option.start.getTime())
+  );
 
   while (freeBlockStart + readyInMilliseconds <= freeBlockEnd) {
-    optionArray = [
-      ...optionArray,
-      new TimeBlock(
-        new Date(freeBlockStart),
-        new Date(freeBlockStart + readyInMilliseconds)
-      ),
-    ];
+    if (!preferredStarts.has(freeBlockStart)) {
+      optionArray = [
+        ...optionArray,
+        new TimeBlock(
+          new Date(freeBlockStart),
+          new Date(freeBlockStart + readyInMilliseconds)
+        ),
+      ];
+    }
     freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
     if (optionArray.length >= 2) {
       break;
@@ -281,7 +291,7 @@ const getMultipleScheduleOptions = ({
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
   let recipeArray = [...userRecipes];
   let freeTimeArray = [...userFreeTime];
-  for (let i = 0; i < numOptions; i++) {
+  for (let i = 0; i < 1; i++) {
     if (singleDayPrep) {
       const option = getMealPrepTimeOptions({
         userFreeTime: freeTimeArray,

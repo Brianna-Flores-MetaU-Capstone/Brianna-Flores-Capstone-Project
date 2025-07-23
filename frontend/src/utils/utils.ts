@@ -107,7 +107,7 @@ const validateInput = (formData: AuthFormData) => {
     return { type: "error", text: "Email and password are required" };
   }
 
-  if (formData.password.length < 8) {
+  if (formData.password.length < PASS) {
     return {
       type: "error",
       text: "Password must be at least 8 characters long",
