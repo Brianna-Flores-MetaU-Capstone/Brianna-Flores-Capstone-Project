@@ -36,7 +36,6 @@ const RecipeCostModal = ({
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
-          height: "50%",
         }}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
@@ -51,18 +50,22 @@ const RecipeCostModal = ({
         </Typography>
         <Box sx={{ width: "100%" }}>
           <Box>
-          <TitledListView
-            headerList={[
-              { title: "Ingredient", spacing: 8 },
-              { title: "Cost", spacing: 2 },
-              { title: "For Amount", spacing: 2 },
-            ]}
-            itemsList={ingredientsCostInformation}
-            renderItem={(ingredientInfo, index) => (
-              <IngredientCost key={index} ingredientCostInfo={ingredientInfo} />
-            )}
-            listItemsStyle={ColumnOverflowTitledListStyle}
-          />
+            <TitledListView
+              headerList={[
+                { title: "Ingredient", spacing: 4 },
+                { title: "Quantity Needed", spacing: 4 },
+                { title: "Cost", spacing: 2 },
+                { title: "For Amount", spacing: 2 },
+              ]}
+              itemsList={ingredientsCostInformation}
+              renderItem={(ingredientInfo, index) => (
+                <IngredientCost
+                  key={index}
+                  ingredientCostInfo={ingredientInfo}
+                />
+              )}
+              listItemsStyle={ColumnOverflowTitledListStyle}
+            />
           </Box>
           <Typography level="h3">Total Cost</Typography>
           <Typography>${totalCost.toFixed(2)}</Typography>
