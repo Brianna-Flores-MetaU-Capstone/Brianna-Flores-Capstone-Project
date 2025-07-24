@@ -49,7 +49,7 @@ model Recipe {
   originalSource     String
   editingAuthorName  String
   recipeTitle        String
-  previewImage       String
+  previewImage       String[]        @default([""])
   servings           Int
   ingredients        Json
   sourceUrl          String

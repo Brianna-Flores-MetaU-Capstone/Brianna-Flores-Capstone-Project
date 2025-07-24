@@ -162,7 +162,7 @@ const RecipeDiscoveryPage = () => {
           />
         ))}
       </Box>
-      {message && (
+      {user && message && (
         <ErrorState error={message.error} message={message.message} />
       )}
       <MealInfoModal

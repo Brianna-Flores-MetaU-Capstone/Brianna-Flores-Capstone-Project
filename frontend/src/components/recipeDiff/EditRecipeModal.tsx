@@ -19,6 +19,7 @@ import {
   Typography,
   IconButton,
   Textarea,
+  AspectRatio,
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -126,7 +127,7 @@ const EditRecipeModal = ({
       }
     | {
         type: typeof actions.SET_IMAGE;
-        value: string;
+        value: Set<string>;
       }
     | {
         type: typeof actions.SET_INPUT_NUM;
@@ -189,6 +190,11 @@ const EditRecipeModal = ({
           ...state,
           [action.dietTag]: !state[action.dietTag],
           recipeTags: updatedRecipeTags,
+        };
+      case actions.SET_IMAGE:
+        return {
+          ...state,
+          previewImage: [...state.previewImage, ...action.value],
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
@@ -285,6 +291,10 @@ const EditRecipeModal = ({
   };
 
   const handleNewImages = (selectedImages: Set<string>) => {
+    dispatch({
+      type: actions.SET_IMAGE,
+      value: selectedImages,
+    });
   };
 
   return (
@@ -377,9 +387,18 @@ const EditRecipeModal = ({
                     </Grid>
                   </Grid>
                 </Box>
-                <Button onClick={() => setImageSearchModalOpen(true)}>
-                  Add Images!
-                </Button>
+                <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
+                  {editedRecipeData.previewImage?.map((imageUrl, index) => (
+                    <AspectRatio ratio={1} sx={{ width: 250 }} key={index}>
+                      <img src={imageUrl} />
+                    </AspectRatio>
+                  ))}
+                  <AspectRatio ratio={1} sx={{ width: 250 }}>
+                    <Button onClick={() => setImageSearchModalOpen(true)}>
+                      Add Images!
+                    </Button>
+                  </AspectRatio>
+                </Box>
                 <TitledListView
                   itemsList={editedRecipeData.ingredients}
                   headerList={[
