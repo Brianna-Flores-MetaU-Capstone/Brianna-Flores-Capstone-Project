@@ -23,6 +23,7 @@ import {
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TitledListView from "../utils/TitledListView";
 import {
   MUI_GRID_FULL_SPACE,
@@ -44,7 +45,8 @@ type GPEditRecipeModalType = {
 const actions = {
   SET_RECIPE: "setRecipe",
   SET_INPUT: "setInput",
-  SET_IMAGE: "setImage",
+  ADD_IMAGE: "addImage",
+  DELETE_IMAGE: "deleteImage",
   SET_INPUT_NUM: "setInputNum",
   SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
@@ -126,8 +128,12 @@ const EditRecipeModal = ({
         value: string;
       }
     | {
-        type: typeof actions.SET_IMAGE;
+        type: typeof actions.ADD_IMAGE;
         value: Set<string>;
+      }
+    | {
+        type: typeof actions.DELETE_IMAGE;
+        value: string;
       }
     | {
         type: typeof actions.SET_INPUT_NUM;
@@ -191,10 +197,17 @@ const EditRecipeModal = ({
           [action.dietTag]: !state[action.dietTag],
           recipeTags: updatedRecipeTags,
         };
-      case actions.SET_IMAGE:
+      case actions.ADD_IMAGE:
         return {
           ...state,
           previewImage: [...state.previewImage, ...action.value],
+        };
+      case actions.DELETE_IMAGE:
+        return {
+          ...state,
+          previewImage: state.previewImage.filter(
+            (imageUrl) => imageUrl !== action.value
+          ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
@@ -292,7 +305,7 @@ const EditRecipeModal = ({
 
   const handleNewImages = (selectedImages: Set<string>) => {
     dispatch({
-      type: actions.SET_IMAGE,
+      type: actions.ADD_IMAGE,
       value: selectedImages,
     });
   };
@@ -388,12 +401,28 @@ const EditRecipeModal = ({
                   </Grid>
                 </Box>
                 <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
-                  {editedRecipeData.previewImage?.map((imageUrl, index) => (
-                    <AspectRatio ratio={1} sx={{ width: 250 }} key={index}>
-                      <img src={imageUrl} />
-                    </AspectRatio>
-                  ))}
-                  <AspectRatio ratio={1} sx={{ width: 250 }}>
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    {editedRecipeData.previewImage?.map((imageUrl, index) => (
+                      <Box key={index}>
+                        <AspectRatio ratio={1} sx={{ width: 250 }}>
+                          <img src={imageUrl} />
+                        </AspectRatio>
+                        <Button
+                          variant="solid"
+                          sx={{ position: "relative", bottom: 45, left: 10 }}
+                          onClick={() =>
+                            dispatch({
+                              type: actions.DELETE_IMAGE,
+                              value: imageUrl,
+                            })
+                          }
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Box>
+                    ))}
+                  </Box>
+                  <AspectRatio ratio={1} sx={{ minWidth: 250 }}>
                     <Button onClick={() => setImageSearchModalOpen(true)}>
                       Add Images!
                     </Button>
