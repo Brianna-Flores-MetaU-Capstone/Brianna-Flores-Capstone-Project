@@ -15,6 +15,7 @@ import {
   deleteIngredient,
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
+import { ColumnOverflowTitledListStyle } from "../utils/UIStyle";
 
 const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
@@ -73,6 +74,7 @@ const IngredientsPage = () => {
               onDelete={() => handleDeleteIngredient(ingredient)}
             />
           )}
+          listItemsStyle={ColumnOverflowTitledListStyle}
         />
         {message && (
           <ErrorState error={message.error} message={message.message} />

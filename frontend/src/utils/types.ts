@@ -1,5 +1,4 @@
 import type { User } from "firebase/auth";
-import type { GPIngredientCostInfoTypes } from "../../../backend/utils/utils";
 import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
@@ -15,7 +14,7 @@ type GPRecipeDataTypes = {
   vegan: boolean;
   glutenFree: boolean;
   dairyFree: boolean;
-  ingredientCostInfo: GPIngredientCostInfoTypes[];
+  ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
 };
 
@@ -39,6 +38,8 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
+  ingredientCost: number;
+  ingredientCostUnit: number;
 };
 
 type GPCurrentUserTypes = {
@@ -68,14 +69,9 @@ type GPRecipeIngredientTypes = {
   isChecked: boolean;
 };
 
-type GPIngredientWithCostInfoTypes = {
-  ingredient: GPRecipeIngredientTypes;
-  ingredientApiInfo: GPIngredientApiInfoType;
-};
-
 type GPIngredientApiInfoType = {
   ingredientCost: number;
-  ingredientAmount: number;
+  ingredientCostUnit: number;
 };
 
 type GPUserEventTypes = {
@@ -103,6 +99,14 @@ type GPPreferredBlockType = {
   end: string;
 };
 
+type GPRecipeDiscoveryCategories = {
+  all: GPRecipeDataTypes[];
+  dairyFree: GPRecipeDataTypes[];
+  glutenFree: GPRecipeDataTypes[];
+  vegetarian: GPRecipeDataTypes[];
+  vegan: GPRecipeDataTypes[];
+};
+
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,
@@ -112,9 +116,9 @@ export type {
   GPErrorMessageTypes,
   GPOwnedIngredientsTypes,
   GPRecipeIngredientTypes,
-  GPIngredientWithCostInfoTypes,
   GPIngredientApiInfoType,
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPPreferredBlockType,
+  GPRecipeDiscoveryCategories
 };

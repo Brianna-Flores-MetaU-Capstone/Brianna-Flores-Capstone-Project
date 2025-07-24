@@ -8,7 +8,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 import { isAuthenticated } from "../utils/authMiddleware";
-import { GPIngredientWithCostInfoTypes } from "../../frontend/src/utils/types";
+import { GPIngredientDataTypes } from "../../frontend/src/utils/types";
 
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
@@ -39,8 +39,8 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
       return res.status(404).send("User not found");
     }
     const clearedList = user.groceryList.filter(
-      (ingredientItem: GPIngredientWithCostInfoTypes) => {
-        return !ingredientItem.ingredient.isChecked;
+      (ingredientItem: GPIngredientDataTypes) => {
+        return !ingredientItem.isChecked;
       }
     );
     const updatedUser = await prisma.user.update({
@@ -68,14 +68,11 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
       return res.status(404).send("User not found");
     }
     const checkedGroceryList = user.groceryList.map(
-      (ingredientItem: GPIngredientWithCostInfoTypes) =>
-        ingredientItem.ingredient.ingredientName === ingredientName
+      (ingredientItem: GPIngredientDataTypes) =>
+        ingredientItem.ingredientName === ingredientName
           ? {
               ...ingredientItem,
-              ingredient: {
-                ...ingredientItem.ingredient,
-                isChecked: !ingredientItem.ingredient.isChecked,
-              },
+                isChecked: !ingredientItem.isChecked,
             }
           : ingredientItem
     );

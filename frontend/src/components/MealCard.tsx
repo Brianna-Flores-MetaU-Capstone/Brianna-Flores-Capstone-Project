@@ -30,6 +30,7 @@ type GPMealCardProps = {
   onLoadRecipes?: (data: GPRecipeDataTypes, index: number) => void;
   selected: boolean;
   onCompareSelect?: (data: GPRecipeDataTypes) => void;
+  cardSize: number
 };
 
 const MealCard: React.FC<GPMealCardProps> = ({
@@ -42,6 +43,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   onLoadRecipes,
   selected,
   onCompareSelect,
+  cardSize,
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,7 +80,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card
         variant="outlined"
-        sx={{ minHeight: "280px", width: 350 }}
+        sx={{ minHeight: "200px", minWidth: cardSize, width: cardSize}}
         onClick={() => onMealCardClick()}
       >
         <CardCover>
@@ -92,7 +94,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
         />
         {onCompareSelect && (
           <Checkbox
-            sx={{ zIndex: 5 }}
+            sx={{ zIndex: 5}}
+            size="lg"
             checked={selected}
             onClick={(event) => {
               event.stopPropagation();

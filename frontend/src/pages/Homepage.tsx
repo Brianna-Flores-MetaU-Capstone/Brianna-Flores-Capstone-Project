@@ -1,7 +1,6 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPIngredientWithCostInfoTypes,
   GPRecipeDataTypes,
 } from "../utils/types";
 import AppHeader from "../components/AppHeader";
@@ -19,13 +18,14 @@ import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
+import { ColumnOverflowTitledListStyle, RowOverflowTitledListStyle } from "../utils/UIStyle";
 
 const LIST_HEIGHT = 250
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientWithCostInfoTypes[]
+    GPIngredientDataTypes[]
   >([]);
   const [userIngredientList, setUserIngredientList] = useState<
     GPIngredientDataTypes[]
@@ -67,7 +67,7 @@ const Homepage = () => {
                   presentButtons={false}
                 />
               )}
-              listHeight={LIST_HEIGHT}
+              listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
           <Grid xs={6}>
@@ -77,13 +77,13 @@ const Homepage = () => {
               renderItem={(item, index) => (
                 <Ingredient
                   key={index}
-                  ingredient={item?.ingredient}
+                  ingredient={item}
                   presentGroceryCheck={true}
                   presentExpiration={false}
                   presentButtons={false}
                 />
               )}
-              listHeight={LIST_HEIGHT}
+              listItemsStyle={ColumnOverflowTitledListStyle}
             />
           </Grid>
         </Grid>
@@ -91,14 +91,18 @@ const Homepage = () => {
           <TitledListView
             headerList={[{ title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE }]}
             itemsList={selectedRecipes}
-            renderItem={(meal) => (
+            renderItem={(meal, index) => (
               <MealCard
                 key={meal.apiId}
+                index={index}
                 onMealCardClick={() => navigate("/new-list")}
                 parsedMealData={meal}
+                setMessage={setMessage}
+                selected={false}
+                cardSize={350}
               />
             )}
-            flexDirectionRow={true}
+            listItemsStyle={RowOverflowTitledListStyle}
           />
         </Box>
       </Box>

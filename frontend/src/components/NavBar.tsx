@@ -22,6 +22,7 @@ const NavBar = () => {
     { name: "Create List", path: "/new-list" },
     { name: "Owned Ingredients", path: "/ingredients" },
     { name: "Grocery List", path: "/grocery-list" },
+    { name: "Discover Recipes", path: "/discovery"},
     { name: "Account", path: "/account" },
   ];
 

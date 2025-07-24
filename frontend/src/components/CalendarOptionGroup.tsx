@@ -3,6 +3,7 @@ import type { GPRecipeEventOptionType } from "../utils/types";
 import CalendarEventCard from "./CalendarEventCard";
 import TitledListView from "./TitledListView";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { CenteredTitledListStyle } from "../utils/UIStyle";
 
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];
@@ -35,7 +36,7 @@ const CalendarOptionGroup = ({
         renderItem={(event, index) => (
           <CalendarEventCard key={index} eventOption={event} groupNum={groupNum - 1}/>
         )}
-        flexDirectionRow
+        listItemsStyle={CenteredTitledListStyle}
       />
     </Box>
   );

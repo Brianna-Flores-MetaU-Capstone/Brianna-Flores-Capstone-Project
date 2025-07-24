@@ -23,7 +23,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
 import ConnectCalendar from "../components/ConnectCalendar";
 import CalendarModal from "../components/CalendarModal";
-import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle} from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -134,9 +134,10 @@ const NewListPage = () => {
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
                 selected={false}
+                cardSize={300}
               />
             )}
-            flexDirectionRow
+            listItemsStyle={CenteredTitledListStyle}
           />
         </Box>
         {message && (

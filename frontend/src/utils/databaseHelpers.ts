@@ -4,13 +4,14 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-  GPIngredientWithCostInfoTypes,
+  GPRecipeDiscoveryCategories,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+const DISCOVERY_NUM_TO_REQUEST = 20;
 
 const axiosConfig = {
   headers: {
@@ -209,7 +210,7 @@ const updateUserRecipes = async ({
 
 type GPFetchGroceryListTypes = GPSetMessageType & {
   setUserGroceryList: (
-    value: React.SetStateAction<GPIngredientWithCostInfoTypes[]>
+    value: React.SetStateAction<GPIngredientDataTypes[]>
   ) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
   setGroceryListCost?: (value: React.SetStateAction<number>) => void;
@@ -243,6 +244,74 @@ const fetchGroceryList = async ({
   }
 };
 
+type GPFetchDiscoverRecipesType = GPSetMessageType & {
+  filter: string;
+  offset: number;
+  numRequested: number;
+};
+const fetchDiscoverRecipes = async ({
+  setMessage,
+  filter,
+  offset,
+  numRequested,
+}: GPFetchDiscoverRecipesType) => {
+  try {
+    const response = await axios.post(
+      `${databaseUrl}/recipes/discover`,
+      { filter, offset, numRequested },
+      axiosConfig
+    );
+    return response.data;
+  } catch (error) {
+    setMessage({
+      error: true,
+      message: `Error fetching ${filter} recipes`,
+    });
+  }
+};
+
+type GPFetchRecipeCategoryType = GPSetMessageType & {
+  setRecipeDiscoveryResults: (
+    value: React.SetStateAction<GPRecipeDiscoveryCategories>
+  ) => void;
+  filters: { filter: string; title: string }[];
+  offset: number;
+};
+const fetchAllRecipeCategories = async ({
+  setMessage,
+  setRecipeDiscoveryResults,
+  filters,
+  offset,
+}: GPFetchRecipeCategoryType) => {
+  try {
+    const recipeCategories: GPRecipeDiscoveryCategories = {
+      all: [],
+      dairyFree: [],
+      glutenFree: [],
+      vegetarian: [],
+      vegan: [],
+    };
+    await Promise.all(
+      filters.map(async (filter: { filter: string; title: string }) => {
+        const categoryRecipes = await fetchDiscoverRecipes({
+          setMessage,
+          filter: filter.filter,
+          offset,
+          numRequested: DISCOVERY_NUM_TO_REQUEST,
+        });
+        recipeCategories[filter.filter as keyof GPRecipeDiscoveryCategories] =
+          categoryRecipes;
+      })
+    );
+    setRecipeDiscoveryResults(recipeCategories);
+  } catch (error) {
+    setMessage({
+      error: true,
+      message: "Error fetching recipes",
+    });
+  }
+};
+
 export {
   updateAccount,
   getUserData,
@@ -255,5 +324,7 @@ export {
   fetchRecipes,
   updateUserRecipes,
   fetchGroceryList,
+  fetchDiscoverRecipes,
+  fetchAllRecipeCategories,
   axiosConfig,
 };

@@ -6,7 +6,10 @@ import {
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
-import type { GPRecipeDataTypes, GPErrorMessageTypes, GPIngredientDataTypes } from "../utils/types";
+import type {
+  GPRecipeDataTypes,
+  GPErrorMessageTypes,
+} from "../utils/types";
 import ErrorState from "./ErrorState";
 import TitledListView from "./TitledListView";
 import axios from "axios";
@@ -26,9 +29,12 @@ import {
   ButtonGroup,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
-import { RecipeIngredientsDiff } from "../classes/DiffClass";
-import type { GPDiffReturnType } from "../classes/DiffClass";
+import type { GPRecipeDiffType } from "../utils/diffUtils";
 import RecipeDiffModal from "./RecipeDiffModal";
+import { updateRecipeWithPricing } from "../utils/utils";
+import LoadingModal from "./LoadingModal";
+import { getRecipeDiffResults } from "../utils/diffUtils";
+import { CenteredTitledListStyle } from "../utils/UIStyle";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -48,13 +54,17 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [mealResults, setMealResults] = useState<GPRecipeDataTypes[]>([]);
   const [searchClicked, setSearchClicked] = useState(false); // search recipes button clicked
   const [numInDatabase, setNumInDatabase] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loadingSearchButton, setLoadingSearchButton] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [usePreferences, setUsePreferences] = useState(false);
   const [inputError, setInputError] = useState(false);
-  const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>([])
-  const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false)
-  const [ingredientsDiffData, setIngredientsDiffData] = useState<GPDiffReturnType<GPIngredientDataTypes>>()
+  const [recipesToCompare, setRecipesToCompare] = useState<GPRecipeDataTypes[]>(
+    []
+  );
+  const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
+  const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
+
   const { user } = useUser();
 
   const parsePreferenceList = (preferenceList: string[]) => {
@@ -85,7 +95,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       ? `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true&diet=${userDiets}&intolerances=${userIntolerances}`
       : `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeRequest}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
-      setLoading(true);
+      setLoadingSearchButton(true);
       const response = await axios.get(recipeUrl);
       const parsedRecipes = await parseRecipeData(response.data.results);
       if (searchClicked) {
@@ -93,7 +103,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       } else {
         setMealResults(parsedRecipes);
       }
-      setLoading(false);
+      setLoadingSearchButton(false);
       // TODO: add fetched recipes to database helper method
     } catch (error) {
       setMessage({
@@ -136,7 +146,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setNumInDatabase(0);
     setSearchClicked(false);
     setMealResults([]);
-    setRecipesToCompare([])
+    setRecipesToCompare([]);
     // TODO: check if recipes in database and set numInDatabase, fetch only recipes required
     handleFetchRecipes(true);
     setSearchClicked(true);
@@ -160,115 +170,176 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   };
 
   const handleToggleCompareRecipe = (clickedRecipe: GPRecipeDataTypes) => {
-    if (!recipesToCompare.some((recipe) => recipe.apiId === clickedRecipe.apiId)) { 
+    if (
+      !recipesToCompare.some((recipe) => recipe.apiId === clickedRecipe.apiId)
+    ) {
       // recipe not found, add to array
-      setRecipesToCompare((prev) => [...prev, clickedRecipe])
+      setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
-      setRecipesToCompare((prev) => prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId))
+      setRecipesToCompare((prev) =>
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
+      );
     }
-  }
-  
-  const compareRecipesClick = () => {
+  };
+
+  const compareRecipesClick = async () => {
     if (recipesToCompare.length === 2) {
-      const diffIngredients = new RecipeIngredientsDiff()
-      const diffResults = diffIngredients.getDiff(recipesToCompare[0].ingredients, recipesToCompare[1].ingredients)
-      setIngredientsDiffData(diffResults)
-      setRecipeDiffModalOpen(true)
+      setLoadingModal(true);
+      let updatedRecipesToCompare: GPRecipeDataTypes[] = [];
+      for (const recipe of recipesToCompare) {
+        const updatedRecipe = await updateRecipeWithPricing({
+          setMessage,
+          recipe,
+        });
+        updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
+        // find index of recipe in meal results so we can also update the recipe information there too
+        const index = mealResults.findIndex(
+          (element) => element.apiId === recipe.apiId
+        );
+        handleUpdateRecipe(updatedRecipe, index);
+        setRecipesToCompare(updatedRecipesToCompare);
+      }
+      const recipeDiffResults = getRecipeDiffResults({
+        recipeA: updatedRecipesToCompare[0],
+        recipeB: updatedRecipesToCompare[1],
+      });
+      setRecipeDiffData(recipeDiffResults);
+      setLoadingModal(false);
+      setRecipeDiffModalOpen(true);
     }
-  }
+  };
 
   return (
     <>
-    <Modal open={modalOpen} onClose={toggleModal}>
-      <ModalDialog layout="fullscreen">
-        <ModalClose />
-        <DialogContent sx={{ my: 3 }}>
-          <Box>
-            <form onSubmit={handleSearchSubmit}>
-              <FormControl error={inputError}>
-                <FormLabel>Search</FormLabel>
-                <Input
-                  slotProps={{
-                    input: { "data-reciperequest": "recipeName" },
-                  }}
-                  onChange={handleRequestChange}
-                  value={recipeRequest}
-                  required
-                />
-                {inputError && (
-                  <FormHelperText>
-                    <InfoOutlined />
-                    Must enter a search term
-                  </FormHelperText>
-                )}
-              </FormControl>
-              <Box
-                sx={{ my: 3, display: "flex", justifyContent: "space-between" }}
-              >
-                {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
-                <FormControl
-                  orientation="horizontal"
-                  sx={{ justifyContent: "space-between" }}
-                >
-                  <FormLabel>Apply Dietary Preferences</FormLabel>
-                  <Switch
-                    checked={usePreferences}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setUsePreferences(event.target.checked)
-                    }
-                    variant={usePreferences ? "solid" : "outlined"}
-                    endDecorator={usePreferences ? "On" : "Off"}
+      <Modal open={modalOpen} onClose={toggleModal}>
+        <ModalDialog layout="fullscreen">
+          <ModalClose />
+          <DialogContent sx={{ my: 3 }}>
+            <Box>
+              <form onSubmit={handleSearchSubmit}>
+                <FormControl error={inputError}>
+                  <FormLabel>Search</FormLabel>
+                  <Input
                     slotProps={{
-                      endDecorator: {
-                        sx: {
-                          minWidth: 24,
-                        },
-                      },
+                      input: { "data-reciperequest": "recipeName" },
                     }}
+                    onChange={handleRequestChange}
+                    value={recipeRequest}
+                    required
                   />
+                  {inputError && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      Must enter a search term
+                    </FormHelperText>
+                  )}
                 </FormControl>
-                <Button type="submit" loading={loading} loadingPosition="start">
-                  Find Recipes!
+                <Box
+                  sx={{
+                    my: 3,
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+                  <FormControl
+                    orientation="horizontal"
+                    sx={{ justifyContent: "space-between" }}
+                  >
+                    <FormLabel>Apply Dietary Preferences</FormLabel>
+                    <Switch
+                      checked={usePreferences}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        setUsePreferences(event.target.checked);
+                      }}
+                      variant={usePreferences ? "solid" : "outlined"}
+                      endDecorator={usePreferences ? "On" : "Off"}
+                      slotProps={{
+                        endDecorator: {
+                          sx: {
+                            minWidth: 24,
+                          },
+                        },
+                      }}
+                    />
+                  </FormControl>
+                  <Button
+                    type="submit"
+                    loading={loadingSearchButton}
+                    loadingPosition="start"
+                  >
+                    Find Recipes!
+                  </Button>
+                </Box>
+              </form>
+            </Box>
+            {/* Display error message if needed */}
+            {message && (
+              <ErrorState error={message.error} message={message.message} />
+            )}
+            <TitledListView
+              itemsList={mealResults}
+              renderItem={(meal, index) => (
+                <MealCard
+                  key={index}
+                  index={index}
+                  onMealCardClick={() => event?.preventDefault()}
+                  setMessage={setMessage}
+                  parsedMealData={meal}
+                  onSelectRecipe={onSelectRecipe}
+                  onLoadRecipes={handleUpdateRecipe}
+                  selected={recipesToCompare.some(
+                    (recipe) => recipe.apiId === meal.apiId
+                  )}
+                  onCompareSelect={handleToggleCompareRecipe}
+                  cardSize={350}
+                />
+              )}
+              listItemsStyle={CenteredTitledListStyle}
+            />
+            {/* if search clicked, add a generate more button */}
+            <ButtonGroup buttonFlex={1} spacing={{ xs: 10 }} color="primary">
+              {searchClicked && !loadingSearchButton && (
+                <Button onClick={handleGenerateMore}>Generate More!</Button>
+              )}
+              {mealResults.length > 0 && (
+                <Button
+                  disabled={recipesToCompare.length !== 2}
+                  onClick={compareRecipesClick}
+                >
+                  Compare Recipes!
                 </Button>
-              </Box>
-            </form>
-          </Box>
-          {/* Display error message if needed */}
-          {message && (
-            <ErrorState error={message.error} message={message.message} />
-          )}
-          <TitledListView
-            itemsList={mealResults}
-            renderItem={(meal, index) => (
-              <MealCard
-                key={index}
-                index={index}
-                onMealCardClick={() => event?.preventDefault()}
-                setMessage={setMessage}
-                parsedMealData={meal}
-                onSelectRecipe={onSelectRecipe}
-                onLoadRecipes={handleUpdateRecipe}
-                selected={recipesToCompare.some((recipe) => recipe.apiId === meal.apiId)}
-                onCompareSelect={handleToggleCompareRecipe}
-              />
-            )}
-            flexDirectionRow={true}
-          />
-          {/* if search clicked, add a generate more button */}
-          <ButtonGroup buttonFlex={1} color="primary">
-            {searchClicked && !loading && (
-              <Button onClick={handleGenerateMore}>Generate More!</Button>
-            )}
-            {mealResults.length > 0 && (
-              <Button disabled={recipesToCompare.length !== 2 } onClick={compareRecipesClick}>
-                Compare Recipes!
-              </Button>
-            )}
-          </ButtonGroup>
-        </DialogContent>
-      </ModalDialog>
-    </Modal>
-    <RecipeDiffModal modalOpen={recipeDiffModalOpen} toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)} diffData={ingredientsDiffData ?? {added: [], deleted: [], changed: [], unchanged: []}} recipeA={recipesToCompare[0]} recipeB={recipesToCompare[1]}/>
+              )}
+            </ButtonGroup>
+          </DialogContent>
+        </ModalDialog>
+      </Modal>
+      <LoadingModal modalOpen={loadingModal} message="Generating comparison" />
+      <RecipeDiffModal
+        modalOpen={recipeDiffModalOpen}
+        toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
+        recipeDiffData={
+          recipeDiffData ?? {
+            recipeA: recipesToCompare[0],
+            recipeB: recipesToCompare[1],
+            servingsDiff: false,
+            recipeIngredientDiff: {
+              added: [],
+              deleted: [],
+              changed: [],
+              unchanged: [],
+            },
+            purchasedIngredientsDiff: {
+              added: [],
+              deleted: [],
+              changed: [],
+              unchanged: [],
+            },
+          }
+        }
+      />
     </>
   );
 };

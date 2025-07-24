@@ -1,6 +1,7 @@
 import React from "react";
 import TitledListView from "./TitledListView";
 import { Button } from "@mui/joy";
+import { CenteredTitledListStyle } from "../utils/UIStyle";
 
 type GPUserPreferenceButtonsProps = {
   listName: string;
@@ -31,7 +32,7 @@ const RegistrationPreferenceButtons: React.FC<GPUserPreferenceButtonsProps> = ({
           {item}
         </Button>
       )}
-      flexDirectionRow={true}
+      listItemsStyle={CenteredTitledListStyle}
     />
   );
 };

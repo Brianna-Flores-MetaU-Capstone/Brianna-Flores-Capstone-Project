@@ -10,12 +10,27 @@ const prisma = new PrismaClient();
 import { isAuthenticated } from "../utils/authMiddleware";
 import { convertUnits } from "../utils/utils";
 
+router.post("/discover", async (req: Request, res: Response) => {
+  const {filter, offset, numRequested} = req.body
+  try {
+    const recipeData = await prisma.recipe.findMany({
+      ...(filter !== "all" ? {where: { [filter]: true }} : {}),
+      skip: parseInt(offset),
+      take: parseInt(numRequested),
+    })
+    res.json(recipeData)
+  } catch (error) {
+    res.status(500).send("Error fetching database recipes")
+  }
+})
+
 router.post("/convertUnits", isAuthenticated, async (req: Request, res: Response) => {
   const { convertTo, converting } = req.body;
   const converted = convertUnits({convertTo, converting});
   res.json(converted)
 })
 
+// get a users recipes
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
   try {
