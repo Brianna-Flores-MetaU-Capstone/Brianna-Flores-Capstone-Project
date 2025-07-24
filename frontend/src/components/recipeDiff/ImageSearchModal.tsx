@@ -74,6 +74,7 @@ const ImageSearchModal = ({
   const handleImageConfirmation = () => {
     toggleModal()
     onSubmit(selectedImages);
+    setSelectedImages(new Set())
   };
 
   return (
