@@ -2,9 +2,11 @@ import type { User } from "firebase/auth";
 import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
+  id: number,
   apiId: number;
   originalSource: string;
-  editingAuthor: string;
+  editingAuthorName: string;
+  editingAuthorId: number | null;
   recipeTitle: string;
   previewImage: string;
   servings: number;

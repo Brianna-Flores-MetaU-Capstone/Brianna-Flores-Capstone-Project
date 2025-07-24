@@ -194,10 +194,12 @@ const fetchRecipes = async ({
 };
 
 type GPUpdateUserRecipesTypes = GPSetMessageType & {
+  editedRecipe: boolean;
   selectedRecipe: GPRecipeDataTypes;
   userId: string;
 };
 const updateUserRecipes = async ({
+  editedRecipe,
   userId,
   selectedRecipe,
   setMessage,
@@ -205,7 +207,7 @@ const updateUserRecipes = async ({
   try {
     await axios.post(
       `${databaseUrl}/recipes/planned/${userId}`,
-      selectedRecipe,
+      { editedRecipe: editedRecipe, ...selectedRecipe },
       axiosConfig
     );
   } catch (error) {
@@ -327,8 +329,8 @@ const handleUnfavoriteRecipe = async ({
 }: GPUnfavoriteType) => {
   try {
     await axios.put(
-      `${databaseUrl}/recipes/favorited/${recipe.apiId}`,
-      {},
+      `${databaseUrl}/recipes/favorited/unfavorite`,
+      { selectedRecipe: recipe },
       axiosConfig
     );
   } catch (error) {
@@ -336,15 +338,20 @@ const handleUnfavoriteRecipe = async ({
   }
 };
 
+type GPFavoriteType = GPSetMessageType & {
+  userId: string;
+  selectedRecipe: GPRecipeDataTypes;
+};
+
 const handleFavoriteRecipe = async ({
   setMessage,
   userId,
   selectedRecipe,
-}: GPUpdateUserRecipesTypes) => {
+}: GPFavoriteType) => {
   try {
     await axios.post(
       `${databaseUrl}/recipes/favorited/${userId}`,
-      { apiId: selectedRecipe.apiId },
+      { selectedRecipe },
       axiosConfig
     );
   } catch (error) {

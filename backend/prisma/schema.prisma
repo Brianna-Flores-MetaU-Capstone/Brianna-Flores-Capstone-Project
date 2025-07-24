@@ -25,6 +25,7 @@ model User {
   groceryListCost  Decimal           @default(0.00)
   recipes          Recipe[]          @relation("PlannedRecipes")
   favoritedRecipes Recipe[]          @relation("FavoritedRecipes")
+  editedRecipes    Recipe[]
 }
 
 model OwnedIngredient {
@@ -51,9 +52,9 @@ model Ingredient {
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations
 model Recipe {
   id                 Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
-  apiId              Int      @unique
+  apiId              Int
   originalSource     String
-  editingAuthor      String
+  editingAuthorName  String
   recipeTitle        String
   previewImage       String // if image not provided, generic image will be presented
   servings           Int
@@ -68,4 +69,9 @@ model Recipe {
   dairyFree          Boolean
   users              User[]   @relation("PlannedRecipes")
   usersThatFavorited User[]   @relation("FavoritedRecipes")
+  editingAuthorId    Int?
+  editingAuthor      User?    @relation(fields: [editingAuthorId], references: [id])
+
+
+  @@unique([apiId, editingAuthorId])
 }

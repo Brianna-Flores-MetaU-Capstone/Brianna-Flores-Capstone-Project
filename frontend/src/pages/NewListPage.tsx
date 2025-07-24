@@ -48,7 +48,7 @@ const NewListPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, selectedRecipe, setMessage });
+      await updateUserRecipes({ editedRecipe: false, userId, selectedRecipe, setMessage });
       await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
@@ -67,8 +67,8 @@ const NewListPage = () => {
   const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
     try {
       await axios.put(
-        `${databaseUrl}/recipes/planned/${deletedRecipe.apiId}`,
-        {},
+        `${databaseUrl}/recipes/planned/remove`,
+        {deletedRecipe},
         axiosConfig
       );
       await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });

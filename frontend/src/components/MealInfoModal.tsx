@@ -3,6 +3,7 @@ import { GPModalStyle } from "../utils/UIStyle";
 import type { GPRecipeDataTypes } from "../utils/types";
 import {
   Modal,
+  Button,
   Typography,
   Sheet,
   List,
@@ -12,7 +13,8 @@ import {
   Link,
   AspectRatio,
 } from "@mui/joy";
-import LinkIcon from '@mui/icons-material/Link';
+import PersonIcon from "@mui/icons-material/Person";
+import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
 
@@ -35,17 +37,26 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet variant="outlined" sx={GPModalStyle}>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md"}}>
+        <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md" }}>
             <img src={recipeInfo?.previewImage} />
           </AspectRatio>
-          <Box
-            sx={GPCenteredBoxStyle}
-          >
+          <Box sx={GPCenteredBoxStyle}>
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
+            {recipeInfo?.editingAuthorName && (
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                <PersonIcon />
+                <Typography>
+                  Edited by: {recipeInfo.editingAuthorName}
+                </Typography>
+                <Button>Compare With Original Recipe</Button>
+              </Box>
+            )}
             <Typography>Servings: {recipeInfo?.servings}</Typography>
             <DietsAndIntolerances recipeInfo={recipeInfo} />
-            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon/>}>Recipe link</Link>
+            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon />}>
+              Recipe link
+            </Link>
           </Box>
         </Box>
         <Box>
@@ -53,9 +64,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <List marker="circle">
             {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
               return (
-                <ListItem
-                  key={index}
-                >
+                <ListItem key={index}>
                   <ListItemContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >

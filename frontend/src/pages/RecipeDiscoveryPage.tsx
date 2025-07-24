@@ -69,7 +69,7 @@ const RecipeDiscoveryPage = () => {
       });
       // set favorited recipes id
       for (const elem of favoritedRecipesReturn) {
-        setFavoritedRecipesId(prev => new Set(prev.add(elem.apiId)));
+        setFavoritedRecipesId(prev => new Set(prev.add(elem.id)));
       }
     }
     setRecipeLists();
@@ -87,7 +87,7 @@ const RecipeDiscoveryPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, selectedRecipe: recipe, setMessage });
+      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
@@ -95,11 +95,11 @@ const RecipeDiscoveryPage = () => {
 
   const handleFavoriteClick = async (recipe: GPRecipeDataTypes) => {
     if (user) {
-      if (favoritedRecipesId.has(recipe.apiId)) {
+      if (favoritedRecipesId.has(recipe.id)) {
         handleUnfavoriteRecipe({ setMessage, recipe });
         // Removing an element from set useState variable
         setFavoritedRecipesId((prev) => {
-          prev.delete(recipe.apiId);
+          prev.delete(recipe.id);
           return new Set(prev);
         });
       } else {
@@ -108,7 +108,7 @@ const RecipeDiscoveryPage = () => {
           userId: user.id,
           selectedRecipe: recipe,
         });
-        setFavoritedRecipesId(prev => new Set(prev.add(recipe.apiId)))
+        setFavoritedRecipesId(prev => new Set(prev.add(recipe.id)))
       }
       fetchAllRecipeCategories({
         setMessage,
@@ -157,7 +157,7 @@ const RecipeDiscoveryPage = () => {
                 setMessage={setMessage}
                 selectedToCompare={false}
                 {...(user && { onFavoriteClick: handleFavoriteClick })}
-                favorited={favoritedRecipesId.has(meal.apiId)}
+                favorited={favoritedRecipesId.has(meal.id)}
                 cardSize={300}
               />
             )}
