@@ -265,6 +265,7 @@ const CalendarTimeModal = ({
                   sx={{ my: 2 }}
                   buttonFlex={1}
                   size="lg"
+                  spacing={2}
                 >
                   <Button
                     variant={!singleDayPrep ? "solid" : "outlined"}

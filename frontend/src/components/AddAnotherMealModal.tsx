@@ -34,6 +34,7 @@ import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { Recipe } from "../../../shared/Recipe";
 import MealInfoModal from "./recipeDisplay/MealInfoModal";
+import { useNavigate } from "react-router";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -65,6 +66,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
 
   const { user } = useUser();
+  const navigate = useNavigate()
 
   const parsePreferenceList = (preferenceList: string[]) => {
     let parsedPreferences = "";
@@ -240,6 +242,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     justifyContent: "space-between",
                   }}
                 >
+                  <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
                   {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
                   <FormControl
                     orientation="horizontal"
@@ -264,6 +267,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                       }}
                     />
                   </FormControl>
+                  <Button onClick={() => navigate("/account")}>Edit Dietary Preferences</Button>
+                  </Box>
                   <Button
                     type="submit"
                     loading={loadingSearchButton}

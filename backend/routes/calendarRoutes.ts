@@ -39,7 +39,7 @@ router.post(
       }
       res.json(newEvent);
     } catch (error) {
-      res.status(500).send("Server Error");
+      res.status(500).send("Error creating event object");
     }
   },
 );
