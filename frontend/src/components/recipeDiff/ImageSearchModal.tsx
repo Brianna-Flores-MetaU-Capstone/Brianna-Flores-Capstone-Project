@@ -21,11 +21,16 @@ import ErrorState from "../utils/ErrorState";
 import TitledListView from "../utils/TitledListView";
 import {
   CenteredTitledListStyle,
-  GPCenteredBoxStyle,
   GPModalStyle,
-  MUI_GRID_FULL_SPACE,
 } from "../../utils/style/UIStyle";
 const IMAGE_API_KEY = import.meta.env.VITE_IMAGE_API_KEY;
+
+const GPSelectedImageStyle = {
+  border: "4px solid",
+  borderColor: "primary.300",
+};
+
+const IMAGE_RESULTS_WIDTH = 150;
 
 type GPImageSearchModalTypes = {
   modalOpen: boolean;
@@ -57,7 +62,7 @@ const ImageSearchModal = ({
       });
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
-        (photoInfo: GPPexelsImageType) => photoInfo.src?.large,
+        (photoInfo: GPPexelsImageType) => photoInfo.src?.original
       );
       setImageSearchResults(photosSrc);
     } catch (error) {
@@ -80,6 +85,8 @@ const ImageSearchModal = ({
     toggleModal();
     onSubmit(selectedImages);
     setSelectedImages(new Set());
+    setImageSearchResults([]);
+    setImageSearchTerm("");
   };
 
   return (
@@ -125,11 +132,8 @@ const ImageSearchModal = ({
                     ratio={1}
                     key={index}
                     sx={{
-                      ...(selectedImages.has(imageUrl) && {
-                        border: "4px solid",
-                        borderColor: "primary.300",
-                      }),
-                      width: 150,
+                      ...(selectedImages.has(imageUrl) && GPSelectedImageStyle),
+                      width: IMAGE_RESULTS_WIDTH,
                     }}
                   >
                     <img src={imageUrl} alt={imageSearchTerm} />
