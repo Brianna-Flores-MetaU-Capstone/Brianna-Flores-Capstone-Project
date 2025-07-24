@@ -4,7 +4,7 @@ import type {
 } from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import TitledListView from "../components/utils/TitledListView";
-import { PreviewConstants } from "../utils/constants";
+import { PreviewConstants, RecipeFetchEnum } from "../utils/constants";
 import { MUI_GRID_FULL_SPACE } from "../utils/style/UIStyle";
 import Ingredient from "../components/ingredients/Ingredient";
 import MealCard from "../components/recipeDisplay/MealCard";
@@ -46,7 +46,7 @@ const Homepage = () => {
       await fetchRecipes({
         setMessage,
         setRecipes: setSelectedRecipes,
-        recipeGroup: "planned",
+        recipeGroup: RecipeFetchEnum.PLANNED,
       });
     };
     setUserListPreviews();
