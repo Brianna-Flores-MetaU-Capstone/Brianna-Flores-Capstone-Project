@@ -34,7 +34,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -67,7 +67,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -166,7 +166,6 @@ const MealCard: React.FC<GPMealCardProps> = ({
             </Typography>
           )}
           <DietsAndIntolerances recipeInfo={parsedMealData} />
-          <Button onClick={() => onMealCardClick()}>View Recipe Details</Button>
           {toggleCalendarTimeModal && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {parsedMealData.calendarEvents.length > 0 ? (
@@ -208,7 +207,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
               </Tooltip>
             </Box>
           )}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
                 <Button
@@ -225,6 +224,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 </Button>
               </Tooltip>
             )}
+            <Button sx={{flexGrow: 1}} onClick={() => onMealCardClick()}>
+              View Recipe Details
+            </Button>
             {onEditRecipe && (
               <Tooltip title="Add your own edits!">
                 <IconButton
