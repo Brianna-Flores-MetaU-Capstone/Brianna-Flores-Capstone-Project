@@ -47,7 +47,7 @@ const ImageSearchModal = ({
         },
         params: {
           query: imageSearchTerm,
-          per_page: 6,
+          per_page: 8,
         },
       });
       const photosArray = imageResults.data.photos;
@@ -123,7 +123,7 @@ const ImageSearchModal = ({
                       ...(selectedImages.has(imageUrl) && {
                         border: "4px solid", borderColor: "primary.300"
                       }),
-                      width: 125
+                      width: 150
                     }}
                   >
                     <img src={imageUrl} alt={imageSearchTerm} />

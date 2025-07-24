@@ -24,7 +24,7 @@ const CalendarOptionGroup = ({
           justifyContent: "space-between",
         }}
       >
-        <Typography>Option Group #{groupNum}</Typography>
+        <Typography>Option #{groupNum}</Typography>
       </Box>
       <TitledListView
         itemsList={eventOptions}

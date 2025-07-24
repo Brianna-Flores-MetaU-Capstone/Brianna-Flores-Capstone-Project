@@ -89,12 +89,12 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
               <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
               {recipeInfo?.editingAuthorName && (
                 <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 1,
-                  }}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 1,
+                }}
                 >
                   <PersonIcon />
                   <Typography>
@@ -105,6 +105,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                   </Button>
                 </Box>
               )}
+              <Typography>Original creator: {recipeInfo?.originalSource}</Typography>
               <Typography>Servings: {recipeInfo?.servings}</Typography>
               <DietsAndIntolerances recipeInfo={recipeInfo} />
               <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon />}>
