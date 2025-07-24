@@ -3,6 +3,8 @@ import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
   apiId: number;
+  originalSource: string;
+  editingAuthor: string;
   recipeTitle: string;
   previewImage: string;
   servings: number;
@@ -38,8 +40,8 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
-  ingredientCost: number;
-  ingredientCostUnit: number;
+  ingredientCost?: number;
+  ingredientCostUnit?: number;
 };
 
 type GPCurrentUserTypes = {

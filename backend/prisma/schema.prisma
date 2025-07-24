@@ -52,6 +52,8 @@ model Ingredient {
 model Recipe {
   id                 Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
   apiId              Int      @unique
+  originalSource     String
+  editingAuthor      String
   recipeTitle        String
   previewImage       String // if image not provided, generic image will be presented
   servings           Int

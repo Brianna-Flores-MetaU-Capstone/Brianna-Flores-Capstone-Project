@@ -22,6 +22,7 @@ import {
 import ErrorState from "../components/ErrorState";
 import MealInfoModal from "../components/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
+import EditRecipeModal from "../components/EditRecipeModal";
 
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
@@ -51,6 +52,8 @@ const RecipeDiscoveryPage = () => {
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
     new Set()
   );
+  const [editRecipeInfo, setEditRecipeInfo] = useState<GPRecipeDataTypes>()
+  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false)
 
   useEffect(() => {
     const setRecipeLists = async () => {
@@ -116,6 +119,11 @@ const RecipeDiscoveryPage = () => {
     }
   };
 
+  const handleEditRecipe = (recipe: GPRecipeDataTypes) => {
+    setEditRecipeModalOpen((prev) => !prev)
+    setEditRecipeInfo(recipe)
+  }
+
   return (
     <Box>
       <AppHeader />
@@ -138,12 +146,15 @@ const RecipeDiscoveryPage = () => {
               <MealCard
                 key={index}
                 index={index}
+                parsedMealData={meal}
                 onMealCardClick={() => handleRecipeCardClick(meal)}
                 {...(user && {
                   onSelectRecipe: () => handleSelectRecipeToShop(meal),
                 })}
+                {...(user && {
+                  onEditRecipe: () => handleEditRecipe(meal),
+                })}
                 setMessage={setMessage}
-                parsedMealData={meal}
                 selectedToCompare={false}
                 {...(user && { onFavoriteClick: handleFavoriteClick })}
                 favorited={favoritedRecipesId.has(meal.apiId)}
@@ -162,6 +173,11 @@ const RecipeDiscoveryPage = () => {
         modalOpen={recipeInfoModalOpen}
         recipeInfo={recipeInfoModalInfo}
       />
+      <EditRecipeModal
+        recipe={editRecipeInfo}
+        modalOpen={editRecipeModalOpen}
+        toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
+        />
     </Box>
   );
 };

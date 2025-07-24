@@ -112,6 +112,8 @@ router.post(
     const userId = parseInt(req.params.userId);
     const {
       apiId,
+      originalAuthor,
+      editingAuthor,
       recipeTitle,
       previewImage,
       servings,
@@ -148,6 +150,8 @@ router.post(
         recipe = await prisma.Recipe.create({
           data: {
             apiId,
+            originalAuthor,
+            editingAuthor,
             recipeTitle,
             previewImage,
             servings,
