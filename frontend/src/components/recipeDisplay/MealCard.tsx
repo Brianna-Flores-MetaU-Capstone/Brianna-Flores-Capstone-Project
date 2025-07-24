@@ -230,7 +230,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
               View Recipe Details
             </Button>
             {onEditRecipe && (
-              <Tooltip title="Add your own edits!">
+              <Tooltip title="Create your own variant!">
                 <IconButton
                   onClick={(event) => {
                     event.stopPropagation();

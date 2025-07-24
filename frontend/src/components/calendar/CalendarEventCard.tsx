@@ -77,7 +77,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
           }}
         >
           <Typography level="body-md">
-            Cook Time: {recipe.readyInMinutes}
+            Cook Time: {recipe.readyInMinutes} minutes
           </Typography>
           <Typography level="body-md">Servings: {recipe.servings}</Typography>
         </Box>

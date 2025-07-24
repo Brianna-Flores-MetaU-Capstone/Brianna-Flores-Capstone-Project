@@ -69,7 +69,7 @@ const EditRecipeFieldsEnum = {
 const recipeInputEditFields = [
   { label: "Recipe Title", field: EditRecipeFieldsEnum.TITLE, spacing: 12 },
   { label: "Servings", field: EditRecipeFieldsEnum.SERVINGS, spacing: 2 },
-  { label: "Cook Time", field: EditRecipeFieldsEnum.READY_IN, spacing: 4 },
+  { label: "Cook Time (in minutes)", field: EditRecipeFieldsEnum.READY_IN, spacing: 4 },
   { label: "Editor Username", field: EditRecipeFieldsEnum.EDITOR, spacing: 6 },
   { label: "Recipe URL", field: EditRecipeFieldsEnum.URL, spacing: 12 },
 ] as const;
@@ -212,7 +212,7 @@ const EditRecipeModal = ({
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseInt(action.value) <= 0,
+            parseFloat(action.value) <= 0,
         );
         return {
           ...state,
@@ -329,7 +329,7 @@ const EditRecipeModal = ({
                           borderRadius: "md",
                         }}
                       >
-                        <Typography level="h4">Edit Recipe</Typography>
+                        <Typography level="h4">Create Your Own Variant</Typography>
                       </Grid>
                       {recipeInputEditFields.map((field, index) => (
                         <Grid key={index} xs={field.spacing}>
