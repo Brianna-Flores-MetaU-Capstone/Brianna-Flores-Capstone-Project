@@ -36,6 +36,7 @@ type GPEditRecipeModalType = {
   recipe: Recipe | undefined;
   modalOpen: boolean;
   toggleModal: () => void;
+  onSubmit: () => void;
 };
 
 const actions = {
@@ -85,6 +86,7 @@ const EditRecipeModal = ({
   recipe,
   modalOpen,
   toggleModal,
+  onSubmit,
 }: GPEditRecipeModalType) => {
   const initialRecipeState = recipe ?? {
     id: 0,
@@ -152,6 +154,9 @@ const EditRecipeModal = ({
       };
 
   const [inputError, setInputError] = useState(false);
+  const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
     switch (action.type) {
@@ -225,10 +230,6 @@ const EditRecipeModal = ({
     }
   }
 
-  const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const { user } = useUser();
-
   useEffect(() => {
     if (recipe) {
       dispatch({ type: actions.SET_RECIPE, value: recipe });
@@ -268,6 +269,8 @@ const EditRecipeModal = ({
         selectedRecipe: newRecipe,
         setMessage,
       });
+      toggleModal();
+      onSubmit();
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
