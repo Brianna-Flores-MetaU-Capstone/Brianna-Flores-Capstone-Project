@@ -12,12 +12,14 @@ import SignupForm from "./pages/SignupForm";
 import AccountPage from "./pages/AccountPage";
 import WithAuth from "./components/WithAuth";
 import RecipeDiscoveryPage from "./pages/RecipeDiscoveryPage";
+import FavoritedRecipes from "./pages/FavoritedRecipes";
 
 function App() {
   const AuthNewListPage = WithAuth(NewListPage);
   const AuthIngredientsList = WithAuth(IngredientsPage);
   const AuthGroceryList = WithAuth(GroceryList);
   const AuthAccountPage = WithAuth(AccountPage);
+  const AuthFavoritedPage = WithAuth(FavoritedRecipes)
 
   return (
     <CssVarsProvider theme={theme}>
@@ -32,6 +34,7 @@ function App() {
           <Route path="signup" element={<SignupForm />} />
           <Route path="account" element={<AuthAccountPage />} />
           <Route path="discovery" element={<RecipeDiscoveryPage />} />
+          <Route path="favorited" element={<AuthFavoritedPage />} />
         </Routes>
       </BrowserRouter>
     </CssVarsProvider>

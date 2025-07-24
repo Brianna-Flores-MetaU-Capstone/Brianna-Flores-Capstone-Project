@@ -165,7 +165,8 @@ const RowOverflowTitledListStyle = {
 const ColumnOverflowTitledListStyle = {
   ...BaseListStyle,
   flexDirection: "column",
-  overflowY: "auto" 
+  overflowY: "auto",
+  maxHeight: 300,
 }
 
 const CenteredTitledListStyle = {

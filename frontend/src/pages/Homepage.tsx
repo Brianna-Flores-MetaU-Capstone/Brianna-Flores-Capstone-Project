@@ -20,8 +20,6 @@ import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
 import { ColumnOverflowTitledListStyle, RowOverflowTitledListStyle } from "../utils/UIStyle";
 
-const LIST_HEIGHT = 250
-
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
