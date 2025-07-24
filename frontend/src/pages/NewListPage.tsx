@@ -31,6 +31,7 @@ import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import EventSummaryModal from "../components/calendar/EventSummaryModal";
 import { RecipeFetchEnum } from "../utils/constants";
+import Masonry from "react-responsive-masonry";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -87,7 +88,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
-        axiosConfig,
+        axiosConfig
       );
       await fetchRecipes({
         setMessage,
@@ -116,7 +117,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig,
+        axiosConfig
       );
       navigate("/grocery-list");
     } catch (error) {

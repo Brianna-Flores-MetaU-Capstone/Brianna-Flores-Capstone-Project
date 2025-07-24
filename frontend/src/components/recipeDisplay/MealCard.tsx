@@ -34,7 +34,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -67,7 +67,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -100,18 +100,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            level="h4"
-            sx={{
-              textAlign: "center",
-              textWrap: "nowrap",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {parsedMealData.recipeTitle}
-          </Typography>
+          <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
           {onFavoriteClick && (
             <Tooltip
               title={favorited ? "Remove from favorites" : "Add to favorites"}
