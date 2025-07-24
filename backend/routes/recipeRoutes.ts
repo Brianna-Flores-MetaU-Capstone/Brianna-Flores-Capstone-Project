@@ -15,6 +15,9 @@ router.post("/discover", async (req: Request, res: Response) => {
   try {
     const recipeData = await prisma.recipe.findMany({
       ...(filter !== "all" ? { where: { [filter]: true } } : {}),
+      orderBy: {
+        id: "desc",
+      },
       skip: parseInt(offset),
       take: parseInt(numRequested),
     });
@@ -31,7 +34,7 @@ router.post(
     const { convertTo, converting } = req.body;
     const converted = convertUnits({ convertTo, converting });
     res.json(converted);
-  },
+  }
 );
 
 router.get("/original/:apiId", async (req: Request, res: Response) => {
@@ -102,7 +105,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users favorited recipes
@@ -124,7 +127,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // add a new recipe to a users planned recipes to shop
@@ -220,7 +223,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // Add recipe to users favorites list
@@ -250,7 +253,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // remove recipe from users favorites list
