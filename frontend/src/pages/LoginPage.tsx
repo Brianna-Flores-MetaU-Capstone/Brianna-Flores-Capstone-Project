@@ -36,6 +36,7 @@ const LoginPage = () => {
                 setUser(userExtendedData.data);
               }
               setMessage({ error: false, message: "Successfully logged in!" });
+              navigate("/discovery");
             } catch (error) {
               setUser(null);
               setMessage({ error: true, message: "Error saving login" });

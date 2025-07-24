@@ -11,7 +11,7 @@ const ErrorState: React.FC<GPErrorMessageTypes> = ({ error, message }) => {
     <div>
       <Alert
         startDecorator={error ? <ReportIcon /> : <CheckCircleIcon />}
-        sx={{ alignItems: "flex-start", my: 1}}
+        sx={{ alignItems: "flex-start", my: 1 }}
         color={error ? "danger" : "success"}
       >
         {displayedMessage}

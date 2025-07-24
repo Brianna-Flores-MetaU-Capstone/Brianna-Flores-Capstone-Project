@@ -206,20 +206,20 @@ const EditRecipeModal = ({
         return {
           ...state,
           previewImage: state.previewImage.filter(
-            (imageUrl) => imageUrl !== action.value
+            (imageUrl) => imageUrl !== action.value,
           ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseInt(action.value) <= 0
+            parseInt(action.value) <= 0,
         );
         return {
           ...state,
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem
+              : elem,
           ),
         };
       case actions.UPDATE_INSTRUCTION:
@@ -227,7 +227,7 @@ const EditRecipeModal = ({
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step
+            index === action.instructionIndex ? action.value : step,
           ),
         };
       case actions.DELETE_ITEM:
@@ -236,7 +236,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (item, index) => index !== action.itemIndex
+              (item, index) => index !== action.itemIndex,
             ),
           };
         } else {
@@ -286,7 +286,7 @@ const EditRecipeModal = ({
       editedRecipeData.recipeTags,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName
+      editedRecipeData.editingAuthorName,
     );
     try {
       const userId = user.id;

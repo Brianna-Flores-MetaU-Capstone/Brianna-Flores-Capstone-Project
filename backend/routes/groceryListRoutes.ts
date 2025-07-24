@@ -69,7 +69,8 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
     }
     const checkedGroceryList = user.groceryList.map(
       (ingredientItem: GPIngredientDataTypes) =>
-        ingredientItem.ingredientName.toLowerCase() === ingredientName.toLowerCase()
+        ingredientItem.ingredientName.toLowerCase() ===
+        ingredientName.toLowerCase()
           ? {
               ...ingredientItem,
               isChecked: !ingredientItem.isChecked,

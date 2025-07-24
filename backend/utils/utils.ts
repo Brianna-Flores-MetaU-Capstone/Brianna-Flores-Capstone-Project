@@ -127,7 +127,8 @@ const getListOfMissingIngredients = ({
   for (const recipeIngredient of recipeIngredients) {
     const alreadyInGroceryList = ingredientsToPurchase.find(
       (ingredient) =>
-        ingredient.ingredientName.toLowerCase() === recipeIngredient.ingredientName.toLowerCase(),
+        ingredient.ingredientName.toLowerCase() ===
+        recipeIngredient.ingredientName.toLowerCase(),
     );
     if (!alreadyInGroceryList) {
       const totalQuantity = getTotalQuantity({
@@ -149,7 +150,9 @@ const getListOfMissingIngredients = ({
         // user has ingredient, check if they have enough
         const ingredientOnHand =
           ownedIngredients[
-            ownedIngredientsNames.indexOf(recipeIngredient.ingredientName.toLowerCase())
+            ownedIngredientsNames.indexOf(
+              recipeIngredient.ingredientName.toLowerCase(),
+            )
           ];
         const quantityUserNeeds = quantityNeeded({
           ingredientOnHand,
@@ -205,10 +208,11 @@ const getCostForAmountOfIngredient = async ({
   // get the cost and quantity of first result (most rellevant)
   if (searchResults?.items) {
     const ingredientCost = searchResults.items[0]?.salePrice ?? 0;
-    const ingredientCostUnit = searchResults.items[0]?.size ?? "Price not Found";
+    const ingredientCostUnit =
+      searchResults.items[0]?.size ?? "Price not Found";
     return { ingredientCost, ingredientCostUnit };
   }
-  return { ingredientCost: 0, ingredientCostUnit: "Price not Found"}
+  return { ingredientCost: 0, ingredientCostUnit: "Price not Found" };
 };
 
 export {

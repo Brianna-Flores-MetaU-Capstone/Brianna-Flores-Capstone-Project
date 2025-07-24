@@ -11,7 +11,7 @@ type GPTitledListViewProps<T> = {
   renderItem: (item: T, index: number) => React.ReactNode;
   headerList?: GPHeaderListType[];
   listItemsStyle?: {};
-  centerTitle?: boolean
+  centerTitle?: boolean;
 };
 
 const TitledListView = <T,>({
@@ -32,7 +32,7 @@ const TitledListView = <T,>({
             bgcolor: "primary.300",
             borderRadius: "md",
             mb: 2,
-            ...(centerTitle && {textAlign: "center"})
+            ...(centerTitle && { textAlign: "center" }),
           }}
         >
           {headerList.map((header, index) => (

@@ -19,7 +19,12 @@ import type {
 } from "../../utils/types/types";
 import ErrorState from "../utils/ErrorState";
 import TitledListView from "../utils/TitledListView";
-import { CenteredTitledListStyle, GPCenteredBoxStyle, GPModalStyle, MUI_GRID_FULL_SPACE } from "../../utils/style/UIStyle";
+import {
+  CenteredTitledListStyle,
+  GPCenteredBoxStyle,
+  GPModalStyle,
+  MUI_GRID_FULL_SPACE,
+} from "../../utils/style/UIStyle";
 const IMAGE_API_KEY = import.meta.env.VITE_IMAGE_API_KEY;
 
 type GPImageSearchModalTypes = {
@@ -52,7 +57,7 @@ const ImageSearchModal = ({
       });
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
-        (photoInfo: GPPexelsImageType) => photoInfo.src?.large
+        (photoInfo: GPPexelsImageType) => photoInfo.src?.large,
       );
       setImageSearchResults(photosSrc);
     } catch (error) {
@@ -72,9 +77,9 @@ const ImageSearchModal = ({
   };
 
   const handleImageConfirmation = () => {
-    toggleModal()
+    toggleModal();
     onSubmit(selectedImages);
-    setSelectedImages(new Set())
+    setSelectedImages(new Set());
   };
 
   return (
@@ -89,23 +94,23 @@ const ImageSearchModal = ({
         <DialogContent sx={{ my: 3 }}>
           <form onSubmit={handleSearchSubmit}>
             <Grid container alignItems="flex-end">
-                <Grid xs={10}>
-            <FormControl>
-              <FormLabel>Search Images</FormLabel>
-              <Input
-                slotProps={{
-                  input: { "data-reciperequest": "recipeName" },
-                }}
-                onChange={(event) => setImageSearchTerm(event.target.value)}
-                value={imageSearchTerm}
-                required
-              />
-            </FormControl>
+              <Grid xs={10}>
+                <FormControl>
+                  <FormLabel>Search Images</FormLabel>
+                  <Input
+                    slotProps={{
+                      input: { "data-reciperequest": "recipeName" },
+                    }}
+                    onChange={(event) => setImageSearchTerm(event.target.value)}
+                    value={imageSearchTerm}
+                    required
+                  />
+                </FormControl>
+              </Grid>
+              <Grid xs={2}>
+                <Button type="submit">Search!</Button>
+              </Grid>
             </Grid>
-            <Grid xs={2}>
-            <Button type="submit">Search!</Button>
-                </Grid>
-                </Grid>
           </form>
           {message && (
             <ErrorState error={message.error} message={message.message} />
@@ -121,9 +126,10 @@ const ImageSearchModal = ({
                     key={index}
                     sx={{
                       ...(selectedImages.has(imageUrl) && {
-                        border: "4px solid", borderColor: "primary.300"
+                        border: "4px solid",
+                        borderColor: "primary.300",
                       }),
-                      width: 150
+                      width: 150,
                     }}
                   >
                     <img src={imageUrl} alt={imageSearchTerm} />
@@ -133,7 +139,10 @@ const ImageSearchModal = ({
               />
             }
             {imageSearchResults.length > 0 && (
-              <Button sx={{justifySelf: "center"}} onClick={handleImageConfirmation}>
+              <Button
+                sx={{ justifySelf: "center" }}
+                onClick={handleImageConfirmation}
+              >
                 Confirm Selection!
               </Button>
             )}

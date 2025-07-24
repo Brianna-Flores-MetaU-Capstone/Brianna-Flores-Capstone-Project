@@ -11,7 +11,7 @@ const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
       <Grid container alignItems="center">
         <Grid container xs={4}>
           <Grid xs={11}>
-          <Typography>{ingredientCostInfo.ingredientName}</Typography>
+            <Typography>{ingredientCostInfo.ingredientName}</Typography>
           </Grid>
         </Grid>
         <Grid xs={4}>
