@@ -1,8 +1,9 @@
 import React from "react";
 import { GPModalStyle } from "../utils/UIStyle";
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
 import {
   Modal,
+  Button,
   Typography,
   Sheet,
   List,
@@ -12,9 +13,13 @@ import {
   Link,
   AspectRatio,
 } from "@mui/joy";
-import LinkIcon from '@mui/icons-material/Link';
+import PersonIcon from "@mui/icons-material/Person";
+import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { GPCenteredBoxStyle } from "../utils/UIStyle";
+import { checkForChangedLines, getIngredientsDiff, getInstructionsLCS } from "../utils/diffUtils";
+import { fetchSingleRecipe } from "../utils/databaseHelpers";
+import { useState } from "react";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -27,6 +32,35 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   modalOpen,
   recipeInfo,
 }) => {
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const onCompareWithOriginal = async () => {
+    // we are viewing the edited recipe, need to fetch original recipe
+    if (!recipeInfo) {
+      setMessage({
+        error: true,
+        message: "Error no recipe info set",
+      });
+      return;
+    }
+    const originalRecipe = await fetchSingleRecipe({
+      setMessage,
+      selectedRecipe: recipeInfo,
+    });
+    const diffInstructionLines = getInstructionsLCS({
+      instructionsA: originalRecipe.instructions,
+      instructionsB: recipeInfo.instructions,
+    });
+    if (!diffInstructionLines) {
+      setMessage({
+        error: true,
+        message: "Error during diff",
+      });
+      return;
+    }
+    const detailedDiffInstruction = checkForChangedLines({instructionDifferences: diffInstructionLines})
+    const ingredientsDiff = getIngredientsDiff({recipeA: originalRecipe, recipeB: recipeInfo})
+  };
+
   return (
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <Modal
@@ -35,17 +69,35 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet variant="outlined" sx={GPModalStyle}>
-        <Box sx={{ display: "flex" }}>
-          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md"}}>
+        <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md" }}>
             <img src={recipeInfo?.previewImage} />
           </AspectRatio>
-          <Box
-            sx={GPCenteredBoxStyle}
-          >
+          <Box sx={GPCenteredBoxStyle}>
             <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
+            {recipeInfo?.editingAuthorName && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <PersonIcon />
+                <Typography>
+                  Edited by: {recipeInfo.editingAuthorName}
+                </Typography>
+                <Button onClick={onCompareWithOriginal}>
+                  Compare With Original Recipe
+                </Button>
+              </Box>
+            )}
             <Typography>Servings: {recipeInfo?.servings}</Typography>
             <DietsAndIntolerances recipeInfo={recipeInfo} />
-            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon/>}>Recipe link</Link>
+            <Link href={recipeInfo?.sourceUrl} startDecorator={<LinkIcon />}>
+              Recipe link
+            </Link>
           </Box>
         </Box>
         <Box>
@@ -53,9 +105,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <List marker="circle">
             {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
               return (
-                <ListItem
-                  key={index}
-                >
+                <ListItem key={index}>
                   <ListItemContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
@@ -63,7 +113,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                     <Typography>
                       {ingredient.quantity % 1 === 0
                         ? ingredient.quantity
-                        : ingredient.quantity.toFixed(2)}{" "}
+                        : Number(ingredient.quantity).toFixed(2)}{" "}
                       {ingredient.unit}
                     </Typography>
                   </ListItemContent>

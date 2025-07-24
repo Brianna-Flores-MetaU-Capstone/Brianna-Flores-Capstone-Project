@@ -113,6 +113,11 @@ const theme = extendTheme({
         color: "error",
       },
     },
+    JoyIconButton: {
+      defaultProps: {
+        color: "primary",
+      },
+    },
   },
 });
 
@@ -149,26 +154,44 @@ const GPDiffHeaderStyle = {
 const BaseListStyle = {
   display: "flex",
   gap: 3,
-}
+};
 
 const RowOverflowTitledListStyle = {
   ...BaseListStyle,
   overflowX: "auto",
-  mb: 4
-}
+  mb: 4,
+};
 
 const ColumnOverflowTitledListStyle = {
   ...BaseListStyle,
   flexDirection: "column",
-  overflowY: "auto" 
-}
+  overflowY: "auto",
+  maxHeight: 300,
+};
+
+const RecipeTagsTitledListStyle = {
+  ...BaseListStyle,
+  flexDirection: "column",
+  gap: 2,
+  mb: 2,
+};
 
 const CenteredTitledListStyle = {
   ...BaseListStyle,
   flexWrap: "wrap",
   justifyContent: "center",
-}
+};
 
 const MUI_GRID_FULL_SPACE = 12;
 
-export { GPModalStyle, GPCenteredBoxStyle, GPDiffHeaderStyle, theme, MUI_GRID_FULL_SPACE, RowOverflowTitledListStyle, ColumnOverflowTitledListStyle, CenteredTitledListStyle };
+export {
+  GPModalStyle,
+  GPCenteredBoxStyle,
+  GPDiffHeaderStyle,
+  theme,
+  MUI_GRID_FULL_SPACE,
+  RowOverflowTitledListStyle,
+  ColumnOverflowTitledListStyle,
+  CenteredTitledListStyle,
+  RecipeTagsTitledListStyle
+};

@@ -20,8 +20,6 @@ import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
 import { ColumnOverflowTitledListStyle, RowOverflowTitledListStyle } from "../utils/UIStyle";
 
-const LIST_HEIGHT = 250
-
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
@@ -44,7 +42,7 @@ const Homepage = () => {
           setMessage,
         });
         setUserIngredientList(userIngredients);
-        await fetchRecipes({ setMessage, setSelectedRecipes });
+        await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     };
     setUserListPreviews();
   }, []);
@@ -95,10 +93,11 @@ const Homepage = () => {
               <MealCard
                 key={meal.apiId}
                 index={index}
+                favorited={false}
                 onMealCardClick={() => navigate("/new-list")}
                 parsedMealData={meal}
                 setMessage={setMessage}
-                selected={false}
+                selectedToCompare={false}
                 cardSize={350}
               />
             )}

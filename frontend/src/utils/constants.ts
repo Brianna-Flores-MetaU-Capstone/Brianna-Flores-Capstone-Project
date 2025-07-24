@@ -12,8 +12,8 @@ const AuthenticationFieldEnum = {
 const EventTimeEnum = {
   DATE: "date",
   START: "start",
-  END: "end"
-}
+  END: "end",
+};
 
 const IngredientDataFields = {
   DEPARTMENT: "department",
@@ -23,6 +23,24 @@ const IngredientDataFields = {
   UNIT: "unit",
   ESTIMATED_COST: "estimatedCost",
   EXPIRATION_DATE: "expirationDate",
+};
+
+const RecipeDataFields = {
+  ID: "id",
+  API_ID: "apiId",
+  TITLE: "recipeTitle",
+  IMAGE: "previewImage",
+  SERVINGS: "servings",
+  INGREDIENTS: "ingredients",
+  INSTRUCTIONS: "instructions",
+  URL: "sourceUrl",
+  TIME: "readyInMinutes",
+  VEGETARIAN: "vegetarian",
+  VEGAN: "vegan",
+  GLUTEN_FREE: "glutenFree",
+  DAIRY_FREE: "dairyFree",
+  COST_INFO: "ingredientCostInfo",
+  TOTAL_COST: "totalCost",
 };
 
 const GROUP_OF_DISPLAYED_CARDS = 3;
@@ -42,6 +60,7 @@ export {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
   IngredientDataFields,
+  RecipeDataFields,
   PreviewConstants,
   EventTimeEnum,
   GROUP_OF_DISPLAYED_CARDS,

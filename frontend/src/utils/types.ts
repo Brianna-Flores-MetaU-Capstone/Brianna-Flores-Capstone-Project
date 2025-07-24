@@ -2,7 +2,11 @@ import type { User } from "firebase/auth";
 import TimeBlock from "../../../backend/utils/TimeBlockClass";
 
 type GPRecipeDataTypes = {
+  id: number,
   apiId: number;
+  originalSource: string;
+  editingAuthorName: string;
+  editingAuthorId: number | null;
   recipeTitle: string;
   previewImage: string;
   servings: number;
@@ -38,8 +42,8 @@ type GPIngredientDataTypes = {
   department: string;
   expirationDate?: string | null;
   isChecked: boolean;
-  ingredientCost: number;
-  ingredientCostUnit: number;
+  ingredientCost?: number;
+  ingredientCostUnit?: number;
 };
 
 type GPCurrentUserTypes = {

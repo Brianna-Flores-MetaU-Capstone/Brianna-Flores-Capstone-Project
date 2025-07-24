@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
   GPRecipeDiscoveryCategories,
+  GPRecipeDataTypes,
 } from "../utils/types";
-import { fetchAllRecipeCategories } from "../utils/databaseHelpers";
+import {
+  fetchAllRecipeCategories,
+  fetchRecipes,
+  handleFavoriteRecipe,
+  handleUnfavoriteRecipe,
+  updateUserRecipes,
+} from "../utils/databaseHelpers";
 import TitledListView from "../components/TitledListView";
 import MealCard from "../components/MealCard";
 import {
@@ -13,6 +20,9 @@ import {
   RowOverflowTitledListStyle,
 } from "../utils/UIStyle";
 import ErrorState from "../components/ErrorState";
+import MealInfoModal from "../components/MealInfoModal";
+import { useUser } from "../contexts/UserContext";
+import EditRecipeModal from "../components/EditRecipeModal";
 
 // https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
 const recipeFilters = [
@@ -34,39 +44,120 @@ const RecipeDiscoveryPage = () => {
       vegan: [],
     });
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
+    useState<GPRecipeDataTypes>();
+  const { user } = useUser();
+  const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
+    new Set()
+  );
+  const [editRecipeInfo, setEditRecipeInfo] = useState<GPRecipeDataTypes>()
+  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false)
 
   useEffect(() => {
+    const setRecipeLists = async () => {
     fetchAllRecipeCategories({
       setMessage,
       setRecipeDiscoveryResults,
       filters: recipeFilters,
-      offset: 0
+      offset: 0,
     });
-  }, []);
+    const favoritedRecipesReturn = await fetchRecipes({
+        setMessage,
+        recipeGroup: "favoritedIds",
+      });
+      // set favorited recipes id
+      for (const elem of favoritedRecipesReturn) {
+        setFavoritedRecipesId(prev => new Set(prev.add(elem.id)));
+      }
+    }
+    setRecipeLists();
+}, []);
+
+  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+    setRecipeInfoModalOpen((prev) => !prev);
+    setRecipeInfoModalInfo(recipe);
+  };
+
+  const handleSelectRecipeToShop = async (recipe: GPRecipeDataTypes) => {
+    if (!user) {
+      setMessage({ error: true, message: "Error user not signed in" });
+      return;
+    }
+    try {
+      const userId = user.id;
+      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
+    } catch (error) {
+      setMessage({ error: true, message: "Error adding recipe" });
+    }
+  };
+
+  const handleFavoriteClick = async (recipe: GPRecipeDataTypes) => {
+    if (user) {
+      if (favoritedRecipesId.has(recipe.id)) {
+        handleUnfavoriteRecipe({ setMessage, recipe });
+        // Removing an element from set useState variable
+        setFavoritedRecipesId((prev) => {
+          prev.delete(recipe.id);
+          return new Set(prev);
+        });
+      } else {
+        handleFavoriteRecipe({
+          setMessage,
+          userId: user.id,
+          selectedRecipe: recipe,
+        });
+        setFavoritedRecipesId(prev => new Set(prev.add(recipe.id)))
+      }
+      fetchAllRecipeCategories({
+        setMessage,
+        setRecipeDiscoveryResults,
+        filters: recipeFilters,
+        offset: 0,
+      });
+    }
+  };
+
+  const handleEditRecipe = (recipe: GPRecipeDataTypes) => {
+    setEditRecipeModalOpen((prev) => !prev)
+    setEditRecipeInfo(recipe)
+  }
 
   return (
     <Box>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        {Object.keys(recipeDiscoveryResults).map((filter, i) => (
+        {Object.keys(recipeDiscoveryResults).map((filter, index) => (
           <TitledListView
+            key={index}
             itemsList={
               recipeDiscoveryResults[
                 filter as keyof GPRecipeDiscoveryCategories
               ]
             }
             headerList={[
-              { title: recipeFilters[i].title, spacing: MUI_GRID_FULL_SPACE },
+              {
+                title: recipeFilters[index].title,
+                spacing: MUI_GRID_FULL_SPACE,
+              },
             ]}
             renderItem={(meal, index) => (
               <MealCard
-                key={meal.apiId}
+                key={index}
                 index={index}
-                onMealCardClick={() => {}}
-                setMessage={setMessage}
                 parsedMealData={meal}
-                selected={false}
-                cardSize={200}
+                onMealCardClick={() => handleRecipeCardClick(meal)}
+                {...(user && {
+                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                })}
+                {...(user && {
+                  onEditRecipe: () => handleEditRecipe(meal),
+                })}
+                setMessage={setMessage}
+                selectedToCompare={false}
+                {...(user && { onFavoriteClick: handleFavoriteClick })}
+                favorited={favoritedRecipesId.has(meal.id)}
+                cardSize={300}
               />
             )}
             listItemsStyle={RowOverflowTitledListStyle}
@@ -76,6 +167,16 @@ const RecipeDiscoveryPage = () => {
       {message && (
         <ErrorState error={message.error} message={message.message} />
       )}
+      <MealInfoModal
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
+        modalOpen={recipeInfoModalOpen}
+        recipeInfo={recipeInfoModalInfo}
+      />
+      <EditRecipeModal
+        recipe={editRecipeInfo}
+        modalOpen={editRecipeModalOpen}
+        toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
+        />
     </Box>
   );
 };

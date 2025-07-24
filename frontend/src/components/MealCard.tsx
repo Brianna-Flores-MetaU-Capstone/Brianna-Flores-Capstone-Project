@@ -1,17 +1,21 @@
 import type { GPRecipeDataTypes } from "../utils/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import {
   Button,
   Box,
   Card,
   CardContent,
-  CardCover,
-  Link,
   Typography,
   Checkbox,
+  Tooltip,
+  IconButton,
+  AspectRatio,
 } from "@mui/joy";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import PersonIcon from "@mui/icons-material/Person";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
 import { estimateRecipeCost } from "../utils/utils";
@@ -20,30 +24,36 @@ import type { GPErrorMessageTypes } from "../utils/types";
 
 type GPMealCardProps = {
   index: number;
-  onMealCardClick: () => void;
   parsedMealData: GPRecipeDataTypes;
+  selectedToCompare: boolean;
+  cardSize: number;
+  favorited: boolean;
+  onMealCardClick: () => void;
   setMessage: (
     value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: GPRecipeDataTypes) => void;
+  onEditRecipe?: (data: GPRecipeDataTypes) => void;
   onDeleteRecipe?: (data: GPRecipeDataTypes) => void;
-  onLoadRecipes?: (data: GPRecipeDataTypes, index: number) => void;
-  selected: boolean;
+  onLoadRecipeCost?: (data: GPRecipeDataTypes, index: number) => void;
   onCompareSelect?: (data: GPRecipeDataTypes) => void;
-  cardSize: number
+  onFavoriteClick?: (data: GPRecipeDataTypes) => void;
 };
 
 const MealCard: React.FC<GPMealCardProps> = ({
   index,
-  onMealCardClick,
   parsedMealData,
+  selectedToCompare,
+  cardSize,
+  favorited,
+  onMealCardClick,
   setMessage,
   onSelectRecipe,
+  onEditRecipe,
   onDeleteRecipe,
-  onLoadRecipes,
-  selected,
+  onLoadRecipeCost,
   onCompareSelect,
-  cardSize,
+  onFavoriteClick,
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -52,7 +62,10 @@ const MealCard: React.FC<GPMealCardProps> = ({
     setIngredientCostModalOpen((prev) => !prev);
   };
 
-  const handleCostEstimateClick = async () => {
+  const handleCostEstimateClick = async (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    event.stopPropagation();
     setLoading(true);
     const ownedIngredients = await fetchUserIngredientsHelper({
       setMessage: setMessage,
@@ -67,8 +80,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
       ingredientCostInfo: estimatedRecipeCostInfo.ingredientCostInfo,
       totalCost: estimatedRecipeCostInfo.estimatedCost,
     };
-    if (onLoadRecipes) {
-      onLoadRecipes(updatedRecipeInfo, index);
+    if (onLoadRecipeCost) {
+      onLoadRecipeCost(updatedRecipeInfo, index);
     }
     setLoading(false);
     toggleModal();
@@ -80,89 +93,127 @@ const MealCard: React.FC<GPMealCardProps> = ({
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card
         variant="outlined"
-        sx={{ minHeight: "200px", minWidth: cardSize, width: cardSize}}
+        sx={{ minWidth: cardSize, width: cardSize }}
         onClick={() => onMealCardClick()}
       >
-        <CardCover>
-          <img src={parsedMealData.previewImage} />
-        </CardCover>
-        <CardCover
+        <Box
           sx={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
           }}
-        />
-        {onCompareSelect && (
-          <Checkbox
-            sx={{ zIndex: 5}}
-            size="lg"
-            checked={selected}
-            onClick={(event) => {
-              event.stopPropagation();
-              onCompareSelect(parsedMealData);
+        >
+          <Typography
+            level="h4"
+            sx={{
+              textAlign: "center",
+              textWrap: "nowrap",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
             }}
-          />
-        )}
+          >
+            {parsedMealData.recipeTitle}
+          </Typography>
+          {onFavoriteClick && (
+            <Tooltip
+              title={favorited ? "Remove from favorites" : "Add to favorites"}
+            >
+              <IconButton
+                color="primary"
+                sx={{ zIndex: 2 }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onFavoriteClick(parsedMealData);
+                }}
+              >
+                {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+            </Tooltip>
+          )}
+          {onCompareSelect && (
+            <Tooltip title="Compare recipes">
+              <Checkbox
+                sx={{ zIndex: 5 }}
+                size="lg"
+                checked={selectedToCompare}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onCompareSelect(parsedMealData);
+                }}
+              />
+            </Tooltip>
+          )}
+        </Box>
+        <Box sx={{ my: 0, display: "flex", justifyContent: "space-between" }}>
+          <Typography>Servings: {parsedMealData.servings}</Typography>
+          {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
+            <Typography>
+              Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
+            </Typography>
+          )}
+        </Box>
+        <AspectRatio>
+          <img src={parsedMealData.previewImage} />
+        </AspectRatio>
         <CardContent sx={{ justifyContent: "flex-end" }}>
+          {parsedMealData.editingAuthorName && (
+            <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
+              <PersonIcon />
+              <Typography>Edited by: {parsedMealData.editingAuthorName}</Typography>
+            </Box>
+          )}
           {onSelectRecipe && (
             <DietsAndIntolerances recipeInfo={parsedMealData} />
           )}
-          <Typography textColor="#fff" level="h4">
-            {parsedMealData.recipeTitle}
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography textColor="neutral.300">
-              Servings: {parsedMealData.servings}
-            </Typography>
-            {onSelectRecipe && parsedMealData.totalCost > 0 && (
-              <Typography textColor="neutral.300">
-                Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
-              </Typography>
-            )}
-            {onDeleteRecipe && (
-              <Button
-                variant="plain"
-                size="lg"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDeleteRecipe?.(parsedMealData);
-                }}
-                sx={{ zIndex: 1 }}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </Button>
-            )}
-          </Box>
-          <Link overlay underline="none"></Link>
+          {onDeleteRecipe && (
+            <IconButton
+              color="primary"
+              variant="plain"
+              size="lg"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDeleteRecipe?.(parsedMealData);
+              }}
+              sx={{ zIndex: 1, alignSelf: "flex-end" }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {onSelectRecipe && (
-              <Button
-                onClick={() => {
-                  setMessage({
-                    error: false,
-                    message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
-                  });
-                  onSelectRecipe(parsedMealData);
-                }}
-                sx={{ color: "primary.50" }}
-              >
-                Select Recipe
-              </Button>
+              <Tooltip title="Add to recipes to shop">
+                <Button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setMessage({
+                      error: false,
+                      message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
+                    });
+                    onSelectRecipe(parsedMealData);
+                  }}
+                >
+                  Select Recipe
+                </Button>
+              </Tooltip>
             )}
-            {onSelectRecipe && parsedMealData.totalCost > 0 && (
-              <Button
-                onClick={toggleModal}
-                sx={{ zIndex: 1, color: "primary.50" }}
-              >
-                See Pricing Details
-              </Button>
+            {onEditRecipe && (
+              <Tooltip title="Add your own edits!">
+                <IconButton
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onEditRecipe(parsedMealData);
+                  }}
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             )}
-            {onSelectRecipe && parsedMealData.totalCost <= 0 && (
-              <Button
-                loading={loading}
-                sx={{ zIndex: 1, color: "primary.50" }}
-                onClick={handleCostEstimateClick}
-              >
+            {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
+              <Button onClick={toggleModal}>See Pricing Details</Button>
+            )}
+            {onLoadRecipeCost && parsedMealData.totalCost <= 0 && (
+              <Button loading={loading} onClick={handleCostEstimateClick}>
                 Get Estimated Cost
               </Button>
             )}

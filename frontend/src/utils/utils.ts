@@ -19,6 +19,9 @@ const parseRecipeData = async (recipeData: any) => {
       );
       return {
         apiId: recipe.id,
+        originalSource: recipe.sourceName,
+        editingAuthorName: "",
+        editingAuthorId: null,
         recipeTitle: recipe.title,
         previewImage: recipe.image,
         servings: recipe.servings,

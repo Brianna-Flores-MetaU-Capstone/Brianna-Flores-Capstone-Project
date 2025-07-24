@@ -171,17 +171,22 @@ const updateIngredientDatabase = async ({
 };
 
 type GPFetchRecipeTypes = GPSetMessageType & {
-  setSelectedRecipes: (
-    value: React.SetStateAction<GPRecipeDataTypes[]>
-  ) => void;
+  setRecipes?: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
+  recipeGroup: string;
 };
 const fetchRecipes = async ({
   setMessage,
-  setSelectedRecipes,
+  setRecipes,
+  recipeGroup,
 }: GPFetchRecipeTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/recipes`, axiosConfig);
-    setSelectedRecipes(response.data);
+    const response = await axios.get(
+      `${databaseUrl}/recipes/${recipeGroup}`,
+      axiosConfig
+    );
+    if (setRecipes) {
+      setRecipes(response.data);
+    }
     return response.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to fetch user recipes" });
@@ -189,18 +194,20 @@ const fetchRecipes = async ({
 };
 
 type GPUpdateUserRecipesTypes = GPSetMessageType & {
+  editedRecipe: boolean;
   selectedRecipe: GPRecipeDataTypes;
   userId: string;
 };
 const updateUserRecipes = async ({
+  editedRecipe,
   userId,
   selectedRecipe,
   setMessage,
 }: GPUpdateUserRecipesTypes) => {
   try {
     await axios.post(
-      `${databaseUrl}/recipes/${userId}`,
-      selectedRecipe,
+      `${databaseUrl}/recipes/planned/${userId}`,
+      { editedRecipe: editedRecipe, ...selectedRecipe },
       axiosConfig
     );
   } catch (error) {
@@ -312,6 +319,65 @@ const fetchAllRecipeCategories = async ({
   }
 };
 
+type GPUnfavoriteType = GPSetMessageType & {
+  recipe: GPRecipeDataTypes;
+};
+
+const handleUnfavoriteRecipe = async ({
+  setMessage,
+  recipe,
+}: GPUnfavoriteType) => {
+  try {
+    await axios.put(
+      `${databaseUrl}/recipes/favorited/unfavorite`,
+      { selectedRecipe: recipe },
+      axiosConfig
+    );
+  } catch (error) {
+    setMessage({ error: true, message: "Error unfavoriting recipe" });
+  }
+};
+
+type GPFavoriteType = GPSetMessageType & {
+  userId: string;
+  selectedRecipe: GPRecipeDataTypes;
+};
+
+const handleFavoriteRecipe = async ({
+  setMessage,
+  userId,
+  selectedRecipe,
+}: GPFavoriteType) => {
+  try {
+    await axios.post(
+      `${databaseUrl}/recipes/favorited/${userId}`,
+      { selectedRecipe },
+      axiosConfig
+    );
+  } catch (error) {
+    setMessage({ error: true, message: "Error favoriting recipe" });
+  }
+};
+
+type GPFetchSingleRecipeType = GPSetMessageType & {
+  selectedRecipe: GPRecipeDataTypes;
+};
+
+const fetchSingleRecipe = async ({
+  setMessage,
+  selectedRecipe,
+}: GPFetchSingleRecipeType) => {
+  try {
+    const originalRecipe = await axios.get(
+      `${databaseUrl}/recipes/original/${selectedRecipe.apiId}`,
+      axiosConfig
+    );
+    return originalRecipe.data;
+  } catch (error) {
+    setMessage({ error: true, message: "Error fetching original recipe" });
+  }
+};
+
 export {
   updateAccount,
   getUserData,
@@ -326,5 +392,8 @@ export {
   fetchGroceryList,
   fetchDiscoverRecipes,
   fetchAllRecipeCategories,
+  handleUnfavoriteRecipe,
+  handleFavoriteRecipe,
+  fetchSingleRecipe,
   axiosConfig,
 };
