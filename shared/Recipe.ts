@@ -8,7 +8,7 @@ class Recipe {
   readonly editingAuthorName: string;
   readonly editingAuthorId: number | null;
   readonly recipeTitle: string;
-  readonly previewImage: string;
+  readonly previewImage: string[];
   readonly servings: number;
   readonly ingredients: GPIngredientDataTypes[];
   readonly instructions: string[];
@@ -27,7 +27,7 @@ class Recipe {
     apiId: number,
     originalSource: string,
     recipeTitle: string,
-    previewImage: string,
+    previewImage: string[],
     servings: number,
     ingredients: GPIngredientDataTypes[],
     instructions: string[],

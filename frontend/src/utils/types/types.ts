@@ -9,7 +9,7 @@ type GPRecipeDataTypes = {
   editingAuthorName: string;
   editingAuthorId: number | null;
   recipeTitle: string;
-  previewImage: string;
+  previewImage: string[];
   servings: number;
   ingredients: GPIngredientDataTypes[];
   instructions: string[];
@@ -95,6 +95,29 @@ type GPRecipeDiscoveryCategories = {
   vegan: Recipe[];
 };
 
+type GPPexelsImageType = {
+  id: number;
+  width: number;
+  height: number;
+  url: string;
+  photographer: string;
+  photographer_url: string;
+  photographer_id: number;
+  avg_color: string;
+  src: {
+    original: string;
+    large2x: string;
+    large: string;
+    medium: string;
+    small: string;
+    portrait: string;
+    landscape: string;
+    tiny: string;
+  };
+  liked: boolean;
+  alt: string;
+};
+
 export type {
   GPAccountInfoTypes,
   GPCurrentUserTypes,
@@ -107,4 +130,5 @@ export type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPRecipeDiscoveryCategories,
+  GPPexelsImageType
 };

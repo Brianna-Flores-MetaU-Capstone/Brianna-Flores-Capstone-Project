@@ -90,7 +90,7 @@ const DiffOriginalRecipe = ({
           <DialogContent sx={{ m: 4 }}>
             <Box sx={GPMealInfoModalTitleStyle}>
               <AspectRatio ratio="1" sx={{ width: 350, borderRadius: "md" }}>
-                <img src={originalRecipeInfo.previewImage} />
+                <img src={originalRecipeInfo.previewImage[0]} />
               </AspectRatio>
               <Box sx={GPCenteredBoxStyle}>
                 {recipeDiffInfo?.titleDiffResults && (
