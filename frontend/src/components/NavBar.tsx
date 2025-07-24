@@ -19,7 +19,7 @@ const NavBar = () => {
 
   const pages = [
     { name: "Home", path: "/" },
-    { name: "Create List", path: "/new-list" },
+    { name: "Recipes to Shop", path: "/new-list" },
     { name: "Owned Ingredients", path: "/ingredients" },
     { name: "Grocery List", path: "/grocery-list" },
     { name: "Discover Recipes", path: "/discovery"},

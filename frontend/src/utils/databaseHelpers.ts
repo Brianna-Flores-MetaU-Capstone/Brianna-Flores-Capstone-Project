@@ -171,17 +171,22 @@ const updateIngredientDatabase = async ({
 };
 
 type GPFetchRecipeTypes = GPSetMessageType & {
-  setSelectedRecipes: (
-    value: React.SetStateAction<GPRecipeDataTypes[]>
-  ) => void;
+  setRecipes?: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
+  recipeGroup: string;
 };
 const fetchRecipes = async ({
   setMessage,
-  setSelectedRecipes,
+  setRecipes,
+  recipeGroup,
 }: GPFetchRecipeTypes) => {
   try {
-    const response = await axios.get(`${databaseUrl}/recipes`, axiosConfig);
-    setSelectedRecipes(response.data);
+    const response = await axios.get(
+      `${databaseUrl}/recipes/${recipeGroup}`,
+      axiosConfig
+    );
+    if (setRecipes) {
+      setRecipes(response.data);
+    }
     return response.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to fetch user recipes" });
@@ -199,7 +204,7 @@ const updateUserRecipes = async ({
 }: GPUpdateUserRecipesTypes) => {
   try {
     await axios.post(
-      `${databaseUrl}/recipes/${userId}`,
+      `${databaseUrl}/recipes/planned/${userId}`,
       selectedRecipe,
       axiosConfig
     );
@@ -312,6 +317,41 @@ const fetchAllRecipeCategories = async ({
   }
 };
 
+type GPUnfavoriteType = GPSetMessageType & {
+  recipe: GPRecipeDataTypes;
+};
+
+const handleUnfavoriteRecipe = async ({
+  setMessage,
+  recipe,
+}: GPUnfavoriteType) => {
+  try {
+    await axios.put(
+      `${databaseUrl}/recipes/favorited/${recipe.apiId}`,
+      {},
+      axiosConfig
+    );
+  } catch (error) {
+    setMessage({ error: true, message: "Error unfavoriting recipe" });
+  }
+};
+
+const handleFavoriteRecipe = async ({
+  setMessage,
+  userId,
+  selectedRecipe,
+}: GPUpdateUserRecipesTypes) => {
+  try {
+    await axios.post(
+      `${databaseUrl}/recipes/favorited/${userId}`,
+      { apiId: selectedRecipe.apiId },
+      axiosConfig
+    );
+  } catch (error) {
+    setMessage({ error: true, message: "Error favoriting recipe" });
+  }
+};
+
 export {
   updateAccount,
   getUserData,
@@ -326,5 +366,7 @@ export {
   fetchGroceryList,
   fetchDiscoverRecipes,
   fetchAllRecipeCategories,
+  handleUnfavoriteRecipe,
+  handleFavoriteRecipe,
   axiosConfig,
 };

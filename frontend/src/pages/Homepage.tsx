@@ -44,7 +44,7 @@ const Homepage = () => {
           setMessage,
         });
         setUserIngredientList(userIngredients);
-        await fetchRecipes({ setMessage, setSelectedRecipes });
+        await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
     };
     setUserListPreviews();
   }, []);
@@ -95,10 +95,11 @@ const Homepage = () => {
               <MealCard
                 key={meal.apiId}
                 index={index}
+                favorited={false}
                 onMealCardClick={() => navigate("/new-list")}
                 parsedMealData={meal}
                 setMessage={setMessage}
-                selected={false}
+                selectedToCompare={false}
                 cardSize={350}
               />
             )}
