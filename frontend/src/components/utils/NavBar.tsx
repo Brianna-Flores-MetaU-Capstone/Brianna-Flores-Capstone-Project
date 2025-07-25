@@ -24,6 +24,7 @@ const NavBar = () => {
     { name: "Grocery List", path: "/grocery-list" },
     { name: "Discover Recipes", path: "/discovery" },
     { name: "Favorited Recipes", path: "/favorited" },
+    { name: "My Edited Recipes", path: "/edited" },
     { name: "Account", path: "/account" },
   ];
 
