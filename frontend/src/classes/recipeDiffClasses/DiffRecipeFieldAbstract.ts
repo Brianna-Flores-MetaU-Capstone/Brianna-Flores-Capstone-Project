@@ -20,7 +20,11 @@ abstract class DiffRecipeFieldAbstract<T> {
     this.itemBData = itemBData;
   }
 
-  // define method since shared across diffs
+  /**
+   * Utilizes the longest common substring algorithm as a basis to derive an algorithm applicable to an array and
+   * find the items that were unchanged, added, or deleted between the two lists to compare
+   * @returns An array containing which items in the array are unchanged, added, or deleted
+   */
   getLcsDiff(): GPDiffLineInfoType<T>[] {
     // Adapted from https://www.geeksforgeeks.org/javascript/javascript-program-for-longest-common-subsequence/
     const n = this.itemAData.length;

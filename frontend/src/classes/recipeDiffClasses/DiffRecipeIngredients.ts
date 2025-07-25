@@ -19,6 +19,12 @@ type GPRecipeComparisonReturnType<T> = {
 };
 
 class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataTypes> {
+  /**
+   * Used to compare ingredients between different recipes
+   * Finds the ingredients (name, quantity, and unit) were unchanged, added and removed
+   * Finds the ingredients that were changed (same name but different quantity/unit)
+   * @returns array containing ingredients that are unchanged, changed, added, and deleted
+   */
   getIngredientsComparisonDiff() {
     let added: GPIngredientDataTypes[] = [];
     let changed: GPQuantityChangeType<GPIngredientDataTypes>[] = [];
@@ -66,6 +72,11 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<GPIngredientDataType
     return diffRecipeIngredients;
   }
 
+  /**
+   * Parses the ingredients list to format ingredients correctly prior to being diffed
+   * Diff ingredients using the getLcsDiff method in DiffRecipeFieldAbstract class
+   * @returns returns an array containing ingredients and whether each they were changed, unchanged, added, or removed via each lines status prop
+   */
   getIngredientsDiff(): GPDiffLineInfoType<string>[] {
     const ingredientsA = this.itemAData;
     const ingredientsB = this.itemBData;

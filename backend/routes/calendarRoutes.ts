@@ -55,7 +55,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  }
+  },
 );
 
 router.post(
@@ -72,7 +72,7 @@ router.post(
       numOptions: SINGLE_RECIPE_SCHEDULE_OPTIONS,
     });
     res.json(recipeScheduleOptions);
-  }
+  },
 );
 
 module.exports = router;

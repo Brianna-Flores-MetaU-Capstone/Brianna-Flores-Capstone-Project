@@ -34,10 +34,7 @@ const EventSummaryModal = ({
       onClose={toggleModal}
     >
       <ModalDialog maxWidth={500} sx={GPModalStyle}>
-        <ModalClose
-          variant="plain"
-          sx={{ zIndex: 2, m: 1 }}
-        />
+        <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
         <DialogContent sx={{ my: 3 }}>
           <TitledListView
             headerList={[
@@ -52,7 +49,9 @@ const EventSummaryModal = ({
                 <Typography>{event.eventTitle}</Typography>
                 <Typography>{event.getFormattedDate()}</Typography>
                 <Typography>{event.getFormattedTime()}</Typography>
-                <Link key={index} href={event.eventLink}>Take me there!</Link>
+                <Link key={index} href={event.eventLink}>
+                  Take me there!
+                </Link>
               </Box>
             )}
             listItemsStyle={LeftAlignedTitledListStyle}

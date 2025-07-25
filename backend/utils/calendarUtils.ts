@@ -160,7 +160,7 @@ const getRecipeTimeOptions = ({
       eventOptions = [...eventOptions, bestOption];
       currentDay.setDate(
         bestOption.timeOptions[0].start.getDate() +
-          Math.ceil(recipe.servings / servingsPerDay)
+          Math.ceil(recipe.servings / servingsPerDay),
       );
       currentDay.setHours(8, 0, 0, 0);
     }
@@ -186,7 +186,7 @@ const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
       ...optionArray,
       new TimeBlock(
         new Date(freeBlockStart),
-        new Date(freeBlockStart + readyInMilliseconds)
+        new Date(freeBlockStart + readyInMilliseconds),
       ),
     ];
     freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
@@ -230,7 +230,7 @@ const fitsUserPreferences = ({
     
     const userPreferenceTimeBlock = new TimeBlock(
       new Date(preferredStart),
-      new Date(preferredEnd)
+      new Date(preferredEnd),
     );
     const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
 
@@ -238,7 +238,7 @@ const fitsUserPreferences = ({
       let optionArray = [
         new TimeBlock(
           new Date(overlap.start),
-          new Date(overlap.start + readyInMilliseconds)
+          new Date(overlap.start + readyInMilliseconds),
         ),
       ];
       const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
@@ -247,7 +247,7 @@ const fitsUserPreferences = ({
           ...optionArray,
           new TimeBlock(
             new Date(newStart),
-            new Date(newStart + readyInMilliseconds)
+            new Date(newStart + readyInMilliseconds),
           ),
         ];
       }

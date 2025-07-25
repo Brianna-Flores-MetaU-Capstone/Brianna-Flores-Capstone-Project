@@ -42,10 +42,20 @@ class RecipeFilter {
     return this.vegan;
   }
 
+  /**
+   * get the list of recipes that matches the given filter
+   * @param filter the list of recipes to get
+   * @returns a list of recipes matching the criteria (all, dairy free, gluten free, vegetarian, vegan)
+   */
   getFilteredList(filter: recipeFilterType) {
     return this[filter];
   }
 
+  /**
+   * set the list of recipes that matches the given filter
+   * @param filter the list of recipes to set
+   * @param value an array of recipes to set the filtered list to
+   */
   setFilteredList(filter: recipeFilterType, value: Recipe[]) {
     this[filter] = value;
   }
