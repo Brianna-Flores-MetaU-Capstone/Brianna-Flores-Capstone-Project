@@ -1,10 +1,16 @@
 class TourStep {
   readonly selectElement: string;
   readonly stepInfo: string;
+  readonly relativePosition: string;
 
-  constructor(selectElement: string, stepInfo: string) {
+  constructor(
+    selectElement: string,
+    stepInfo: string,
+    relativePosition: string
+  ) {
     this.selectElement = selectElement;
     this.stepInfo = stepInfo;
+    this.relativePosition = relativePosition;
   }
 
   get element() {
@@ -13,6 +19,10 @@ class TourStep {
 
   get description() {
     return this.stepInfo;
+  }
+
+  get position() {
+    return this.relativePosition;
   }
 }
 

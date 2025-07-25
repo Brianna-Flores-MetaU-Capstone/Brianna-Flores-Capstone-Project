@@ -1,19 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { TourStep } from "../../classes/calendar/TourStep";
 import "./CalendarTour.css";
+import { PositionsEnum } from "../utils/calendarTour/CalendarTourSteps";
 
 type GPCalendarTourType = {
   tourSteps: TourStep[];
   tourActive: boolean;
   onClose: () => void;
-  onFinish: () => void;
 };
 
 const CalendarTourTooltip = ({
   tourSteps,
   tourActive,
   onClose,
-  onFinish,
 }: GPCalendarTourType) => {
   // keep track of what step in the tutorial we are on
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,8 +44,29 @@ const CalendarTourTooltip = ({
 
     // set tooltip position
     const tooltipWidth = 300;
-    const top = targetRect.top;
-    const left = targetRect.right;
+    const tooltipHeight =
+      tooltipLocationRef.current?.getBoundingClientRect().height || 200;
+    let top = targetRect.top;
+    let left = targetRect.right;
+
+    switch (tourSteps[currentStep].position) {
+      case PositionsEnum.RIGHT:
+        top = targetRect.top;
+        left = targetRect.right;
+        break;
+      case PositionsEnum.TOP:
+        top = targetRect.top - tooltipHeight;
+        left = targetRect.left;
+        break;
+      case PositionsEnum.BOTTOM:
+        top = targetRect.bottom;
+        left = targetRect.left;
+        break;
+      case PositionsEnum.LEFT:
+        top = targetRect.top;
+        left = targetRect.left - tooltipWidth;
+        break;
+    }
 
     setTooltipPositioning({
       top: `${top}px`,
@@ -69,8 +89,13 @@ const CalendarTourTooltip = ({
       setCurrentStep(currentStep + 1);
     } else {
       setCurrentStep(0);
-      onFinish();
+      onClose();
     }
+  };
+
+  const handleCloseInstructions = () => {
+    setCurrentStep(0);
+    onClose();
   };
 
   if (!tourActive || tourSteps.length === 0) return null;
@@ -84,6 +109,9 @@ const CalendarTourTooltip = ({
         style={{ ...tooltipPositioning }}
       >
         <div className="tooltipContent">
+          <button className="closeTooltip" onClick={handleCloseInstructions}>
+            x
+          </button>
           <p>{tourSteps[currentStep].description}</p>
           <div className="tooltipNavButtons">
             <button

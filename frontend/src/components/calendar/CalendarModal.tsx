@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Modal,
   ModalClose,
@@ -23,6 +23,8 @@ import { gapi } from "gapi-script";
 import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 import { saveCalendarEvent } from "../../utils/databaseHelpers";
+import CalendarTourTooltip from "./CalendarTourTooltip";
+import { CalendarRecipesModalTour } from "../utils/calendarTour/CalendarTourSteps";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -39,6 +41,13 @@ const CalendarModal = ({
   const { selectedEvents } = useSelectedEvents();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [tourActive, setTourActive] = useState(modalOpen);
+
+  useEffect(() => {
+    if (modalOpen) {
+      setTourActive(true);
+    }
+  }, [modalOpen]);
 
   const verifyDate = (dateToCheck: Date | string) => {
     if (typeof dateToCheck === "object") {
@@ -88,7 +97,7 @@ const CalendarModal = ({
           eventData.summary,
           eventData.start.dateTime,
           eventData.end.dateTime,
-          eventData.htmlLink,
+          eventData.htmlLink
         );
         createdEvents = [...createdEvents, newEvent];
         const savedCalendarEvent = await saveCalendarEvent({
@@ -135,6 +144,7 @@ const CalendarModal = ({
             <ErrorState error={message.error} message={message.message} />
           )}
           <IconButton
+            id="confirmSelections"
             aria-label="Accept Event Group Recommendation"
             variant="outlined"
             color="success"
@@ -147,6 +157,11 @@ const CalendarModal = ({
         </ModalDialog>
       </Modal>
       <LoadingModal modalOpen={loading} message="Adding events to calendar" />
+      <CalendarTourTooltip
+        tourSteps={CalendarRecipesModalTour}
+        tourActive={tourActive}
+        onClose={() => setTourActive(false)}
+      />
     </>
   );
 };

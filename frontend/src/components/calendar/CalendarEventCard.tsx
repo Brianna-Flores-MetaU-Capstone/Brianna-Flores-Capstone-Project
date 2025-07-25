@@ -36,7 +36,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
         selectedEvent.name === clickedEvent.name &&
         selectedEvent.timeOptions[0].start ===
           clickedEvent.timeOptions[0].start &&
-        selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end,
+        selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end
     );
     if (isSelected.length === 0) {
       setSelectedEvents((prev) => [...prev, clickedEvent]);
@@ -47,15 +47,14 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
             selectedEvent.name !== clickedEvent.name ||
             selectedEvent.timeOptions[0].start !==
               clickedEvent.timeOptions[0].start ||
-            selectedEvent.timeOptions[0].end !==
-              clickedEvent.timeOptions[0].end,
-        ),
+            selectedEvent.timeOptions[0].end !== clickedEvent.timeOptions[0].end
+        )
       );
     }
   };
 
   return (
-    <Card sx={{ width: 350 }}>
+    <Card id="eventCard" sx={{ width: 350 }}>
       <Box>
         <Typography
           level="title-lg"
@@ -115,7 +114,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
                 {
                   hour: "numeric",
                   minute: "numeric",
-                },
+                }
               );
               const formattedEnd = new Date(option.end).toLocaleTimeString([], {
                 hour: "numeric",
@@ -131,21 +130,23 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
                   selectedEvent.timeOptions[0].start ===
                     clickedEvent.timeOptions[0].start &&
                   selectedEvent.timeOptions[0].end ===
-                    clickedEvent.timeOptions[0].end,
+                    clickedEvent.timeOptions[0].end
               );
               return (
                 <Tooltip key={index} title="Select time">
                   <Button
+                    id="eventTimeOption"
                     variant={isSelected.length === 0 ? "outlined" : "solid"}
                     onClick={() => toggleSelection(option)}
-                    key={index}
                   >
                     {startDate.toDateString()}: {formattedStart}-{formattedEnd}
                   </Button>
                 </Tooltip>
               );
             })}
-            <Button onClick={() => setModalOpen(true)}>Adjust Time</Button>
+            <Button id="eventTimeAdjustment" onClick={() => setModalOpen(true)}>
+              Adjust Time
+            </Button>
           </ButtonGroup>
           <CalendarTimeModal
             editMode={true}

@@ -87,7 +87,7 @@ const CalendarTimeModal = ({
   const [timeInputError, setTimeInputError] = useState(false);
   const [servingsInputError, setServingsInputError] = useState(false);
   const [dateInputError, setDateInputError] = useState(false);
-  const [tourActive, setTourActive] = useState(false);
+  const [tourActive, setTourActive] = useState(true);
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
@@ -113,6 +113,12 @@ const CalendarTimeModal = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (modalOpen) {
+      setTourActive(true);
+    }
+  }, [modalOpen]);
 
   useEffect(() => {
     setTimeInputError(start > end);
@@ -155,6 +161,7 @@ const CalendarTimeModal = ({
     // when preferences submitted, zero out everything
     setPreferredTimeBlocks([new TimePreferenceString()]);
     setServingsPerDay(1);
+    setDate("");
     toggleModal();
   };
 
@@ -184,9 +191,6 @@ const CalendarTimeModal = ({
           >
             {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
-          {!editMode && (
-            <Button onClick={() => setTourActive(true)}>Activate Tour</Button>
-          )}
           <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
             <FormControl error={dateInputError}>
               <FormLabel>
@@ -343,7 +347,6 @@ const CalendarTimeModal = ({
             }
             tourActive={tourActive}
             onClose={() => setTourActive(false)}
-            onFinish={() => setTourActive(false)}
           />
         </Sheet>
       </Modal>
