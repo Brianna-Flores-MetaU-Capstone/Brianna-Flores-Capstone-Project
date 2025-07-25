@@ -34,6 +34,14 @@ const GPSelectedImageStyle = {
   borderColor: "primary.300",
 };
 
+const GPFileInputStyle = {
+  border: "none",
+  background: "none",
+  boxShadow: "none",
+  flexShrink: 1,
+  alignItems: "center",
+};
+
 const IMAGE_RESULTS_WIDTH = 150;
 
 type GPImageSearchModalTypes = {
@@ -124,13 +132,7 @@ const ImageSearchModal = ({
           <FormControl>
             <FormLabel>Add your own image!</FormLabel>
             <Input
-              sx={{
-                border: "none",
-                background: "none",
-                boxShadow: "none",
-                flexShrink: 1,
-                alignItems: "center",
-              }}
+              sx={GPFileInputStyle}
               type="file"
               onChange={(event) => {
                 if (event.target.files) {

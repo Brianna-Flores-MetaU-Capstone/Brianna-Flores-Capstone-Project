@@ -220,6 +220,18 @@ const GPTitledListHeaderStyle = {
   mb: 2,
 };
 
+const GPLoadingModalStyle = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 3,
+  width: "50%",
+  maxWidth: 500,
+  borderRadius: "md",
+  p: 3,
+  boxShadow: "lg",
+};
+
 const CARD_WIDTH = 350;
 const MUI_GRID_FULL_SPACE = 12;
 
@@ -238,5 +250,6 @@ export {
   RecipeTagsTitledListStyle,
   GPTitledListHeaderStyle,
   GPTagItemStyle,
+  GPLoadingModalStyle,
   CARD_WIDTH,
 };

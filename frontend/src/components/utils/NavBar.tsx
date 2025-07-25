@@ -12,6 +12,15 @@ import {
 } from "@mui/joy";
 import Menu from "@mui/icons-material/Menu";
 
+const GPNavBarStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: 0.5,
+  ml: "auto",
+  mt: 1,
+  mr: 2,
+};
+
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -32,7 +41,7 @@ const NavBar = () => {
     // code referenced from MUI documentation: https://mui.com/joy-ui/react-drawer/
     <React.Fragment>
       <IconButton
-        variant="outlined"
+        variant="plain"
         color="neutral"
         onClick={() => setOpen(true)}
         sx={{ zIndex: "1" }}
@@ -40,16 +49,7 @@ const NavBar = () => {
         <Menu />
       </IconButton>
       <Drawer open={open} onClose={() => setOpen(false)}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-            ml: "auto",
-            mt: 1,
-            mr: 2,
-          }}
-        >
+        <Box sx={GPNavBarStyle}>
           <Typography
             component="label"
             htmlFor="close-icon"

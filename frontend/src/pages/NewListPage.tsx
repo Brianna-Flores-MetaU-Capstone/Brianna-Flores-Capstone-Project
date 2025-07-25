@@ -22,9 +22,7 @@ import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button, Typography } from "@mui/joy";
 import ConnectCalendar from "../components/calendar/ConnectCalendar";
 import CalendarModal from "../components/calendar/CalendarModal";
-import {
-  GPTitledListHeaderStyle,
-} from "../utils/style/UIStyle";
+import { GPTitledListHeaderStyle } from "../utils/style/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
@@ -87,7 +85,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
-        axiosConfig
+        axiosConfig,
       );
       await fetchRecipes({
         setMessage,
@@ -116,7 +114,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig
+        axiosConfig,
       );
       navigate("/grocery-list");
     } catch (error) {
@@ -154,7 +152,9 @@ const NewListPage = () => {
           />
         </Box>
         <Box>
-          <Typography level="h3" sx={GPTitledListHeaderStyle}>Selected Recipes to Shop and Schedule</Typography>
+          <Typography level="h3" sx={GPTitledListHeaderStyle}>
+            Selected Recipes to Shop and Schedule
+          </Typography>
           <Masonry columnsCount={4}>
             {selectedRecipes.map((meal, index) => (
               <MealCard

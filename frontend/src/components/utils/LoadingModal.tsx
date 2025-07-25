@@ -2,6 +2,7 @@ import Modal from "@mui/joy/Modal";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import CircularProgress from "@mui/joy/CircularProgress";
+import { GPLoadingModalStyle } from "../../utils/style/UIStyle";
 
 type GPLoadingModalTypes = {
   modalOpen: boolean;
@@ -17,20 +18,7 @@ const LoadingModal = ({ modalOpen, message }: GPLoadingModalTypes) => {
         open={modalOpen}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <Sheet
-          variant="outlined"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 3,
-            width: "50%",
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
-          }}
-        >
+        <Sheet variant="outlined" sx={GPLoadingModalStyle}>
           <Typography
             component="h2"
             id="modal-title"

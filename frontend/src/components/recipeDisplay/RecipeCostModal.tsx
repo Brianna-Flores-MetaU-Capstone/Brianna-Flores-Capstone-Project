@@ -4,6 +4,17 @@ import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 import { ColumnOverflowTitledListStyle } from "../../utils/style/UIStyle";
 
+const GPCostModalStyle = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "80%",
+  maxWidth: 700,
+  borderRadius: "md",
+  p: 3,
+  boxShadow: "lg",
+};
+
 type GPRecipeCostModalTypes = {
   ingredientsCostInformation: GPIngredientDataTypes[];
   totalCost: number;
@@ -19,25 +30,13 @@ const RecipeCostModal = ({
   return (
     // Code based on MUI documentation: https://mui.com/joy-ui/react-modal/
     <Modal
-      aria-labelledby="Loading"
-      aria-describedby="loading screen"
+      aria-labelledby="Recipe Cost Modal"
+      aria-describedby="Recipe Cost Screen"
       open={modalOpen}
       onClose={onClose}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <Sheet
-        variant="outlined"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "80%",
-          maxWidth: 700,
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
-        }}
-      >
+      <Sheet variant="outlined" sx={GPCostModalStyle}>
         <ModalClose variant="plain" sx={{ m: 1 }} />
         <Typography
           component="h2"

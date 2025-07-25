@@ -8,6 +8,14 @@ import {
   MUI_GRID_FULL_SPACE,
 } from "../utils/style/UIStyle";
 
+const GPGroceryListDepartmentStyle = {
+  p: 2,
+  width: 500,
+  borderRadius: "md",
+  border: "2px solid",
+  borderColor: "primary.300",
+};
+
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientDataTypes[];
   department: string;
@@ -22,20 +30,8 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
     (item) => item.department === department,
   );
 
-  const handleDeleteIngredient = async (
-    ingredient: GPIngredientDataTypes,
-  ) => {};
-
   return (
-    <Box
-      sx={{
-        p: 2,
-        width: 500,
-        borderRadius: "md",
-        border: "2px solid",
-        borderColor: "primary.300",
-      }}
-    >
+    <Box sx={GPGroceryListDepartmentStyle}>
       <TitledListView
         headerList={[{ title: department, spacing: MUI_GRID_FULL_SPACE }]}
         itemsList={filteredGroceries}
@@ -51,7 +47,6 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
               ingredientCostUnit: itemInfo.ingredientCostUnit ?? 0,
             }}
             onGroceryCheck={onGroceryCheck}
-            onDelete={handleDeleteIngredient}
           />
         )}
         listItemsStyle={ColumnOverflowTitledListStyle}
