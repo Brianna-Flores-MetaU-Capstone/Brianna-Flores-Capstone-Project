@@ -8,7 +8,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 import { isAuthenticated } from "../utils/authMiddleware";
-import { GPIngredientDataTypes } from "../../frontend/src/utils/types";
+import { GPIngredientDataTypes } from "../../frontend/src/utils/types/types";
 
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;

@@ -4,7 +4,7 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type {
   GPIngredientApiInfoType,
   GPIngredientDataTypes,
-} from "../../utils/types";
+} from "../../utils/types/types";
 import {
   Box,
   ButtonGroup,
@@ -62,7 +62,6 @@ const Ingredient: React.FC<GPIngredientProps> = ({
         <Grid xs={GRID_NAME_COST_SPACING}>
           <Typography>{ingredient.ingredientName}</Typography>
         </Grid>
-        {/* Quantity goes to 2 decimal places only if decimal */}
         <Grid xs={GRID_EXP_QUANT_SPACING}>
           <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
         </Grid>

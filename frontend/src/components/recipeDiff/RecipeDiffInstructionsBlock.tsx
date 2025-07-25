@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, List, ListItem } from "@mui/joy";
-import { GPDiffHeaderStyle } from "../../utils/UIStyle";
+import { GPDiffHeaderStyle } from "../../utils/style/UIStyle";
 import type { Recipe } from "../../../../shared/Recipe";
 
 type GPInstructionsDiffTypes = {

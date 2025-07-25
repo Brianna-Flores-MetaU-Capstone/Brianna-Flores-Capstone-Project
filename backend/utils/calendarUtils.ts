@@ -1,12 +1,12 @@
 import type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
-} from "../../frontend/src/utils/types";
+} from "../../frontend/src/utils/types/types";
 import { TimePreferenceString } from "../../frontend/src/classes/calendar/TimePreferenceString";
 
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
-const ZERO_OUT_DATE_HOURS = "T00:00:00"
+const ZERO_OUT_DATE_HOURS = "T00:00:00";
 
 import TimeBlock from "../classes/TimeBlock";
 import { Recipe } from "../../shared/Recipe";
@@ -73,7 +73,11 @@ const getMealPrepTimeOptions = ({
   let preferredOptions: TimeBlock[] = [];
   let fallbackOptions: TimeBlock[] = [];
   for (const freeBlock of userFreeTime) {
-    if (new Date(freeBlock.end).getTime() < new Date(`${preferredStartDate}${ZERO_OUT_DATE_HOURS}`).getTime()) {
+    // check that current free block is after users preferred start date
+    if (
+      new Date(freeBlock.end).getTime() <
+      new Date(`${preferredStartDate}${ZERO_OUT_DATE_HOURS}`).getTime()
+    ) {
       continue;
     }
     const timeOptions = fitsUserPreferences({
@@ -84,6 +88,7 @@ const getMealPrepTimeOptions = ({
     if (timeOptions) {
       preferredOptions = [...preferredOptions, ...timeOptions];
     }
+    // if at least 2 time options available, break from loop
     if (
       preferredOptions.length > 0 &&
       preferredOptions.length + fallbackOptions.length >= 2
@@ -141,8 +146,8 @@ const getRecipeTimeOptions = ({
     const tempCurrentDay = new Date(currentDay);
     for (const freeBlock of userFreeTime) {
       let endTime = new Date(freeBlock.end);
+      // ensure free block is after current day
       if (endTime.getTime() >= tempCurrentDay.getTime()) {
-        // block is after current day
         const timeOptions = fitsUserPreferences({
           freeBlock,
           userPreferences,

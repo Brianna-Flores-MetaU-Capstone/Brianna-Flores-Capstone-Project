@@ -1,11 +1,11 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-} from "../utils/types";
+} from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import TitledListView from "../components/utils/TitledListView";
 import { PreviewConstants } from "../utils/constants";
-import { MUI_GRID_FULL_SPACE } from "../utils/UIStyle";
+import { MUI_GRID_FULL_SPACE } from "../utils/style/UIStyle";
 import Ingredient from "../components/ingredients/Ingredient";
 import MealCard from "../components/recipeDisplay/MealCard";
 import {
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router";
 import {
   ColumnOverflowTitledListStyle,
   RowOverflowTitledListStyle,
-} from "../utils/UIStyle";
+} from "../utils/style/UIStyle";
 import { Recipe } from "../../../shared/Recipe";
 
 const Homepage = () => {

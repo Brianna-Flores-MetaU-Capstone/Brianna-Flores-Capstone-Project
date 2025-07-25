@@ -1,6 +1,9 @@
 import React from "react";
-import { GPMealInfoModalTitleStyle, GPModalStyle } from "../../utils/UIStyle";
-import type { GPErrorMessageTypes } from "../../utils/types";
+import {
+  GPMealInfoModalTitleStyle,
+  GPModalStyle,
+} from "../../utils/style/UIStyle";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import {
   Modal,
   Button,
@@ -16,7 +19,7 @@ import {
 import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
-import { GPCenteredBoxStyle } from "../../utils/UIStyle";
+import { GPCenteredBoxStyle } from "../../utils/style/UIStyle";
 import { fetchSingleRecipe } from "../../utils/databaseHelpers";
 import { useState } from "react";
 import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";

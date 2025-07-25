@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const express = require("express");
 const router = express.Router();
 
-// add a user to the database when they signup
+// add a user to the database on signup
 router.post("/signup", async (req: Request, res: Response) => {
   try {
     if (!req.body.firebaseId || !req.body.email) {
@@ -86,7 +86,7 @@ router.post("/login", async (req: includeSession, res: Response) => {
       const user = await prisma.user.findUnique({
         where: { firebaseId: uid },
       });
-      // store the user id to establish a session
+      // store user id to establish a session
       req.session.userId = user.id;
       const userAccount = { id: user.id, userName: user.userName };
       res.json(userAccount);

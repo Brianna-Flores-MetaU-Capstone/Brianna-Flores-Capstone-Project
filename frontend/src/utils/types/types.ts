@@ -1,6 +1,6 @@
 import type { User } from "firebase/auth";
-import TimeBlock from "../../../backend/classes/TimeBlock";
-import type { Recipe } from "../../../shared/Recipe";
+import TimeBlock from "../../../../backend/classes/TimeBlock";
+import type { Recipe } from "../../../../shared/Recipe";
 
 type GPRecipeDataTypes = {
   id: number;

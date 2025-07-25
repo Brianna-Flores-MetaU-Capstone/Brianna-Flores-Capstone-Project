@@ -12,7 +12,7 @@ import TitledListView from "../utils/TitledListView";
 import {
   CenteredTitledListStyle,
   MUI_GRID_FULL_SPACE,
-} from "../../utils/UIStyle";
+} from "../../utils/style/UIStyle";
 import { useState } from "react";
 import { GPDiffOptionsEnum } from "../../classes/recipeDiffClasses/DiffRecipes";
 

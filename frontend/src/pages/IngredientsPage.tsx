@@ -4,7 +4,7 @@ import IngredientModal from "../components/ingredients/IngredientModal";
 import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
-} from "../utils/types";
+} from "../utils/types/types";
 import { Box, Button, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/utils/TitledListView";
@@ -15,7 +15,7 @@ import {
   deleteIngredient,
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
-import { ColumnOverflowTitledListStyle } from "../utils/UIStyle";
+import { ColumnOverflowTitledListStyle } from "../utils/style/UIStyle";
 
 const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);

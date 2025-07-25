@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import type { GPRecipeEventOptionType } from "../utils/types";
+import type { GPRecipeEventOptionType } from "../utils/types/types";
 
 type GPSelectedEventContextType = {
   selectedEvents: GPRecipeEventOptionType[];

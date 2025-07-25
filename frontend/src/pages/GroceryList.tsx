@@ -1,7 +1,7 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-} from "../utils/types";
+} from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
@@ -11,7 +11,7 @@ import { GROCERY_MODAL } from "../utils/constants";
 import TitledListView from "../components/utils/TitledListView";
 import ErrorState from "../components/utils/ErrorState";
 import { fetchGroceryList } from "../utils/databaseHelpers";
-import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";

@@ -8,7 +8,7 @@ const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
 import { axiosConfig } from "../../utils/databaseHelpers";
 
-import type { GPUserEventTypes } from "../../utils/types";
+import type { GPUserEventTypes } from "../../utils/types/types";
 import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
 import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
@@ -122,7 +122,7 @@ const ConnectCalendar = ({
       const accessToken = gapi.client.getToken().access_token;
       let startDate = new Date(`${preferredStartDate}${ZERO_OUT_START_DATE}`);
       if (startDate.toLocaleDateString() === new Date().toLocaleDateString()) {
-        startDate = new Date()
+        startDate = new Date();
       }
       const endDate = new Date(
         startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
@@ -165,7 +165,13 @@ const ConnectCalendar = ({
         // suggest events for all saved recipes
         const recommendedEvents = await axios.post(
           `${databaseUrl}/calendar/reccomendEvents`,
-          { preferredStartDate, parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay },
+          {
+            preferredStartDate,
+            parsedFreeTime,
+            userPreferences,
+            singleDayPrep,
+            servingsPerDay,
+          },
           axiosConfig,
         );
         // get back a list of possible options for each event (shopping + each recipe)
@@ -186,7 +192,12 @@ const ConnectCalendar = ({
     singleDayPrep: boolean,
     servingsPerDay: number,
   ) => {
-    await getUserFreeTime(preferredStartDate, preferences, singleDayPrep, servingsPerDay);
+    await getUserFreeTime(
+      preferredStartDate,
+      preferences,
+      singleDayPrep,
+      servingsPerDay,
+    );
   };
 
   return (

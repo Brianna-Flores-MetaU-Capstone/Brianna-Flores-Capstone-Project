@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 import type {
   GPRecipeIngredientTypes,
   GPIngredientDataTypes,
-} from "../../frontend/src/utils/types";
+} from "../../frontend/src/utils/types/types";
 import { unitConversions } from "./constants";
 import convert from "convert-units";
 import { searchWalmart } from "./walmartAPI";
@@ -32,7 +32,6 @@ const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
         .to(convertToUnit);
       convertingUnit = convertToUnit;
     } catch (error) {
-      // TODO handle errors in type conversion better
       convertingQuantity = converting.quantity;
       convertingUnit = convertingUnit;
     }
@@ -203,10 +202,9 @@ const getCostForAmountOfIngredient = async ({
   ingredient,
 }: GPGetItemCostType) => {
   const searchResults = await searchWalmart(ingredient.ingredientName);
-  // get the cost of the first result (most rellevant)
+  // get the cost and quantity of first result (most rellevant)
   const ingredientCost = searchResults?.items[0].salePrice ?? 0.0;
   const ingredientCostUnit = searchResults?.items[0]?.size ?? "Not Found";
-  // TODO implement check for item[0].size of item using convert quantity
   return { ingredientCost, ingredientCostUnit };
 };
 

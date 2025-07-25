@@ -1,7 +1,7 @@
 import React from "react";
 import AppHeader from "../components/utils/AppHeader";
 import RegistrationPreferenceButtons from "../components/authentication/RegistrationPreferenceButtons";
-import type { GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import { Intolerances, Diets } from "../utils/enum";
 import { useState, useEffect } from "react";
 import { auth } from "../utils/firebase";
@@ -46,8 +46,6 @@ const AccountPage = () => {
   const [emailInputError, setEmailInputError] = useState(false);
   const [passwordInuptError, setPasswordInputError] = useState(false);
   const { setUser } = useUser();
-
-  // TODO Implement useReducer to handle user data
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

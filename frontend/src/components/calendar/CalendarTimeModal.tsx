@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import type { GPRecipeEventOptionType } from "../../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types/types";
 import {
   Box,
   Button,
@@ -35,7 +35,7 @@ type GPEventTimeModal = {
     preferredStartDate: string,
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) => void;
   singleRecipe: boolean;
 };
@@ -58,14 +58,14 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    })
+    }),
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    })
+    }),
   );
   const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
@@ -78,7 +78,7 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getMonth().toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0")
+      eventStartTime.getDate().toString().padStart(2, "0"),
   );
   const [servingsInputError, setServingsInputError] = useState(false);
   const [dateInputError, setDateInputError] = useState(false);
@@ -87,7 +87,7 @@ const CalendarTimeModal = ({
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string
+    newValue: string,
   ) => {
     if (timeField === EventTimeEnum.START) {
       setStart(newValue);
@@ -101,7 +101,7 @@ const CalendarTimeModal = ({
         const updatedBlocks = [...prev];
         updatedBlocks[index].setTime(
           timeField as GPTimePreferenceType,
-          newValue
+          newValue,
         );
         return updatedBlocks;
       });
@@ -211,7 +211,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     value={editMode ? start : block.start}
@@ -231,7 +231,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value
+                        event.target.value,
                       )
                     }
                     value={editMode ? end : block.end}

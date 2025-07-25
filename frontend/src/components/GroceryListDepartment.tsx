@@ -1,12 +1,12 @@
 import React from "react";
-import type { GPIngredientDataTypes } from "../utils/types";
+import type { GPIngredientDataTypes } from "../utils/types/types";
 import TitledListView from "./utils/TitledListView";
 import Ingredient from "./ingredients/Ingredient";
 import { Box } from "@mui/joy";
 import {
   ColumnOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
-} from "../utils/UIStyle";
+} from "../utils/style/UIStyle";
 
 type GPGroceryListDepartmentProps = {
   groceryList: GPIngredientDataTypes[];

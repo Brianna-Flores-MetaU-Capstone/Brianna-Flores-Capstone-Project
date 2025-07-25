@@ -4,9 +4,9 @@ import { IngredientUnitOptions, Departments } from "../../utils/enum";
 import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
-} from "../../utils/types";
+} from "../../utils/types/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../../utils/constants";
-import { GPModalStyle } from "../../utils/UIStyle";
+import { GPModalStyle } from "../../utils/style/UIStyle";
 import { useState } from "react";
 import ErrorState from "../utils/ErrorState";
 import { useUser } from "../../contexts/UserContext";
@@ -249,6 +249,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             </FormControl>
           )}
           {isEditing ? (
+            // Prevent editing the ingredient department
             <FormControl>
               <FormLabel>Department</FormLabel>
               <Select

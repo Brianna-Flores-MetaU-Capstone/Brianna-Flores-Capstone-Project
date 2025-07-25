@@ -56,7 +56,6 @@ router.get("/original/:apiId", async (req: Request, res: Response) => {
 router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
   try {
-    // get the user data
     const userData = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -76,21 +75,19 @@ router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
         },
       },
     });
-    // return the users recipes
     res.json(userData.recipes);
   } catch (error) {
     res.status(500).send("Server Error");
   }
 });
 
-// get a users favorite recipes ids
+// get a users favorited recipes' ids
 router.get(
   "/favoritedIds",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = req.session.userId;
     try {
-      // get the user data
       const userData = await prisma.user.findUnique({
         where: {
           id: userId,
@@ -101,7 +98,6 @@ router.get(
           },
         },
       });
-      // return the users recipes
       res.json(userData.favoritedRecipes);
     } catch (error) {
       res.status(500).send("Server Error");
@@ -109,14 +105,13 @@ router.get(
   },
 );
 
-// get a users favorite recipes
+// get a users favorited recipes
 router.get(
   "/favorited",
   isAuthenticated,
   async (req: Request, res: Response) => {
     const userId = req.session.userId;
     try {
-      // get the user data
       const userData = await prisma.user.findUnique({
         where: {
           id: userId,
@@ -125,7 +120,6 @@ router.get(
           favoritedRecipes: true,
         },
       });
-      // return the users recipes
       res.json(userData.favoritedRecipes);
     } catch (error) {
       res.status(500).send("Server Error");
@@ -133,7 +127,7 @@ router.get(
   },
 );
 
-// add a new recipe for a user
+// add a new recipe to a users planned recipes to shop
 router.post(
   "/planned/:userId",
   isAuthenticated,
@@ -169,11 +163,9 @@ router.post(
       return res.status(400).send("Missing required recipe fields");
     }
     try {
-      // check if recipe already in database and not edited
+      // check if recipe from API is in the database and not edited
       let recipe = null;
       if (!editedRecipe) {
-        // if recipe is edited, there will be 2 recipes with identical api ids
-        // not an edited recipe, look for api id
         recipe = await prisma.Recipe.findFirst({
           where: {
             apiId: apiId,
@@ -183,7 +175,7 @@ router.post(
       }
 
       if (!recipe) {
-        // no recipe found or editing, make new recipe
+        // no original recipe from API found, make new recipe
         recipe = await prisma.recipe.create({
           data: {
             apiId,
@@ -204,7 +196,6 @@ router.post(
           },
         });
       }
-      // check if failure to create recipe
       if (!recipe) {
         return res.status(400).send("Error, failed to create recipe");
       }
@@ -232,7 +223,7 @@ router.post(
   },
 );
 
-// Favorite a recipe for a user
+// Add recipe to users favorites list
 router.post(
   "/favorited/:userId",
   isAuthenticated,
@@ -262,7 +253,7 @@ router.post(
   },
 );
 
-// update user to remove favorited recipe
+// remove recipe from users favorites list
 router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { selectedRecipe } = req.body;
@@ -283,7 +274,7 @@ router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
   }
 });
 
-// update user to remove recipe
+// update user to remove recipe from planned recipes to shop list
 router.put("/planned/remove", async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { deletedRecipe } = req.body;

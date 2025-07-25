@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/joy";
-import { GPTagItemStyle } from "../../utils/UIStyle";
+import { GPTagItemStyle } from "../../utils/style/UIStyle";
 import type { Recipe } from "../../../../shared/Recipe";
 
 const DietsAndIntolerances = ({

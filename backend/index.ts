@@ -54,8 +54,3 @@ app.use("/", authRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-// TODO: Change root directory behavior
-app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to my app!");
-});

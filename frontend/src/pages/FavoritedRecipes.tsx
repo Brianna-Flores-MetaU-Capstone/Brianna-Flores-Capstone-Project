@@ -1,7 +1,7 @@
 import AppHeader from "../components/utils/AppHeader";
 import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes } from "../utils/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import {
   fetchRecipes,
   handleUnfavoriteRecipe,
@@ -11,7 +11,7 @@ import TitledListView from "../components/utils/TitledListView";
 import MealCard from "../components/recipeDisplay/MealCard";
 import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
-import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { useUser } from "../contexts/UserContext";
 import { Recipe } from "../../../shared/Recipe";
 
