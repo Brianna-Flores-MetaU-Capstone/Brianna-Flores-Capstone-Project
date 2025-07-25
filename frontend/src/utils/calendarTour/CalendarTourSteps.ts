@@ -15,12 +15,12 @@ const CalendarTimeModalPreferenceTour: TourStep[] = [
   ),
   new TourStep(
     "#eventTimeInput",
-    "Add times of day you'd prefer to cook, the system will prioritize these preferences if available in schedule",
+    "Add times of day you'd prefer to cook, the system will prioritize these preferences if available in calendar",
     PositionsEnum.RIGHT
   ),
   new TourStep(
     "#eventAddTimeblock",
-    "You can add several preferred time blocks enhancing flexibility",
+    "You can add several preferred time blocks throughout the day",
     PositionsEnum.RIGHT
   ),
   new TourStep(
@@ -41,6 +41,24 @@ const CalendarTimeModalPreferenceTour: TourStep[] = [
   new TourStep(
     "#servingsPerDay",
     "Enter how many servings you plan to eat per day to help the system determine a schedule and account for leftovers",
+    PositionsEnum.RIGHT
+  ),
+];
+
+const CalendarTimeModalSinglePreferenceTour = [
+  new TourStep(
+    "#eventDateInput",
+    "Choose the day you'd like schedule to cook this recipe",
+    PositionsEnum.RIGHT
+  ),
+  new TourStep(
+    "#eventTimeInput",
+    "Add times of day you'd prefer to cook, the system will prioritize these preferences if available in calendar",
+    PositionsEnum.RIGHT
+  ),
+  new TourStep(
+    "#eventAddTimeblock",
+    "You can add several preferred time blocks throughout the day",
     PositionsEnum.RIGHT
   ),
 ];
@@ -89,6 +107,7 @@ const CalendarTimeModalAdjustTour: TourStep[] = [
 export {
   PositionsEnum,
   CalendarTimeModalPreferenceTour,
+  CalendarTimeModalSinglePreferenceTour,
   CalendarRecipesModalTour,
   CalendarTimeModalAdjustTour,
 };

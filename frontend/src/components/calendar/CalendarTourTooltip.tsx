@@ -51,19 +51,19 @@ const CalendarTourTooltip = ({
 
     switch (tourSteps[currentStep].position) {
       case PositionsEnum.RIGHT:
-        top = targetRect.top;
+        top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
         left = targetRect.right;
         break;
       case PositionsEnum.TOP:
         top = targetRect.top - tooltipHeight;
-        left = targetRect.left;
+        left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
         break;
       case PositionsEnum.BOTTOM:
         top = targetRect.bottom;
-        left = targetRect.left;
+        left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
         break;
       case PositionsEnum.LEFT:
-        top = targetRect.top;
+        top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
         left = targetRect.left - tooltipWidth;
         break;
     }

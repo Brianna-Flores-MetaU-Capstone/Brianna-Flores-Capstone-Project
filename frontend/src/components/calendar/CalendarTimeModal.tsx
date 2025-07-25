@@ -28,6 +28,7 @@ import CalendarTourTooltip from "./CalendarTourTooltip";
 import {
   CalendarTimeModalAdjustTour,
   CalendarTimeModalPreferenceTour,
+  CalendarTimeModalSinglePreferenceTour,
 } from "../../utils/calendarTour/CalendarTourSteps";
 
 type GPEventTimeModal = {
@@ -286,6 +287,7 @@ const CalendarTimeModal = ({
             {!editMode && !singleRecipe && (
               <Box>
                 <ButtonGroup
+                  id="eventSchedulingMode"
                   color="primary"
                   sx={{ my: 2 }}
                   buttonFlex={1}
@@ -343,7 +345,9 @@ const CalendarTimeModal = ({
             tourSteps={
               editMode
                 ? CalendarTimeModalAdjustTour
-                : CalendarTimeModalPreferenceTour
+                : singleRecipe
+                  ? CalendarTimeModalSinglePreferenceTour
+                  : CalendarTimeModalPreferenceTour
             }
             tourActive={tourActive}
             onClose={() => setTourActive(false)}

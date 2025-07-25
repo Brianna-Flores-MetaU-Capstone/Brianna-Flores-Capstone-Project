@@ -24,7 +24,6 @@
 .tooltipContent {
   background-color: #fafafa;
   padding: 1%;
-  width: 20vw;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
