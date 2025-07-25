@@ -18,6 +18,13 @@ const GRID_NAME_COST_SPACING = 4;
 const GRID_EXP_QUANT_SPACING = 3;
 const GRID_BUTTON_SPACING = 1;
 
+const GPIngredientStyle = {
+  bgcolor: "#F7F2EF",
+  px: 3,
+  py: 2,
+  borderRadius: "md",
+};
+
 type GPIngredientProps = {
   ingredient: GPIngredientDataTypes;
   presentGroceryCheck: boolean;
@@ -44,7 +51,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       ? ingredient.quantity
       : Number(ingredient.quantity).toFixed(2);
   return (
-    <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md" }}>
+    <Box sx={GPIngredientStyle}>
       <Grid container alignItems="center">
         {presentGroceryCheck && (
           <Grid xs={1}>

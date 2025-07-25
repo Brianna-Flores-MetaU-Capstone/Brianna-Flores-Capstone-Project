@@ -53,7 +53,6 @@ const DiffOriginalRecipe = ({
 }: GPDiffOriginalType) => {
   const [recipeDiffInfo, setRecipeDiffInfo] =
     useState<GPOriginalRecipeDiffType>();
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [viewOriginalModalOpen, setViewOriginalModalOpen] = useState(false);
 
   useEffect(() => {

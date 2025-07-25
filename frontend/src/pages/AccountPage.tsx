@@ -35,6 +35,14 @@ import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
+const GPAccountPageStyle = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  mt: 10,
+  mx: "auto",
+};
+
 const AccountPage = () => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
@@ -177,15 +185,7 @@ const AccountPage = () => {
   return (
     <Box>
       <AppHeader />
-      <Card
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mt: 10,
-          mx: "auto",
-        }}
-      >
+      <Card sx={GPAccountPageStyle}>
         <Typography level="h2">Edit Account Details</Typography>
         <FormControl error={emailInputError}>
           <FormLabel>Email</FormLabel>

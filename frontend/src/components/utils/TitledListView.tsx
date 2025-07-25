@@ -27,7 +27,10 @@ const TitledListView = <T,>({
       {headerList && (
         <Grid
           container
-          sx={{...GPTitledListHeaderStyle, ...(centerTitle && { textAlign: "center" }),}}
+          sx={{
+            ...GPTitledListHeaderStyle,
+            ...(centerTitle && { textAlign: "center" }),
+          }}
         >
           {headerList.map((header, index) => (
             <Grid xs={header.spacing} key={index}>
