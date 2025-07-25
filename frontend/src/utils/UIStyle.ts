@@ -194,6 +194,12 @@ const CenteredTitledListStyle = {
   justifyContent: "center",
 };
 
+const LeftAlignedTitledListStyle = {
+  ...BaseListStyle,
+  justifyContent: "flex-start",
+  m: 1
+};
+
 const GPTagItemStyle = {
   mx: 0.5,
   my: 1,
@@ -205,6 +211,7 @@ const GPTagItemStyle = {
   color: "primary.400",
 };
 
+const CARD_WIDTH = 350;
 const MUI_GRID_FULL_SPACE = 12;
 
 export {
@@ -218,6 +225,8 @@ export {
   ColumnOverflowTitledListStyle,
   ColumnNoOverflowTitledListStyle,
   CenteredTitledListStyle,
+  LeftAlignedTitledListStyle,
   RecipeTagsTitledListStyle,
   GPTagItemStyle,
+  CARD_WIDTH,
 };

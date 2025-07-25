@@ -22,14 +22,13 @@ import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types";
 import { Recipe } from "../../classes/recipe/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
+import { CARD_WIDTH } from "../../utils/UIStyle";
 
 type GPMealCardProps = {
   index: number;
   parsedMealData: Recipe;
   selectedToCompare: boolean;
-  cardSize: number;
   favorited: boolean;
-  calendarTimeModalOpen?: boolean;
   toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
@@ -47,9 +46,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   index,
   parsedMealData,
   selectedToCompare,
-  cardSize,
   favorited,
-  calendarTimeModalOpen,
   toggleCalendarTimeModal,
   onMealCardClick,
   setMessage,
@@ -93,7 +90,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
-      <Card variant="outlined" sx={{ minWidth: cardSize, width: cardSize }}>
+      <Card variant="outlined" sx={{ minWidth: CARD_WIDTH, width: CARD_WIDTH }}>
         <Box
           sx={{
             display: "flex",

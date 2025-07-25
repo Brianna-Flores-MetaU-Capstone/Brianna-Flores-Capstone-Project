@@ -154,7 +154,6 @@ const RecipeDiscoveryPage = () => {
                 selectedToCompare={false}
                 {...(user && { onFavoriteClick: handleFavoriteClick })}
                 favorited={favoritedRecipesId.has(meal.id)}
-                cardSize={350}
               />
             )}
             listItemsStyle={RowOverflowTitledListStyle}

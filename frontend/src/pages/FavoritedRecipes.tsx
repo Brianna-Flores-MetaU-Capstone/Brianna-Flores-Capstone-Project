@@ -75,7 +75,6 @@ const FavoritedRecipes = () => {
               setMessage={setMessage}
               parsedMealData={recipe}
               selectedToCompare={false}
-              cardSize={350}
             />
           )}
           listItemsStyle={CenteredTitledListStyle}

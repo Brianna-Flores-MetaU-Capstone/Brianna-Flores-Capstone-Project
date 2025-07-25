@@ -21,15 +21,17 @@ import {
 
 import { gapi } from "gapi-script";
 import type { GPErrorMessageTypes } from "../../utils/types";
+import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
   toggleModal: () => void;
+  setCreatedEvents: (value: CalendarEvent[]) => void
 };
 
-const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
+const CalendarModal = ({ modalOpen, toggleModal, setCreatedEvents }: GPCalendarModalTypes) => {
   const { eventOptions } = useEventRec();
-  const { selectedEvents } = useSelectedEvents();
+  const { selectedEvents, setSelectedEvents } = useSelectedEvents();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
 
@@ -51,6 +53,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
       return;
     }
     setLoading(true);
+    let createdEvents: CalendarEvent[] = [];
     for (const eventInfo of selectedEvents) {
       const newEvent = {
         summary: `Cook ${eventInfo.name}`,
@@ -69,7 +72,14 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
         calendarId: "primary",
         resource: newEvent,
       });
+      const eventData = request.result;
+      if (eventData.htmlLink && eventData.summary && eventData.start?.dateTime && eventData.end?.dateTime) {
+        const newEvent = new CalendarEvent(eventData.summary, eventData.start.dateTime, eventData.end.dateTime, eventData.htmlLink)
+        createdEvents = [...createdEvents, newEvent];
+      }
     }
+    // reset selected events to prevent multiple events being added
+    setCreatedEvents(createdEvents)
     setLoading(false);
     toggleModal();
   };

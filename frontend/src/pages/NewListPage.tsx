@@ -25,6 +25,8 @@ import CalendarModal from "../components/calendar/CalendarModal";
 import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../classes/recipe/Recipe";
+import { CalendarEvent } from "../classes/calendar/CalendarEvent";
+import EventSummaryModal from "../components/calendar/EventSummaryModal";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -35,6 +37,8 @@ const NewListPage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
+  const [createdEvents, setCreatedEvents] = useState<CalendarEvent[]>([]);
+  const [eventSummaryModalOpen, setEventSummaryModalOpen] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -116,6 +120,11 @@ const NewListPage = () => {
     }
   };
 
+  const handleEventsCreated = (createdEvents: CalendarEvent[]) => {
+    setCreatedEvents(createdEvents);
+    setEventSummaryModalOpen(true);
+  };
+
   return (
     <Box>
       <AppHeader />
@@ -147,7 +156,6 @@ const NewListPage = () => {
                 index={index}
                 // TODO enable favoriting across meal cards
                 favorited={false}
-                calendarTimeModalOpen={calendarModalOpen}
                 toggleCalendarTimeModal={() =>
                   setCalendarModalOpen((prev) => !prev)
                 }
@@ -156,7 +164,6 @@ const NewListPage = () => {
                 parsedMealData={meal}
                 onDeleteRecipe={handleDeleteRecipe}
                 selectedToCompare={false}
-                cardSize={300}
               />
             )}
             listItemsStyle={CenteredTitledListStyle}
@@ -183,6 +190,14 @@ const NewListPage = () => {
       <CalendarModal
         modalOpen={calendarModalOpen}
         toggleModal={() => setCalendarModalOpen((prev) => !prev)}
+        setCreatedEvents={handleEventsCreated}
+      />
+      <EventSummaryModal
+        events={createdEvents}
+        modalOpen={eventSummaryModalOpen}
+        toggleModal={() => {
+          setEventSummaryModalOpen((prev) => !prev);
+        }}
       />
     </Box>
   );
