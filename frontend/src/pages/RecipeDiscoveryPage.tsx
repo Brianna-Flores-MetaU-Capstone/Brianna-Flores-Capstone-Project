@@ -1,5 +1,5 @@
 import AppHeader from "../components/utils/AppHeader";
-import { Box } from "@mui/joy";
+import { Box, Button } from "@mui/joy";
 import { useState, useEffect } from "react";
 import type {
   GPErrorMessageTypes,
@@ -26,6 +26,8 @@ import { RecipeFilter } from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
 import Masonry from "react-responsive-masonry";
+import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
+import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },
@@ -49,6 +51,13 @@ const RecipeDiscoveryPage = () => {
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
+  const [recipesToCompare, setRecipesToCompare] = useState<Recipe[]>([]);
+  const [diffModalOpen, setDiffModalOpen] = useState(false);
+  const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
+  const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
+    new Set()
+  );
+  const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setAllRecipeLists();
@@ -123,61 +132,124 @@ const RecipeDiscoveryPage = () => {
     setEditRecipeInfo(recipe);
   };
 
+  const handleToggleCompareRecipe = (clickedRecipe: Recipe) => {
+    if (
+      !recipesToCompare.some((recipe) => recipe.apiId === clickedRecipe.apiId)
+    ) {
+      // recipe not found, add to array
+      setRecipesToCompare((prev) => [...prev, clickedRecipe]);
+    } else {
+      setRecipesToCompare((prev) =>
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
+      );
+    }
+  };
+
+  const onCompareRecipesSubmit = () => {
+    if (recipesToCompare.length === 2) {
+      setUserDiffOptionsOpen(true);
+    }
+  };
+
+  const onSubmitUserDiffOptions = async (
+    userChoices: Set<string>,
+    noDiffFields: Set<string>
+  ) => {
+    setUserDiffOptionsOpen(false);
+    if (!recipesToCompare[0] || !recipesToCompare[1]) {
+      setMessage({
+        error: true,
+        message: "Error could not get recipes to compare",
+      });
+      return;
+    }
+    setUserDiffChoices(userChoices);
+    setNoDiffFields(noDiffFields);
+    setDiffModalOpen(true);
+  };
+
   return (
-    <Box>
-      <AppHeader />
-      <Box sx={{ m: 2 }}>
-        {Object.keys(recipeDiscoveryResults).map((filter, index) => (
-          <TitledListView
-            key={index}
-            itemsList={
-              recipeDiscoveryResults[
-                filter as keyof GPRecipeDiscoveryCategories
-              ]
-            }
-            headerList={[
-              {
-                title: recipeFilters[index].title,
-                spacing: MUI_GRID_FULL_SPACE,
-              },
-            ]}
-            renderItem={(meal, index) => (
-              <MealCard
-                key={index}
-                index={index}
-                parsedMealData={meal}
-                onMealCardClick={() => handleRecipeCardClick(meal)}
-                {...(user && {
-                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
-                })}
-                {...(user && {
-                  onEditRecipe: () => handleEditRecipe(meal),
-                })}
-                setMessage={setMessage}
-                selectedToCompare={false}
-                {...(user && { onFavoriteClick: handleFavoriteClick })}
-                favorited={favoritedRecipesId.has(meal.id)}
-              />
-            )}
-            listItemsStyle={RowOverflowTitledListStyle}
-          />
-        ))}
+    <>
+      <Box>
+        <AppHeader />
+        <Button
+          sx={{ display: "flex", justifySelf: "flex-end", mx: 2, mt: 3 }}
+          disabled={recipesToCompare.length !== 2}
+          onClick={onCompareRecipesSubmit}
+        >
+          Compare Recipes!
+        </Button>
+        <Box sx={{ m: 2 }}>
+          {Object.keys(recipeDiscoveryResults).map((filter, index) => (
+            <TitledListView
+              key={index}
+              itemsList={
+                recipeDiscoveryResults[
+                  filter as keyof GPRecipeDiscoveryCategories
+                ]
+              }
+              headerList={[
+                {
+                  title: recipeFilters[index].title,
+                  spacing: MUI_GRID_FULL_SPACE,
+                },
+              ]}
+              renderItem={(meal, index) => (
+                <MealCard
+                  key={index}
+                  index={index}
+                  parsedMealData={meal}
+                  onMealCardClick={() => handleRecipeCardClick(meal)}
+                  {...(user && {
+                    onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                  })}
+                  {...(user && {
+                    onEditRecipe: () => handleEditRecipe(meal),
+                  })}
+                  setMessage={setMessage}
+                  {...(user && { onFavoriteClick: handleFavoriteClick })}
+                  favorited={favoritedRecipesId.has(meal.id)}
+                  selectedToCompare={recipesToCompare.some(
+                    (recipe) => recipe.apiId === meal.apiId
+                  )}
+                  onCompareSelect={handleToggleCompareRecipe}
+                />
+              )}
+              listItemsStyle={RowOverflowTitledListStyle}
+            />
+          ))}
+        </Box>
+        {user && message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
+        <MealInfoModal
+          toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
+          modalOpen={recipeInfoModalOpen}
+          recipeInfo={recipeInfoModalInfo}
+        />
+        <EditRecipeModal
+          recipe={editRecipeInfo}
+          modalOpen={editRecipeModalOpen}
+          toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
+          onSubmit={setAllRecipeLists}
+        />
       </Box>
-      {user && message && (
-        <ErrorState error={message.error} message={message.message} />
+      {recipesToCompare[0] && recipesToCompare[1] && (
+        <DiffOriginalRecipe
+          originalRecipeInfo={recipesToCompare[0]}
+          editedRecipeInfo={recipesToCompare[1]}
+          modalOpen={diffModalOpen}
+          setModalOpen={() => setDiffModalOpen((prev) => !prev)}
+          userDiffChoices={[...userDiffChoices]}
+          noDiffFields={[...noDiffFields]}
+        />
       )}
-      <MealInfoModal
-        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
-        modalOpen={recipeInfoModalOpen}
-        recipeInfo={recipeInfoModalInfo}
+      <UserDiffOptions
+        modalOpen={userDiffOptionsOpen}
+        toggleModal={() => setUserDiffOptionsOpen((prev) => !prev)}
+        onSubmit={onSubmitUserDiffOptions}
       />
-      <EditRecipeModal
-        recipe={editRecipeInfo}
-        modalOpen={editRecipeModalOpen}
-        toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
-        onSubmit={setAllRecipeLists}
-      />
-    </Box>
+    </>
   );
 };
 
