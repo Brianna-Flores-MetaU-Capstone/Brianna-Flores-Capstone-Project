@@ -1,15 +1,15 @@
 import type {
   GPErrorMessageTypes,
-  GPIngredientDataTypes
+  GPIngredientDataTypes,
 } from "../utils/types";
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/utils/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
-import IngredientModal from "../components/IngredientModal";
+import IngredientModal from "../components/ingredients/IngredientModal";
 import { Button, Box, Typography } from "@mui/joy";
 import { GROCERY_MODAL } from "../utils/constants";
-import TitledListView from "../components/TitledListView";
-import ErrorState from "../components/ErrorState";
+import TitledListView from "../components/utils/TitledListView";
+import ErrorState from "../components/utils/ErrorState";
 import { fetchGroceryList } from "../utils/databaseHelpers";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
@@ -39,48 +39,52 @@ const GroceryList = () => {
   }, []);
 
   const toggleGroceryCheck = async (groceryItem: string) => {
-    await axios.put(`${databaseUrl}/generateList/check`, {ingredientName: groceryItem}, axiosConfig)
+    await axios.put(
+      `${databaseUrl}/generateList/check`,
+      { ingredientName: groceryItem },
+      axiosConfig
+    );
     fetchGroceryList({
       setMessage,
       setUserGroceryList,
       setGroceryDepartments,
       setGroceryListCost,
     });
-  }
+  };
 
-  const handleClearGroceries = async() => {
-    await axios.put(`${databaseUrl}/generateList/clear`, {}, axiosConfig)
+  const handleClearGroceries = async () => {
+    await axios.put(`${databaseUrl}/generateList/clear`, {}, axiosConfig);
     fetchGroceryList({
       setMessage,
       setUserGroceryList,
       setGroceryDepartments,
       setGroceryListCost,
     });
-  }
+  };
 
   return (
     <Box>
       <AppHeader />
-      <Box sx={{m: 3}}>
-        <Button onClick={handleClearGroceries}>
-          Clear Purchased Items
-        </Button>
-        <Box sx={{my: 3}}>
-        <TitledListView
-          itemsList={groceryDepartments}
-          renderItem={(department) => (
-            <GroceryListDepartment
-              key={department}
-              groceryList={userGroceryList}
-              department={department}
-              onGroceryCheck={toggleGroceryCheck}
-            />
-          )}
-          listItemsStyle={CenteredTitledListStyle}
-        />
+      <Box sx={{ m: 3 }}>
+        <Button onClick={handleClearGroceries}>Clear Purchased Items</Button>
+        <Box sx={{ my: 3 }}>
+          <TitledListView
+            itemsList={groceryDepartments}
+            renderItem={(department) => (
+              <GroceryListDepartment
+                key={department}
+                groceryList={userGroceryList}
+                department={department}
+                onGroceryCheck={toggleGroceryCheck}
+              />
+            )}
+            listItemsStyle={CenteredTitledListStyle}
+          />
         </Box>
         <Typography level="h3">Estimated Cost</Typography>
-        <Typography level="h4">${Number(groceryListCost).toFixed(2)}</Typography>
+        <Typography level="h4">
+          ${Number(groceryListCost).toFixed(2)}
+        </Typography>
       </Box>
       {addGroceryItemModalOpen && (
         <IngredientModal

@@ -57,13 +57,18 @@ const parseFreeTime = (userFreeSpace: GPUserEventTypes[]) => {
     let freeSpaceStart = freeSpace.start;
     let freeSpaceEnd = freeSpace.end;
     // if start and end days are not the same, split event
-    while (freeSpaceStart < freeSpaceEnd) { // while loop if free space spans multiple days
+    while (freeSpaceStart < freeSpaceEnd) {
+      // while loop if free space spans multiple days
       const startOfDay = new Date(freeSpaceStart);
       const endOfDay = new Date(freeSpaceStart);
-      startOfDay.setHours(START_OF_DAY_TIME, 0, 0, 0)
+      startOfDay.setHours(START_OF_DAY_TIME, 0, 0, 0);
       endOfDay.setHours(END_OF_DAY_TIME, 0, 0, 0); // set end date to end of day
-      const newStart = freeSpaceStart > startOfDay ? new Date(freeSpaceStart) : new Date(startOfDay)
-      const newEnd = freeSpaceEnd > endOfDay ? new Date(endOfDay) : new Date(freeSpaceEnd)
+      const newStart =
+        freeSpaceStart > startOfDay
+          ? new Date(freeSpaceStart)
+          : new Date(startOfDay);
+      const newEnd =
+        freeSpaceEnd > endOfDay ? new Date(endOfDay) : new Date(freeSpaceEnd);
       if (newEnd > newStart) {
         const splitFreeStart = {
           name: "free",
@@ -73,7 +78,7 @@ const parseFreeTime = (userFreeSpace: GPUserEventTypes[]) => {
         parsedFreeTime = [...parsedFreeTime, splitFreeStart];
       }
       freeSpaceStart.setDate(freeSpaceStart.getDate() + 1);
-      freeSpaceStart.setHours(START_OF_DAY_TIME, 0, 0, 0)
+      freeSpaceStart.setHours(START_OF_DAY_TIME, 0, 0, 0);
     }
   }
   return parsedFreeTime;

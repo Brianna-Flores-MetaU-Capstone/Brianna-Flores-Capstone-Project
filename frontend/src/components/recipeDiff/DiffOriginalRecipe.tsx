@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
-import type { GPDiffLineInfoType } from "../utils/diffUtils";
+import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../../utils/types";
+import type { GPDiffLineInfoType } from "../../utils/diffUtils";
 import {
   AspectRatio,
   List,
@@ -14,14 +14,14 @@ import {
   Typography,
 } from "@mui/joy";
 
-import { DiffRecipes } from "../classes/recipeDiffClasses/DiffRecipes";
+import { DiffRecipes } from "../../classes/recipeDiffClasses/DiffRecipes";
 import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
 import {
   GPCenteredBoxStyle,
   GPMealInfoModalTitleStyle,
   GPTagItemStyle,
-} from "../utils/UIStyle";
-import MealInfoModal from "./MealInfoModal";
+} from "../../utils/UIStyle";
+import MealInfoModal from "../recipeDisplay/MealInfoModal";
 
 type GPDiffOriginalType = {
   originalRecipeInfo: GPRecipeDataTypes;

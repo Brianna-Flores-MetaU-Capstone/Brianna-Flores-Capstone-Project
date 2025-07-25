@@ -1,5 +1,5 @@
-import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
-import type { GPIngredientDataTypes } from "../utils/types";
+import type { GPDiffReturnType } from "../../classes/recipeDiffClasses/DiffClass";
+import type { GPIngredientDataTypes } from "../../utils/types";
 import { Box, Table } from "@mui/joy";
 
 type GPRecipeDiffInfo = {

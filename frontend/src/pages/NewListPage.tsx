@@ -3,13 +3,13 @@ import type {
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
 } from "../utils/types";
-import AppHeader from "../components/AppHeader";
-import MealCard from "../components/MealCard";
-import MealInfoModal from "../components/MealInfoModal";
+import AppHeader from "../components/utils/AppHeader";
+import MealCard from "../components/recipeDisplay/MealCard";
+import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import TitledListView from "../components/TitledListView";
-import ErrorState from "../components/ErrorState";
+import TitledListView from "../components/utils/TitledListView";
+import ErrorState from "../components/utils/ErrorState";
 import { useUser } from "../contexts/UserContext";
 import {
   fetchRecipes,
@@ -17,13 +17,13 @@ import {
   fetchUserIngredientsHelper,
 } from "../utils/databaseHelpers";
 import { useNavigate } from "react-router";
-import LoadingModal from "../components/LoadingModal";
+import LoadingModal from "../components/utils/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
 import { Box, Button } from "@mui/joy";
-import ConnectCalendar from "../components/ConnectCalendar";
-import CalendarModal from "../components/CalendarModal";
-import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle} from "../utils/UIStyle";
+import ConnectCalendar from "../components/calendar/ConnectCalendar";
+import CalendarModal from "../components/calendar/CalendarModal";
+import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const NewListPage = () => {
@@ -48,15 +48,28 @@ const NewListPage = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ editedRecipe: false, userId, selectedRecipe, setMessage });
-      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+      await updateUserRecipes({
+        editedRecipe: false,
+        userId,
+        selectedRecipe,
+        setMessage,
+      });
+      await fetchRecipes({
+        setMessage,
+        setRecipes: setSelectedRecipes,
+        recipeGroup: "planned",
+      });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
   };
 
   useEffect(() => {
-    fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+    fetchRecipes({
+      setMessage,
+      setRecipes: setSelectedRecipes,
+      recipeGroup: "planned",
+    });
   }, []);
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -68,10 +81,14 @@ const NewListPage = () => {
     try {
       await axios.put(
         `${databaseUrl}/recipes/planned/remove`,
-        {deletedRecipe},
+        { deletedRecipe },
         axiosConfig
       );
-      await fetchRecipes({ setMessage, setRecipes: setSelectedRecipes, recipeGroup: "planned" });
+      await fetchRecipes({
+        setMessage,
+        setRecipes: setSelectedRecipes,
+        recipeGroup: "planned",
+      });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
     }

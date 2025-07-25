@@ -1,5 +1,5 @@
 import { Box } from "@mui/joy";
-import { DiffStatus, type GPDiffLineInfoType } from "../utils/diffUtils";
+import { DiffStatus, type GPDiffLineInfoType } from "../../utils/diffUtils";
 
 type GPDiffOriginalDisplayType = {
   xDiffResults: GPDiffLineInfoType[];
@@ -34,7 +34,11 @@ const DiffOriginalContentDisplay = ({
       {xDiffResults.map((line, index) => {
         if (line.status === DiffStatus.UNCHANGED) {
           return (
-            <Box component={childrenComponent} {...childComponentProps} key={index}>
+            <Box
+              component={childrenComponent}
+              {...childComponentProps}
+              key={index}
+            >
               {line.line}
             </Box>
           );
@@ -43,7 +47,7 @@ const DiffOriginalContentDisplay = ({
             <Box
               component={childrenComponent}
               key={index}
-               {...childComponentProps}
+              {...childComponentProps}
               sx={GPDiffAddedStyle}
             >
               {line.line}
@@ -54,7 +58,7 @@ const DiffOriginalContentDisplay = ({
             <Box
               component={childrenComponent}
               key={index}
-               {...childComponentProps}
+              {...childComponentProps}
               sx={GPDiffDeletedStyle}
             >
               <Box component="s">{line.line}</Box>
@@ -62,7 +66,11 @@ const DiffOriginalContentDisplay = ({
           );
         } else {
           return (
-            <Box component={childrenComponent}  {...childComponentProps} key={index}>
+            <Box
+              component={childrenComponent}
+              {...childComponentProps}
+              key={index}
+            >
               {line.lineDiffInfo?.map((word, wordIndex) => {
                 if (word.status === DiffStatus.UNCHANGED) {
                   return (

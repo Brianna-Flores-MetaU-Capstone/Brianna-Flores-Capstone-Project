@@ -3,7 +3,9 @@ import type { GPRecipeEventOptionType } from "../utils/types";
 
 type GPSelectedEventContextType = {
   selectedEvents: GPRecipeEventOptionType[];
-  setSelectedEvents: React.Dispatch<React.SetStateAction<GPRecipeEventOptionType[]>>;
+  setSelectedEvents: React.Dispatch<
+    React.SetStateAction<GPRecipeEventOptionType[]>
+  >;
 };
 
 const SelectedEventsContext = createContext<GPSelectedEventContextType>({
@@ -11,14 +13,22 @@ const SelectedEventsContext = createContext<GPSelectedEventContextType>({
   setSelectedEvents: () => {},
 });
 
-export const SelectedEventsProvider = ({children}: {children: React.ReactNode}) => {
-    const [selectedEvents, setSelectedEvents] = useState<GPRecipeEventOptionType[]>([]);
+export const SelectedEventsProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [selectedEvents, setSelectedEvents] = useState<
+    GPRecipeEventOptionType[]
+  >([]);
 
-    return (
-        <SelectedEventsContext.Provider value={{selectedEvents, setSelectedEvents }}>
-            {children}
-        </SelectedEventsContext.Provider>
-    )
-}
+  return (
+    <SelectedEventsContext.Provider
+      value={{ selectedEvents, setSelectedEvents }}
+    >
+      {children}
+    </SelectedEventsContext.Provider>
+  );
+};
 
-export const useSelectedEvents = () => useContext(SelectedEventsContext)
+export const useSelectedEvents = () => useContext(SelectedEventsContext);

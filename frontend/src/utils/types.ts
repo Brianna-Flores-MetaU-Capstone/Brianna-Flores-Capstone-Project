@@ -112,8 +112,6 @@ type GPRecipeDiscoveryCategories = {
   vegan: GPRecipeDataTypes[];
 };
 
-
-
 export type {
   GPAccountInfoTypes,
   GPAuthFormDataTypes,

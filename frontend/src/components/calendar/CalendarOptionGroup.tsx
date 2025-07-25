@@ -1,9 +1,9 @@
 import { Box, Typography, IconButton } from "@mui/joy";
-import type { GPRecipeEventOptionType } from "../utils/types";
+import type { GPRecipeEventOptionType } from "../../utils/types";
 import CalendarEventCard from "./CalendarEventCard";
-import TitledListView from "./TitledListView";
+import TitledListView from "../utils/TitledListView";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { CenteredTitledListStyle } from "../utils/UIStyle";
+import { CenteredTitledListStyle } from "../../utils/UIStyle";
 
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];
@@ -18,7 +18,13 @@ const CalendarOptionGroup = ({
 }: GPCalendarOptionGroup) => {
   return (
     <Box>
-      <Box sx={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography>Option Group #{groupNum}</Typography>
         <IconButton
           disabled={adjustedSuggestion}
@@ -28,13 +34,17 @@ const CalendarOptionGroup = ({
           size="lg"
         >
           <CheckCircleOutlineIcon />
-        <Typography>Accept All</Typography>
+          <Typography>Accept All</Typography>
         </IconButton>
       </Box>
       <TitledListView
         itemsList={eventOptions}
         renderItem={(event, index) => (
-          <CalendarEventCard key={index} eventOption={event} groupNum={groupNum - 1}/>
+          <CalendarEventCard
+            key={index}
+            eventOption={event}
+            groupNum={groupNum - 1}
+          />
         )}
         listItemsStyle={CenteredTitledListStyle}
       />

@@ -4,13 +4,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router";
 import type { GPAuthFormDataTypes, GPErrorMessageTypes } from "../utils/types";
 import { validateUserToken } from "../utils/databaseHelpers";
-import AppHeader from "../components/AppHeader";
-import ErrorState from "../components/ErrorState";
-import AuthForm from "../components/AuthForm";
+import AppHeader from "../components/utils/AppHeader";
+import ErrorState from "../components/utils/ErrorState";
+import AuthForm from "../components/authentication/AuthForm";
 import { handleAuthInputChange } from "../utils/utils";
 import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
-
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -45,9 +44,7 @@ const LoginPage = () => {
     <Box>
       <AppHeader />
       <Box>
-        <Card
-          sx={{ mt: 30, mx: "auto" }}
-        >
+        <Card sx={{ mt: 30, mx: "auto" }}>
           <AuthForm
             handleLoginSubmit={handleSubmit}
             handleAuthInputChange={(event) =>

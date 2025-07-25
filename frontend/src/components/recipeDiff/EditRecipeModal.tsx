@@ -3,7 +3,7 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-} from "../utils/types";
+} from "../../utils/types";
 import {
   Button,
   Input,
@@ -21,13 +21,13 @@ import {
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TitledListView from "./TitledListView";
+import TitledListView from "../utils/TitledListView";
 import {
   MUI_GRID_FULL_SPACE,
   RecipeTagsTitledListStyle,
-} from "../utils/UIStyle";
-import { useUser } from "../contexts/UserContext";
-import { updateUserRecipes } from "../utils/databaseHelpers";
+} from "../../utils/UIStyle";
+import { useUser } from "../../contexts/UserContext";
+import { updateUserRecipes } from "../../utils/databaseHelpers";
 
 type GPEditRecipeModalType = {
   recipe: GPRecipeDataTypes | undefined;
@@ -157,14 +157,19 @@ const EditRecipeModal = ({
       case actions.SET_INPUT_NUM:
         return { ...state, [action.recipeField]: action.value };
       case actions.SET_DIETARY_TAGS:
-        let updatedRecipeTags = [...state.recipeTags]
-        if (state[action.dietTag]) { // previously selected, remove from recipe tags
-          const index = updatedRecipeTags.indexOf(action.dietLabel)
-          updatedRecipeTags.splice(index, 1)
+        let updatedRecipeTags = [...state.recipeTags];
+        if (state[action.dietTag]) {
+          // previously selected, remove from recipe tags
+          const index = updatedRecipeTags.indexOf(action.dietLabel);
+          updatedRecipeTags.splice(index, 1);
         } else {
-          updatedRecipeTags = [...state.recipeTags, action.dietLabel]
+          updatedRecipeTags = [...state.recipeTags, action.dietLabel];
         }
-        return { ...state, [action.dietTag]: !state[action.dietTag], recipeTags: updatedRecipeTags };
+        return {
+          ...state,
+          [action.dietTag]: !state[action.dietTag],
+          recipeTags: updatedRecipeTags,
+        };
       case actions.UPDATE_INGREDIENT:
         return {
           ...state,
@@ -264,12 +269,14 @@ const EditRecipeModal = ({
                           <Input
                             required
                             type={
-                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
+                              field.field === EditRecipeFieldsEnum.SERVINGS ||
+                              field.field === EditRecipeFieldsEnum.READY_IN
                                 ? "number"
                                 : "text"
                             }
                             onChange={(event) => {
-                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
+                              field.field === EditRecipeFieldsEnum.SERVINGS ||
+                              field.field === EditRecipeFieldsEnum.READY_IN
                                 ? dispatch({
                                     type: actions.SET_INPUT_NUM,
                                     recipeField: field.field,
@@ -309,7 +316,7 @@ const EditRecipeModal = ({
                             dispatch({
                               type: actions.SET_DIETARY_TAGS,
                               dietTag: tag.field as keyof GPRecipeDataTypes,
-                              dietLabel: tag.label
+                              dietLabel: tag.label,
                             })
                           }
                         >

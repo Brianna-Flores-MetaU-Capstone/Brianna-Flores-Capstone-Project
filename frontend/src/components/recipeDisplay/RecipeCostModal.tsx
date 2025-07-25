@@ -1,8 +1,8 @@
-import type { GPIngredientDataTypes } from "../utils/types";
-import TitledListView from "./TitledListView";
-import IngredientCost from "./IngredientCost";
+import type { GPIngredientDataTypes } from "../../utils/types";
+import TitledListView from "../utils/TitledListView";
+import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
-import { ColumnOverflowTitledListStyle } from "../utils/UIStyle";
+import { ColumnOverflowTitledListStyle } from "../../utils/UIStyle";
 
 type GPLoadingModalTypes = {
   ingredientsCostInformation: GPIngredientDataTypes[];
@@ -47,18 +47,19 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
-        <Box sx={{width: "100%", overflowY: "auto"}}>
-        <TitledListView
-          headerList={[{title: "Ingredient", spacing: 8}, {title: "Cost", spacing: 2}, {title: "For Amount", spacing: 2}]}
-          itemsList={ingredientsCostInformation}
-          renderItem={(ingredientInfo, index) => (
-            <IngredientCost
-              key={index}
-              ingredientCostInfo={ingredientInfo}
-            />
-          )}
-          listItemsStyle={ColumnOverflowTitledListStyle}
-        />
+        <Box sx={{ width: "100%", overflowY: "auto" }}>
+          <TitledListView
+            headerList={[
+              { title: "Ingredient", spacing: 8 },
+              { title: "Cost", spacing: 2 },
+              { title: "For Amount", spacing: 2 },
+            ]}
+            itemsList={ingredientsCostInformation}
+            renderItem={(ingredientInfo, index) => (
+              <IngredientCost key={index} ingredientCostInfo={ingredientInfo} />
+            )}
+            listItemsStyle={ColumnOverflowTitledListStyle}
+          />
         </Box>
       </Sheet>
     </Modal>

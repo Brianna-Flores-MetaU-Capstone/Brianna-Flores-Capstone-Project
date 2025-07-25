@@ -1,13 +1,13 @@
 import React from "react";
-import { Intolerances, Diets } from "../utils/enum";
+import { Intolerances, Diets } from "../../utils/enum";
 import { useState } from "react";
 import RegistrationPreferenceButtons from "./RegistrationPreferenceButtons";
 import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
-} from "../utils/constants";
+} from "../../utils/constants";
 import { Button, Box, Input, FormControl, FormLabel } from "@mui/joy";
-import type { GPAuthFormDataTypes } from "../utils/types";
+import type { GPAuthFormDataTypes } from "../../utils/types";
 
 type GPAuthFormEventProps = {
   handleRegistrationSubmit?: ({
@@ -77,7 +77,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           onChange={handleAuthInputChange}
         />
       </FormControl>
-      <FormControl sx={{my: 2}}>
+      <FormControl sx={{ my: 2 }}>
         <FormLabel>Enter Password</FormLabel>
         <Input
           required
@@ -110,7 +110,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           />
         </Box>
       )}
-      <Button type="submit" sx={{display: "block", mx: "auto", mt: 1}}>
+      <Button type="submit" sx={{ display: "block", mx: "auto", mt: 1 }}>
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

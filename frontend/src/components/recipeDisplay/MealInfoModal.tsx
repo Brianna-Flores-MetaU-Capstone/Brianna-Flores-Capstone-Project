@@ -1,6 +1,6 @@
 import React from "react";
-import { GPMealInfoModalTitleStyle, GPModalStyle } from "../utils/UIStyle";
-import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
+import { GPMealInfoModalTitleStyle, GPModalStyle } from "../../utils/UIStyle";
+import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../../utils/types";
 import {
   Modal,
   Button,
@@ -16,10 +16,10 @@ import {
 import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
 import DietsAndIntolerances from "./DietsAndIntolerances";
-import { GPCenteredBoxStyle } from "../utils/UIStyle";
-import { fetchSingleRecipe } from "../utils/databaseHelpers";
+import { GPCenteredBoxStyle } from "../../utils/UIStyle";
+import { fetchSingleRecipe } from "../../utils/databaseHelpers";
 import { useState } from "react";
-import DiffOriginalRecipe from "./DiffOriginalRecipe";
+import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
 
 type GPMealModalProps = {
   modalOpen: boolean;

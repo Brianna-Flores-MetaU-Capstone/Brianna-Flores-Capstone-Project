@@ -1,4 +1,4 @@
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/utils/AppHeader";
 import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
 import type {
@@ -13,16 +13,16 @@ import {
   handleUnfavoriteRecipe,
   updateUserRecipes,
 } from "../utils/databaseHelpers";
-import TitledListView from "../components/TitledListView";
-import MealCard from "../components/MealCard";
+import TitledListView from "../components/utils/TitledListView";
+import MealCard from "../components/recipeDisplay/MealCard";
 import {
   MUI_GRID_FULL_SPACE,
   RowOverflowTitledListStyle,
 } from "../utils/UIStyle";
-import ErrorState from "../components/ErrorState";
-import MealInfoModal from "../components/MealInfoModal";
+import ErrorState from "../components/utils/ErrorState";
+import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
-import EditRecipeModal from "../components/EditRecipeModal";
+import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
 import { RecipeFilter } from "../classes/filters/RecipeFilters";
 
 const recipeFilters = [

@@ -8,14 +8,14 @@ import {
   Grid,
 } from "@mui/joy";
 import RecipeDiffBlock from "./RecipeDiffBlock";
-import type { GPRecipeDiffType } from "../utils/diffUtils";
+import type { GPRecipeDiffType } from "../../utils/diffUtils";
 import RecipeDiffInstructionsBlock from "./RecipeDiffInstructionsBlock";
 
 const servingsStyle = {
-   p: 1,
-   borderRadius: "lg", 
-   display: "flex", 
-}
+  p: 1,
+  borderRadius: "lg",
+  display: "flex",
+};
 
 type GPRecipeDiffModalType = {
   modalOpen: boolean;
@@ -40,7 +40,15 @@ const RecipeDiffModal = ({
                   <Typography level="h2">
                     {recipeDiffData.recipeA?.recipeTitle}
                   </Typography>
-                  <Typography sx={{ ...servingsStyle, bgcolor: recipeDiffData.servingsDiff ? "success.200" : "neutral"}} level="h4">
+                  <Typography
+                    sx={{
+                      ...servingsStyle,
+                      bgcolor: recipeDiffData.servingsDiff
+                        ? "success.200"
+                        : "neutral",
+                    }}
+                    level="h4"
+                  >
                     Servings: {recipeDiffData.recipeA?.servings}
                   </Typography>
                 </Box>
@@ -53,7 +61,15 @@ const RecipeDiffModal = ({
                   <Typography level="h2">
                     {recipeDiffData.recipeB?.recipeTitle}
                   </Typography>
-                  <Typography sx={{ ...servingsStyle, bgcolor: recipeDiffData.servingsDiff ? "danger.200" : "neutral"}} level="h4">
+                  <Typography
+                    sx={{
+                      ...servingsStyle,
+                      bgcolor: recipeDiffData.servingsDiff
+                        ? "danger.200"
+                        : "neutral",
+                    }}
+                    level="h4"
+                  >
                     Servings: {recipeDiffData.recipeB?.servings}
                   </Typography>
                 </Box>
@@ -73,7 +89,10 @@ const RecipeDiffModal = ({
             diffInfo={recipeDiffData.purchasedIngredientsDiff}
             costDiff={true}
           />
-          <RecipeDiffInstructionsBlock recipeA={recipeDiffData.recipeA} recipeB={recipeDiffData.recipeB}/>
+          <RecipeDiffInstructionsBlock
+            recipeA={recipeDiffData.recipeA}
+            recipeB={recipeDiffData.recipeB}
+          />
         </DialogContent>
       </ModalDialog>
     </Modal>

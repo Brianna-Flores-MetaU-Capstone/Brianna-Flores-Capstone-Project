@@ -4,7 +4,7 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type {
   GPIngredientApiInfoType,
   GPIngredientDataTypes,
-} from "../utils/types";
+} from "../../utils/types";
 import {
   Box,
   ButtonGroup,

@@ -1,4 +1,4 @@
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/utils/AppHeader";
 import { Box } from "@mui/joy";
 import { useState, useEffect } from "react";
 import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
@@ -7,10 +7,10 @@ import {
   handleUnfavoriteRecipe,
   updateUserRecipes,
 } from "../utils/databaseHelpers";
-import TitledListView from "../components/TitledListView";
-import MealCard from "../components/MealCard";
-import ErrorState from "../components/ErrorState";
-import MealInfoModal from "../components/MealInfoModal";
+import TitledListView from "../components/utils/TitledListView";
+import MealCard from "../components/recipeDisplay/MealCard";
+import ErrorState from "../components/utils/ErrorState";
+import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { useUser } from "../contexts/UserContext";
 
@@ -34,9 +34,7 @@ const FavoritedRecipes = () => {
 
   const onFavoriteClick = (recipe: GPRecipeDataTypes) => {
     handleUnfavoriteRecipe({ setMessage, recipe });
-    setFavoritedRecipes((prev) =>
-      prev.filter((elem) => elem.id !== recipe.id)
-    );
+    setFavoritedRecipes((prev) => prev.filter((elem) => elem.id !== recipe.id));
   };
 
   const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
@@ -51,7 +49,12 @@ const FavoritedRecipes = () => {
     }
     try {
       const userId = user.id;
-      await updateUserRecipes({ userId, editedRecipe: false, selectedRecipe: recipe, setMessage });
+      await updateUserRecipes({
+        userId,
+        editedRecipe: false,
+        selectedRecipe: recipe,
+        setMessage,
+      });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }

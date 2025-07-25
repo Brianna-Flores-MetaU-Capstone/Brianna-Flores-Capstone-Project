@@ -30,15 +30,18 @@ const searchWalmart = async (searchQuery: string) => {
   const { keyVersion, consumerId, timestamp, signature } = getSign();
   if (consumerId) {
     try {
-      const response = await axios.get(`https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=3`, {
-        headers: {
-          "WM_SEC.KEY_VERSION": keyVersion,
-          "WM_CONSUMER.ID": consumerId,
-          "WM_CONSUMER.INTIMESTAMP": timestamp,
-          "WM_SEC.AUTH_SIGNATURE": signature,
-        },
-      })
-      return response.data
+      const response = await axios.get(
+        `https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=${searchQuery}&numItems=3`,
+        {
+          headers: {
+            "WM_SEC.KEY_VERSION": keyVersion,
+            "WM_CONSUMER.ID": consumerId,
+            "WM_CONSUMER.INTIMESTAMP": timestamp,
+            "WM_SEC.AUTH_SIGNATURE": signature,
+          },
+        }
+      );
+      return response.data;
     } catch (error) {
       console.error("Error fetching data");
       return;

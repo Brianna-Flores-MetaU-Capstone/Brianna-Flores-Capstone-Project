@@ -1,19 +1,19 @@
 import React from "react";
 import { useReducer } from "react";
-import { IngredientUnitOptions, Departments } from "../utils/enum";
+import { IngredientUnitOptions, Departments } from "../../utils/enum";
 import type {
   GPIngredientDataTypes,
   GPErrorMessageTypes,
-} from "../utils/types";
-import { IngredientDataFields, INGREDIENT_MODAL } from "../utils/constants";
-import { GPModalStyle } from "../utils/UIStyle";
+} from "../../utils/types";
+import { IngredientDataFields, INGREDIENT_MODAL } from "../../utils/constants";
+import { GPModalStyle } from "../../utils/UIStyle";
 import { useState } from "react";
-import ErrorState from "./ErrorState";
-import { useUser } from "../contexts/UserContext";
+import ErrorState from "../utils/ErrorState";
+import { useUser } from "../../contexts/UserContext";
 import {
   addIngredientDatabase,
   updateIngredientDatabase,
-} from "../utils/databaseHelpers";
+} from "../../utils/databaseHelpers";
 import {
   Button,
   Box,

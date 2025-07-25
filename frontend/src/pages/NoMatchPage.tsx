@@ -1,4 +1,4 @@
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/utils/AppHeader";
 import { Box, Alert, Typography } from "@mui/joy";
 
 const NoMatchPage = () => {

@@ -7,13 +7,12 @@ import type {
   GPErrorMessageTypes,
 } from "../utils/types";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
-import AuthForm from "../components/AuthForm";
-import AppHeader from "../components/AppHeader";
-import ErrorState from "../components/ErrorState";
+import AuthForm from "../components/authentication/AuthForm";
+import AppHeader from "../components/utils/AppHeader";
+import ErrorState from "../components/utils/ErrorState";
 import { handleAuthInputChange } from "../utils/utils";
 import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
-
 
 const SignupForm = () => {
   const [formData, setFormData] = useState<GPAuthFormDataTypes>({
@@ -34,7 +33,10 @@ const SignupForm = () => {
       .then(async (userCredential) => {
         const user = userCredential.user;
         if (!user.uid || !user.email) {
-          setMessage({error: true, message: "Unable to create account, missing required information"})
+          setMessage({
+            error: true,
+            message: "Unable to create account, missing required information",
+          });
           return;
         }
 

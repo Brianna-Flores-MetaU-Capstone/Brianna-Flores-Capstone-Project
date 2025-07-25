@@ -1,21 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 import { gapi } from "gapi-script";
 import { Box, Button } from "@mui/joy";
-import { parseUserEvents } from "../utils/calendarUtils";
+import { parseUserEvents } from "../../utils/calendarUtils";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
-import { axiosConfig } from "../utils/databaseHelpers";
+import { axiosConfig } from "../../utils/databaseHelpers";
 
-import type {
-  GPUserEventTypes,
-  GPPreferredBlockType,
-} from "../utils/types";
-import { findFreeTime, parseFreeTime } from "../utils/calendarUtils";
-import { useEventRec } from "../contexts/EventRecContext";
+import type { GPUserEventTypes, GPPreferredBlockType } from "../../utils/types";
+import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
+import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
-import LoadingModal from "./LoadingModal";
+import LoadingModal from "../utils/LoadingModal";
 
 // TODO change requested days to have user input
 const REQUESTED_DAYS = 7;
@@ -29,8 +26,7 @@ type GPConnectCalendarTypes = {
 const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const { setEventOptions } = useEventRec();
   // Discovery doc URL for APIs used by the quickstart
-  const DISCOVERY_DOC =
-    `${calendarUrl}/discovery/v1/apis/calendar/v3/rest`;
+  const DISCOVERY_DOC = `${calendarUrl}/discovery/v1/apis/calendar/v3/rest`;
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
@@ -43,7 +39,9 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   const [loading, setLoading] = useState(false);
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
-  const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(null)
+  const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(
+    null
+  );
 
   // load on mount
   useEffect(() => {
@@ -124,7 +122,11 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
     }
   }
 
-  async function getUserFreeTime(userPreferences: GPPreferredBlockType[], singleDayPrep: boolean, servingsPerDay: number) {
+  async function getUserFreeTime(
+    userPreferences: GPPreferredBlockType[],
+    singleDayPrep: boolean,
+    servingsPerDay: number
+  ) {
     setLoading(true);
     try {
       const accessToken = gapi.client.getToken().access_token;
@@ -174,18 +176,18 @@ const ConnectCalendar = ({ onClick }: GPConnectCalendarTypes) => {
   }
 
   const getUserTimePreferences = async (
-    preferences: GPPreferredBlockType[], 
+    preferences: GPPreferredBlockType[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => {
     await getUserFreeTime(preferences, singleDayPrep, servingsPerDay);
   };
 
   return (
     <Box>
-      <Box sx={{display: "flex", gap: 2 }}>
-      <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
-      <Button onClick={handleSignoutClick}>Signout of Google</Button>
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Button onClick={handleAddToCalendarClick}>Add to Calendar!</Button>
+        <Button onClick={handleSignoutClick}>Signout of Google</Button>
       </Box>
       <CalendarTimeModal
         editMode={false}

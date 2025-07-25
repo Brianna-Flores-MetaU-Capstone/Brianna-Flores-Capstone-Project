@@ -1,15 +1,14 @@
 import { Box, Typography } from "@mui/joy";
-import type { GPRecipeDataTypes } from "../utils/types";
-import { GPTagItemStyle } from "../utils/UIStyle";
+import type { GPRecipeDataTypes } from "../../utils/types";
+import { GPTagItemStyle } from "../../utils/UIStyle";
 
 const DietsAndIntolerances = ({
   recipeInfo,
 }: {
   recipeInfo: GPRecipeDataTypes | undefined;
 }) => {
-
   return (
-    <Box sx={{ display: "flex", justifyContent: "center"}}>
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
       {recipeInfo?.dairyFree && (
         <Typography level="body-xs" sx={GPTagItemStyle}>
           Dairy Free

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
-import { axiosConfig } from "../utils/databaseHelpers";
+import { axiosConfig } from "../../utils/databaseHelpers";
 
 const WithAuth = <T extends object>(
   WrappedComponent: React.ComponentType<T>

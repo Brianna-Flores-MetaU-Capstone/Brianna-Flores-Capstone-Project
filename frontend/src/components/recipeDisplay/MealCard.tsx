@@ -1,4 +1,4 @@
-import type { GPRecipeDataTypes } from "../utils/types";
+import type { GPRecipeDataTypes } from "../../utils/types";
 import { useState } from "react";
 import {
   Button,
@@ -18,9 +18,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import RecipeCostModal from "./RecipeCostModal";
 import DietsAndIntolerances from "./DietsAndIntolerances";
-import { estimateRecipeCost } from "../utils/utils";
-import { fetchUserIngredientsHelper } from "../utils/databaseHelpers";
-import type { GPErrorMessageTypes } from "../utils/types";
+import { estimateRecipeCost } from "../../utils/utils";
+import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
+import type { GPErrorMessageTypes } from "../../utils/types";
 
 type GPMealCardProps = {
   index: number;
@@ -158,9 +158,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
         </AspectRatio>
         <CardContent sx={{ justifyContent: "flex-end" }}>
           {parsedMealData.editingAuthorName && (
-            <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <PersonIcon />
-              <Typography>Edited by: {parsedMealData.editingAuthorName}</Typography>
+              <Typography>
+                Edited by: {parsedMealData.editingAuthorName}
+              </Typography>
             </Box>
           )}
           {onSelectRecipe && (
