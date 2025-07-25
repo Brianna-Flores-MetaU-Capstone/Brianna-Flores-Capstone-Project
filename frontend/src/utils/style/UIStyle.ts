@@ -212,6 +212,14 @@ const GPTagItemStyle = {
   color: "primary.400",
 };
 
+const GPTitledListHeaderStyle = {
+  flexGrow: 1,
+  p: 2,
+  bgcolor: "primary.300",
+  borderRadius: "md",
+  mb: 2,
+};
+
 const CARD_WIDTH = 350;
 const MUI_GRID_FULL_SPACE = 12;
 
@@ -228,6 +236,7 @@ export {
   CenteredTitledListStyle,
   LeftAlignedTitledListStyle,
   RecipeTagsTitledListStyle,
+  GPTitledListHeaderStyle,
   GPTagItemStyle,
   CARD_WIDTH,
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/joy";
+import { GPTitledListHeaderStyle } from "../../utils/style/UIStyle";
 
 type GPHeaderListType = {
   title: string;
@@ -26,14 +27,7 @@ const TitledListView = <T,>({
       {headerList && (
         <Grid
           container
-          sx={{
-            flexGrow: 1,
-            p: 2,
-            bgcolor: "primary.300",
-            borderRadius: "md",
-            mb: 2,
-            ...(centerTitle && { textAlign: "center" }),
-          }}
+          sx={{...GPTitledListHeaderStyle, ...(centerTitle && { textAlign: "center" }),}}
         >
           {headerList.map((header, index) => (
             <Grid xs={header.spacing} key={index}>
