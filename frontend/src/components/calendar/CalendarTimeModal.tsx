@@ -24,6 +24,12 @@ import {
   TimePreferenceString,
   type GPTimePreferenceType,
 } from "../../classes/calendar/TimePreferenceString";
+import CalendarTourTooltip from "./CalendarTourTooltip";
+import {
+  CalendarTimeModalAdjustTour,
+  CalendarTimeModalPreferenceTour,
+  CalendarTimeModalSinglePreferenceTour,
+} from "../../utils/calendarTour/CalendarTourSteps";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -35,7 +41,7 @@ type GPEventTimeModal = {
     preferredStartDate: string,
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => void;
   singleRecipe: boolean;
 };
@@ -58,14 +64,14 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
     TimePreferenceString[]
@@ -77,17 +83,18 @@ const CalendarTimeModal = ({
       "-" +
       (eventStartTime.getMonth() + 1).toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0"),
+      eventStartTime.getDate().toString().padStart(2, "0")
   );
   const [timeInputError, setTimeInputError] = useState(false);
   const [servingsInputError, setServingsInputError] = useState(false);
   const [dateInputError, setDateInputError] = useState(false);
+  const [tourActive, setTourActive] = useState(true);
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string,
+    newValue: string
   ) => {
     if (timeField === EventTimeEnum.START) {
       setStart(newValue);
@@ -101,12 +108,18 @@ const CalendarTimeModal = ({
         const updatedBlocks = [...prev];
         updatedBlocks[index].setTime(
           timeField as GPTimePreferenceType,
-          newValue,
+          newValue
         );
         return updatedBlocks;
       });
     }
   };
+
+  useEffect(() => {
+    if (modalOpen) {
+      setTourActive(true);
+    }
+  }, [modalOpen]);
 
   useEffect(() => {
     setTimeInputError(start > end);
@@ -149,6 +162,7 @@ const CalendarTimeModal = ({
     // when preferences submitted, zero out everything
     setPreferredTimeBlocks([new TimePreferenceString()]);
     setServingsPerDay(1);
+    setDate("");
     toggleModal();
   };
 
@@ -193,6 +207,9 @@ const CalendarTimeModal = ({
                   input: {
                     "data-time": EventTimeEnum.DATE,
                   },
+                  root: {
+                    id: "eventDateInput",
+                  },
                 }}
                 required
               />
@@ -213,13 +230,16 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? start : block.start}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.START,
+                      },
+                      root: {
+                        id: "eventTimeInput",
                       },
                     }}
                     required
@@ -233,13 +253,16 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? end : block.end}
                     slotProps={{
                       input: {
                         "data-time": EventTimeEnum.END,
+                      },
+                      root: {
+                        id: "eventTimeInput",
                       },
                     }}
                     required
@@ -252,7 +275,10 @@ const CalendarTimeModal = ({
                   )}
                 </FormControl>
                 {!editMode && (
-                  <IconButton onClick={addAnotherTimeBlock}>
+                  <IconButton
+                    id="eventAddTimeblock"
+                    onClick={addAnotherTimeBlock}
+                  >
                     <AddCircleOutlineIcon />
                   </IconButton>
                 )}
@@ -261,6 +287,7 @@ const CalendarTimeModal = ({
             {!editMode && !singleRecipe && (
               <Box>
                 <ButtonGroup
+                  id="eventSchedulingMode"
                   color="primary"
                   sx={{ my: 2 }}
                   buttonFlex={1}
@@ -268,12 +295,14 @@ const CalendarTimeModal = ({
                   spacing={2}
                 >
                   <Button
+                    id="cookThroughoutWeekButton"
                     variant={!singleDayPrep ? "solid" : "outlined"}
                     onClick={() => setSingleDayPrep(false)}
                   >
                     Cook throughout the week
                   </Button>
                   <Button
+                    id="cookSingleDayButton"
                     variant={singleDayPrep ? "solid" : "outlined"}
                     onClick={() => setSingleDayPrep(true)}
                   >
@@ -287,6 +316,11 @@ const CalendarTimeModal = ({
                     onChange={(event) =>
                       setServingsPerDay(parseInt(event.target.value))
                     }
+                    slotProps={{
+                      root: {
+                        id: "servingsPerDay",
+                      },
+                    }}
                     value={servingsPerDay}
                     required
                   />
@@ -307,6 +341,17 @@ const CalendarTimeModal = ({
               {editMode ? "Adjust Time" : "Submit Preferences!"}
             </Button>
           </form>
+          <CalendarTourTooltip
+            tourSteps={
+              editMode
+                ? CalendarTimeModalAdjustTour
+                : singleRecipe
+                  ? CalendarTimeModalSinglePreferenceTour
+                  : CalendarTimeModalPreferenceTour
+            }
+            tourActive={tourActive}
+            onClose={() => setTourActive(false)}
+          />
         </Sheet>
       </Modal>
     </React.Fragment>

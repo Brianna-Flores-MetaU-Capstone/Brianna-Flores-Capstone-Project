@@ -1,0 +1,66 @@
+.entirePage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1310;
+}
+
+.highlightElement {
+  position: absolute;
+  border: 2px solid #5dac9f;
+  border-radius: 5px;
+  z-index: 1500;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 1500;
+}
+
+.tooltipContent {
+  background-color: #fafafa;
+  padding: 1%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  color: #5dac9f;
+  border: 2px solid #5dac9f;
+  align-items: center;
+}
+
+.closeTooltip {
+  position: absolute;
+  left: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tooltipNavButtons {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1vw;
+}
+
+.tooltipNavButtons button {
+  border: 1px solid #5dac9f;
+  border-radius: 5px;
+  background: none;
+  text-align: center;
+  color: #5dac9f;
+  cursor: pointer;
+}
+
+.tooltipNavButtons p {
+  padding: 0;
+  margin: 0;
+}
+
+.tooltipContent p {
+  text-align: center;
+}
