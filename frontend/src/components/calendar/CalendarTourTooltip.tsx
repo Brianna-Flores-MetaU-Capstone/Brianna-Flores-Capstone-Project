@@ -20,6 +20,8 @@ const CalendarTourTooltip = ({
   const tooltipLocationRef = useRef<HTMLDivElement>(null);
   const [tooltipPositioning, setTooltipPositioning] = useState({});
   const [highlightPositioning, setHighlightPositioning] = useState({});
+  const [arrowPositioning, setArrowPositioning] = useState({});
+  const [nextButtonClicked, setNextButtonClicked] = useState(false);
 
   const positionTooltip = () => {
     if (!tourActive || tourSteps.length === 0) {
@@ -53,10 +55,18 @@ const CalendarTourTooltip = ({
       case PositionsEnum.RIGHT:
         top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
         left = targetRect.right;
+        setArrowPositioning({
+          top: `${targetRect.bottom}px`,
+          left: `${targetRect.left + targetRect.width / 2 - 20}px`,
+        });
         break;
       case PositionsEnum.TOP:
         top = targetRect.top - tooltipHeight;
         left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
+        setArrowPositioning({
+          top: `${targetRect.top - 60}px`,
+          left: `${targetRect.left}px`,
+        });
         break;
       case PositionsEnum.BOTTOM:
         top = targetRect.bottom;
@@ -91,6 +101,7 @@ const CalendarTourTooltip = ({
       setCurrentStep(0);
       onClose();
     }
+    setNextButtonClicked(true);
   };
 
   const handleCloseInstructions = () => {
@@ -103,6 +114,9 @@ const CalendarTourTooltip = ({
   return (
     <div className="entirePage">
       <div className="highlightElement" style={highlightPositioning}></div>
+      <div className="tourArrow" style={arrowPositioning}>
+        {tourSteps[currentStep].position === PositionsEnum.RIGHT ? "👆" : "👇"}
+      </div>
       <div
         className="tooltip"
         ref={tooltipLocationRef}
@@ -123,9 +137,26 @@ const CalendarTourTooltip = ({
             <p>
               Step {currentStep + 1} of {tourSteps.length}
             </p>
-            <button onClick={handleNextStepClick}>
-              {currentStep === tourSteps.length - 1 ? "Done" : "Next"}
-            </button>
+            <div onMouseLeave={() => setNextButtonClicked(false)}>
+              <button className="nextButton" onClick={handleNextStepClick}>
+                {currentStep === tourSteps.length - 1 ? "Done" : "Next"}
+                <div
+                  className={`icon tomato ${nextButtonClicked ? "removeHoverEffect" : ""}`}
+                >
+                  🍅
+                </div>
+                <div
+                  className={`icon carrot ${nextButtonClicked ? "removeHoverEffect" : ""}`}
+                >
+                  🥕
+                </div>
+                <div
+                  className={`icon avocado ${nextButtonClicked ? "removeHoverEffect" : ""}`}
+                >
+                  🥑
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
