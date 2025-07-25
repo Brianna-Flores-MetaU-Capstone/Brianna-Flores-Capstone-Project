@@ -17,6 +17,7 @@ const parseRecipeData = async (recipeData: any) => {
       const parsedInstructions = parseInstructions(
         recipe.analyzedInstructions[0].steps
       );
+      const parsedTags = parseTags(recipe);
       return {
         apiId: recipe.id,
         originalSource: recipe.sourceName,
@@ -33,6 +34,7 @@ const parseRecipeData = async (recipeData: any) => {
         vegan: recipe.vegan,
         glutenFree: recipe.glutenFree,
         dairyFree: recipe.dairyFree,
+        recipeTags: parsedTags,
         ingredientCostInfo: [],
         totalCost: 0,
         isChecked: false,
@@ -40,6 +42,23 @@ const parseRecipeData = async (recipeData: any) => {
     })
   );
 };
+
+const parseTags = (unparsedRecipeData: any) => {
+  let recipeTags:string[] = []
+  if (unparsedRecipeData.vegetarian) {
+    recipeTags = [...recipeTags, "Vegetarian"]
+  } 
+  if (unparsedRecipeData.vegan) {
+    recipeTags = [...recipeTags, "Vegan"]
+  } 
+  if (unparsedRecipeData.dairyFree) {
+    recipeTags = [...recipeTags, "Dairy Free"]
+  } 
+  if (unparsedRecipeData.glutenFree) {
+    recipeTags = [...recipeTags, "Gluten Free"]
+  } 
+  return recipeTags;
+}
 
 const parseIngredients = (ingredientsData: any) => {
   return ingredientsData.map((ingredient: any) => ({

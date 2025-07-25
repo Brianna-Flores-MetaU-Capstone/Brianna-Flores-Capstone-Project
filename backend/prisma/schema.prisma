@@ -67,11 +67,11 @@ model Recipe {
   vegan              Boolean
   glutenFree         Boolean
   dairyFree          Boolean
+  recipeTags         String[]
   users              User[]   @relation("PlannedRecipes")
   usersThatFavorited User[]   @relation("FavoritedRecipes")
   editingAuthorId    Int?
   editingAuthor      User?    @relation(fields: [editingAuthorId], references: [id])
-
 
   @@unique([apiId, editingAuthorId])
 }

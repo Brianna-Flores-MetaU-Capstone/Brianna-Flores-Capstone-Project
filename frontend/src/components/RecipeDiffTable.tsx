@@ -1,10 +1,10 @@
-import type { GPDiffReturnType } from "../classes/DiffClass";
+import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
 import type { GPIngredientDataTypes } from "../utils/types";
 import { Box, Table } from "@mui/joy";
 
 type GPRecipeDiffInfo = {
   first: boolean;
-  costDiff: boolean
+  costDiff: boolean;
   diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
 };
 
@@ -35,7 +35,12 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                 {formatQuantity(ingredient.quantity)} {ingredient.unit}
               </td>
               <td>{ingredient.ingredientName}</td>
-              {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
+              {costDiff && (
+                <td>
+                  ${ingredient.ingredientCost} for{" "}
+                  {ingredient.ingredientCostUnit}
+                </td>
+              )}
             </Box>
           ))}
 
@@ -62,7 +67,13 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                   ? ingredient.itemA.ingredientName
                   : ingredient.itemB.ingredientName}
               </td>
-              {costDiff && <td>{first ? `$${ingredient.itemA.ingredientCost} for ${ingredient.itemA.ingredientCostUnit}` : `$${ingredient.itemB.ingredientCost} for ${ingredient.itemB.ingredientCostUnit}`}</td>}
+              {costDiff && (
+                <td>
+                  {first
+                    ? `$${ingredient.itemA.ingredientCost} for ${ingredient.itemA.ingredientCostUnit}`
+                    : `$${ingredient.itemB.ingredientCost} for ${ingredient.itemB.ingredientCostUnit}`}
+                </td>
+              )}
             </Box>
           ))}
           {first &&
@@ -72,7 +83,12 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
-              {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
+                {costDiff && (
+                  <td>
+                    ${ingredient.ingredientCost} for{" "}
+                    {ingredient.ingredientCostUnit}
+                  </td>
+                )}
               </Box>
             ))}
           {!first &&
@@ -82,7 +98,12 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
                 <td>{ingredient.ingredientName}</td>
-                {costDiff && <td>${ingredient.ingredientCost} for {ingredient.ingredientCostUnit}</td>}
+                {costDiff && (
+                  <td>
+                    ${ingredient.ingredientCost} for{" "}
+                    {ingredient.ingredientCostUnit}
+                  </td>
+                )}
               </Box>
             ))}
         </Box>

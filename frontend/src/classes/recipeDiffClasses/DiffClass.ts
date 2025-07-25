@@ -1,4 +1,4 @@
-import type { GPIngredientDataTypes } from "../utils/types";
+import type { GPIngredientDataTypes } from "../../utils/types";
 
 type GPQuantityChangeType<T> = {
   itemA: T;

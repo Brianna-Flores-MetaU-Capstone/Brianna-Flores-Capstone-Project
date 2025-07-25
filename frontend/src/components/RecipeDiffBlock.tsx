@@ -1,17 +1,22 @@
 import { Box, Grid, Typography } from "@mui/joy";
 import RecipeDiffTable from "./RecipeDiffTable";
-import type { GPDiffReturnType } from "../classes/DiffClass";
+import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
 import type { GPIngredientDataTypes, GPRecipeDataTypes } from "../utils/types";
 import { GPDiffHeaderStyle } from "../utils/UIStyle";
 
 type GPRecipeDiffInfo = {
-  recipeA: GPRecipeDataTypes
-  recipeB: GPRecipeDataTypes
+  recipeA: GPRecipeDataTypes;
+  recipeB: GPRecipeDataTypes;
   costDiff: boolean;
   diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
 };
 
-const RecipeDiffBlock = ({ recipeA, recipeB, diffInfo, costDiff }: GPRecipeDiffInfo) => {
+const RecipeDiffBlock = ({
+  recipeA,
+  recipeB,
+  diffInfo,
+  costDiff,
+}: GPRecipeDiffInfo) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Typography sx={GPDiffHeaderStyle} level="h2">
@@ -21,27 +26,37 @@ const RecipeDiffBlock = ({ recipeA, recipeB, diffInfo, costDiff }: GPRecipeDiffI
       </Typography>
       <Grid container spacing={2}>
         <Grid xs={6}>
-        <RecipeDiffTable first={true} diffInfo={diffInfo} costDiff={costDiff} />
+          <RecipeDiffTable
+            first={true}
+            diffInfo={diffInfo}
+            costDiff={costDiff}
+          />
         </Grid>
         <Grid xs={6}>
-        
-        <RecipeDiffTable
-          first={false}
-          diffInfo={diffInfo}
-          costDiff={costDiff}
+          <RecipeDiffTable
+            first={false}
+            diffInfo={diffInfo}
+            costDiff={costDiff}
           />
-          </Grid>
+        </Grid>
       </Grid>
       <Grid container spacing={2}>
-            <Grid xs={6}>
-          {costDiff && <Typography level="h2">Total Estimated Cost: </Typography>}
-          {costDiff && <Typography level="h4">${recipeA.totalCost.toFixed(2)}</Typography>}
-            </Grid>
-            <Grid xs={6}>
-
-          {costDiff && <Typography level="h2">Total Estimated Cost: </Typography>}
-          {costDiff && <Typography level="h4">${recipeB.totalCost.toFixed(2)}</Typography>}
-            </Grid>
+        <Grid xs={6}>
+          {costDiff && (
+            <Typography level="h2">Total Estimated Cost: </Typography>
+          )}
+          {costDiff && (
+            <Typography level="h4">${recipeA.totalCost.toFixed(2)}</Typography>
+          )}
+        </Grid>
+        <Grid xs={6}>
+          {costDiff && (
+            <Typography level="h2">Total Estimated Cost: </Typography>
+          )}
+          {costDiff && (
+            <Typography level="h4">${recipeB.totalCost.toFixed(2)}</Typography>
+          )}
+        </Grid>
       </Grid>
     </Box>
   );

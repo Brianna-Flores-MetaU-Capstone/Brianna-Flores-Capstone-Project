@@ -135,6 +135,12 @@ const GPModalStyle = {
   borderRadius: "lg",
 };
 
+const GPMealInfoModalTitleStyle = {
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+};
+
 const GPCenteredBoxStyle = {
   display: "flex",
   flexDirection: "column",
@@ -182,10 +188,21 @@ const CenteredTitledListStyle = {
   justifyContent: "center",
 };
 
+const GPTagItemStyle = {
+  m: 1,
+  p: 1,
+  border: "2px solid",
+  borderRadius: "md",
+  textAlign: "center",
+  alignSelf: "center",
+  color: "primary.400",
+};
+
 const MUI_GRID_FULL_SPACE = 12;
 
 export {
   GPModalStyle,
+  GPMealInfoModalTitleStyle,
   GPCenteredBoxStyle,
   GPDiffHeaderStyle,
   theme,
@@ -193,5 +210,6 @@ export {
   RowOverflowTitledListStyle,
   ColumnOverflowTitledListStyle,
   CenteredTitledListStyle,
-  RecipeTagsTitledListStyle
+  RecipeTagsTitledListStyle,
+  GPTagItemStyle,
 };

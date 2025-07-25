@@ -38,6 +38,7 @@ type GPEditRecipeModalType = {
 const actions = {
   SET_RECIPE: "setRecipe",
   SET_INPUT: "setInput",
+  SET_INPUT_NUM: "setInputNum",
   SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
   UPDATE_INSTRUCTION: "setInstruction",
@@ -45,18 +46,29 @@ const actions = {
   ADD_ITEM: "addItem",
 } as const;
 
+const EditRecipeFieldsEnum = {
+  TITLE: "recipeTitle",
+  SERVINGS: "servings",
+  READY_IN: "readyInMinutes",
+  EDITOR: "editingAuthorName",
+  URL: "sourceUrl",
+  ING_NAME: "ingredientName",
+  ING_QUANTITY: "quantity",
+  ING_UNIT: "unit",
+} as const;
+
 const recipeInputEditFields = [
-  { label: "Recipe Title", field: "recipeTitle", spacing: 12 },
-  { label: "Servings", field: "servings", spacing: 2 },
-  { label: "Cook Time", field: "readyInMinutes", spacing: 4 },
-  { label: "Editor Username", field: "editingAuthorName", spacing: 6 },
-  { label: "Recipe URL", field: "sourceUrl", spacing: 12 },
+  { label: "Recipe Title", field: EditRecipeFieldsEnum.TITLE, spacing: 12 },
+  { label: "Servings", field: EditRecipeFieldsEnum.SERVINGS, spacing: 2 },
+  { label: "Cook Time", field: EditRecipeFieldsEnum.READY_IN, spacing: 4 },
+  { label: "Editor Username", field: EditRecipeFieldsEnum.EDITOR, spacing: 6 },
+  { label: "Recipe URL", field: EditRecipeFieldsEnum.URL, spacing: 12 },
 ] as const;
 
 const ingredientInputEditFields = [
-  { label: "Ingredient Name", field: "ingredientName", space: 6 },
-  { label: "Quantity", field: "quantity", space: 2 },
-  { label: "Unit", field: "unit", space: 3 },
+  { label: "Ingredient Name", field: EditRecipeFieldsEnum.ING_NAME, space: 6 },
+  { label: "Quantity", field: EditRecipeFieldsEnum.ING_QUANTITY, space: 2 },
+  { label: "Unit", field: EditRecipeFieldsEnum.ING_UNIT, space: 3 },
 ] as const;
 
 const dietaryEditFields = [
@@ -89,6 +101,7 @@ const EditRecipeModal = ({
     vegan: false,
     glutenFree: false,
     dairyFree: false,
+    recipeTags: [],
     ingredientCostInfo: [],
     totalCost: 0,
   };
@@ -104,8 +117,14 @@ const EditRecipeModal = ({
         value: string;
       }
     | {
+        type: typeof actions.SET_INPUT_NUM;
+        recipeField: keyof GPRecipeDataTypes;
+        value: number;
+      }
+    | {
         type: typeof actions.SET_DIETARY_TAGS;
         dietTag: keyof GPRecipeDataTypes;
+        dietLabel: string;
       }
     | {
         type: typeof actions.UPDATE_INGREDIENT;
@@ -135,8 +154,17 @@ const EditRecipeModal = ({
         return { ...action.value };
       case actions.SET_INPUT:
         return { ...state, [action.recipeField]: action.value };
+      case actions.SET_INPUT_NUM:
+        return { ...state, [action.recipeField]: action.value };
       case actions.SET_DIETARY_TAGS:
-        return { ...state, [action.dietTag]: !state[action.dietTag] };
+        let updatedRecipeTags = [...state.recipeTags]
+        if (state[action.dietTag]) { // previously selected, remove from recipe tags
+          const index = updatedRecipeTags.indexOf(action.dietLabel)
+          updatedRecipeTags.splice(index, 1)
+        } else {
+          updatedRecipeTags = [...state.recipeTags, action.dietLabel]
+        }
+        return { ...state, [action.dietTag]: !state[action.dietTag], recipeTags: updatedRecipeTags };
       case actions.UPDATE_INGREDIENT:
         return {
           ...state,
@@ -230,18 +258,29 @@ const EditRecipeModal = ({
                       <Typography level="h4">Edit Recipe</Typography>
                     </Grid>
                     {recipeInputEditFields.map((field, index) => (
-                      <Grid  key={index} xs={field.spacing}>
+                      <Grid key={index} xs={field.spacing}>
                         <FormControl>
                           <FormLabel>{field.label}</FormLabel>
                           <Input
                             required
-                            onChange={(event) =>
-                              dispatch({
-                                type: actions.SET_INPUT,
-                                recipeField: field.field,
-                                value: event.target.value,
-                              })
+                            type={
+                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
+                                ? "number"
+                                : "text"
                             }
+                            onChange={(event) => {
+                              field.field === EditRecipeFieldsEnum.SERVINGS || field.field === EditRecipeFieldsEnum.READY_IN
+                                ? dispatch({
+                                    type: actions.SET_INPUT_NUM,
+                                    recipeField: field.field,
+                                    value: parseInt(event.target.value),
+                                  })
+                                : dispatch({
+                                    type: actions.SET_INPUT,
+                                    recipeField: field.field,
+                                    value: event.target.value,
+                                  });
+                            }}
                             value={editedRecipeData[field.field] ?? ""}
                           />
                         </FormControl>
@@ -270,6 +309,7 @@ const EditRecipeModal = ({
                             dispatch({
                               type: actions.SET_DIETARY_TAGS,
                               dietTag: tag.field as keyof GPRecipeDataTypes,
+                              dietLabel: tag.label
                             })
                           }
                         >
@@ -293,6 +333,11 @@ const EditRecipeModal = ({
                         <FormControl>
                           <FormHelperText>{field.label}</FormHelperText>
                           <Input
+                            type={
+                              field.field === EditRecipeFieldsEnum.ING_QUANTITY
+                                ? "number"
+                                : "text"
+                            }
                             onChange={(event) =>
                               dispatch({
                                 type: actions.UPDATE_INGREDIENT,

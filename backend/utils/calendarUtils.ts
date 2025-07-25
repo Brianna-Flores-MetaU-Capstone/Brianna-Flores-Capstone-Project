@@ -8,7 +8,7 @@ import type {
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
 
-import TimeBlock from "./TimeBlockClass";
+import TimeBlock from "../classes/TimeBlock";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
@@ -174,7 +174,7 @@ type GPAnyBlockTypes = {
 };
 
 const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
-  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS;
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   let freeBlockStart = startAsDate.getTime();
@@ -208,7 +208,7 @@ const fitsUserPreferences = ({
   readyInMinutes,
 }: GPFitsPreferenceTypes) => {
   // userPreferences formatted as 00:00
-  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS
+  const readyInMilliseconds = readyInMinutes * TO_MILLISECONDS;
   const startAsDate = new Date(freeBlock.start);
   const endAsDate = new Date(freeBlock.end);
   const freeTimeBlock = new TimeBlock(startAsDate, endAsDate);

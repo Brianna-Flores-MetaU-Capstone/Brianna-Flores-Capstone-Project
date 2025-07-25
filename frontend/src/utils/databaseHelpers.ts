@@ -4,11 +4,15 @@ import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
-  GPRecipeDiscoveryCategories,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
+import {
+  RecipeFilter,
+  recipeFiltersList,
+  type recipeFilterType,
+} from "../classes/filters/RecipeFilters";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const DISCOVERY_NUM_TO_REQUEST = 20;
@@ -279,38 +283,30 @@ const fetchDiscoverRecipes = async ({
 
 type GPFetchRecipeCategoryType = GPSetMessageType & {
   setRecipeDiscoveryResults: (
-    value: React.SetStateAction<GPRecipeDiscoveryCategories>
+    value: React.SetStateAction<RecipeFilter>
   ) => void;
-  filters: { filter: string; title: string }[];
   offset: number;
 };
 const fetchAllRecipeCategories = async ({
   setMessage,
   setRecipeDiscoveryResults,
-  filters,
   offset,
 }: GPFetchRecipeCategoryType) => {
   try {
-    const recipeCategories: GPRecipeDiscoveryCategories = {
-      all: [],
-      dairyFree: [],
-      glutenFree: [],
-      vegetarian: [],
-      vegan: [],
-    };
-    await Promise.all(
-      filters.map(async (filter: { filter: string; title: string }) => {
-        const categoryRecipes = await fetchDiscoverRecipes({
-          setMessage,
-          filter: filter.filter,
-          offset,
-          numRequested: DISCOVERY_NUM_TO_REQUEST,
-        });
-        recipeCategories[filter.filter as keyof GPRecipeDiscoveryCategories] =
-          categoryRecipes;
-      })
-    );
-    setRecipeDiscoveryResults(recipeCategories);
+    const createdRecipeFilter = new RecipeFilter();
+    for (const [key, filter] of Object.entries(recipeFiltersList)) {
+      const categoryRecipes = await fetchDiscoverRecipes({
+        setMessage,
+        filter,
+        offset,
+        numRequested: DISCOVERY_NUM_TO_REQUEST,
+      });
+      createdRecipeFilter.setFilteredList(
+        filter as recipeFilterType,
+        categoryRecipes
+      );
+    }
+    setRecipeDiscoveryResults(new RecipeFilter(createdRecipeFilter));
   } catch (error) {
     setMessage({
       error: true,
