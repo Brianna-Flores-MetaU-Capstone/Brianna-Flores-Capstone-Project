@@ -1,7 +1,6 @@
 import type {
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPRecipeDataTypes,
 } from "../utils/types";
 import AppHeader from "../components/utils/AppHeader";
 import TitledListView from "../components/utils/TitledListView";
@@ -22,6 +21,7 @@ import {
   ColumnOverflowTitledListStyle,
   RowOverflowTitledListStyle,
 } from "../utils/UIStyle";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const Homepage = () => {
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -31,9 +31,7 @@ const Homepage = () => {
   const [userIngredientList, setUserIngredientList] = useState<
     GPIngredientDataTypes[]
   >([]);
-  const [selectedRecipes, setSelectedRecipes] = useState<GPRecipeDataTypes[]>(
-    []
-  );
+  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
 
   const { user } = useUser();
   const navigate = useNavigate();

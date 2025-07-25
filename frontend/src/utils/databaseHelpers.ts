@@ -3,7 +3,6 @@ import type {
   GPAccountInfoTypes,
   GPErrorMessageTypes,
   GPIngredientDataTypes,
-  GPRecipeDataTypes,
 } from "./types";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
@@ -13,6 +12,7 @@ import {
   recipeFiltersList,
   type recipeFilterType,
 } from "../classes/filters/RecipeFilters";
+import { Recipe } from "../classes/recipe/Recipe";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const DISCOVERY_NUM_TO_REQUEST = 20;
@@ -26,7 +26,7 @@ const axiosConfig = {
 
 type GPSetMessageType = {
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
 };
 
@@ -57,7 +57,7 @@ const getUserData = async ({ user, setMessage }: GPUserDataHelperTypes) => {
   try {
     const response = await axios.get(
       `${databaseUrl}/account/${user.uid}`,
-      axiosConfig
+      axiosConfig,
     );
     const userDataObj: GPCurrentUserTypes = {
       user,
@@ -79,7 +79,7 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
     const response = await axios.post(
       `${databaseUrl}/signup`,
       newUser,
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -93,7 +93,7 @@ const validateUserToken = async (user: User) => {
     const response = await axios.post(
       `${databaseUrl}/login`,
       { token },
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -123,7 +123,7 @@ const deleteIngredient = async ({
   try {
     await axios.delete(
       `${databaseUrl}/ingredients/${ingredient.id}`,
-      axiosConfig
+      axiosConfig,
     );
     setMessage({ error: false, message: "Sucessfully deleted ingredient" });
   } catch (error) {
@@ -145,7 +145,7 @@ const addIngredientDatabase = async ({
     await axios.post(
       `${databaseUrl}/ingredients/${userId}`,
       newIngredientData,
-      axiosConfig
+      axiosConfig,
     );
     setMessage({ error: false, message: "Sucessfully created ingredient" });
   } catch (error) {
@@ -166,7 +166,7 @@ const updateIngredientDatabase = async ({
     await axios.put(
       `${databaseUrl}/ingredients/${ingredientId}`,
       newIngredientData,
-      axiosConfig
+      axiosConfig,
     );
     setMessage({ error: false, message: "Sucessfully updated ingredient" });
   } catch (error) {
@@ -175,7 +175,7 @@ const updateIngredientDatabase = async ({
 };
 
 type GPFetchRecipeTypes = GPSetMessageType & {
-  setRecipes?: (value: React.SetStateAction<GPRecipeDataTypes[]>) => void;
+  setRecipes?: (value: React.SetStateAction<Recipe[]>) => void;
   recipeGroup: string;
 };
 const fetchRecipes = async ({
@@ -186,7 +186,7 @@ const fetchRecipes = async ({
   try {
     const response = await axios.get(
       `${databaseUrl}/recipes/${recipeGroup}`,
-      axiosConfig
+      axiosConfig,
     );
     if (setRecipes) {
       setRecipes(response.data);
@@ -199,7 +199,7 @@ const fetchRecipes = async ({
 
 type GPUpdateUserRecipesTypes = GPSetMessageType & {
   editedRecipe: boolean;
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
   userId: string;
 };
 const updateUserRecipes = async ({
@@ -212,7 +212,7 @@ const updateUserRecipes = async ({
     await axios.post(
       `${databaseUrl}/recipes/planned/${userId}`,
       { editedRecipe: editedRecipe, ...selectedRecipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Failed to save recipe" });
@@ -221,7 +221,7 @@ const updateUserRecipes = async ({
 
 type GPFetchGroceryListTypes = GPSetMessageType & {
   setUserGroceryList: (
-    value: React.SetStateAction<GPIngredientDataTypes[]>
+    value: React.SetStateAction<GPIngredientDataTypes[]>,
   ) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
   setGroceryListCost?: (value: React.SetStateAction<number>) => void;
@@ -235,12 +235,12 @@ const fetchGroceryList = async ({
   try {
     const response = await axios.get(
       `${databaseUrl}/generateList`,
-      axiosConfig
+      axiosConfig,
     );
     setUserGroceryList(response.data.groceryList);
     if (setGroceryDepartments) {
       const departments = parseGroceryListDepartments(
-        response.data.groceryList
+        response.data.groceryList,
       );
       setGroceryDepartments(departments);
     }
@@ -270,7 +270,7 @@ const fetchDiscoverRecipes = async ({
     const response = await axios.post(
       `${databaseUrl}/recipes/discover`,
       { filter, offset, numRequested },
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -283,7 +283,7 @@ const fetchDiscoverRecipes = async ({
 
 type GPFetchRecipeCategoryType = GPSetMessageType & {
   setRecipeDiscoveryResults: (
-    value: React.SetStateAction<RecipeFilter>
+    value: React.SetStateAction<RecipeFilter>,
   ) => void;
   offset: number;
 };
@@ -303,7 +303,7 @@ const fetchAllRecipeCategories = async ({
       });
       createdRecipeFilter.setFilteredList(
         filter as recipeFilterType,
-        categoryRecipes
+        categoryRecipes,
       );
     }
     setRecipeDiscoveryResults(new RecipeFilter(createdRecipeFilter));
@@ -316,7 +316,7 @@ const fetchAllRecipeCategories = async ({
 };
 
 type GPUnfavoriteType = GPSetMessageType & {
-  recipe: GPRecipeDataTypes;
+  recipe: Recipe;
 };
 
 const handleUnfavoriteRecipe = async ({
@@ -327,7 +327,7 @@ const handleUnfavoriteRecipe = async ({
     await axios.put(
       `${databaseUrl}/recipes/favorited/unfavorite`,
       { selectedRecipe: recipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Error unfavoriting recipe" });
@@ -336,7 +336,7 @@ const handleUnfavoriteRecipe = async ({
 
 type GPFavoriteType = GPSetMessageType & {
   userId: string;
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
 };
 
 const handleFavoriteRecipe = async ({
@@ -348,7 +348,7 @@ const handleFavoriteRecipe = async ({
     await axios.post(
       `${databaseUrl}/recipes/favorited/${userId}`,
       { selectedRecipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Error favoriting recipe" });
@@ -356,7 +356,7 @@ const handleFavoriteRecipe = async ({
 };
 
 type GPFetchSingleRecipeType = GPSetMessageType & {
-  selectedRecipe: GPRecipeDataTypes;
+  selectedRecipe: Recipe;
 };
 
 const fetchSingleRecipe = async ({
@@ -366,7 +366,7 @@ const fetchSingleRecipe = async ({
   try {
     const originalRecipe = await axios.get(
       `${databaseUrl}/recipes/original/${selectedRecipe.apiId}`,
-      axiosConfig
+      axiosConfig,
     );
     return originalRecipe.data;
   } catch (error) {

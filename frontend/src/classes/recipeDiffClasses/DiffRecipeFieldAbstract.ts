@@ -84,7 +84,6 @@ abstract class DiffRecipeFieldAbstract<T> {
         j--;
       }
     }
-    // array of lines (unchanged, added, or deleted)
     // add any leftover
     while (i > 0) {
       itemChanges = [

@@ -43,7 +43,7 @@ class TimeBlock {
 
     if (freeBlockStart > preferredEnd || freeBlockEnd < preferredStart) {
       // no overlap
-      return {start: 0, end: 0};
+      return { start: 0, end: 0 };
     }
     let start = 0;
     let end = 0;
@@ -75,7 +75,7 @@ class TimeBlock {
       start = freeBlockStart;
       end = preferredEnd;
     }
-    return {start: start, end: end}
+    return { start: start, end: end };
   }
 
   toString() {

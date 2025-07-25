@@ -54,7 +54,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  }
+  },
 );
 
 module.exports = router;

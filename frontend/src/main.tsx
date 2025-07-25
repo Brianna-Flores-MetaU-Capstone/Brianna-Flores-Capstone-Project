@@ -15,5 +15,5 @@ createRoot(document.getElementById("root")!).render(
         </SelectedEventsProvider>
       </EventRecProvider>
     </UserProvider>
-  </StrictMode>
+  </StrictMode>,
 );

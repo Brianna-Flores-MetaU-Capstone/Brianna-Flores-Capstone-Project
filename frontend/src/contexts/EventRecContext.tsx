@@ -19,7 +19,7 @@ export const EventRecProvider = ({
   children: React.ReactNode;
 }) => {
   const [eventOptions, setEventOptions] = useState<GPRecipeEventOptionType[][]>(
-    []
+    [],
   );
   return (
     <EventRecContext.Provider value={{ eventOptions, setEventOptions }}>

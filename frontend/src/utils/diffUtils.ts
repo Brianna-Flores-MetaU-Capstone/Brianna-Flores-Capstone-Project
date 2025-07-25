@@ -1,28 +1,29 @@
-import type { GPIngredientDataTypes, GPRecipeDataTypes } from "./types";
+import type { GPIngredientDataTypes } from "./types";
 import { RecipeIngredientsDiff } from "../classes/recipeDiffClasses/DiffClass";
 import type { GPDiffReturnType } from "../classes/recipeDiffClasses/DiffClass";
+import { Recipe } from "../classes/recipe/Recipe";
 
 type GPRecipeDiffType = {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
   servingsDiff: boolean;
   recipeIngredientDiff: GPDiffReturnType<GPIngredientDataTypes>;
   purchasedIngredientsDiff: GPDiffReturnType<GPIngredientDataTypes>;
 };
 type GPDiffType = {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
 };
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   const diffRecipeIngredients = new RecipeIngredientsDiff();
   const diffRecipeIngredientsResults = diffRecipeIngredients.getDiff(
     recipeA.ingredients,
-    recipeB.ingredients
+    recipeB.ingredients,
   );
   const diffIngredientsToPurchase = new RecipeIngredientsDiff();
   const diffIngredientsToPurchaseResults = diffIngredientsToPurchase.getDiff(
     recipeA.ingredientCostInfo,
-    recipeB.ingredientCostInfo
+    recipeB.ingredientCostInfo,
   );
   const diffServingsResults = recipeA.servings !== recipeB.servings;
   const recipeDiffResults: GPRecipeDiffType = {
@@ -65,7 +66,7 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
           : Math.min(
               arr[i - 1][j] + 1,
               arr[i][j - 1] + 1,
-              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1)
+              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1),
             );
     }
   }

@@ -1,14 +1,14 @@
 import type {
   GPUserEventTypes,
-  GPRecipeDataTypes,
   GPRecipeEventOptionType,
-  GPPreferredBlockType,
 } from "../../frontend/src/utils/types";
+import { TimePreferenceString } from "../../frontend/src/classes/timePreference/TimePreferenceString";
 
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
 
 import TimeBlock from "../classes/TimeBlock";
+import { Recipe } from "../../frontend/src/classes/recipe/Recipe";
 
 type GPBestTimeType = {
   userFreeTime: GPUserEventTypes[];
@@ -47,8 +47,8 @@ const getShoppingTimeOptions = ({
 
 type GPRecipeEventTypes = {
   userFreeTime: GPUserEventTypes[];
-  userRecipes: GPRecipeDataTypes[];
-  userPreferences: GPPreferredBlockType[];
+  userRecipes: Recipe[];
+  userPreferences: TimePreferenceString[];
   servingsPerDay: number;
 };
 
@@ -160,7 +160,7 @@ const getRecipeTimeOptions = ({
       eventOptions = [...eventOptions, bestOption];
       currentDay.setDate(
         bestOption.timeOptions[0].start.getDate() +
-          Math.ceil(recipe.servings / servingsPerDay)
+          Math.ceil(recipe.servings / servingsPerDay),
       );
       currentDay.setHours(8, 0, 0, 0);
     }
@@ -186,7 +186,7 @@ const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
       ...optionArray,
       new TimeBlock(
         new Date(freeBlockStart),
-        new Date(freeBlockStart + readyInMilliseconds)
+        new Date(freeBlockStart + readyInMilliseconds),
       ),
     ];
     freeBlockStart += TIME_BLOCK_INCREMENT * TO_MILLISECONDS;
@@ -199,7 +199,7 @@ const getAnyFreeTime = ({ freeBlock, readyInMinutes }: GPAnyBlockTypes) => {
 
 type GPFitsPreferenceTypes = {
   freeBlock: GPUserEventTypes;
-  userPreferences: GPPreferredBlockType[];
+  userPreferences: TimePreferenceString[];
   readyInMinutes: number;
 };
 const fitsUserPreferences = ({
@@ -230,7 +230,7 @@ const fitsUserPreferences = ({
     
     const userPreferenceTimeBlock = new TimeBlock(
       new Date(preferredStart),
-      new Date(preferredEnd)
+      new Date(preferredEnd),
     );
     const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
 
@@ -238,7 +238,7 @@ const fitsUserPreferences = ({
       let optionArray = [
         new TimeBlock(
           new Date(overlap.start),
-          new Date(overlap.start + readyInMilliseconds)
+          new Date(overlap.start + readyInMilliseconds),
         ),
       ];
       const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
@@ -247,7 +247,7 @@ const fitsUserPreferences = ({
           ...optionArray,
           new TimeBlock(
             new Date(newStart),
-            new Date(newStart + readyInMilliseconds)
+            new Date(newStart + readyInMilliseconds),
           ),
         ];
       }

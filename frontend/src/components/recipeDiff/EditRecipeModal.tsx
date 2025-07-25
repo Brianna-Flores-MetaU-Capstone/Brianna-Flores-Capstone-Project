@@ -28,9 +28,10 @@ import {
 } from "../../utils/UIStyle";
 import { useUser } from "../../contexts/UserContext";
 import { updateUserRecipes } from "../../utils/databaseHelpers";
+import { Recipe } from "../../classes/recipe/Recipe";
 
 type GPEditRecipeModalType = {
-  recipe: GPRecipeDataTypes | undefined;
+  recipe: Recipe | undefined;
   modalOpen: boolean;
   toggleModal: () => void;
 };
@@ -176,14 +177,14 @@ const EditRecipeModal = ({
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem
+              : elem,
           ),
         };
       case actions.UPDATE_INSTRUCTION:
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step
+            index === action.instructionIndex ? action.value : step,
           ),
         };
       case actions.DELETE_ITEM:
@@ -192,7 +193,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (item, index) => index !== action.itemIndex
+              (item, index) => index !== action.itemIndex,
             ),
           };
         } else {
@@ -229,12 +230,31 @@ const EditRecipeModal = ({
       setMessage({ error: true, message: "Error user not signed in" });
       return;
     }
+    const newRecipe = new Recipe(
+      editedRecipeData.apiId,
+      editedRecipeData.originalSource,
+      editedRecipeData.recipeTitle,
+      editedRecipeData.previewImage,
+      editedRecipeData.servings,
+      editedRecipeData.ingredients,
+      editedRecipeData.instructions,
+      editedRecipeData.sourceUrl,
+      editedRecipeData.readyInMinutes,
+      editedRecipeData.vegetarian,
+      editedRecipeData.vegan,
+      editedRecipeData.glutenFree,
+      editedRecipeData.dairyFree,
+      editedRecipeData.recipeTags,
+      editedRecipeData.editingAuthorId,
+      editedRecipeData.id,
+      editedRecipeData.editingAuthorName,
+    );
     try {
       const userId = user.id;
       await updateUserRecipes({
         editedRecipe: true,
         userId,
-        selectedRecipe: editedRecipeData,
+        selectedRecipe: newRecipe,
         setMessage,
       });
     } catch (error) {

@@ -10,7 +10,7 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();

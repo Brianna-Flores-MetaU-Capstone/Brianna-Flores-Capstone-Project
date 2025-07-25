@@ -1,10 +1,10 @@
-import type { GPRecipeDataTypes } from "../../utils/types";
 import { Box, Grid, Typography, List, ListItem } from "@mui/joy";
 import { GPDiffHeaderStyle } from "../../utils/UIStyle";
+import type { Recipe } from "../../classes/recipe/Recipe";
 
 type GPInstructionsDiffTypes = {
-  recipeA: GPRecipeDataTypes;
-  recipeB: GPRecipeDataTypes;
+  recipeA: Recipe;
+  recipeB: Recipe;
 };
 
 const RecipeDiffInstructionsBlock = ({

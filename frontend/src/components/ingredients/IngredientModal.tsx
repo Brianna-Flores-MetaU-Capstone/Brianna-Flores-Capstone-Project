@@ -85,7 +85,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   const [newIngredientData, dispatch] = useReducer(
     reducer,
-    initialIngredientState
+    initialIngredientState,
   );
 
   const handleModalSubmit = async (event: React.FormEvent) => {

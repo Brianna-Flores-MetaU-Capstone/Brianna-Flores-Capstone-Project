@@ -19,11 +19,11 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   onGroceryCheck,
 }) => {
   const filteredGroceries = groceryList.filter(
-    (item) => item.department === department
+    (item) => item.department === department,
   );
 
   const handleDeleteIngredient = async (
-    ingredient: GPIngredientDataTypes
+    ingredient: GPIngredientDataTypes,
   ) => {};
 
   return (

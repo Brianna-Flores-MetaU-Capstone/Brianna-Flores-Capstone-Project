@@ -1,5 +1,4 @@
 import type {
-  GPRecipeDataTypes,
   GPErrorMessageTypes,
   GPRecipeIngredientTypes,
 } from "../utils/types";
@@ -25,23 +24,21 @@ import ConnectCalendar from "../components/calendar/ConnectCalendar";
 import CalendarModal from "../components/calendar/CalendarModal";
 import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
+import { Recipe } from "../classes/recipe/Recipe";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
     useState(false);
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
-  const [recipeInfoModalInfo, setRecipeInfoModalInfo] =
-    useState<GPRecipeDataTypes>();
-  const [selectedRecipes, setSelectedRecipes] = useState<GPRecipeDataTypes[]>(
-    []
-  );
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
+  const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [loadingList, setLoadingList] = useState(false);
   const [calendarModalOpen, setCalendarModalOpen] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
-  const handleSelectRecipe = async (selectedRecipe: GPRecipeDataTypes) => {
+  const handleSelectRecipe = async (selectedRecipe: Recipe) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;
@@ -72,17 +69,17 @@ const NewListPage = () => {
     });
   }, []);
 
-  const handleRecipeCardClick = (recipe: GPRecipeDataTypes) => {
+  const handleRecipeCardClick = (recipe: Recipe) => {
     setRecipeInfoModalOpen((prev) => !prev);
     setRecipeInfoModalInfo(recipe);
   };
 
-  const handleDeleteRecipe = async (deletedRecipe: GPRecipeDataTypes) => {
+  const handleDeleteRecipe = async (deletedRecipe: Recipe) => {
     try {
       await axios.put(
         `${databaseUrl}/recipes/planned/remove`,
         { deletedRecipe },
-        axiosConfig
+        axiosConfig,
       );
       await fetchRecipes({
         setMessage,
@@ -94,7 +91,7 @@ const NewListPage = () => {
     }
   };
 
-  const getRecipeIngredients = (recipes: GPRecipeDataTypes[]) => {
+  const getRecipeIngredients = (recipes: Recipe[]) => {
     let recipeIngredients: GPRecipeIngredientTypes[] = [];
     for (const recipe of recipes) {
       recipeIngredients = [...recipeIngredients, ...recipe.ingredients];
@@ -111,7 +108,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig
+        axiosConfig,
       );
       navigate("/grocery-list");
     } catch (error) {

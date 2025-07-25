@@ -7,7 +7,7 @@ import {
   AuthenticationFieldEnum,
 } from "../../utils/constants";
 import { Button, Box, Input, FormControl, FormLabel } from "@mui/joy";
-import type { GPAuthFormDataTypes } from "../../utils/types";
+import { AuthFormData } from "../../classes/authentication/AuthFormData";
 
 type GPAuthFormEventProps = {
   handleRegistrationSubmit?: ({
@@ -19,7 +19,7 @@ type GPAuthFormEventProps = {
   }) => void;
   handleLoginSubmit?: (event: React.FormEvent) => void;
   handleAuthInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  formData: GPAuthFormDataTypes;
+  formData: AuthFormData;
 };
 
 const AuthForm: React.FC<GPAuthFormEventProps> = ({
@@ -32,7 +32,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
   const [userDiets, setUserDiets] = useState<string[]>([]);
 
   const handlePreferenceClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const { category, selection } = (event.currentTarget as HTMLButtonElement)
       .dataset;
@@ -70,7 +70,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           required
           id={AuthenticationFieldEnum.EMAIL}
           type="text"
-          value={formData.email}
+          value={formData.getEmail}
           slotProps={{
             input: { "data-credential": `${AuthenticationFieldEnum.EMAIL}` },
           }}
@@ -88,7 +88,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
               "data-credential": `${AuthenticationFieldEnum.PASSWORD}`,
             },
           }}
-          value={formData.password}
+          value={formData.getPassword}
           onChange={handleAuthInputChange}
         />
       </FormControl>

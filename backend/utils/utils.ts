@@ -55,7 +55,7 @@ const getTotalQuantity = ({
   // for the current ingredient, check to see if there are any of the same ingredient in the list
   const sameIngredients = recipeIngredients.filter(
     (ingredient) =>
-      ingredient.ingredientName === recipeIngredient.ingredientName
+      ingredient.ingredientName === recipeIngredient.ingredientName,
   );
   // loop through array of ingredients to get the quantity needed
   let totalQuantity = 0;
@@ -121,14 +121,14 @@ const getListOfMissingIngredients = ({
   let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
   const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
-    ingredient.ingredientName.toLowerCase()
+    ingredient.ingredientName.toLowerCase(),
   );
 
   // loop through list of ingredients for recipe
   for (const recipeIngredient of recipeIngredients) {
     const alreadyInGroceryList = ingredientsToPurchase.find(
       (ingredient) =>
-        ingredient.ingredientName === recipeIngredient.ingredientName
+        ingredient.ingredientName === recipeIngredient.ingredientName,
     );
     if (!alreadyInGroceryList) {
       const totalQuantity = getTotalQuantity({
@@ -141,7 +141,7 @@ const getListOfMissingIngredients = ({
       };
       if (
         ownedIngredientsNames.indexOf(
-          recipeIngredient.ingredientName.toLowerCase()
+          recipeIngredient.ingredientName.toLowerCase(),
         ) === -1
       ) {
         // user does not have ingredient, add to grocery list
