@@ -44,33 +44,43 @@ router.post(
   }
 );
 
-router.get("/calendarEvents", isAuthenticated, async (req: Request, res: Response) => {
-  const userId = req.session.userId;
-  try {
-    const userCalendarEvents = await prisma.calendarEvent.findMany({
-      where: {
-        userId: userId
-      }, 
-      include: {
-        recipe: true
+router.get(
+  "/calendarEvents",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const userId = req.session.userId;
+    try {
+      const userCalendarEvents = await prisma.calendarEvent.findMany({
+        where: {
+          userId: userId,
+        },
+        include: {
+          recipe: true,
+        },
+      });
+      if (!userCalendarEvents) {
+        res.status(404).send("Error, calendar events not found");
       }
-    })
-    if (!userCalendarEvents) {
-      res.status(404).send("Error, calendar events not found");
+      res.json(userCalendarEvents);
+    } catch (error) {
+      res.status(500).send("Server Error");
     }
-    res.json(userCalendarEvents)
-  } catch (error) {
-    res.status(500).send("Server Error")
   }
-})
+);
 
 router.post(
   "/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
     // get parsed list of events from google calendar
-    const { parsedFreeTime, userPreferences, singleDayPrep, servingsPerDay } =
-      req.body;
+    const {
+      preferredStartDate,
+      parsedFreeTime,
+      userPreferences,
+      singleDayPrep,
+      servingsPerDay,
+    } = req.body;
+
     const userId = req.session.userId;
     try {
       const user = await prisma.User.findUnique({
@@ -93,6 +103,7 @@ router.post(
         shoppingTime: SHOPPING_TIME,
       });
       const recipeScheduleOptions = getMultipleScheduleOptions({
+        preferredStartDate: preferredStartDate,
         userFreeTime: parsedFreeTime,
         userRecipes: userSelectedRecipes,
         userPreferences: userPreferences,
@@ -111,8 +122,10 @@ router.post(
   "/single/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
-    const { parsedFreeTime, userPreferences, recipeInfo } = req.body;
+    const { preferredStartDate, parsedFreeTime, userPreferences, recipeInfo } =
+      req.body;
     const recipeScheduleOptions = getMultipleScheduleOptions({
+      preferredStartDate: preferredStartDate,
       userFreeTime: parsedFreeTime,
       userRecipes: [recipeInfo],
       userPreferences: userPreferences,

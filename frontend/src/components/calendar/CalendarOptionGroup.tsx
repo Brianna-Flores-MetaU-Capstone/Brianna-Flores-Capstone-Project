@@ -1,8 +1,7 @@
-import { Box, Typography, IconButton } from "@mui/joy";
+import { Box, Typography } from "@mui/joy";
 import type { GPRecipeEventOptionType } from "../../utils/types";
 import CalendarEventCard from "./CalendarEventCard";
 import TitledListView from "../utils/TitledListView";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { CenteredTitledListStyle } from "../../utils/UIStyle";
 
 type GPCalendarOptionGroup = {
@@ -26,16 +25,6 @@ const CalendarOptionGroup = ({
         }}
       >
         <Typography>Option Group #{groupNum}</Typography>
-        <IconButton
-          disabled={adjustedSuggestion}
-          aria-label="Accept Event Group Recommendation"
-          variant="plain"
-          color="success"
-          size="lg"
-        >
-          <CheckCircleOutlineIcon />
-          <Typography>Accept All</Typography>
-        </IconButton>
       </Box>
       <TitledListView
         itemsList={eventOptions}

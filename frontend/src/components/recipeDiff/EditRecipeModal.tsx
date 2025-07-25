@@ -177,14 +177,14 @@ const EditRecipeModal = ({
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem
+              : elem,
           ),
         };
       case actions.UPDATE_INSTRUCTION:
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step
+            index === action.instructionIndex ? action.value : step,
           ),
         };
       case actions.DELETE_ITEM:
@@ -193,7 +193,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (item, index) => index !== action.itemIndex
+              (item, index) => index !== action.itemIndex,
             ),
           };
         } else {
@@ -247,7 +247,7 @@ const EditRecipeModal = ({
       editedRecipeData.recipeTags,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName
+      editedRecipeData.editingAuthorName,
     );
     try {
       const userId = user.id;

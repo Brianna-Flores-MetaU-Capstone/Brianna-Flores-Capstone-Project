@@ -39,7 +39,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
 
@@ -49,7 +49,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>
+    noDiffFields: Set<string>,
   ) => {
     // we are viewing the edited recipe, need to fetch original recipe
     setUserDiffOptionsOpen(false);
