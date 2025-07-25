@@ -1,0 +1,35 @@
+.tooltipContent {
+  background-color: #fafafa;
+  padding: 1%;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  color: #5dac9f;
+  border: 2px solid #5dac9f;
+  align-items: center;
+}
+
+.tooltipNavButtons {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1vw;
+}
+
+.tooltipNavButtons button {
+  border: 1px solid #5dac9f;
+  border-radius: 5px;
+  background: none;
+  text-align: center;
+  color: #5dac9f;
+}
+
+.tooltipNavButtons p {
+  padding: 0;
+  margin: 0;
+}
+
+.tooltipContent p {
+  text-align: center;
+}
