@@ -52,7 +52,7 @@ const RecipeDiffModal = ({
                     Servings: {recipeDiffData?.recipeA?.servings}
                   </Typography>
                 </Box>
-                <img src={recipeDiffData?.recipeA?.previewImage} />
+                <img src={recipeDiffData?.recipeA?.previewImage[0]} />
               </Box>
             </Grid>
             <Grid xs={6}>
@@ -73,7 +73,7 @@ const RecipeDiffModal = ({
                     Servings: {recipeDiffData?.recipeB?.servings}
                   </Typography>
                 </Box>
-                <img src={recipeDiffData?.recipeB?.previewImage} />
+                <img src={recipeDiffData?.recipeB?.previewImage[0]} />
               </Box>
             </Grid>
           </Grid>

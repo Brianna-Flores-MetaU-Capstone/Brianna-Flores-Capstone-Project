@@ -25,6 +25,7 @@ import { useState } from "react";
 import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
 import { Recipe } from "../../../../shared/Recipe";
 import UserDiffOptions from "../recipeDiff/UserDiffOptions";
+import ImageCarousel from "./ImageCarousel";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -42,7 +43,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
 
@@ -52,7 +53,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>,
+    noDiffFields: Set<string>
   ) => {
     // we are viewing the edited recipe, need to fetch original recipe
     setUserDiffOptionsOpen(false);
@@ -82,10 +83,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Sheet variant="outlined" sx={GPModalStyle}>
+          <ImageCarousel imageUrls={recipeInfo?.previewImage ?? []} />
           <Box sx={GPMealInfoModalTitleStyle}>
-            <AspectRatio ratio="1"  sx={{ maxWidth: 300, width: 300, borderRadius: "md" }}>
-              <img src={recipeInfo?.previewImage} />
-            </AspectRatio>
             <Box sx={GPCenteredBoxStyle}>
               <Typography level="h2">{recipeInfo?.recipeTitle}</Typography>
               {recipeInfo?.editingAuthorName && (

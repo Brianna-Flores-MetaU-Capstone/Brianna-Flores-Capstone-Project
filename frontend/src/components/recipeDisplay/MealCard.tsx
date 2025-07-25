@@ -149,7 +149,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
           </Typography>
         </Box>
         <AspectRatio>
-          <img src={parsedMealData.previewImage} />
+          <img src={parsedMealData.previewImage[0]} />
         </AspectRatio>
         <CardContent sx={{ justifyContent: "flex-end" }}>
           {parsedMealData.editingAuthorName && (

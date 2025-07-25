@@ -84,8 +84,8 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
       </Box>
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
-          src={recipe.previewImage}
-          srcSet={recipe.previewImage}
+          src={recipe.previewImage[0]}
+          srcSet={recipe.previewImage[0]}
           loading="lazy"
           alt=""
         />

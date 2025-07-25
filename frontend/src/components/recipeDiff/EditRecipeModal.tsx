@@ -19,9 +19,11 @@ import {
   Typography,
   IconButton,
   Textarea,
+  AspectRatio,
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TitledListView from "../utils/TitledListView";
 import {
   MUI_GRID_FULL_SPACE,
@@ -31,6 +33,7 @@ import { useUser } from "../../contexts/UserContext";
 import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
+import ImageSearchModal from "./ImageSearchModal";
 
 type GPEditRecipeModalType = {
   recipe: Recipe | undefined;
@@ -42,6 +45,8 @@ type GPEditRecipeModalType = {
 const actions = {
   SET_RECIPE: "setRecipe",
   SET_INPUT: "setInput",
+  ADD_IMAGE: "addImage",
+  DELETE_IMAGE: "deleteImage",
   SET_INPUT_NUM: "setInputNum",
   SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
@@ -95,8 +100,9 @@ const EditRecipeModal = ({
     editingAuthorName: "",
     editingAuthorId: null,
     recipeTitle: "",
-    previewImage:
+    previewImage: [
       "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg",
+    ],
     servings: 0,
     ingredients: [],
     instructions: [],
@@ -119,6 +125,14 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.SET_INPUT;
         recipeField: keyof GPRecipeDataTypes;
+        value: string;
+      }
+    | {
+        type: typeof actions.ADD_IMAGE;
+        value: Set<string>;
+      }
+    | {
+        type: typeof actions.DELETE_IMAGE;
         value: string;
       }
     | {
@@ -156,6 +170,7 @@ const EditRecipeModal = ({
   const [inputError, setInputError] = useState(false);
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
   const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
@@ -181,6 +196,18 @@ const EditRecipeModal = ({
           ...state,
           [action.dietTag]: !state[action.dietTag],
           recipeTags: updatedRecipeTags,
+        };
+      case actions.ADD_IMAGE:
+        return {
+          ...state,
+          previewImage: [...state.previewImage, ...action.value],
+        };
+      case actions.DELETE_IMAGE:
+        return {
+          ...state,
+          previewImage: state.previewImage.filter(
+            (imageUrl) => imageUrl !== action.value
+          ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
@@ -276,227 +303,273 @@ const EditRecipeModal = ({
     }
   };
 
+  const handleNewImages = (selectedImages: Set<string>) => {
+    dispatch({
+      type: actions.ADD_IMAGE,
+      value: selectedImages,
+    });
+  };
+
   return (
-    <Modal open={modalOpen} onClose={toggleModal}>
-      <ModalDialog layout="fullscreen">
-        <ModalClose sx={{ zIndex: 2 }} />
-        <DialogContent>
-          <form onSubmit={handleRecipeSubmit}>
-            <Box>
-              <Box sx={{ m: 1 }}>
-                <Grid container spacing={2} sx={{ alignItems: "flex-end" }}>
-                  <Grid container xs={9}>
-                    <Grid
-                      sx={{
-                        flexGrow: 1,
-                        p: 2,
-                        bgcolor: "primary.300",
-                        borderRadius: "md",
-                      }}
-                    >
-                      <Typography level="h4">Edit Recipe</Typography>
-                    </Grid>
-                    {recipeInputEditFields.map((field, index) => (
-                      <Grid key={index} xs={field.spacing}>
-                        <FormControl>
-                          <FormLabel>{field.label}</FormLabel>
-                          <Input
-                            required
-                            type={
-                              field.field === EditRecipeFieldsEnum.SERVINGS ||
-                              field.field === EditRecipeFieldsEnum.READY_IN
-                                ? "number"
-                                : "text"
-                            }
-                            onChange={(event) => {
-                              field.field === EditRecipeFieldsEnum.SERVINGS ||
-                              field.field === EditRecipeFieldsEnum.READY_IN
-                                ? dispatch({
-                                    type: actions.SET_INPUT_NUM,
-                                    recipeField: field.field,
-                                    value: parseInt(event.target.value),
-                                  })
-                                : dispatch({
-                                    type: actions.SET_INPUT,
-                                    recipeField: field.field,
-                                    value: event.target.value,
-                                  });
-                            }}
-                            value={editedRecipeData[field.field] ?? ""}
-                          />
-                        </FormControl>
+    <>
+      <Modal open={modalOpen} onClose={toggleModal}>
+        <ModalDialog layout="fullscreen">
+          <ModalClose sx={{ zIndex: 2 }} />
+          <DialogContent>
+            <form onSubmit={handleRecipeSubmit}>
+              <Box>
+                <Box sx={{ m: 1 }}>
+                  <Grid container spacing={2} sx={{ alignItems: "flex-end" }}>
+                    <Grid container xs={9}>
+                      <Grid
+                        sx={{
+                          flexGrow: 1,
+                          p: 2,
+                          bgcolor: "primary.300",
+                          borderRadius: "md",
+                        }}
+                      >
+                        <Typography level="h4">Edit Recipe</Typography>
                       </Grid>
-                    ))}
+                      {recipeInputEditFields.map((field, index) => (
+                        <Grid key={index} xs={field.spacing}>
+                          <FormControl>
+                            <FormLabel>{field.label}</FormLabel>
+                            <Input
+                              required
+                              type={
+                                field.field === EditRecipeFieldsEnum.SERVINGS ||
+                                field.field === EditRecipeFieldsEnum.READY_IN
+                                  ? "number"
+                                  : "text"
+                              }
+                              onChange={(event) => {
+                                field.field === EditRecipeFieldsEnum.SERVINGS ||
+                                field.field === EditRecipeFieldsEnum.READY_IN
+                                  ? dispatch({
+                                      type: actions.SET_INPUT_NUM,
+                                      recipeField: field.field,
+                                      value: parseInt(event.target.value),
+                                    })
+                                  : dispatch({
+                                      type: actions.SET_INPUT,
+                                      recipeField: field.field,
+                                      value: event.target.value,
+                                    });
+                              }}
+                              value={editedRecipeData[field.field] ?? ""}
+                            />
+                          </FormControl>
+                        </Grid>
+                      ))}
+                    </Grid>
+                    <Grid xs={3}>
+                      <TitledListView
+                        itemsList={dietaryEditFields}
+                        headerList={[
+                          {
+                            title: "Recipe Tags",
+                            spacing: MUI_GRID_FULL_SPACE,
+                          },
+                        ]}
+                        renderItem={(tag, index) => (
+                          <Button
+                            key={index}
+                            sx={{ p: 1 }}
+                            value={tag.field}
+                            variant={
+                              editedRecipeData[
+                                tag.field as keyof GPRecipeDataTypes
+                              ]
+                                ? "solid"
+                                : "plain"
+                            }
+                            onClick={() =>
+                              dispatch({
+                                type: actions.SET_DIETARY_TAGS,
+                                dietTag: tag.field as keyof GPRecipeDataTypes,
+                                dietLabel: tag.label,
+                              })
+                            }
+                          >
+                            {tag.label}
+                          </Button>
+                        )}
+                        listItemsStyle={RecipeTagsTitledListStyle}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid xs={3}>
-                    <TitledListView
-                      itemsList={dietaryEditFields}
-                      headerList={[
-                        { title: "Recipe Tags", spacing: MUI_GRID_FULL_SPACE },
-                      ]}
-                      renderItem={(tag, index) => (
+                </Box>
+                <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    {editedRecipeData.previewImage?.map((imageUrl, index) => (
+                      <Box key={index}>
+                        <AspectRatio ratio={1} sx={{ width: 250 }}>
+                          <img src={imageUrl} />
+                        </AspectRatio>
                         <Button
-                          key={index}
-                          sx={{ p: 1 }}
-                          value={tag.field}
-                          variant={
-                            editedRecipeData[
-                              tag.field as keyof GPRecipeDataTypes
-                            ]
-                              ? "solid"
-                              : "plain"
-                          }
+                          variant="solid"
+                          sx={{ position: "relative", bottom: 45, left: 10 }}
                           onClick={() =>
                             dispatch({
-                              type: actions.SET_DIETARY_TAGS,
-                              dietTag: tag.field as keyof GPRecipeDataTypes,
-                              dietLabel: tag.label,
+                              type: actions.DELETE_IMAGE,
+                              value: imageUrl,
                             })
                           }
                         >
-                          {tag.label}
+                          <DeleteIcon />
                         </Button>
-                      )}
-                      listItemsStyle={RecipeTagsTitledListStyle}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-              <TitledListView
-                itemsList={editedRecipeData.ingredients}
-                headerList={[
-                  { title: "Ingredients", spacing: MUI_GRID_FULL_SPACE },
-                ]}
-                renderItem={(ingredient, ingredientIndex) => (
-                  <Grid container key={ingredientIndex} alignItems="center">
-                    {ingredientInputEditFields.map((field, fieldIndex) => (
-                      <Grid key={fieldIndex} xs={field.space}>
+                      </Box>
+                    ))}
+                  </Box>
+                  <AspectRatio ratio={1} sx={{ minWidth: 250 }}>
+                    <Button onClick={() => setImageSearchModalOpen(true)}>
+                      Add Images!
+                    </Button>
+                  </AspectRatio>
+                </Box>
+                <TitledListView
+                  itemsList={editedRecipeData.ingredients}
+                  headerList={[
+                    { title: "Ingredients", spacing: MUI_GRID_FULL_SPACE },
+                  ]}
+                  renderItem={(ingredient, ingredientIndex) => (
+                    <Grid container key={ingredientIndex} alignItems="center">
+                      {ingredientInputEditFields.map((field, fieldIndex) => (
+                        <Grid key={fieldIndex} xs={field.space}>
+                          <FormControl>
+                            <FormHelperText>{field.label}</FormHelperText>
+                            <Input
+                              type={
+                                field.field ===
+                                EditRecipeFieldsEnum.ING_QUANTITY
+                                  ? "number"
+                                  : "text"
+                              }
+                              onChange={(event) =>
+                                dispatch({
+                                  type: actions.UPDATE_INGREDIENT,
+                                  ingredientIndex: ingredientIndex,
+                                  ingredientField:
+                                    field.field as keyof GPIngredientDataTypes,
+                                  value: event.target.value,
+                                })
+                              }
+                              value={ingredient[field.field]}
+                            />
+                          </FormControl>
+                        </Grid>
+                      ))}
+                      <Grid xs={1}>
+                        <IconButton
+                          onClick={() =>
+                            dispatch({
+                              type: actions.DELETE_ITEM,
+                              deletedField: "ingredients",
+                              itemIndex: ingredientIndex,
+                            })
+                          }
+                        >
+                          <RemoveCircleOutlineIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  )}
+                />
+                <IconButton
+                  sx={{ justifySelf: "flex-end" }}
+                  onClick={() =>
+                    dispatch({
+                      type: actions.ADD_ITEM,
+                      addedField: "ingredients",
+                      addedItem: {
+                        id: 0,
+                        ingredientName: "",
+                        quantity: 0,
+                        unit: "",
+                        department: "",
+                        isChecked: false,
+                      },
+                    })
+                  }
+                >
+                  <AddCircleOutlineIcon />
+                </IconButton>
+                <TitledListView
+                  headerList={[
+                    { title: "Instructions", spacing: MUI_GRID_FULL_SPACE },
+                  ]}
+                  itemsList={editedRecipeData.instructions}
+                  renderItem={(step, index) => (
+                    <Grid container key={index} sx={{ alignItems: "center" }}>
+                      <Grid xs={1}>
+                        <Typography>#{index + 1}</Typography>
+                      </Grid>
+                      <Grid xs={10}>
                         <FormControl>
-                          <FormHelperText>{field.label}</FormHelperText>
-                          <Input
-                            type={
-                              field.field === EditRecipeFieldsEnum.ING_QUANTITY
-                                ? "number"
-                                : "text"
-                            }
+                          <Textarea
+                            required
                             onChange={(event) =>
                               dispatch({
-                                type: actions.UPDATE_INGREDIENT,
-                                ingredientIndex: ingredientIndex,
-                                ingredientField:
-                                  field.field as keyof GPIngredientDataTypes,
+                                type: actions.UPDATE_INSTRUCTION,
+                                instructionIndex: index,
                                 value: event.target.value,
                               })
                             }
-                            value={ingredient[field.field]}
+                            value={step}
                           />
                         </FormControl>
                       </Grid>
-                    ))}
-                    <Grid xs={1}>
-                      <IconButton
-                        onClick={() =>
-                          dispatch({
-                            type: actions.DELETE_ITEM,
-                            deletedField: "ingredients",
-                            itemIndex: ingredientIndex,
-                          })
-                        }
-                      >
-                        <RemoveCircleOutlineIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                )}
-              />
-              <IconButton
-                sx={{ justifySelf: "flex-end" }}
-                onClick={() =>
-                  dispatch({
-                    type: actions.ADD_ITEM,
-                    addedField: "ingredients",
-                    addedItem: {
-                      id: 0,
-                      ingredientName: "",
-                      quantity: 0,
-                      unit: "",
-                      department: "",
-                      isChecked: false,
-                    },
-                  })
-                }
-              >
-                <AddCircleOutlineIcon />
-              </IconButton>
-              <TitledListView
-                headerList={[
-                  { title: "Instructions", spacing: MUI_GRID_FULL_SPACE },
-                ]}
-                itemsList={editedRecipeData.instructions}
-                renderItem={(step, index) => (
-                  <Grid container key={index} sx={{ alignItems: "center" }}>
-                    <Grid xs={1}>
-                      <Typography>#{index + 1}</Typography>
-                    </Grid>
-                    <Grid xs={10}>
-                      <FormControl>
-                        <Textarea
-                          required
-                          onChange={(event) =>
+                      <Grid xs={1}>
+                        <IconButton
+                          onClick={() =>
                             dispatch({
-                              type: actions.UPDATE_INSTRUCTION,
-                              instructionIndex: index,
-                              value: event.target.value,
+                              type: actions.DELETE_ITEM,
+                              deletedField: "instructions",
+                              itemIndex: index,
                             })
                           }
-                          value={step}
-                        />
-                      </FormControl>
+                        >
+                          <RemoveCircleOutlineIcon />
+                        </IconButton>
+                      </Grid>
                     </Grid>
-                    <Grid xs={1}>
-                      <IconButton
-                        onClick={() =>
-                          dispatch({
-                            type: actions.DELETE_ITEM,
-                            deletedField: "instructions",
-                            itemIndex: index,
-                          })
-                        }
-                      >
-                        <RemoveCircleOutlineIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
+                  )}
+                />
+                <IconButton
+                  sx={{ justifySelf: "flex-end" }}
+                  onClick={(event) =>
+                    dispatch({
+                      type: actions.ADD_ITEM,
+                      addedField: "instructions",
+                      addedItem: "",
+                    })
+                  }
+                >
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              </Box>
+              <FormControl error={inputError}>
+                <Button type="submit" disabled={inputError}>
+                  Update Recipe!
+                </Button>
+                {inputError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    Must enter valid input to submit
+                  </FormHelperText>
                 )}
-              />
-              <IconButton
-                sx={{ justifySelf: "flex-end" }}
-                onClick={(event) =>
-                  dispatch({
-                    type: actions.ADD_ITEM,
-                    addedField: "instructions",
-                    addedItem: "",
-                  })
-                }
-              >
-                <AddCircleOutlineIcon />
-              </IconButton>
-            </Box>
-            <FormControl error={inputError}>
-              <Button type="submit" disabled={inputError}>
-                Update Recipe!
-              </Button>
-              {inputError && (
-                <FormHelperText>
-                  <InfoOutlined />
-                  Must enter valid input to submit
-                </FormHelperText>
-              )}
-            </FormControl>
-          </form>
-        </DialogContent>
-      </ModalDialog>
-    </Modal>
+              </FormControl>
+            </form>
+          </DialogContent>
+        </ModalDialog>
+      </Modal>
+      <ImageSearchModal
+        modalOpen={imageSearchModalOpen}
+        toggleModal={() => setImageSearchModalOpen((prev) => !prev)}
+        onSubmit={handleNewImages}
+      />
+    </>
   );
 };
 
