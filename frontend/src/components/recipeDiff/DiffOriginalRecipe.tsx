@@ -22,7 +22,7 @@ import {
   GPTagItemStyle,
 } from "../../utils/UIStyle";
 import MealInfoModal from "../recipeDisplay/MealInfoModal";
-import type { Recipe } from "../../classes/recipe/Recipe";
+import type { Recipe } from "../../../../shared/Recipe";
 import { GPDiffOptionsEnum } from "../../classes/recipeDiffClasses/DiffRecipes";
 
 type GPDiffOriginalType = {
@@ -66,7 +66,7 @@ const DiffOriginalRecipe = ({
       // otherwise diff only requested fields
       const recipeDiffInfo = recipeDiff.getRequestedDiff(
         userDiffChoices,
-        noDiffFields,
+        noDiffFields
       );
       setRecipeDiffInfo(recipeDiffInfo);
     }

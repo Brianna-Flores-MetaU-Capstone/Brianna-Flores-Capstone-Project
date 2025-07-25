@@ -22,6 +22,7 @@ import {
 import { gapi } from "gapi-script";
 import type { GPErrorMessageTypes } from "../../utils/types";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
+import { saveCalendarEvent } from "../../utils/databaseHelpers";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -87,12 +88,16 @@ const CalendarModal = ({
           eventData.summary,
           eventData.start.dateTime,
           eventData.end.dateTime,
-          eventData.htmlLink,
+          eventData.htmlLink
         );
         createdEvents = [...createdEvents, newEvent];
+        const savedCalendarEvent = await saveCalendarEvent({
+          setMessage,
+          selectedRecipe: eventInfo.recipe,
+          calendarEvent: newEvent,
+        });
       }
     }
-    // reset selected events to prevent multiple events being added
     setCreatedEvents(createdEvents);
     setLoading(false);
     toggleModal();

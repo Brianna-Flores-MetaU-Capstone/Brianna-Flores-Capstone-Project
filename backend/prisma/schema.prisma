@@ -26,6 +26,7 @@ model User {
   recipes          Recipe[]          @relation("PlannedRecipes")
   favoritedRecipes Recipe[]          @relation("FavoritedRecipes")
   editedRecipes    Recipe[]
+  calendarEvents   CalendarEvent[]
 }
 
 model OwnedIngredient {
@@ -51,7 +52,7 @@ model Ingredient {
 // many to many relationship
 // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations
 model Recipe {
-  id                 Int      @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
+  id                 Int             @id @default(autoincrement()) // store the id number from spoonacular api, otherwise id is auto incremented (part of the users database)
   apiId              Int
   originalSource     String
   editingAuthorName  String
@@ -60,7 +61,7 @@ model Recipe {
   servings           Int
   ingredients        Json
   sourceUrl          String
-  readyInMinutes     Int      @default(45)
+  readyInMinutes     Int             @default(45)
   totalCost          Decimal? // total cost of ingredients to create for baseline servings
   instructions       String[]
   vegetarian         Boolean
@@ -68,10 +69,23 @@ model Recipe {
   glutenFree         Boolean
   dairyFree          Boolean
   recipeTags         String[]
-  users              User[]   @relation("PlannedRecipes")
-  usersThatFavorited User[]   @relation("FavoritedRecipes")
+  users              User[]          @relation("PlannedRecipes")
+  usersThatFavorited User[]          @relation("FavoritedRecipes")
   editingAuthorId    Int?
-  editingAuthor      User?    @relation(fields: [editingAuthorId], references: [id])
+  editingAuthor      User?           @relation(fields: [editingAuthorId], references: [id])
+  calendarEvents     CalendarEvent[]
 
   @@unique([apiId, editingAuthorId])
+}
+
+model CalendarEvent {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  recipeId   Int
+  recipe     Recipe   @relation(fields: [recipeId], references: [id])
+  eventTitle String
+  start      DateTime
+  end        DateTime
+  eventLink  String
 }

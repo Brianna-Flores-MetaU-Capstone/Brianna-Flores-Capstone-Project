@@ -3,7 +3,7 @@ import RecipeDiffTable from "./RecipeDiffTable";
 import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
 import type { GPIngredientDataTypes } from "../../utils/types";
 import { GPDiffHeaderStyle } from "../../utils/UIStyle";
-import type { Recipe } from "../../classes/recipe/Recipe";
+import type { Recipe } from "../../../../shared/Recipe";
 
 type GPRecipeDiffInfo = {
   recipeA: Recipe | undefined;

@@ -1,6 +1,6 @@
 import type { User } from "firebase/auth";
 import TimeBlock from "../../../backend/classes/TimeBlock";
-import type { Recipe } from "../classes/recipe/Recipe";
+import type { Recipe } from "../../../shared/Recipe";
 
 type GPRecipeDataTypes = {
   id: number;
@@ -92,7 +92,7 @@ type GPPrepBlockType = {
 type GPRecipeEventOptionType = {
   name: string;
   timeOptions: TimeBlock[];
-  recipe: Recipe | GPPrepBlockType;
+  recipe: Recipe;
 };
 
 type GPRecipeDiscoveryCategories = {

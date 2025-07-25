@@ -1,6 +1,6 @@
 import { DiffRecipeStringArray } from "./DiffRecipeStringArray";
 import { DiffRecipeIngredients } from "./DiffRecipeIngredients";
-import type { Recipe } from "../recipe/Recipe";
+import { Recipe } from "../../../../shared/Recipe";
 import { DiffStatus, type GPDiffLineInfoType } from "./DiffRecipeFieldAbstract";
 
 const GPDiffOptionsEnum = {
@@ -125,7 +125,7 @@ class DiffRecipes {
   getCourseIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients,
+      this.recipeB.ingredients
     );
     const ingredinetsDiffResults =
       diffIngredients.getIngredientsComparisonDiff();
@@ -135,7 +135,7 @@ class DiffRecipes {
   getCourseInstrictionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions,
+      this.recipeB.instructions
     );
     const instructionsDiffResults = diffInstructions.getLcsDiff();
     return instructionsDiffResults;
@@ -148,7 +148,7 @@ class DiffRecipes {
   getInstructionDiff() {
     const diffInstructions = new DiffRecipeStringArray(
       this.recipeA.instructions,
-      this.recipeB.instructions,
+      this.recipeB.instructions
     );
     const instructionsDiffResults = diffInstructions.getStringArrayDiff();
     return instructionsDiffResults;
@@ -176,7 +176,7 @@ class DiffRecipes {
   getIngredientsDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeB.ingredients,
+      this.recipeB.ingredients
     );
     const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
     return ingredientsDiffResults;
@@ -189,7 +189,7 @@ class DiffRecipes {
   getIngredientsNoDiff() {
     const diffIngredients = new DiffRecipeIngredients(
       this.recipeA.ingredients,
-      this.recipeA.ingredients,
+      this.recipeA.ingredients
     );
     const ingredientsDiffResults = diffIngredients.getIngredientsDiff();
     return ingredientsDiffResults;
@@ -202,7 +202,7 @@ class DiffRecipes {
   getTitleDiff() {
     const diffTitle = new DiffRecipeStringArray(
       [this.recipeA.recipeTitle],
-      [this.recipeB.recipeTitle],
+      [this.recipeB.recipeTitle]
     );
     const titleDiffResults = diffTitle.getStringArrayDiff();
     return titleDiffResults;
@@ -223,7 +223,7 @@ class DiffRecipes {
   getServingsDiff() {
     const diffServings = new DiffRecipeStringArray(
       [this.recipeA.servings.toString()],
-      [this.recipeB.servings.toString()],
+      [this.recipeB.servings.toString()]
     );
     const servingsDiffResults = diffServings.getStringArrayDiff();
     return servingsDiffResults;
@@ -244,7 +244,7 @@ class DiffRecipes {
   getTagDiff() {
     const diffTags = new DiffRecipeStringArray(
       this.recipeA.recipeTags,
-      this.recipeB.recipeTags,
+      this.recipeB.recipeTags
     );
     const tagsDiffResults = diffTags.getStringArrayDiff();
     return tagsDiffResults;
@@ -272,7 +272,7 @@ class DiffRecipes {
   getCookTimeDiff() {
     const diffCookTime = new DiffRecipeStringArray(
       [this.recipeA.readyInMinutes.toString()],
-      [this.recipeB.readyInMinutes.toString()],
+      [this.recipeB.readyInMinutes.toString()]
     );
     const cookTimeDiffResults = diffCookTime.getStringArrayDiff();
     return cookTimeDiffResults;

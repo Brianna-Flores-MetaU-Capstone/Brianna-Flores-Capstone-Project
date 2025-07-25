@@ -23,7 +23,7 @@ import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
 import { RecipeFilter } from "../classes/filters/RecipeFilters";
-import { Recipe } from "../classes/recipe/Recipe";
+import { Recipe } from "../../../shared/Recipe";
 
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },
@@ -36,14 +36,14 @@ const recipeFilters = [
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
   const [recipeDiscoveryResults, setRecipeDiscoveryResults] = useState(
-    new RecipeFilter(),
+    new RecipeFilter()
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
-    new Set(),
+    new Set()
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);

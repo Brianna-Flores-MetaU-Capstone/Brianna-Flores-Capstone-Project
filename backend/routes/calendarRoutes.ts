@@ -16,6 +16,55 @@ const NUM_SCHEDULE_OPTIONS = 3;
 const SINGLE_RECIPE_SCHEDULE_OPTIONS = 1;
 
 router.post(
+  "/createEvent",
+  isAuthenticated,
+  async (req: Request, res: Response) => {
+    const { selectedRecipe, eventTitle, start, end, eventLink } = req.body;
+    const userId = req.session.userId;
+    try {
+      const newEvent = await prisma.calendarEvent.create({
+        data: {
+          userId: userId,
+          recipeId: selectedRecipe.id,
+          eventTitle: eventTitle,
+          start: start,
+          end: end,
+          eventLink: eventLink,
+        },
+      });
+      if (!newEvent) {
+        return res
+          .status(400)
+          .send("Error, failed to add the event to database");
+      }
+      res.json(newEvent);
+    } catch (error) {
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+router.get("/calendarEvents", isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.session.userId;
+  try {
+    const userCalendarEvents = await prisma.calendarEvent.findMany({
+      where: {
+        userId: userId
+      }, 
+      include: {
+        recipe: true
+      }
+    })
+    if (!userCalendarEvents) {
+      res.status(404).send("Error, calendar events not found");
+    }
+    res.json(userCalendarEvents)
+  } catch (error) {
+    res.status(500).send("Server Error")
+  }
+})
+
+router.post(
   "/reccomendEvents",
   isAuthenticated,
   async (req: Request, res: Response) => {
@@ -55,7 +104,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error finding empty time slots");
     }
-  },
+  }
 );
 
 router.post(
@@ -72,7 +121,7 @@ router.post(
       numOptions: SINGLE_RECIPE_SCHEDULE_OPTIONS,
     });
     res.json(recipeScheduleOptions);
-  },
+  }
 );
 
 module.exports = router;

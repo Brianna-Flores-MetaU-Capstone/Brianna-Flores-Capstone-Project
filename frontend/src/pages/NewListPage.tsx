@@ -24,7 +24,7 @@ import ConnectCalendar from "../components/calendar/ConnectCalendar";
 import CalendarModal from "../components/calendar/CalendarModal";
 import { MUI_GRID_FULL_SPACE, CenteredTitledListStyle } from "../utils/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
-import { Recipe } from "../classes/recipe/Recipe";
+import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import EventSummaryModal from "../components/calendar/EventSummaryModal";
 
@@ -83,7 +83,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/planned/remove`,
         { deletedRecipe },
-        axiosConfig,
+        axiosConfig
       );
       await fetchRecipes({
         setMessage,
@@ -112,7 +112,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig,
+        axiosConfig
       );
       navigate("/grocery-list");
     } catch (error) {
@@ -120,9 +120,14 @@ const NewListPage = () => {
     }
   };
 
-  const handleEventsCreated = (createdEvents: CalendarEvent[]) => {
+  const handleEventsCreated = async (createdEvents: CalendarEvent[]) => {
     setCreatedEvents(createdEvents);
     setEventSummaryModalOpen(true);
+    await fetchRecipes({
+      setMessage,
+      setRecipes: setSelectedRecipes,
+      recipeGroup: "planned",
+    });
   };
 
   return (

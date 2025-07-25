@@ -31,7 +31,7 @@ router.post(
     const { convertTo, converting } = req.body;
     const converted = convertUnits({ convertTo, converting });
     res.json(converted);
-  },
+  }
 );
 
 router.get("/original/:apiId", async (req: Request, res: Response) => {
@@ -62,7 +62,18 @@ router.get("/planned", isAuthenticated, async (req: Request, res: Response) => {
         id: userId,
       },
       include: {
-        recipes: true,
+        recipes: {
+          include: {
+            calendarEvents: {
+              where: {
+                userId: userId,
+                start: {
+                  gte: new Date()
+                }
+              },
+            },
+          },
+        },
       },
     });
     // return the users recipes
@@ -95,7 +106,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users favorite recipes
@@ -119,7 +130,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // add a new recipe for a user
@@ -218,7 +229,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // Favorite a recipe for a user
@@ -248,7 +259,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // update user to remove favorited recipe

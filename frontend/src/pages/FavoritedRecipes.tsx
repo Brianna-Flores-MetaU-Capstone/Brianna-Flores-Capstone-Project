@@ -13,7 +13,7 @@ import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { CenteredTitledListStyle } from "../utils/UIStyle";
 import { useUser } from "../contexts/UserContext";
-import { Recipe } from "../classes/recipe/Recipe";
+import { Recipe } from "../../../shared/Recipe";
 
 const FavoritedRecipes = () => {
   const [favoritedRecipes, setFavoritedRecipes] = useState<Recipe[]>([]);
