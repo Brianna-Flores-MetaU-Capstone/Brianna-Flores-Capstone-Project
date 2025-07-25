@@ -203,9 +203,12 @@ const getCostForAmountOfIngredient = async ({
 }: GPGetItemCostType) => {
   const searchResults = await searchWalmart(ingredient.ingredientName);
   // get the cost and quantity of first result (most rellevant)
-  const ingredientCost = searchResults?.items[0].salePrice ?? 0.0;
-  const ingredientCostUnit = searchResults?.items[0]?.size ?? "Not Found";
-  return { ingredientCost, ingredientCostUnit };
+  if (searchResults?.items) {
+    const ingredientCost = searchResults.items[0]?.salePrice ?? 0;
+    const ingredientCostUnit = searchResults.items[0]?.size ?? "Price not Found";
+    return { ingredientCost, ingredientCostUnit };
+  }
+  return { ingredientCost: 0, ingredientCostUnit: "Price not Found"}
 };
 
 export {

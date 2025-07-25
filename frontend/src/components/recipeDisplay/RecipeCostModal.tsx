@@ -4,16 +4,18 @@ import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 import { ColumnOverflowTitledListStyle } from "../../utils/style/UIStyle";
 
-type GPLoadingModalTypes = {
+type GPRecipeCostModalTypes = {
   ingredientsCostInformation: GPIngredientDataTypes[];
+  totalCost: number;
   modalOpen: boolean;
   onClose: () => void;
 };
 const RecipeCostModal = ({
   ingredientsCostInformation,
+  totalCost,
   modalOpen,
   onClose,
-}: GPLoadingModalTypes) => {
+}: GPRecipeCostModalTypes) => {
   return (
     // Code based on MUI documentation: https://mui.com/joy-ui/react-modal/
     <Modal
@@ -34,7 +36,6 @@ const RecipeCostModal = ({
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
-          height: "50%",
         }}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
@@ -47,19 +48,27 @@ const RecipeCostModal = ({
         >
           Ingredient Cost Information
         </Typography>
-        <Box sx={{ width: "100%", overflowY: "auto" }}>
-          <TitledListView
-            headerList={[
-              { title: "Ingredient", spacing: 8 },
-              { title: "Cost", spacing: 2 },
-              { title: "For Amount", spacing: 2 },
-            ]}
-            itemsList={ingredientsCostInformation}
-            renderItem={(ingredientInfo, index) => (
-              <IngredientCost key={index} ingredientCostInfo={ingredientInfo} />
-            )}
-            listItemsStyle={ColumnOverflowTitledListStyle}
-          />
+        <Box sx={{ width: "100%" }}>
+          <Box>
+            <TitledListView
+              headerList={[
+                { title: "Ingredient", spacing: 4 },
+                { title: "Quantity Needed", spacing: 4 },
+                { title: "Cost", spacing: 2 },
+                { title: "For Amount", spacing: 2 },
+              ]}
+              itemsList={ingredientsCostInformation}
+              renderItem={(ingredientInfo, index) => (
+                <IngredientCost
+                  key={index}
+                  ingredientCostInfo={ingredientInfo}
+                />
+              )}
+              listItemsStyle={ColumnOverflowTitledListStyle}
+            />
+          </Box>
+          <Typography level="h3">Total Cost</Typography>
+          <Typography>${totalCost.toFixed(2)}</Typography>
         </Box>
       </Sheet>
     </Modal>
