@@ -25,7 +25,10 @@ import {
   type GPTimePreferenceType,
 } from "../../classes/calendar/TimePreferenceString";
 import CalendarTourTooltip from "./CalendarTourTooltip";
-import { CalendarTimeModalPreferenceTour } from "../utils/calendarTour/CalendarTourSteps";
+import {
+  CalendarTimeModalAdjustTour,
+  CalendarTimeModalPreferenceTour,
+} from "../utils/calendarTour/CalendarTourSteps";
 
 type GPEventTimeModal = {
   editMode: boolean;
@@ -84,6 +87,7 @@ const CalendarTimeModal = ({
   const [timeInputError, setTimeInputError] = useState(false);
   const [servingsInputError, setServingsInputError] = useState(false);
   const [dateInputError, setDateInputError] = useState(false);
+  const [tourActive, setTourActive] = useState(false);
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
@@ -180,6 +184,9 @@ const CalendarTimeModal = ({
           >
             {editMode ? "Adjust Event Time" : "Input Preferred Time to Cook"}
           </Typography>
+          {!editMode && (
+            <Button onClick={() => setTourActive(true)}>Activate Tour</Button>
+          )}
           <form onSubmit={editMode ? onEditTimeSubmit : onSubmitPreferences}>
             <FormControl error={dateInputError}>
               <FormLabel>
@@ -249,6 +256,9 @@ const CalendarTimeModal = ({
                       input: {
                         "data-time": EventTimeEnum.END,
                       },
+                      root: {
+                        id: "eventTimeInput",
+                      },
                     }}
                     required
                   />
@@ -279,12 +289,14 @@ const CalendarTimeModal = ({
                   spacing={2}
                 >
                   <Button
+                    id="cookThroughoutWeekButton"
                     variant={!singleDayPrep ? "solid" : "outlined"}
                     onClick={() => setSingleDayPrep(false)}
                   >
                     Cook throughout the week
                   </Button>
                   <Button
+                    id="cookSingleDayButton"
                     variant={singleDayPrep ? "solid" : "outlined"}
                     onClick={() => setSingleDayPrep(true)}
                   >
@@ -298,6 +310,11 @@ const CalendarTimeModal = ({
                     onChange={(event) =>
                       setServingsPerDay(parseInt(event.target.value))
                     }
+                    slotProps={{
+                      root: {
+                        id: "servingsPerDay",
+                      },
+                    }}
                     value={servingsPerDay}
                     required
                   />
@@ -319,10 +336,14 @@ const CalendarTimeModal = ({
             </Button>
           </form>
           <CalendarTourTooltip
-            tourSteps={CalendarTimeModalPreferenceTour}
-            tourActive={true}
-            onClose={() => {}}
-            onFinish={() => {}}
+            tourSteps={
+              editMode
+                ? CalendarTimeModalAdjustTour
+                : CalendarTimeModalPreferenceTour
+            }
+            tourActive={tourActive}
+            onClose={() => setTourActive(false)}
+            onFinish={() => setTourActive(false)}
           />
         </Sheet>
       </Modal>

@@ -20,6 +20,7 @@ const CalendarTourTooltip = ({
   // holds the tooltips reference in the myRef variable
   const tooltipLocationRef = useRef<HTMLDivElement>(null);
   const [tooltipPositioning, setTooltipPositioning] = useState({});
+  const [highlightPositioning, setHighlightPositioning] = useState({});
 
   const positionTooltip = () => {
     if (!tourActive || tourSteps.length === 0) {
@@ -33,6 +34,14 @@ const CalendarTourTooltip = ({
     }
     // get size and position of an element
     const targetRect = tooltipTarget.getBoundingClientRect();
+
+    // highlight the element that the tooltip is referencing
+    setHighlightPositioning({
+      top: `${targetRect.top}px`,
+      left: `${targetRect.left}px`,
+      width: `${targetRect.width}px`,
+      height: `${targetRect.height}px`,
+    });
 
     // set tooltip position
     const tooltipWidth = 300;
@@ -50,7 +59,6 @@ const CalendarTourTooltip = ({
   useEffect(() => {
     positionTooltip();
     window.addEventListener("resize", positionTooltip);
-
     return () => {
       window.removeEventListener("resize", positionTooltip);
     };
@@ -68,26 +76,32 @@ const CalendarTourTooltip = ({
   if (!tourActive || tourSteps.length === 0) return null;
 
   return (
-    // ref used to acess DOM element, places element into myRef.current
-    <div
-      ref={tooltipLocationRef}
-      style={{ ...tooltipPositioning, position: "fixed", zIndex: 10 }}
-    >
-      <div className="tooltipContent">
-        <p>{tourSteps[currentStep].description}</p>
-        <div className="tooltipNavButtons">
-          <button
-            disabled={currentStep === 0}
-            onClick={() => setCurrentStep((prev) => prev - 1)}
-          >
-            Prev
-          </button>
-          <p>
-            Step {currentStep + 1} of {tourSteps.length}
-          </p>
-          <button onClick={handleNextStepClick}>Next</button>
+    <div className="entirePage">
+      <div className="highlightElement" style={highlightPositioning}></div>
+      <div
+        className="tooltip"
+        ref={tooltipLocationRef}
+        style={{ ...tooltipPositioning }}
+      >
+        <div className="tooltipContent">
+          <p>{tourSteps[currentStep].description}</p>
+          <div className="tooltipNavButtons">
+            <button
+              disabled={currentStep === 0}
+              onClick={() => setCurrentStep((prev) => prev - 1)}
+            >
+              Prev
+            </button>
+            <p>
+              Step {currentStep + 1} of {tourSteps.length}
+            </p>
+            <button onClick={handleNextStepClick}>
+              {currentStep === tourSteps.length - 1 ? "Done" : "Next"}
+            </button>
+          </div>
         </div>
       </div>
+      <div className="blurBackground"></div>
     </div>
   );
 };

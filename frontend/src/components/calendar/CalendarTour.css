@@ -1,3 +1,17 @@
+.entirePage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1310;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 2;
+}
+
 .tooltipContent {
   background-color: #fafafa;
   padding: 1%;
@@ -32,4 +46,22 @@
 
 .tooltipContent p {
   text-align: center;
+}
+
+.highlightElement {
+  position: absolute;
+  border: 2px solid #5dac9f;
+  border-radius: 5px;
+  z-index: 2;
+  box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.6);
+}
+
+.blurBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  z-index: 1;
 }
