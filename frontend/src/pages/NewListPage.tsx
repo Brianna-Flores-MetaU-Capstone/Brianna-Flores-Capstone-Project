@@ -19,12 +19,11 @@ import { useNavigate } from "react-router";
 import LoadingModal from "../components/utils/LoadingModal";
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
-import { Box, Button } from "@mui/joy";
+import { Box, Button, Typography } from "@mui/joy";
 import ConnectCalendar from "../components/calendar/ConnectCalendar";
 import CalendarModal from "../components/calendar/CalendarModal";
 import {
-  MUI_GRID_FULL_SPACE,
-  CenteredTitledListStyle,
+  GPTitledListHeaderStyle,
 } from "../utils/style/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../../../shared/Recipe";
@@ -88,7 +87,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
-        axiosConfig,
+        axiosConfig
       );
       await fetchRecipes({
         setMessage,
@@ -117,7 +116,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig,
+        axiosConfig
       );
       navigate("/grocery-list");
     } catch (error) {
@@ -155,12 +154,9 @@ const NewListPage = () => {
           />
         </Box>
         <Box>
-          <TitledListView
-            headerList={[
-              { title: "Selected Meals", spacing: MUI_GRID_FULL_SPACE },
-            ]}
-            itemsList={selectedRecipes}
-            renderItem={(meal, index) => (
+          <Typography level="h3" sx={GPTitledListHeaderStyle}>Selected Recipes to Shop and Schedule</Typography>
+          <Masonry columnsCount={4}>
+            {selectedRecipes.map((meal, index) => (
               <MealCard
                 key={index}
                 index={index}
@@ -174,9 +170,8 @@ const NewListPage = () => {
                 onDeleteRecipe={handleDeleteRecipe}
                 selectedToCompare={false}
               />
-            )}
-            listItemsStyle={CenteredTitledListStyle}
-          />
+            ))}
+          </Masonry>
         </Box>
         {message && (
           <ErrorState error={message.error} message={message.message} />
