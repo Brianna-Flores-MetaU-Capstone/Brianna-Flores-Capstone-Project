@@ -12,13 +12,53 @@
   border: 2px solid #5dac9f;
   border-radius: 5px;
   z-index: 1500;
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
   pointer-events: none;
+}
+
+.highlightElement::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Animation code referenced from https://www.joshwcomeau.com/animation/keyframe-animations/ */
+  animation: highlightPulse 2000ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes highlightPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px 15px #5dac9f;
+  }
+  50% {
+    box-shadow: 0 0 15px 0px #5dac9f;
+  }
 }
 
 .tooltip {
   position: fixed;
   z-index: 1500;
+}
+
+@keyframes leftPointerInOut {
+  0% {
+    transform: translatey(0);
+  }
+  50% {
+    transform: translatey(15px);
+  }
+}
+
+.tourArrow {
+  position: absolute;
+  font-size: 40px;
+  z-index: 1500;
+  animation: leftPointerInOut 2000ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 .tooltipContent {
@@ -54,6 +94,38 @@
   text-align: center;
   color: #5dac9f;
   cursor: pointer;
+}
+
+/* Inspired by: https://freecodez.com/post/0ryvaqt */
+.icon {
+  position: absolute;
+  top: 80%;
+  left: 75%;
+  filter: drop-shadow(0, 0, 0, #fffdef);
+  z-index: -5;
+  transition: all 0.4s ease-in-out;
+}
+
+.nextButton:hover .carrot {
+  transform: translate(-120%, -150%) scale(2.5);
+  filter: drop-shadow(0 0 10px #fffdef);
+  z-index: 2;
+}
+
+.nextButton:hover .avocado {
+  transform: translate(250%, 100%) scale(2.3);
+  z-index: 2;
+}
+
+.nextButton:hover .tomato {
+  transform: translate(-200%, 150%) scale(2);
+  z-index: 2;
+}
+
+.removeHoverEffect {
+  transition:
+    opacity 0s,
+    transform 0s;
 }
 
 .tooltipNavButtons p {
