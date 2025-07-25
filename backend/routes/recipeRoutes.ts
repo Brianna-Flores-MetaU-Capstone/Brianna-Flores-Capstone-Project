@@ -153,6 +153,7 @@ router.post(
       glutenFree,
       dairyFree,
       recipeTags,
+      editingAuthorId,
     } = req.body;
     if (
       !apiId ||
@@ -172,11 +173,10 @@ router.post(
         recipe = await prisma.Recipe.findFirst({
           where: {
             apiId: apiId,
-            editingAuthorId: null,
+            editingAuthorId: editingAuthorId,
           },
         });
-      }
-
+      }      
       if (!recipe) {
         // no original recipe from API found, make new recipe
         recipe = await prisma.recipe.create({
