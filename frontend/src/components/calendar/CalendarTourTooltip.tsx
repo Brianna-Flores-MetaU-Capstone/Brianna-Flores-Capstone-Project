@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { TourStep } from "../../classes/calendar/TourStep";
 import "./CalendarTour.css";
-import { PositionsEnum } from "../utils/calendarTour/CalendarTourSteps";
+import { PositionsEnum } from "../../utils/calendarTour/CalendarTourSteps";
 
 type GPCalendarTourType = {
   tourSteps: TourStep[];

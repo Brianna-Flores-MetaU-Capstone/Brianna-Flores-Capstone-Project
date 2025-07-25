@@ -24,7 +24,7 @@ import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 import { saveCalendarEvent } from "../../utils/databaseHelpers";
 import CalendarTourTooltip from "./CalendarTourTooltip";
-import { CalendarRecipesModalTour } from "../utils/calendarTour/CalendarTourSteps";
+import { CalendarRecipesModalTour } from "../../utils/calendarTour/CalendarTourSteps";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;

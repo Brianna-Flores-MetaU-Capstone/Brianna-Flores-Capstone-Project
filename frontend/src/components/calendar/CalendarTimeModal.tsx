@@ -28,7 +28,7 @@ import CalendarTourTooltip from "./CalendarTourTooltip";
 import {
   CalendarTimeModalAdjustTour,
   CalendarTimeModalPreferenceTour,
-} from "../utils/calendarTour/CalendarTourSteps";
+} from "../../utils/calendarTour/CalendarTourSteps";
 
 type GPEventTimeModal = {
   editMode: boolean;
