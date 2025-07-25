@@ -66,7 +66,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
 
   const { user } = useUser();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const parsePreferenceList = (preferenceList: string[]) => {
     let parsedPreferences = "";
@@ -242,32 +242,34 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
-                  {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
-                  <FormControl
-                    orientation="horizontal"
-                    sx={{ justifyContent: "space-between" }}
-                  >
-                    <FormLabel>Apply Dietary Preferences</FormLabel>
-                    <Switch
-                      checked={usePreferences}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>,
-                      ) => {
-                        setUsePreferences(event.target.checked);
-                      }}
-                      variant={usePreferences ? "solid" : "outlined"}
-                      endDecorator={usePreferences ? "On" : "Off"}
-                      slotProps={{
-                        endDecorator: {
-                          sx: {
-                            minWidth: 24,
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {/* Code Referenced from MUI Documentation: https://mui.com/joy-ui/react-switch/ */}
+                    <FormControl
+                      orientation="horizontal"
+                      sx={{ justifyContent: "space-between" }}
+                    >
+                      <FormLabel>Apply Dietary Preferences</FormLabel>
+                      <Switch
+                        checked={usePreferences}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>,
+                        ) => {
+                          setUsePreferences(event.target.checked);
+                        }}
+                        variant={usePreferences ? "solid" : "outlined"}
+                        endDecorator={usePreferences ? "On" : "Off"}
+                        slotProps={{
+                          endDecorator: {
+                            sx: {
+                              minWidth: 24,
+                            },
                           },
-                        },
-                      }}
-                    />
-                  </FormControl>
-                  <Button onClick={() => navigate("/account")}>Edit Dietary Preferences</Button>
+                        }}
+                      />
+                    </FormControl>
+                    <Button onClick={() => navigate("/account")}>
+                      Edit Dietary Preferences
+                    </Button>
                   </Box>
                   <Button
                     type="submit"

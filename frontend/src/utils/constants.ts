@@ -63,7 +63,7 @@ const RecipeFetchEnum = {
   PLANNED: "planned",
   FAVORITED: "favorited",
   FAVORITED_IDS: "favoritedIds",
-  EDITED: "edited"
+  EDITED: "edited",
 };
 
 export {

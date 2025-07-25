@@ -18,15 +18,17 @@ import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
 
 const EditedRecipesPage = () => {
-  const [userEditedRecipes, setUserEditedRecipes] = useState<Recipe[]>([])
-  const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(new Set())
+  const [userEditedRecipes, setUserEditedRecipes] = useState<Recipe[]>([]);
+  const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
+    new Set(),
+  );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
 
   useEffect(() => {
-    setupEditedRecipesPage()
+    setupEditedRecipesPage();
   }, []);
 
   const setupEditedRecipesPage = async () => {
@@ -43,7 +45,7 @@ const EditedRecipesPage = () => {
     for (const elem of favoritedRecipesReturn) {
       setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));
     }
-  }
+  };
 
   const handleFavoriteClick = async (recipe: Recipe) => {
     if (user) {
@@ -92,13 +94,16 @@ const EditedRecipesPage = () => {
     <Box>
       <AppHeader />
       <Box sx={{ my: 3 }}>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
         <TitledListView
           itemsList={userEditedRecipes}
           renderItem={(recipe, index) => (
             <MealCard
               key={index}
               index={index}
-              favorited={true}
+              favorited={favoritedRecipesId.has(recipe.id)}
               onFavoriteClick={() => handleFavoriteClick(recipe)}
               onMealCardClick={() => handleRecipeCardClick(recipe)}
               onSelectRecipe={() => handleSelectRecipeToShop(recipe)}
@@ -110,9 +115,6 @@ const EditedRecipesPage = () => {
           listItemsStyle={CenteredTitledListStyle}
         />
       </Box>
-      {message && (
-        <ErrorState error={message.error} message={message.message} />
-      )}
       <MealInfoModal
         toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
         modalOpen={recipeInfoModalOpen}

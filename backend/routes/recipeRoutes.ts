@@ -130,6 +130,27 @@ router.get(
   },
 );
 
+// get a users edited recipes
+router.get("/edited", isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.session.userId;
+  try {
+    const userData = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        editedRecipes: true,
+      },
+    });
+    if (userData.editedRecipes.length === 0) {
+      res.json([]);
+    }
+    res.json(userData.editedRecipes);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
+
 // add a new recipe to a users planned recipes to shop
 router.post(
   "/planned/:userId",
@@ -176,7 +197,7 @@ router.post(
             editingAuthorId: editingAuthorId,
           },
         });
-      }      
+      }
       if (!recipe) {
         // no original recipe from API found, make new recipe
         recipe = await prisma.recipe.create({

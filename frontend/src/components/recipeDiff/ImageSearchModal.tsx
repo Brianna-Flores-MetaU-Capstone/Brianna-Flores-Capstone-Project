@@ -62,7 +62,7 @@ const ImageSearchModal = ({
       });
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
-        (photoInfo: GPPexelsImageType) => photoInfo.src?.original
+        (photoInfo: GPPexelsImageType) => photoInfo.src?.original,
       );
       setImageSearchResults(photosSrc);
     } catch (error) {

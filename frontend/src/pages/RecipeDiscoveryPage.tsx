@@ -40,14 +40,14 @@ const recipeFilters = [
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
   const [recipeDiscoveryResults, setRecipeDiscoveryResults] = useState(
-    new RecipeFilter()
+    new RecipeFilter(),
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
@@ -55,7 +55,7 @@ const RecipeDiscoveryPage = () => {
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
 
@@ -140,7 +140,7 @@ const RecipeDiscoveryPage = () => {
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
       );
     }
   };
@@ -153,7 +153,7 @@ const RecipeDiscoveryPage = () => {
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>
+    noDiffFields: Set<string>,
   ) => {
     setUserDiffOptionsOpen(false);
     if (!recipesToCompare[0] || !recipesToCompare[1]) {
@@ -210,7 +210,7 @@ const RecipeDiscoveryPage = () => {
                   {...(user && { onFavoriteClick: handleFavoriteClick })}
                   favorited={favoritedRecipesId.has(meal.id)}
                   selectedToCompare={recipesToCompare.some(
-                    (recipe) => recipe.apiId === meal.apiId
+                    (recipe) => recipe.apiId === meal.apiId,
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
                 />
