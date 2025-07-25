@@ -97,39 +97,41 @@ const MealCard: React.FC<GPMealCardProps> = ({
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-start",
+            alignItems: "center",
           }}
         >
           <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
-          {onFavoriteClick && (
-            <Tooltip
-              title={favorited ? "Remove from favorites" : "Add to favorites"}
-            >
-              <IconButton
-                color="primary"
-                sx={{ zIndex: 2 }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onFavoriteClick(parsedMealData);
-                }}
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            {onFavoriteClick && (
+              <Tooltip
+                title={favorited ? "Remove from favorites" : "Add to favorites"}
               >
-                {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              </IconButton>
-            </Tooltip>
-          )}
-          {onCompareSelect && (
-            <Tooltip title="Compare recipes">
-              <Checkbox
-                sx={{ zIndex: 5 }}
-                size="lg"
-                checked={selectedToCompare}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onCompareSelect(parsedMealData);
-                }}
-              />
-            </Tooltip>
-          )}
+                <IconButton
+                  color="primary"
+                  sx={{ zIndex: 2 }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onFavoriteClick(parsedMealData);
+                  }}
+                >
+                  {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                </IconButton>
+              </Tooltip>
+            )}
+            {onCompareSelect && (
+              <Tooltip title="Compare recipes">
+                <Checkbox
+                  sx={{ zIndex: 5 }}
+                  size="lg"
+                  checked={selectedToCompare}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onCompareSelect(parsedMealData);
+                  }}
+                />
+              </Tooltip>
+            )}
+          </Box>
         </Box>
         <Box sx={{ my: 0, display: "flex", justifyContent: "space-between" }}>
           <Typography>Servings: {parsedMealData.servings}</Typography>
@@ -197,7 +199,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
             </Box>
           )}
           <Box
-            sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 1,
+            }}
           >
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
