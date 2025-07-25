@@ -15,7 +15,7 @@ import { useEventRec } from "../../contexts/EventRecContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import {
-  CenteredTitledListStyle,
+  ColumnNoOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
 } from "../../utils/UIStyle";
 
@@ -33,6 +33,14 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
 
+  const verifyDate = (dateToCheck: Date | string) => {
+    if (typeof dateToCheck === "object") {
+      return dateToCheck;
+    } else {
+      return new Date(dateToCheck);
+    }
+  };
+
   const onEventConfirmation = async () => {
     const token = gapi.client.getToken();
     if (!token) {
@@ -47,10 +55,10 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
       const newEvent = {
         summary: `Cook ${eventInfo.name}`,
         start: {
-          dateTime: eventInfo.timeOptions[0].start.toString(),
+          dateTime: verifyDate(eventInfo.timeOptions[0].start).toISOString(),
         },
         end: {
-          dateTime: eventInfo.timeOptions[0].end.toString(),
+          dateTime: verifyDate(eventInfo.timeOptions[0].end).toISOString(),
         },
         source: {
           title: `${eventInfo.name} recipe link`,
@@ -90,7 +98,7 @@ const CalendarModal = ({ modalOpen, toggleModal }: GPCalendarModalTypes) => {
                   adjustedSuggestion={false}
                 />
               )}
-              listItemsStyle={CenteredTitledListStyle}
+              listItemsStyle={ColumnNoOverflowTitledListStyle}
             />
           </DialogContent>
           {message && (

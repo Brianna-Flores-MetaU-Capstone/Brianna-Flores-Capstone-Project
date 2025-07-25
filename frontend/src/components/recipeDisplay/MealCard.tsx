@@ -21,6 +21,7 @@ import { estimateRecipeCost } from "../../utils/utils";
 import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types";
 import { Recipe } from "../../classes/recipe/Recipe";
+import ConnectCalendar from "../calendar/ConnectCalendar";
 
 type GPMealCardProps = {
   index: number;
@@ -28,9 +29,11 @@ type GPMealCardProps = {
   selectedToCompare: boolean;
   cardSize: number;
   favorited: boolean;
+  calendarTimeModalOpen?: boolean;
+  toggleCalendarTimeModal?: () => void;
   onMealCardClick: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -46,6 +49,8 @@ const MealCard: React.FC<GPMealCardProps> = ({
   selectedToCompare,
   cardSize,
   favorited,
+  calendarTimeModalOpen,
+  toggleCalendarTimeModal,
   onMealCardClick,
   setMessage,
   onSelectRecipe,
@@ -63,7 +68,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -88,11 +93,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
-      <Card
-        variant="outlined"
-        sx={{ minWidth: cardSize, width: cardSize }}
-        onClick={() => onMealCardClick()}
-      >
+      <Card variant="outlined" sx={{ minWidth: cardSize, width: cardSize }}>
         <Box
           sx={{
             display: "flex",
@@ -144,11 +145,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
         </Box>
         <Box sx={{ my: 0, display: "flex", justifyContent: "space-between" }}>
           <Typography>Servings: {parsedMealData.servings}</Typography>
-          {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
-            <Typography>
-              Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
-            </Typography>
-          )}
+          <Typography>
+            Cook Time: {parsedMealData.readyInMinutes} minutes
+          </Typography>
         </Box>
         <AspectRatio>
           <img src={parsedMealData.previewImage} />
@@ -162,22 +161,33 @@ const MealCard: React.FC<GPMealCardProps> = ({
               </Typography>
             </Box>
           )}
-          {onSelectRecipe && (
-            <DietsAndIntolerances recipeInfo={parsedMealData} />
+          {onLoadRecipeCost && parsedMealData.totalCost > 0 && (
+            <Typography alignSelf="flex-end">
+              Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
+            </Typography>
           )}
-          {onDeleteRecipe && (
-            <IconButton
-              color="primary"
-              variant="plain"
-              size="lg"
-              onClick={(event) => {
-                event.stopPropagation();
-                onDeleteRecipe?.(parsedMealData);
-              }}
-              sx={{ zIndex: 1, alignSelf: "flex-end" }}
-            >
-              <DeleteIcon />
-            </IconButton>
+          <DietsAndIntolerances recipeInfo={parsedMealData} />
+          <Button onClick={() => onMealCardClick()}>View Recipe Details</Button>
+          {toggleCalendarTimeModal && (
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <ConnectCalendar
+                onClick={toggleCalendarTimeModal}
+                singleRecipe={true}
+                recipeInfo={parsedMealData}
+              />
+              <IconButton
+                color="primary"
+                variant="plain"
+                size="lg"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDeleteRecipe?.(parsedMealData);
+                }}
+                sx={{ zIndex: 1, alignSelf: "flex-end" }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           )}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {onSelectRecipe && (

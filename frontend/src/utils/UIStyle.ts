@@ -175,6 +175,12 @@ const ColumnOverflowTitledListStyle = {
   maxHeight: 300,
 };
 
+const ColumnNoOverflowTitledListStyle = {
+  ...BaseListStyle,
+  flexDirection: "column",
+  overflowY: "auto",
+};
+
 const RecipeTagsTitledListStyle = {
   ...BaseListStyle,
   flexDirection: "column",
@@ -189,7 +195,8 @@ const CenteredTitledListStyle = {
 };
 
 const GPTagItemStyle = {
-  m: 1,
+  mx: 0.5,
+  my: 1,
   p: 1,
   border: "2px solid",
   borderRadius: "md",
@@ -209,6 +216,7 @@ export {
   MUI_GRID_FULL_SPACE,
   RowOverflowTitledListStyle,
   ColumnOverflowTitledListStyle,
+  ColumnNoOverflowTitledListStyle,
   CenteredTitledListStyle,
   RecipeTagsTitledListStyle,
   GPTagItemStyle,

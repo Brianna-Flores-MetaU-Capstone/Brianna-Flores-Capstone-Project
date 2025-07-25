@@ -34,8 +34,9 @@ type GPEventTimeModal = {
   onSubmit?: (
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => void;
+  singleRecipe: boolean;
 };
 
 const CalendarTimeModal = ({
@@ -45,6 +46,7 @@ const CalendarTimeModal = ({
   modalOpen,
   toggleModal,
   onSubmit,
+  singleRecipe,
 }: GPEventTimeModal) => {
   // Modal code referenced from https://mui.com/joy-ui/react-modal/
   const eventStartTime = new Date(eventInfo?.timeOptions[0].start ?? "");
@@ -55,14 +57,14 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
@@ -75,14 +77,14 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getMonth().toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0"),
+      eventStartTime.getDate().toString().padStart(2, "0")
   );
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string,
+    newValue: string
   ) => {
     if (editMode) {
       if (timeField === EventTimeEnum.START) {
@@ -97,7 +99,7 @@ const CalendarTimeModal = ({
         const updatedBlocks = [...prev];
         updatedBlocks[index].setTime(
           timeField as GPTimePreferenceType,
-          newValue,
+          newValue
         );
         return updatedBlocks;
       });
@@ -189,7 +191,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? start : block.start}
@@ -209,7 +211,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? end : block.end}
@@ -234,7 +236,7 @@ const CalendarTimeModal = ({
                 )}
               </Box>
             ))}
-            {!editMode && (
+            {!editMode && !singleRecipe && (
               <Box>
                 <ButtonGroup
                   color="primary"
