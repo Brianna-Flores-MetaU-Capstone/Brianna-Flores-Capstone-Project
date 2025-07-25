@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import type { GPErrorMessageTypes, GPRecipeDataTypes } from "../utils/types";
 import type { GPDiffLineInfoType } from "../utils/diffUtils";
-import { DiffStatus } from "../utils/diffUtils";
 import {
   AspectRatio,
   List,
   ListItem,
+  Button,
   Box,
   Modal,
   ModalClose,
@@ -14,9 +14,14 @@ import {
   Typography,
 } from "@mui/joy";
 
+import { DiffRecipes } from "../classes/DiffRecipe";
+import DiffOriginalContentDisplay from "./DiffOriginalContentDisplay";
 import {
-  DiffRecipes,
-} from "../classes/DiffRecipe";
+  GPCenteredBoxStyle,
+  GPMealInfoModalTitleStyle,
+  GPTagItemStyle,
+} from "../utils/UIStyle";
+import MealInfoModal from "./MealInfoModal";
 
 type GPDiffOriginalType = {
   originalRecipeInfo: GPRecipeDataTypes;
@@ -25,21 +30,11 @@ type GPDiffOriginalType = {
   setModalOpen: () => void;
 };
 
-const GPDiffStyle = {
-  borderRadius: "md",
-  padding: 0.5,
-};
-const GPDiffAddedStyle = {
-  ...GPDiffStyle,
-  bgcolor: "success.200",
-};
-const GPDiffDeletedStyle = {
-  ...GPDiffStyle,
-  bgcolor: "danger.200",
-};
-
 type GPOriginalRecipeDiffType = {
   titleDiffResults: GPDiffLineInfoType[];
+  servingsDiffResults: GPDiffLineInfoType[];
+  tagsDiffResults: GPDiffLineInfoType[];
+  cookTimeDiffResults: GPDiffLineInfoType[];
   ingredientsDiffResults: GPDiffLineInfoType[];
   instructionsDiffResults: GPDiffLineInfoType[];
 };
@@ -53,165 +48,107 @@ const DiffOriginalRecipe = ({
   const [recipeDiffInfo, setRecipeDiffInfo] =
     useState<GPOriginalRecipeDiffType>();
   const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [viewOriginalModalOpen, setViewOriginalModalOpen] = useState(false);
 
   useEffect(() => {
-    const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo)
-    setRecipeDiffInfo(recipeDiff.getRecipeDiff())
+    const recipeDiff = new DiffRecipes(originalRecipeInfo, editedRecipeInfo);
+    const recipeDiffInfo = recipeDiff.getRecipeDiff();
+    setRecipeDiffInfo(recipeDiffInfo);
   }, [modalOpen]);
 
+  const handleViewOriginalRecipe = () => {
+    setModalOpen();
+    setViewOriginalModalOpen(true);
+  };
+
   return (
-    <Modal
-      aria-labelledby="modal-title"
-      aria-describedby="modal-desc"
-      open={modalOpen}
-      onClose={setModalOpen}
-    >
-      <ModalDialog layout="fullscreen">
-        <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
-        <DialogContent sx={{ my: 4 }}>
-          <AspectRatio ratio="1" sx={{ width: "50%", borderRadius: "md" }}>
-            <img src={originalRecipeInfo.previewImage} />
-          </AspectRatio>
-          <Box>
-            <Typography level="h2">
-              {recipeDiffInfo?.titleDiffResults[0].lineDiffInfo?.map((word, index) => {
-                if (word.status === DiffStatus.UNCHANGED) {
-                  return (
-                    <Box component="span" key={index}>
-                      {word.line}{" "}
-                    </Box>
-                  );
-                } else if (word.status === DiffStatus.ADDED) {
-                  return (
-                    <Box component="span" key={index} sx={GPDiffAddedStyle}>
-                      {word.line}{" "}
-                    </Box>
-                  );
-                } else {
-                  return (
-                    <Box component="s" key={index} sx={GPDiffDeletedStyle}>
-                      {word.line}{" "}
-                    </Box>
-                  );
-                }
-              })}
-            </Typography>
-          </Box>
-          <Box>
+    <>
+      <Modal
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        open={modalOpen}
+        onClose={setModalOpen}
+      >
+        <ModalDialog layout="fullscreen">
+          <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
+          <DialogContent sx={{ m: 4 }}>
+            <Box sx={GPMealInfoModalTitleStyle}>
+              <AspectRatio ratio="1" sx={{ width: 350, borderRadius: "md" }}>
+                <img src={originalRecipeInfo.previewImage} />
+              </AspectRatio>
+              <Box sx={GPCenteredBoxStyle}>
+                {recipeDiffInfo && (
+                  <DiffOriginalContentDisplay
+                    xDiffResults={recipeDiffInfo.titleDiffResults}
+                    parentComponent={Box}
+                    childrenComponent={Typography}
+                    childComponentProps={{ level: "h2" }}
+                  />
+                )}
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography>Servings:</Typography>
+                  {recipeDiffInfo && (
+                    <DiffOriginalContentDisplay
+                      xDiffResults={recipeDiffInfo.servingsDiffResults}
+                      parentComponent={Box}
+                      childrenComponent={Typography}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography>Cook Time:</Typography>
+                  {recipeDiffInfo && (
+                    <DiffOriginalContentDisplay
+                      xDiffResults={recipeDiffInfo.cookTimeDiffResults}
+                      parentComponent={Box}
+                      childrenComponent={Typography}
+                    />
+                  )}
+                </Box>
+                {recipeDiffInfo && (
+                  <DiffOriginalContentDisplay
+                    xDiffResults={recipeDiffInfo.tagsDiffResults}
+                    parentComponent={Box}
+                    parentComponentProps={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                    childrenComponent={Typography}
+                    childComponentProps={GPTagItemStyle}
+                  />
+                )}
+                <Button size="lg" onClick={handleViewOriginalRecipe}>
+                  View Original Recipe
+                </Button>
+              </Box>
+            </Box>
+            <Typography level="h3">Ingredients</Typography>
+            {recipeDiffInfo && (
+              <DiffOriginalContentDisplay
+                xDiffResults={recipeDiffInfo.ingredientsDiffResults}
+                parentComponent={List}
+                parentComponentProps={{ marker: "circle" }}
+                childrenComponent={ListItem}
+              />
+            )}
             <Typography level="h3">Instructions</Typography>
-            <List marker="circle">
-              {recipeDiffInfo?.ingredientsDiffResults.map((line, index) => {
-                if (line.status === DiffStatus.UNCHANGED) {
-                  return <ListItem key={index}>{line.line}</ListItem>;
-                } else if (line.status === DiffStatus.ADDED) {
-                  return (
-                    <ListItem key={index} sx={GPDiffAddedStyle}>
-                      {line.line}
-                    </ListItem>
-                  );
-                } else if (line.status === DiffStatus.DELETED) {
-                  return (
-                    <ListItem key={index} sx={GPDiffDeletedStyle}>
-                      <Box component="s">{line.line}</Box>
-                    </ListItem>
-                  );
-                } else {
-                  return (
-                    <ListItem key={index}>
-                      {line.lineDiffInfo?.map((word, wordIndex) => {
-                        if (word.status === DiffStatus.UNCHANGED) {
-                          return (
-                            <Box component="span" key={wordIndex}>
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        } else if (word.status === DiffStatus.ADDED) {
-                          return (
-                            <Box
-                              component="span"
-                              key={wordIndex}
-                              sx={GPDiffAddedStyle}
-                            >
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        } else {
-                          return (
-                            <Box
-                              component="s"
-                              key={wordIndex}
-                              sx={GPDiffDeletedStyle}
-                            >
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        }
-                      })}
-                    </ListItem>
-                  );
-                }
-              })}
-            </List>
-          </Box>
-          <Box>
-            <Typography level="h3">Instructions</Typography>
-            <List component="ol" marker="decimal">
-              {recipeDiffInfo?.instructionsDiffResults.map((line, index) => {
-                if (line.status === DiffStatus.UNCHANGED) {
-                  return <ListItem key={index}>{line.line}</ListItem>;
-                } else if (line.status === DiffStatus.ADDED) {
-                  return (
-                    <ListItem key={index} sx={GPDiffAddedStyle}>
-                      {line.line}
-                    </ListItem>
-                  );
-                } else if (line.status === DiffStatus.DELETED) {
-                  return (
-                    <ListItem key={index} sx={GPDiffDeletedStyle}>
-                      {line.line}
-                    </ListItem>
-                  );
-                } else {
-                  return (
-                    <ListItem key={index}>
-                      {line.lineDiffInfo?.map((word, wordIndex) => {
-                        if (word.status === DiffStatus.UNCHANGED) {
-                          return (
-                            <Box component="span" key={wordIndex}>
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        } else if (word.status === DiffStatus.ADDED) {
-                          return (
-                            <Box
-                              component="span"
-                              key={wordIndex}
-                              sx={GPDiffAddedStyle}
-                            >
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        } else {
-                          return (
-                            <Box
-                              component="s"
-                              key={wordIndex}
-                              sx={GPDiffDeletedStyle}
-                            >
-                              {word.line}{" "}
-                            </Box>
-                          );
-                        }
-                      })}
-                    </ListItem>
-                  );
-                }
-              })}
-            </List>
-          </Box>
-        </DialogContent>
-      </ModalDialog>
-    </Modal>
+            {recipeDiffInfo && (
+              <DiffOriginalContentDisplay
+                xDiffResults={recipeDiffInfo.instructionsDiffResults}
+                parentComponent={List}
+                parentComponentProps={{ marker: "decimal" }}
+                childrenComponent={ListItem}
+              />
+            )}
+          </DialogContent>
+        </ModalDialog>
+      </Modal>
+      <MealInfoModal
+        toggleModal={() => setViewOriginalModalOpen((prev) => !prev)}
+        modalOpen={viewOriginalModalOpen}
+        recipeInfo={originalRecipeInfo}
+      />
+    </>
   );
 };
 
