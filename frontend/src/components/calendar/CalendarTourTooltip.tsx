@@ -28,7 +28,7 @@ const CalendarTourTooltip = ({
       return;
     }
     const tooltipTarget = document.querySelector(
-      tourSteps[currentStep].selectElement
+      tourSteps[currentStep].selectElement,
     );
     if (!tooltipTarget) {
       return;

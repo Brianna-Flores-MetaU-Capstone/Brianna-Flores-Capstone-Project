@@ -36,7 +36,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
         selectedEvent.name === clickedEvent.name &&
         selectedEvent.timeOptions[0].start ===
           clickedEvent.timeOptions[0].start &&
-        selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end
+        selectedEvent.timeOptions[0].end === clickedEvent.timeOptions[0].end,
     );
     if (isSelected.length === 0) {
       setSelectedEvents((prev) => [...prev, clickedEvent]);
@@ -47,8 +47,9 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
             selectedEvent.name !== clickedEvent.name ||
             selectedEvent.timeOptions[0].start !==
               clickedEvent.timeOptions[0].start ||
-            selectedEvent.timeOptions[0].end !== clickedEvent.timeOptions[0].end
-        )
+            selectedEvent.timeOptions[0].end !==
+              clickedEvent.timeOptions[0].end,
+        ),
       );
     }
   };
@@ -114,7 +115,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
                 {
                   hour: "numeric",
                   minute: "numeric",
-                }
+                },
               );
               const formattedEnd = new Date(option.end).toLocaleTimeString([], {
                 hour: "numeric",
@@ -130,7 +131,7 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
                   selectedEvent.timeOptions[0].start ===
                     clickedEvent.timeOptions[0].start &&
                   selectedEvent.timeOptions[0].end ===
-                    clickedEvent.timeOptions[0].end
+                    clickedEvent.timeOptions[0].end,
               );
               return (
                 <Tooltip key={index} title="Select time">

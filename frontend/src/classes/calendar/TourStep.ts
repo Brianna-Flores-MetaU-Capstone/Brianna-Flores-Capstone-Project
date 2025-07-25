@@ -6,7 +6,7 @@ class TourStep {
   constructor(
     selectElement: string,
     stepInfo: string,
-    relativePosition: string
+    relativePosition: string,
   ) {
     this.selectElement = selectElement;
     this.stepInfo = stepInfo;

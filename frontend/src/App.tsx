@@ -13,6 +13,7 @@ import AccountPage from "./pages/AccountPage";
 import WithAuth from "./components/authentication/WithAuth";
 import RecipeDiscoveryPage from "./pages/RecipeDiscoveryPage";
 import FavoritedRecipes from "./pages/FavoritedRecipes";
+import EditedRecipesPage from "./pages/EditedRecipesPage";
 
 function App() {
   const AuthNewListPage = WithAuth(NewListPage);
@@ -20,6 +21,7 @@ function App() {
   const AuthGroceryList = WithAuth(GroceryList);
   const AuthAccountPage = WithAuth(AccountPage);
   const AuthFavoritedPage = WithAuth(FavoritedRecipes);
+  const AuthEditedPage = WithAuth(EditedRecipesPage);
 
   return (
     <CssVarsProvider theme={theme}>
@@ -35,6 +37,7 @@ function App() {
           <Route path="account" element={<AuthAccountPage />} />
           <Route path="discovery" element={<RecipeDiscoveryPage />} />
           <Route path="favorited" element={<AuthFavoritedPage />} />
+          <Route path="edited" element={<AuthEditedPage />} />
         </Routes>
       </BrowserRouter>
     </CssVarsProvider>

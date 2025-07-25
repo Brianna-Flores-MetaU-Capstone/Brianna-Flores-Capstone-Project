@@ -97,7 +97,7 @@ const CalendarModal = ({
           eventData.summary,
           eventData.start.dateTime,
           eventData.end.dateTime,
-          eventData.htmlLink
+          eventData.htmlLink,
         );
         createdEvents = [...createdEvents, newEvent];
         const savedCalendarEvent = await saveCalendarEvent({
