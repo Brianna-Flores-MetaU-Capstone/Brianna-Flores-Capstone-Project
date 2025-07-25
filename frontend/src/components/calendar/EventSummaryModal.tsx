@@ -46,7 +46,7 @@ const EventSummaryModal = ({
             itemsList={events}
             renderItem={(event, index) => (
               <Box>
-                <Typography>{event.eventTitle}</Typography>
+                <Typography level="h4">{event.eventTitle}</Typography>
                 <Typography>{event.getFormattedDate()}</Typography>
                 <Typography>{event.getFormattedTime()}</Typography>
                 <Link key={index} href={event.eventLink}>

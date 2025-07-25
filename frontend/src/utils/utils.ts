@@ -169,7 +169,7 @@ const updateRecipeWithPricing = async ({
 const formatQuantity = (ingredientQuantity: number) => {
   return ingredientQuantity % 1 === 0
     ? ingredientQuantity
-    : ingredientQuantity.toFixed(2);
+    : Number(ingredientQuantity.toString()).toFixed(2);
 };
 
 export {

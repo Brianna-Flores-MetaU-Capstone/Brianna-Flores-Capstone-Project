@@ -34,7 +34,7 @@ type GPEventTimeModal = {
   onSubmit?: (
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number,
+    servingsPerDay: number
   ) => void;
   singleRecipe: boolean;
 };
@@ -57,14 +57,14 @@ const CalendarTimeModal = ({
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [end, setEnd] = useState(
     eventEndTime.toLocaleTimeString([], {
       hour12: false,
       hour: "numeric",
       minute: "numeric",
-    }),
+    })
   );
   const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
@@ -77,29 +77,30 @@ const CalendarTimeModal = ({
       "-" +
       eventStartTime.getMonth().toString().padStart(2, "0") +
       "-" +
-      eventStartTime.getDate().toString().padStart(2, "0"),
+      eventStartTime.getDate().toString().padStart(2, "0")
   );
+  const [servingsInputError, setServingsInputError] = useState(false);
   const { eventOptions } = useEventRec();
 
   const handleTimeChange = (
     index: number,
     timeField: string,
-    newValue: string,
+    newValue: string
   ) => {
-    if (editMode) {
-      if (timeField === EventTimeEnum.START) {
-        setStart(newValue);
-      } else if (timeField === EventTimeEnum.END) {
-        setEnd(newValue);
-      } else if (timeField === EventTimeEnum.DATE) {
-        setDate(newValue);
-      }
-    } else {
+    if (timeField === EventTimeEnum.START) {
+      setStart(newValue);
+    } else if (timeField === EventTimeEnum.END) {
+      setEnd(newValue);
+    }
+    if (editMode && timeField === EventTimeEnum.DATE) {
+      setDate(newValue);
+    }
+    if (!editMode) {
       setPreferredTimeBlocks((prev) => {
         const updatedBlocks = [...prev];
         updatedBlocks[index].setTime(
           timeField as GPTimePreferenceType,
-          newValue,
+          newValue
         );
         return updatedBlocks;
       });
@@ -109,6 +110,10 @@ const CalendarTimeModal = ({
   useEffect(() => {
     setInputError(start > end);
   }, [start, end]);
+
+  useEffect(() => {
+    setServingsInputError(servingsPerDay < 1)
+  }, [servingsPerDay])
 
   const onEditTimeSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -133,6 +138,7 @@ const CalendarTimeModal = ({
     if (onSubmit) {
       onSubmit(preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
+    setPreferredTimeBlocks([new TimePreferenceString()]);
     toggleModal();
   };
 
@@ -191,7 +197,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.START,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? start : block.start}
@@ -211,7 +217,7 @@ const CalendarTimeModal = ({
                       handleTimeChange(
                         index,
                         EventTimeEnum.END,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                     value={editMode ? end : block.end}
@@ -258,7 +264,7 @@ const CalendarTimeModal = ({
                   </Button>
                 </ButtonGroup>
 
-                <FormControl error={inputError}>
+                <FormControl error={servingsInputError}>
                   <FormLabel>Servings eaten per day</FormLabel>
                   <Input
                     type="number"
@@ -268,10 +274,10 @@ const CalendarTimeModal = ({
                     value={servingsPerDay}
                     required
                   />
-                  {inputError && (
+                  {servingsInputError && (
                     <FormHelperText>
                       <InfoOutlined />
-                      End time must be after start
+                      Servings must be greater than 1
                     </FormHelperText>
                   )}
                 </FormControl>
@@ -279,7 +285,7 @@ const CalendarTimeModal = ({
             )}
             <Button
               type="submit"
-              disabled={inputError}
+              disabled={inputError || servingsInputError}
               sx={{ display: "flex", mx: "auto", mt: 2 }}
             >
               {editMode ? "Adjust Time" : "Submit Preferences!"}

@@ -45,9 +45,9 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
       setSelectedEvents((prev) =>
         prev.filter(
           (selectedEvent) =>
-            selectedEvent.name !== clickedEvent.name &&
+            selectedEvent.name !== clickedEvent.name ||
             selectedEvent.timeOptions[0].start !==
-              clickedEvent.timeOptions[0].start &&
+              clickedEvent.timeOptions[0].start ||
             selectedEvent.timeOptions[0].end !==
               clickedEvent.timeOptions[0].end,
         ),
@@ -111,15 +111,13 @@ const CalendarEventCard = ({ eventOption, groupNum }: GPCalendarOption) => {
         >
           <Box>
             <Typography level="body-sm">{startDate.toDateString()}</Typography>
-            <ButtonGroup color="primary" size="sm">
+            <ButtonGroup color="primary" size="sm" spacing={2}>
               {eventOption.timeOptions.map((option, index) => {
                 const formattedStart = new Date(option.start)
                   .toLocaleTimeString([], {
                     hour: "numeric",
                     minute: "numeric",
                   })
-                  .replace(" PM", "")
-                  .replace(" AM", "");
                 const formattedEnd = new Date(option.end).toLocaleTimeString(
                   [],
                   {
