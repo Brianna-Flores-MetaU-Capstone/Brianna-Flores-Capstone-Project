@@ -21,6 +21,7 @@ import { fetchSingleRecipe } from "../../utils/databaseHelpers";
 import { useState } from "react";
 import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
 import { Recipe } from "../../classes/recipe/Recipe";
+import UserDiffOptions from "../recipeDiff/UserDiffOptions";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -36,9 +37,22 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
+  const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
+  const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
+    new Set(),
+  );
+  const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
 
-  const onCompareWithOriginal = async () => {
+  const onCompareWithOriginal = () => {
+    setUserDiffOptionsOpen(true);
+  };
+
+  const onSubmitUserDiffOptions = async (
+    userChoices: Set<string>,
+    noDiffFields: Set<string>,
+  ) => {
     // we are viewing the edited recipe, need to fetch original recipe
+    setUserDiffOptionsOpen(false);
     if (!recipeInfo) {
       setMessage({
         error: true,
@@ -46,6 +60,8 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       });
       return;
     }
+    setUserDiffChoices(userChoices);
+    setNoDiffFields(noDiffFields);
     const originalRecipe = await fetchSingleRecipe({
       setMessage,
       selectedRecipe: recipeInfo,
@@ -130,8 +146,15 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           editedRecipeInfo={recipeInfo}
           modalOpen={diffModalOpen}
           setModalOpen={() => setDiffModalOpen((prev) => !prev)}
+          userDiffChoices={[...userDiffChoices]}
+          noDiffFields={[...noDiffFields]}
         />
       )}
+      <UserDiffOptions
+        modalOpen={userDiffOptionsOpen}
+        toggleModal={() => setUserDiffOptionsOpen((prev) => !prev)}
+        onSubmit={onSubmitUserDiffOptions}
+      />
     </>
   );
 };

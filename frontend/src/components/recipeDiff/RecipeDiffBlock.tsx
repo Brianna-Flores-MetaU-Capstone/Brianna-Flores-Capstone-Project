@@ -1,15 +1,15 @@
 import { Box, Grid, Typography } from "@mui/joy";
 import RecipeDiffTable from "./RecipeDiffTable";
-import type { GPDiffReturnType } from "../../classes/recipeDiffClasses/DiffClass";
+import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
 import type { GPIngredientDataTypes } from "../../utils/types";
 import { GPDiffHeaderStyle } from "../../utils/UIStyle";
 import type { Recipe } from "../../classes/recipe/Recipe";
 
 type GPRecipeDiffInfo = {
-  recipeA: Recipe;
-  recipeB: Recipe;
+  recipeA: Recipe | undefined;
+  recipeB: Recipe | undefined;
   costDiff: boolean;
-  diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
+  diffInfo: GPRecipeComparisonReturnType<GPIngredientDataTypes> | undefined;
 };
 
 const RecipeDiffBlock = ({
@@ -47,7 +47,7 @@ const RecipeDiffBlock = ({
             <Typography level="h2">Total Estimated Cost: </Typography>
           )}
           {costDiff && (
-            <Typography level="h4">${recipeA.totalCost.toFixed(2)}</Typography>
+            <Typography level="h4">${recipeA?.totalCost.toFixed(2)}</Typography>
           )}
         </Grid>
         <Grid xs={6}>
@@ -55,7 +55,7 @@ const RecipeDiffBlock = ({
             <Typography level="h2">Total Estimated Cost: </Typography>
           )}
           {costDiff && (
-            <Typography level="h4">${recipeB.totalCost.toFixed(2)}</Typography>
+            <Typography level="h4">${recipeB?.totalCost.toFixed(2)}</Typography>
           )}
         </Grid>
       </Grid>

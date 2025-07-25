@@ -1,20 +1,15 @@
-import type { GPDiffReturnType } from "../../classes/recipeDiffClasses/DiffClass";
+import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
 import type { GPIngredientDataTypes } from "../../utils/types";
 import { Box, Table } from "@mui/joy";
+import { formatQuantity } from "../../utils/utils";
 
 type GPRecipeDiffInfo = {
   first: boolean;
   costDiff: boolean;
-  diffInfo: GPDiffReturnType<GPIngredientDataTypes>;
+  diffInfo: GPRecipeComparisonReturnType<GPIngredientDataTypes> | undefined;
 };
 
 const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
-  const formatQuantity = (ingredientQuantity: number) => {
-    return ingredientQuantity % 1 === 0
-      ? ingredientQuantity
-      : ingredientQuantity.toFixed(2);
-  };
-
   return (
     <Box>
       <Table
@@ -29,7 +24,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
           </tr>
         </thead>
         <Box component="tbody">
-          {diffInfo.unchanged.map((ingredient, index) => (
+          {diffInfo?.unchanged.map((ingredient, index) => (
             <Box bgcolor="primary.200" component="tr" key={index}>
               <td style={{ textAlign: "center" }}>
                 {formatQuantity(ingredient.quantity)} {ingredient.unit}
@@ -44,7 +39,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
             </Box>
           ))}
 
-          {diffInfo.changed.map((ingredient, index) => (
+          {diffInfo?.changed.map((ingredient, index) => (
             <Box component="tr" bgcolor="neutral.50" key={index}>
               <td>
                 <Box
@@ -77,7 +72,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
             </Box>
           ))}
           {first &&
-            diffInfo.deleted.map((ingredient, index) => (
+            diffInfo?.deleted.map((ingredient, index) => (
               <Box bgcolor="success.200" component="tr" key={index}>
                 <td style={{ textAlign: "center" }}>
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
@@ -92,7 +87,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
               </Box>
             ))}
           {!first &&
-            diffInfo.added.map((ingredient, index) => (
+            diffInfo?.added.map((ingredient, index) => (
               <Box bgcolor="danger.200" component="tr" key={index}>
                 <td style={{ textAlign: "center" }}>
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}

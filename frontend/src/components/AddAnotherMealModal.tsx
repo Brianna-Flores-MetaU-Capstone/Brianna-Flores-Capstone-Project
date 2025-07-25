@@ -192,11 +192,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         handleUpdateRecipeInfo(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
       }
-      const recipeDiffResults = getRecipeDiffResults({
+      const compareRecipeResults = getRecipeDiffResults({
         recipeA: updatedRecipesToCompare[0],
         recipeB: updatedRecipesToCompare[1],
       });
-      setRecipeDiffData(recipeDiffResults);
+      setRecipeDiffData(compareRecipeResults);
       setLoadingModal(false);
       setRecipeDiffModalOpen(true);
     }
@@ -314,25 +314,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       <RecipeDiffModal
         modalOpen={recipeDiffModalOpen}
         toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
-        recipeDiffData={
-          recipeDiffData ?? {
-            recipeA: recipesToCompare[0],
-            recipeB: recipesToCompare[1],
-            servingsDiff: false,
-            recipeIngredientDiff: {
-              added: [],
-              deleted: [],
-              changed: [],
-              unchanged: [],
-            },
-            purchasedIngredientsDiff: {
-              added: [],
-              deleted: [],
-              changed: [],
-              unchanged: [],
-            },
-          }
-        }
+        recipeDiffData={recipeDiffData}
       />
     </>
   );
