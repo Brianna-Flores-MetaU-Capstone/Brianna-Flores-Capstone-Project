@@ -10,6 +10,7 @@ import {
   FormLabel,
   Grid,
   AspectRatio,
+  Typography,
 } from "@mui/joy";
 import axios from "axios";
 import { useState } from "react";
@@ -66,7 +67,7 @@ const ImageSearchModal = ({
       });
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
-        (photoInfo: GPPexelsImageType) => photoInfo.src?.original
+        (photoInfo: GPPexelsImageType) => photoInfo.src?.original,
       );
       setImageSearchResults(photosSrc);
     } catch (error) {
@@ -90,7 +91,7 @@ const ImageSearchModal = ({
       try {
         const response = await axios.post(
           `${imgBBUrl}/upload?key=${UPLOAD_IMAGE_API_KEY}`,
-          uploadedImage
+          uploadedImage,
         );
         const uploadedUrl = response.data.data.url;
         setSelectedImages((prev) => new Set(prev.add(uploadedUrl)));
@@ -107,7 +108,7 @@ const ImageSearchModal = ({
     setSelectedImages(new Set());
     setImageSearchResults([]);
     setImageSearchTerm("");
-    setUploadedImage(new FormData())
+    setUploadedImage(new FormData());
   };
 
   return (
@@ -120,11 +121,31 @@ const ImageSearchModal = ({
       <ModalDialog sx={GPModalStyle}>
         <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
         <DialogContent sx={{ my: 3 }}>
+          <FormControl>
+            <FormLabel>Add your own image!</FormLabel>
+            <Input
+              sx={{
+                border: "none",
+                background: "none",
+                boxShadow: "none",
+                flexShrink: 1,
+                alignItems: "center",
+              }}
+              type="file"
+              onChange={(event) => {
+                if (event.target.files) {
+                  const formData = new FormData();
+                  formData.append("image", event.target.files[0]);
+                  setUploadedImage(formData);
+                }
+              }}
+            />
+          </FormControl>
           <form onSubmit={handleSearchSubmit}>
             <Grid container alignItems="flex-end">
               <Grid xs={10}>
                 <FormControl>
-                  <FormLabel>Search Images</FormLabel>
+                  <FormLabel>Or Search Images</FormLabel>
                   <Input
                     slotProps={{
                       input: { "data-reciperequest": "recipeName" },
@@ -137,35 +158,6 @@ const ImageSearchModal = ({
               </Grid>
               <Grid xs={2}>
                 <Button type="submit">Search!</Button>
-              </Grid>
-            </Grid>
-          </form>
-          <form>
-            <Grid container alignItems="flex-end">
-              <Grid xs={10}>
-                <FormControl>
-                  <FormLabel>Add your own image!</FormLabel>
-                  <Input
-                    sx={{
-                      border: "none",
-                      background: "none",
-                      boxShadow: "none",
-                      flexShrink: 1,
-                      alignItems: "center",
-                    }}
-                    type="file"
-                    onChange={(event) => {
-                      if (event.target.files) {
-                        const formData = new FormData();
-                        formData.append("image", event.target.files[0]);
-                        setUploadedImage(formData);
-                      }
-                    }}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid xs={2}>
-                <Button type="submit">Upload!</Button>
               </Grid>
             </Grid>
           </form>
