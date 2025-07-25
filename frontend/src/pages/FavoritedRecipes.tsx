@@ -14,6 +14,7 @@ import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { useUser } from "../contexts/UserContext";
 import { Recipe } from "../../../shared/Recipe";
+import { RecipeFetchEnum } from "../utils/constants";
 
 const FavoritedRecipes = () => {
   const [favoritedRecipes, setFavoritedRecipes] = useState<Recipe[]>([]);
@@ -26,7 +27,7 @@ const FavoritedRecipes = () => {
     fetchRecipes({
       setMessage,
       setRecipes: setFavoritedRecipes,
-      recipeGroup: "favorited",
+      recipeGroup: RecipeFetchEnum.FAVORITED,
     });
   }, []);
 

@@ -59,6 +59,12 @@ const PreviewConstants = {
   INGREDIENT: "Ingredients on Hand",
 };
 
+const RecipeFetchEnum = {
+  PLANNED: "planned",
+  FAVORITED: "favorited",
+  FAVORITED_IDS: "favoritedIds"
+}
+
 export {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
@@ -74,4 +80,5 @@ export {
   END_OF_DAY_TIME,
   ZERO_OUT_START_DATE,
   MIN_PASSWORD_LENGTH,
+  RecipeFetchEnum,
 };

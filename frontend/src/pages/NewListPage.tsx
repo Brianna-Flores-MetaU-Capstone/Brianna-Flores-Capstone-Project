@@ -30,6 +30,7 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import EventSummaryModal from "../components/calendar/EventSummaryModal";
+import { RecipeFetchEnum } from "../utils/constants";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -61,7 +62,7 @@ const NewListPage = () => {
       await fetchRecipes({
         setMessage,
         setRecipes: setSelectedRecipes,
-        recipeGroup: "planned",
+        recipeGroup: RecipeFetchEnum.PLANNED,
       });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
@@ -72,7 +73,7 @@ const NewListPage = () => {
     fetchRecipes({
       setMessage,
       setRecipes: setSelectedRecipes,
-      recipeGroup: "planned",
+      recipeGroup: RecipeFetchEnum.PLANNED,
     });
   }, []);
 
@@ -84,14 +85,14 @@ const NewListPage = () => {
   const handleDeleteRecipe = async (deletedRecipe: Recipe) => {
     try {
       await axios.put(
-        `${databaseUrl}/recipes/planned/remove`,
+        `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
         axiosConfig,
       );
       await fetchRecipes({
         setMessage,
         setRecipes: setSelectedRecipes,
-        recipeGroup: "planned",
+        recipeGroup: RecipeFetchEnum.PLANNED,
       });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
@@ -129,7 +130,7 @@ const NewListPage = () => {
     await fetchRecipes({
       setMessage,
       setRecipes: setSelectedRecipes,
-      recipeGroup: "planned",
+      recipeGroup: RecipeFetchEnum.PLANNED,
     });
   };
 
