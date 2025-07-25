@@ -24,6 +24,9 @@ import {
   GPModalStyle,
 } from "../../utils/style/UIStyle";
 const IMAGE_API_KEY = import.meta.env.VITE_IMAGE_API_KEY;
+const pexelsUrl = import.meta.env.VITE_PEXELS_URL;
+const UPLOAD_IMAGE_API_KEY = import.meta.env.VITE_IMAGE_UPLOAD_API_KEY;
+const imgBBUrl = import.meta.env.VITE_IMGBB_URL;
 
 const GPSelectedImageStyle = {
   border: "4px solid",
@@ -47,11 +50,12 @@ const ImageSearchModal = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchResults, setImageSearchResults] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set());
+  const [uploadedImage, setUploadedImage] = useState<FormData>();
 
   const handleSearchSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const imageResults = await axios.get(`https://api.pexels.com/v1/search`, {
+      const imageResults = await axios.get(`${pexelsUrl}/search`, {
         headers: {
           Authorization: IMAGE_API_KEY,
         },
@@ -62,7 +66,7 @@ const ImageSearchModal = ({
       });
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
-        (photoInfo: GPPexelsImageType) => photoInfo.src?.original,
+        (photoInfo: GPPexelsImageType) => photoInfo.src?.original
       );
       setImageSearchResults(photosSrc);
     } catch (error) {
@@ -81,12 +85,29 @@ const ImageSearchModal = ({
     }
   };
 
-  const handleImageConfirmation = () => {
+  const handleImageConfirmation = async () => {
+    if (uploadedImage) {
+      try {
+        const response = await axios.post(
+          `${imgBBUrl}/upload?key=${UPLOAD_IMAGE_API_KEY}`,
+          uploadedImage
+        );
+        const uploadedUrl = response.data.data.url;
+        setSelectedImages((prev) => new Set(prev.add(uploadedUrl)));
+      } catch (error) {
+        setMessage({
+          error: true,
+          message: "Error uploading image, try again",
+        });
+        return;
+      }
+    }
     toggleModal();
     onSubmit(selectedImages);
     setSelectedImages(new Set());
     setImageSearchResults([]);
     setImageSearchTerm("");
+    setUploadedImage(new FormData())
   };
 
   return (
@@ -119,6 +140,35 @@ const ImageSearchModal = ({
               </Grid>
             </Grid>
           </form>
+          <form>
+            <Grid container alignItems="flex-end">
+              <Grid xs={10}>
+                <FormControl>
+                  <FormLabel>Add your own image!</FormLabel>
+                  <Input
+                    sx={{
+                      border: "none",
+                      background: "none",
+                      boxShadow: "none",
+                      flexShrink: 1,
+                      alignItems: "center",
+                    }}
+                    type="file"
+                    onChange={(event) => {
+                      if (event.target.files) {
+                        const formData = new FormData();
+                        formData.append("image", event.target.files[0]);
+                        setUploadedImage(formData);
+                      }
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid xs={2}>
+                <Button type="submit">Upload!</Button>
+              </Grid>
+            </Grid>
+          </form>
           {message && (
             <ErrorState error={message.error} message={message.message} />
           )}
@@ -142,14 +192,12 @@ const ImageSearchModal = ({
                 listItemsStyle={CenteredTitledListStyle}
               />
             }
-            {imageSearchResults.length > 0 && (
-              <Button
-                sx={{ justifySelf: "center" }}
-                onClick={handleImageConfirmation}
-              >
-                Confirm Selection!
-              </Button>
-            )}
+            <Button
+              sx={{ justifySelf: "center" }}
+              onClick={handleImageConfirmation}
+            >
+              Confirm Selection!
+            </Button>
           </Box>
         </DialogContent>
       </ModalDialog>

@@ -384,7 +384,7 @@ const EditRecipeModal = ({
                         </Grid>
                       ))}
                     </Grid>
-                    <Grid xs={3}>
+                    <Grid xs={2.9}>
                       <TitledListView
                         itemsList={dietaryEditFields}
                         headerList={[
