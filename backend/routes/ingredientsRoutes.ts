@@ -50,7 +50,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
 
 // Get a specific ingredient by name
 router.get("/:ingredientName", async (req: Request, res: Response) => {
-  const ingredientName = req.params.ingredientName;
+  const ingredientName = req.params.ingredientName.toLowerCase();
   const { quantity, unit, department, expirationDate } = req.body;
   try {
     const ingredient = checkIngredientInDatabase({
@@ -89,7 +89,7 @@ router.post(
       if (!ingredientInDatabase) {
         ingredientInDatabase = await prisma.Ingredient.create({
           data: {
-            ingredientName,
+            ingredientName: ingredientName.toLowerCase(),
             department,
           },
         });

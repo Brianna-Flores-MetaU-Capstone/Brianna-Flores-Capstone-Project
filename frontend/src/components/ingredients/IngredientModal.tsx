@@ -85,7 +85,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   const [newIngredientData, dispatch] = useReducer(
     reducer,
-    initialIngredientState,
+    initialIngredientState
   );
 
   const handleModalSubmit = async (event: React.FormEvent) => {
@@ -112,12 +112,22 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       } else {
         setMessage({ error: true, message: "No ingredient to update" });
       }
+      onClose();
+      fetchUserIngredients();
     } else {
       const userId = user.id;
-      await addIngredientDatabase({ userId, newIngredientData, setMessage });
+      const successfullyAdded = await addIngredientDatabase({
+        userId,
+        newIngredientData,
+      });
+      if (successfullyAdded) {
+        onClose();
+        fetchUserIngredients();
+      }
+      else {
+            setMessage({ error: true, message: "Failed to add ingredient, duplicate may exist" });
+      }
     }
-    onClose();
-    fetchUserIngredients();
   };
 
   return (

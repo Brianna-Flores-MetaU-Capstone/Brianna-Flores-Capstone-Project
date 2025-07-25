@@ -15,7 +15,7 @@ import {
   deleteIngredient,
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
-import { ColumnOverflowTitledListStyle } from "../utils/style/UIStyle";
+import { ColumnNoOverflowTitledListStyle } from "../utils/style/UIStyle";
 
 const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
@@ -59,12 +59,15 @@ const IngredientsPage = () => {
     <Sheet>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <Button onClick={addIngredientClick}>Add Ingredient</Button>
+        <Button onClick={addIngredientClick} sx={{mb: 2}}>Add Ingredient</Button>
+        {message && (
+          <ErrorState error={message.error} message={message.message} />
+        )}
         <TitledListView
           headerList={[
             { title: "Ingredient", spacing: 4 },
             { title: "Quantity", spacing: 3 },
-            { title: "Expiration", spacing: 5 },
+            { title: "Expiration", spacing: 3 },
           ]}
           itemsList={userIngredients}
           renderItem={(ingredient, index) => (
@@ -78,11 +81,8 @@ const IngredientsPage = () => {
               onDelete={() => handleDeleteIngredient(ingredient)}
             />
           )}
-          listItemsStyle={ColumnOverflowTitledListStyle}
+          listItemsStyle={ColumnNoOverflowTitledListStyle}
         />
-        {message && (
-          <ErrorState error={message.error} message={message.message} />
-        )}
       </Box>
       {addIngredientModalOpen && (
         <IngredientModal
