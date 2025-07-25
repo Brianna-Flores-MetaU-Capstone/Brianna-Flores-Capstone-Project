@@ -69,7 +69,11 @@ const EditRecipeFieldsEnum = {
 const recipeInputEditFields = [
   { label: "Recipe Title", field: EditRecipeFieldsEnum.TITLE, spacing: 12 },
   { label: "Servings", field: EditRecipeFieldsEnum.SERVINGS, spacing: 2 },
-  { label: "Cook Time", field: EditRecipeFieldsEnum.READY_IN, spacing: 4 },
+  {
+    label: "Cook Time (in minutes)",
+    field: EditRecipeFieldsEnum.READY_IN,
+    spacing: 4,
+  },
   { label: "Editor Username", field: EditRecipeFieldsEnum.EDITOR, spacing: 6 },
   { label: "Recipe URL", field: EditRecipeFieldsEnum.URL, spacing: 12 },
 ] as const;
@@ -86,6 +90,21 @@ const dietaryEditFields = [
   { label: "Vegetarian", field: "vegetarian" },
   { label: "Vegan", field: "vegan" },
 ];
+
+const GPImageDisplayContainerStyle = {
+  display: "flex",
+  gap: 2,
+};
+
+const GPImageCardStyle = {
+  width: 250,
+};
+
+const GPDeleteIconStyle = {
+  position: "relative",
+  bottom: 45,
+  left: 10,
+};
 
 const EditRecipeModal = ({
   recipe,
@@ -212,7 +231,7 @@ const EditRecipeModal = ({
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseInt(action.value) <= 0
+            parseFloat(action.value) <= 0
         );
         return {
           ...state,
@@ -329,7 +348,9 @@ const EditRecipeModal = ({
                           borderRadius: "md",
                         }}
                       >
-                        <Typography level="h4">Edit Recipe</Typography>
+                        <Typography level="h4">
+                          Create Your Own Variant
+                        </Typography>
                       </Grid>
                       {recipeInputEditFields.map((field, index) => (
                         <Grid key={index} xs={field.spacing}>
@@ -400,16 +421,18 @@ const EditRecipeModal = ({
                     </Grid>
                   </Grid>
                 </Box>
-                <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
-                  <Box sx={{ display: "flex", gap: 2 }}>
+                <Box
+                  sx={{ ...GPImageDisplayContainerStyle, overflowX: "auto" }}
+                >
+                  <Box sx={GPImageDisplayContainerStyle}>
                     {editedRecipeData.previewImage?.map((imageUrl, index) => (
                       <Box key={index}>
-                        <AspectRatio ratio={1} sx={{ width: 250 }}>
+                        <AspectRatio ratio={1} sx={GPImageCardStyle}>
                           <img src={imageUrl} />
                         </AspectRatio>
                         <Button
                           variant="solid"
-                          sx={{ position: "relative", bottom: 45, left: 10 }}
+                          sx={GPDeleteIconStyle}
                           onClick={() =>
                             dispatch({
                               type: actions.DELETE_IMAGE,
@@ -422,7 +445,7 @@ const EditRecipeModal = ({
                       </Box>
                     ))}
                   </Box>
-                  <AspectRatio ratio={1} sx={{ minWidth: 250 }}>
+                  <AspectRatio ratio={1} sx={GPImageCardStyle}>
                     <Button onClick={() => setImageSearchModalOpen(true)}>
                       Add Images!
                     </Button>
@@ -538,7 +561,7 @@ const EditRecipeModal = ({
                 />
                 <IconButton
                   sx={{ justifySelf: "flex-end" }}
-                  onClick={(event) =>
+                  onClick={() =>
                     dispatch({
                       type: actions.ADD_ITEM,
                       addedField: "instructions",

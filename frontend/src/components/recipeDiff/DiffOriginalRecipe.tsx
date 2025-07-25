@@ -111,7 +111,7 @@ const DiffOriginalRecipe = ({
                     />
                   )}
                 </Box>
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
                   <Typography>Cook Time:</Typography>
                   {recipeDiffInfo?.cookTimeDiffResults && (
                     <DiffOriginalContentDisplay
@@ -120,6 +120,7 @@ const DiffOriginalRecipe = ({
                       childrenComponent={Typography}
                     />
                   )}
+                  <Typography>minutes</Typography>
                 </Box>
                 {recipeDiffInfo?.tagsDiffResults && (
                   <DiffOriginalContentDisplay

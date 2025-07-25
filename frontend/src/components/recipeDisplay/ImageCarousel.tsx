@@ -1,10 +1,10 @@
-import { Box, AspectRatio } from "@mui/joy"; 
+import { Box, AspectRatio } from "@mui/joy";
 
 type GPImageCarouselTypes = {
-    imageUrls: string[]
-}
+  imageUrls: string[];
+};
 
-const ImageCarousel = ({imageUrls}: GPImageCarouselTypes)  => {
+const ImageCarousel = ({ imageUrls }: GPImageCarouselTypes) => {
   return (
     <Box sx={{ display: "flex", overflowX: "auto", gap: 2 }}>
       {imageUrls.map((imageUrl, index) => (

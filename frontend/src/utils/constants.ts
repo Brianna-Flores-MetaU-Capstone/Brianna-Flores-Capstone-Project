@@ -62,8 +62,8 @@ const PreviewConstants = {
 const RecipeFetchEnum = {
   PLANNED: "planned",
   FAVORITED: "favorited",
-  FAVORITED_IDS: "favoritedIds"
-}
+  FAVORITED_IDS: "favoritedIds",
+};
 
 export {
   PreferenceCategoryEnum,

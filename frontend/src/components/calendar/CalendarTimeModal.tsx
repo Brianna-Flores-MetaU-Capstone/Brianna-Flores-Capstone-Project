@@ -68,16 +68,16 @@ const CalendarTimeModal = ({
     }),
   );
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
-  TimePreferenceString[]
+    TimePreferenceString[]
   >([new TimePreferenceString()]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
   const [date, setDate] = useState(
     eventStartTime.getFullYear() +
-    "-" +
-    (eventStartTime.getMonth() + 1).toString().padStart(2, "0") +
-    "-" +
-    eventStartTime.getDate().toString().padStart(2, "0"),
+      "-" +
+      (eventStartTime.getMonth() + 1).toString().padStart(2, "0") +
+      "-" +
+      eventStartTime.getDate().toString().padStart(2, "0"),
   );
   const [timeInputError, setTimeInputError] = useState(false);
   const [servingsInputError, setServingsInputError] = useState(false);
@@ -265,6 +265,7 @@ const CalendarTimeModal = ({
                   sx={{ my: 2 }}
                   buttonFlex={1}
                   size="lg"
+                  spacing={2}
                 >
                   <Button
                     variant={!singleDayPrep ? "solid" : "outlined"}

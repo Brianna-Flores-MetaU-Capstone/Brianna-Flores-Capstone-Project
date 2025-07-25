@@ -100,18 +100,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            level="h4"
-            sx={{
-              textAlign: "center",
-              textWrap: "nowrap",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {parsedMealData.recipeTitle}
-          </Typography>
+          <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
           {onFavoriteClick && (
             <Tooltip
               title={favorited ? "Remove from favorites" : "Add to favorites"}
@@ -207,7 +196,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
               </Tooltip>
             </Box>
           )}
-          <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
+          <Box
+            sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}
+          >
             {onSelectRecipe && (
               <Tooltip title="Add to recipes to shop">
                 <Button
@@ -224,11 +215,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 </Button>
               </Tooltip>
             )}
-            <Button sx={{flexGrow: 1}} onClick={() => onMealCardClick()}>
+            <Button sx={{ flexGrow: 1 }} onClick={() => onMealCardClick()}>
               View Recipe Details
             </Button>
             {onEditRecipe && (
-              <Tooltip title="Add your own edits!">
+              <Tooltip title="Create your own variant!">
                 <IconButton
                   onClick={(event) => {
                     event.stopPropagation();

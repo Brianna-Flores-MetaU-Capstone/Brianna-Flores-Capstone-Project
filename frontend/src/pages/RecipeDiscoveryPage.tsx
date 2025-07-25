@@ -25,6 +25,7 @@ import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
 import { RecipeFilter } from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
+import Masonry from "react-responsive-masonry";
 
 const recipeFilters = [
   { filter: "all", title: "Discover All Recipes" },

@@ -130,5 +130,5 @@ export type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
   GPRecipeDiscoveryCategories,
-  GPPexelsImageType
+  GPPexelsImageType,
 };

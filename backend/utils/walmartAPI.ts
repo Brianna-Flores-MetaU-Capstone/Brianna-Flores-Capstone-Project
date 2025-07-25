@@ -39,7 +39,7 @@ const searchWalmart = async (searchQuery: string) => {
             "WM_CONSUMER.INTIMESTAMP": timestamp,
             "WM_SEC.AUTH_SIGNATURE": signature,
           },
-        }
+        },
       );
       return response.data;
     } catch (error) {

@@ -13,11 +13,13 @@ import { handleAuthInputChange } from "../utils/utils";
 import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import { AuthFormData } from "../classes/authentication/AuthFormData";
+import { useNavigate } from "react-router";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState<AuthFormData>(new AuthFormData());
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { setUser } = useUser();
+  const navigate = useNavigate();
 
   function handleSubmit({
     userIntolerances,
@@ -55,6 +57,7 @@ const SignupForm = () => {
             message: "Registration successful!",
           });
           setUser(newUserData);
+          navigate("/discovery");
         }
       })
       .catch((error) => {

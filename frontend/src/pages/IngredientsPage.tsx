@@ -59,7 +59,9 @@ const IngredientsPage = () => {
     <Sheet>
       <AppHeader />
       <Box sx={{ m: 2 }}>
-        <Button onClick={addIngredientClick} sx={{mb: 2}}>Add Ingredient</Button>
+        <Button onClick={addIngredientClick} sx={{ mb: 2 }}>
+          Add Ingredient
+        </Button>
         {message && (
           <ErrorState error={message.error} message={message.message} />
         )}

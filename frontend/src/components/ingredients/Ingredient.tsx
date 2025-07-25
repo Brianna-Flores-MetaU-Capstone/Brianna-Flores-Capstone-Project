@@ -45,10 +45,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
       : Number(ingredient.quantity).toFixed(2);
   return (
     <Box sx={{ bgcolor: "#F7F2EF", px: 3, py: 2, borderRadius: "md" }}>
-      <Grid
-        container
-        alignItems="center"
-      >
+      <Grid container alignItems="center">
         {presentGroceryCheck && (
           <Grid xs={1}>
             <Checkbox

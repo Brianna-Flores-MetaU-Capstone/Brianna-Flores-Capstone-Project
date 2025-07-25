@@ -85,7 +85,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   const [newIngredientData, dispatch] = useReducer(
     reducer,
-    initialIngredientState
+    initialIngredientState,
   );
 
   const handleModalSubmit = async (event: React.FormEvent) => {
@@ -123,9 +123,11 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
       if (successfullyAdded) {
         onClose();
         fetchUserIngredients();
-      }
-      else {
-            setMessage({ error: true, message: "Failed to add ingredient, duplicate may exist" });
+      } else {
+        setMessage({
+          error: true,
+          message: "Failed to add ingredient, duplicate may exist",
+        });
       }
     }
   };
