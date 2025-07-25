@@ -37,36 +37,37 @@ const recipeFilters = [
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
   const [recipeDiscoveryResults, setRecipeDiscoveryResults] = useState(
-    new RecipeFilter(),
+    new RecipeFilter()
   );
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
-    new Set(),
+    new Set()
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
 
   useEffect(() => {
-    const setRecipeLists = async () => {
-      fetchAllRecipeCategories({
-        setMessage,
-        setRecipeDiscoveryResults,
-        offset: 0,
-      });
-      const favoritedRecipesReturn = await fetchRecipes({
-        setMessage,
-        recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
-      });
-      // set favorited recipes id
-      for (const elem of favoritedRecipesReturn) {
-        setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));
-      }
-    };
-    setRecipeLists();
+    setAllRecipeLists();
   }, []);
+
+  const setAllRecipeLists = async () => {
+    fetchAllRecipeCategories({
+      setMessage,
+      setRecipeDiscoveryResults,
+      offset: 0,
+    });
+    const favoritedRecipesReturn = await fetchRecipes({
+      setMessage,
+      recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
+    });
+    // set favorited recipes id
+    for (const elem of favoritedRecipesReturn) {
+      setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));
+    }
+  };
 
   const handleRecipeCardClick = (recipe: Recipe) => {
     setRecipeInfoModalOpen((prev) => !prev);
@@ -173,6 +174,7 @@ const RecipeDiscoveryPage = () => {
         recipe={editRecipeInfo}
         modalOpen={editRecipeModalOpen}
         toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
+        onSubmit={setAllRecipeLists}
       />
     </Box>
   );

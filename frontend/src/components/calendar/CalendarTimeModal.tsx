@@ -67,19 +67,19 @@ const CalendarTimeModal = ({
       minute: "numeric",
     }),
   );
-  const [inputError, setInputError] = useState(false);
   const [preferredTimeBlocks, setPreferredTimeBlocks] = useState<
-    TimePreferenceString[]
+  TimePreferenceString[]
   >([new TimePreferenceString()]);
   const [singleDayPrep, setSingleDayPrep] = useState(false);
   const [servingsPerDay, setServingsPerDay] = useState(1);
   const [date, setDate] = useState(
     eventStartTime.getFullYear() +
-      "-" +
-      eventStartTime.getMonth().toString().padStart(2, "0") +
-      "-" +
-      eventStartTime.getDate().toString().padStart(2, "0"),
+    "-" +
+    (eventStartTime.getMonth() + 1).toString().padStart(2, "0") +
+    "-" +
+    eventStartTime.getDate().toString().padStart(2, "0"),
   );
+  const [timeInputError, setTimeInputError] = useState(false);
   const [servingsInputError, setServingsInputError] = useState(false);
   const [dateInputError, setDateInputError] = useState(false);
   const { eventOptions } = useEventRec();
@@ -109,7 +109,7 @@ const CalendarTimeModal = ({
   };
 
   useEffect(() => {
-    setInputError(start > end);
+    setTimeInputError(start > end);
   }, [start, end]);
 
   useEffect(() => {
@@ -127,9 +127,9 @@ const CalendarTimeModal = ({
     event.preventDefault();
     // set event start time to new date if changed
     eventStartTime.setDate(parseInt(date.substring(8, 10)));
-    eventStartTime.setMonth(parseInt(date.substring(5, 7)));
+    eventStartTime.setMonth(parseInt(date.substring(5, 7)) - 1);
     eventEndTime.setDate(parseInt(date.substring(8, 10)));
-    eventEndTime.setMonth(parseInt(date.substring(5, 7)));
+    eventEndTime.setMonth(parseInt(date.substring(5, 7)) - 1);
 
     eventStartTime.setHours(parseInt(start.substring(0, 2)));
     eventStartTime.setMinutes(parseInt(start.substring(3)));
@@ -146,7 +146,9 @@ const CalendarTimeModal = ({
     if (onSubmit) {
       onSubmit(date, preferredTimeBlocks, singleDayPrep, servingsPerDay);
     }
+    // when preferences submitted, zero out everything
     setPreferredTimeBlocks([new TimePreferenceString()]);
+    setServingsPerDay(1);
     toggleModal();
   };
 
@@ -203,7 +205,7 @@ const CalendarTimeModal = ({
             </FormControl>
             {preferredTimeBlocks.map((block, index) => (
               <Box key={index}>
-                <FormControl error={inputError}>
+                <FormControl error={timeInputError}>
                   <FormLabel>{editMode ? "New Start Time" : "From"}</FormLabel>
                   <Input
                     type="time"
@@ -223,7 +225,7 @@ const CalendarTimeModal = ({
                     required
                   />
                 </FormControl>
-                <FormControl error={inputError}>
+                <FormControl error={timeInputError}>
                   <FormLabel>{editMode ? "New End Time" : "To"}</FormLabel>
                   <Input
                     type="time"
@@ -242,7 +244,7 @@ const CalendarTimeModal = ({
                     }}
                     required
                   />
-                  {inputError && (
+                  {timeInputError && (
                     <FormHelperText>
                       <InfoOutlined />
                       End time must be after start
@@ -298,7 +300,7 @@ const CalendarTimeModal = ({
             )}
             <Button
               type="submit"
-              disabled={inputError || servingsInputError || dateInputError}
+              disabled={timeInputError || servingsInputError || dateInputError}
               sx={{ display: "flex", mx: "auto", mt: 2 }}
             >
               {editMode ? "Adjust Time" : "Submit Preferences!"}

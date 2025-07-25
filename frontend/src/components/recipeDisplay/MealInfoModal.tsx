@@ -83,7 +83,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       >
         <Sheet variant="outlined" sx={GPModalStyle}>
           <Box sx={GPMealInfoModalTitleStyle}>
-            <AspectRatio ratio="1" sx={{ width: 700, borderRadius: "md" }}>
+            <AspectRatio ratio="1"  sx={{ maxWidth: 300, width: 300, borderRadius: "md" }}>
               <img src={recipeInfo?.previewImage} />
             </AspectRatio>
             <Box sx={GPCenteredBoxStyle}>

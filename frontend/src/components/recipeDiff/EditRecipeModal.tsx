@@ -18,6 +18,7 @@ import {
   DialogContent,
   Typography,
   IconButton,
+  Textarea,
 } from "@mui/joy";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -29,11 +30,13 @@ import {
 import { useUser } from "../../contexts/UserContext";
 import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";
+import InfoOutlined from "@mui/icons-material/InfoOutline";
 
 type GPEditRecipeModalType = {
   recipe: Recipe | undefined;
   modalOpen: boolean;
   toggleModal: () => void;
+  onSubmit: () => void;
 };
 
 const actions = {
@@ -83,6 +86,7 @@ const EditRecipeModal = ({
   recipe,
   modalOpen,
   toggleModal,
+  onSubmit,
 }: GPEditRecipeModalType) => {
   const initialRecipeState = recipe ?? {
     id: 0,
@@ -149,13 +153,20 @@ const EditRecipeModal = ({
         addedItem: string | GPIngredientDataTypes;
       };
 
+  const [inputError, setInputError] = useState(false);
+  const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
+  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const { user } = useUser();
+
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
     switch (action.type) {
       case actions.SET_RECIPE:
         return { ...action.value };
       case actions.SET_INPUT:
+        setInputError(action.value === "");
         return { ...state, [action.recipeField]: action.value };
       case actions.SET_INPUT_NUM:
+        setInputError(action.value <= 0);
         return { ...state, [action.recipeField]: action.value };
       case actions.SET_DIETARY_TAGS:
         let updatedRecipeTags = [...state.recipeTags];
@@ -172,19 +183,24 @@ const EditRecipeModal = ({
           recipeTags: updatedRecipeTags,
         };
       case actions.UPDATE_INGREDIENT:
+        setInputError(
+          action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
+            parseInt(action.value) <= 0
+        );
         return {
           ...state,
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem,
+              : elem
           ),
         };
       case actions.UPDATE_INSTRUCTION:
+        setInputError(action.value === "");
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step,
+            index === action.instructionIndex ? action.value : step
           ),
         };
       case actions.DELETE_ITEM:
@@ -193,7 +209,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (item, index) => index !== action.itemIndex,
+              (item, index) => index !== action.itemIndex
             ),
           };
         } else {
@@ -213,10 +229,6 @@ const EditRecipeModal = ({
         return state;
     }
   }
-
-  const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
-  const { user } = useUser();
 
   useEffect(() => {
     if (recipe) {
@@ -247,7 +259,7 @@ const EditRecipeModal = ({
       editedRecipeData.recipeTags,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName,
+      editedRecipeData.editingAuthorName
     );
     try {
       const userId = user.id;
@@ -257,6 +269,8 @@ const EditRecipeModal = ({
         selectedRecipe: newRecipe,
         setMessage,
       });
+      toggleModal();
+      onSubmit();
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
     }
@@ -426,7 +440,7 @@ const EditRecipeModal = ({
                     </Grid>
                     <Grid xs={10}>
                       <FormControl>
-                        <Input
+                        <Textarea
                           required
                           onChange={(event) =>
                             dispatch({
@@ -468,7 +482,17 @@ const EditRecipeModal = ({
                 <AddCircleOutlineIcon />
               </IconButton>
             </Box>
-            <Button type="submit">Update Recipe!</Button>
+            <FormControl error={inputError}>
+              <Button type="submit" disabled={inputError}>
+                Update Recipe!
+              </Button>
+              {inputError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  Must enter valid input to submit
+                </FormHelperText>
+              )}
+            </FormControl>
           </form>
         </DialogContent>
       </ModalDialog>

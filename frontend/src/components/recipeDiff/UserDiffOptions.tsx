@@ -57,7 +57,7 @@ const UserDiffOptions = ({
           <TitledListView
             headerList={[
               {
-                title: "What would you like to diff?",
+                title: "What would you like to compare?",
                 spacing: MUI_GRID_FULL_SPACE,
               },
             ]}
@@ -80,6 +80,7 @@ const UserDiffOptions = ({
               />
             )}
             listItemsStyle={CenteredTitledListStyle}
+            centerTitle={true}
           />
           <Button sx={{ mt: 3 }} onClick={submitUserDiffOptions}>
             Submit!

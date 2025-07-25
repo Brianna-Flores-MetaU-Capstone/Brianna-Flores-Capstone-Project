@@ -4,12 +4,12 @@ import { Recipe } from "../../../../shared/Recipe";
 import { DiffStatus, type GPDiffLineInfoType } from "./DiffRecipeFieldAbstract";
 
 const GPDiffOptionsEnum = {
-  TITLE: "Diff Title",
-  SERVINGS: "Diff Servings",
-  COOK_TIME: "Diff Cook Time",
-  TAGS: "Diff Recipe Tags",
-  INGREDIENTS: "Diff Ingredients",
-  INSTRUCTIONS: "Diff Instructions",
+  TITLE: "Title",
+  SERVINGS: "Servings",
+  COOK_TIME: "Cook Time",
+  TAGS: "Recipe Tags",
+  INGREDIENTS: "Ingredients",
+  INSTRUCTIONS: "Instructions",
 } as const;
 
 type DiffOptionsKeys = keyof typeof GPDiffOptionsEnum;
