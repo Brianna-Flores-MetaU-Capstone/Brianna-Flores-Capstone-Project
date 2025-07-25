@@ -162,7 +162,7 @@ const NewListPage = () => {
             itemsList={selectedRecipes}
             renderItem={(meal, index) => (
               <MealCard
-                key={meal.apiId}
+                key={index}
                 index={index}
                 favorited={false}
                 toggleCalendarTimeModal={() =>
