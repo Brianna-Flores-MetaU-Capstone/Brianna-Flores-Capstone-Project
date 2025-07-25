@@ -33,6 +33,7 @@ import LoadingModal from "./utils/LoadingModal";
 import { getRecipeDiffResults } from "../utils/diffUtils";
 import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { Recipe } from "../../../shared/Recipe";
+import MealInfoModal from "./recipeDisplay/MealInfoModal";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -60,6 +61,8 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
   const [recipesToCompare, setRecipesToCompare] = useState<Recipe[]>([]);
   const [recipeDiffModalOpen, setRecipeDiffModalOpen] = useState(false);
   const [recipeDiffData, setRecipeDiffData] = useState<GPRecipeDiffType>();
+  const [recipeInfoModalOpen, setRecipeInfoModalOpen] = useState(false);
+  const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
 
   const { user } = useUser();
 
@@ -200,6 +203,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     }
   };
 
+  const handleRecipeCardClick = (recipe: Recipe) => {
+    setRecipeInfoModalOpen((prev) => !prev);
+    setRecipeInfoModalInfo(recipe);
+  };
+
   return (
     <>
       <Modal open={modalOpen} onClose={toggleModal}>
@@ -276,7 +284,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   key={index}
                   index={index}
                   favorited={false}
-                  onMealCardClick={() => event?.preventDefault()}
+                  onMealCardClick={() => handleRecipeCardClick(meal)}
                   setMessage={setMessage}
                   parsedMealData={meal}
                   onSelectRecipe={onSelectRecipe}
@@ -314,6 +322,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         modalOpen={recipeDiffModalOpen}
         toggleModal={() => setRecipeDiffModalOpen((prev) => !prev)}
         recipeDiffData={recipeDiffData}
+      />
+      <MealInfoModal
+        toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
+        modalOpen={recipeInfoModalOpen}
+        recipeInfo={recipeInfoModalInfo}
       />
     </>
   );
