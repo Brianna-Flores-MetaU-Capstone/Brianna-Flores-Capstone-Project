@@ -25,7 +25,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
         </thead>
         <Box component="tbody">
           {diffInfo?.unchanged.map((ingredient, index) => (
-            <Box bgcolor="primary.200" component="tr" key={index}>
+            <Box bgcolor="success.200" component="tr" key={index}>
               <td style={{ textAlign: "center" }}>
                 {formatQuantity(ingredient.quantity)} {ingredient.unit}
               </td>
@@ -44,7 +44,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
               <td>
                 <Box
                   sx={{
-                    bgcolor: "danger.200",
+                    bgcolor: "",
                     borderRadius: "lg",
                     textAlign: "center",
                   }}
@@ -73,7 +73,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
           ))}
           {first &&
             diffInfo?.deleted.map((ingredient, index) => (
-              <Box bgcolor="success.200" component="tr" key={index}>
+              <Box bgcolor="" component="tr" key={index}>
                 <td style={{ textAlign: "center" }}>
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
@@ -88,7 +88,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
             ))}
           {!first &&
             diffInfo?.added.map((ingredient, index) => (
-              <Box bgcolor="danger.200" component="tr" key={index}>
+              <Box bgcolor="" component="tr" key={index}>
                 <td style={{ textAlign: "center" }}>
                   {formatQuantity(ingredient.quantity)} {ingredient.unit}
                 </td>
