@@ -136,7 +136,7 @@ const NewListPage = () => {
     <Box>
       <AppHeader />
       <Box>
-        <CalendarDisplay selectedRecipes={selectedRecipes}/>
+        <CalendarDisplay selectedRecipes={selectedRecipes} />
       </Box>
       <Box sx={{ m: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>

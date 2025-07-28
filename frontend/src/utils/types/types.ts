@@ -168,5 +168,5 @@ export type {
   GPRecipeDiscoveryCategories,
   GPPexelsImageType,
   GPPexelsReturnType,
-  GPImgBBReturnType
+  GPImgBBReturnType,
 };

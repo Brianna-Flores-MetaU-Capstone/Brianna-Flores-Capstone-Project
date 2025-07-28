@@ -13,7 +13,7 @@ const CalendarDisplay = ({ selectedRecipes }: GPUpcomingScheduleType) => {
   const startAsDate = new Date();
   const startDay = startAsDate.getDay();
   const scheduledRecipes = selectedRecipes.filter(
-    (recipe) => recipe.calendarEvents.length !== 0
+    (recipe) => recipe.calendarEvents.length !== 0,
   );
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   return (

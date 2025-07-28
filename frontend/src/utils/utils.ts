@@ -100,8 +100,8 @@ const estimateRecipeCost = async ({
     );
     const estimatedCostFormatted: GPEstimateRecipeCostReturnTypes = {
       ingredientCostInfo: response.data.ingredientCostInfo ?? [],
-      estimatedCost: response.data.estimatedCost ?? 0
-    }
+      estimatedCost: response.data.estimatedCost ?? 0,
+    };
     return estimatedCostFormatted;
   } catch (error) {
     console.error("Error estimating cost, send default cost");
@@ -157,14 +157,16 @@ const updateRecipeWithPricing = async ({
   setMessage,
   recipe,
 }: GPUpdateRecipePricingTypes) => {
-  const ownedIngredients = await fetchUserIngredientsHelper({
-    setMessage: setMessage,
-  }) ?? [];
+  const ownedIngredients =
+    (await fetchUserIngredientsHelper({
+      setMessage: setMessage,
+    })) ?? [];
   const estimatedRecipeCostInfo = await estimateRecipeCost({
     ownedIngredients,
     recipeIngredients: recipe.ingredients,
   });
-  recipe.setIngredientCostInfo = estimatedRecipeCostInfo?.ingredientCostInfo ?? [];
+  recipe.setIngredientCostInfo =
+    estimatedRecipeCostInfo?.ingredientCostInfo ?? [];
   recipe.setTotalCost = estimatedRecipeCostInfo?.estimatedCost ?? 0;
   return recipe;
 };
