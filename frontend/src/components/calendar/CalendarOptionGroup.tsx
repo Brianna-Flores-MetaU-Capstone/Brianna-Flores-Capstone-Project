@@ -7,13 +7,11 @@ import { CenteredTitledListStyle } from "../../utils/style/UIStyle";
 type GPCalendarOptionGroup = {
   eventOptions: GPRecipeEventOptionType[];
   groupNum: number;
-  adjustedSuggestion: boolean;
 };
 
 const CalendarOptionGroup = ({
   eventOptions,
   groupNum,
-  adjustedSuggestion,
 }: GPCalendarOptionGroup) => {
   return (
     <Box>

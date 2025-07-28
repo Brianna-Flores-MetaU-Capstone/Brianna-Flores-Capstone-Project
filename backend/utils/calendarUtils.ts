@@ -2,7 +2,7 @@ import type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
 } from "../../frontend/src/utils/types/types";
-import { TimePreferenceString } from "../../frontend/src/classes/calendar/TimePreferenceString";
+import { TimePreferenceString } from "../../shared/TimePreferenceString";
 
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;

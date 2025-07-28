@@ -27,6 +27,7 @@
     "src",
     "../backend/types/convert-units.d.ts",
     "../backend/classes/TimeBlock.ts",
-    "../shared/Recipe.ts"
+    "../shared/Recipe.ts",
+    "../shared/TimePreferenceString.ts"
   ]
 }

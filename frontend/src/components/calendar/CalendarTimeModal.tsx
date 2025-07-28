@@ -23,7 +23,7 @@ import TimeBlock from "../../../../backend/classes/TimeBlock";
 import {
   TimePreferenceString,
   type GPTimePreferenceType,
-} from "../../classes/calendar/TimePreferenceString";
+} from "../../../../shared/TimePreferenceString";
 import CalendarTourTooltip from "./CalendarTourTooltip";
 import {
   CalendarTimeModalAdjustTour,

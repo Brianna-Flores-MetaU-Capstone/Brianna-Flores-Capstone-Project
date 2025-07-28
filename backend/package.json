@@ -1,23 +1,26 @@
 {
   "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/firebase": "^2.4.32",
     "@types/node": "^24.0.13",
-    "prisma": "^6.10.1",
+    "prisma": "^6.12.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.1",
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "^6.12.0",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
     "@types/oauth": "^0.9.6",
+    "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
     "convert-units": "^2.3.4",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
-    "firebase": "^11.9.1",
+    "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
     "googleapis": "^105.0.0"
   },
@@ -26,7 +29,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx --watch ts-node index.ts"
+    "dev": "npx --watch ts-node index.ts",
+    "build": "tsc",
+    "start": "node dist/backend/index.js"
   },
   "keywords": [],
   "author": "",

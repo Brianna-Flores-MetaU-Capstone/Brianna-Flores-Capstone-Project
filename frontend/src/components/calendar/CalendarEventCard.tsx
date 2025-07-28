@@ -10,7 +10,6 @@ import {
   AspectRatio,
   Tooltip,
 } from "@mui/joy";
-import { DaysOfWeek } from "../../utils/enum";
 import CalendarTimeModal from "./CalendarTimeModal";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import TimeBlock from "../../../../backend/classes/TimeBlock";

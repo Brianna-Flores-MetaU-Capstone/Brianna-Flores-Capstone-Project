@@ -21,7 +21,6 @@ import {
 } from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
-import Masonry from "react-responsive-masonry";
 import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 
@@ -74,7 +73,7 @@ const RecipeDiscoveryPage = () => {
     const favoritedRecipesReturn = await fetchRecipes({
       setMessage,
       recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
-    });
+    }) ?? [];
     // set favorited recipes id
     for (const elem of favoritedRecipesReturn) {
       setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));

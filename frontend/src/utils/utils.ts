@@ -2,6 +2,7 @@ import type {
   GPIngredientDataTypes,
   GPRecipeIngredientTypes,
   GPErrorMessageTypes,
+  GPEstimateRecipeCostReturnTypes,
 } from "./types/types";
 import axios from "axios";
 import { axiosConfig, fetchUserIngredientsHelper } from "./databaseHelpers";
@@ -11,9 +12,10 @@ import {
 } from "../classes/authentication/AuthFormData";
 import { Recipe } from "../../../shared/Recipe";
 import { MIN_PASSWORD_LENGTH } from "./constants";
+import type { GPSpoonacularResultsType } from "./types/spoonacularApiReturnType";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-const parseRecipeData = async (recipeData: any) => {
+const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
   return await Promise.all(
     recipeData.map(async (recipe: any) => {
       const parsedIngredients = parseIngredients(recipe.extendedIngredients);
@@ -67,7 +69,7 @@ const parseIngredients = (ingredientsData: any) => {
     department: ingredient.aisle,
     quantity: ingredient.amount,
     unit: ingredient.unit,
-    estimatedCost: getIngredientCost(ingredient.name),
+    estimatedCost: getIngredientCost(),
   }));
 };
 
@@ -77,7 +79,7 @@ const parseInstructions = (steps: any) => {
   }
 };
 
-const getIngredientCost = (ingredientName: string) => {
+const getIngredientCost = () => {
   return 0;
 };
 
@@ -91,12 +93,16 @@ const estimateRecipeCost = async ({
   recipeIngredients,
 }: GPEstimateRecipeCostTypes) => {
   try {
-    const response = await axios.post(
+    const response = await axios.post<GPEstimateRecipeCostReturnTypes>(
       `${databaseUrl}/generateList/estimateCost`,
       { ownedIngredients, recipeIngredients },
       axiosConfig,
     );
-    return response.data;
+    const estimatedCostFormatted: GPEstimateRecipeCostReturnTypes = {
+      ingredientCostInfo: response.data.ingredientCostInfo ?? [],
+      estimatedCost: response.data.estimatedCost ?? 0
+    }
+    return estimatedCostFormatted;
   } catch (error) {
     console.error("Error estimating cost, send default cost");
     return;
@@ -153,16 +159,13 @@ const updateRecipeWithPricing = async ({
 }: GPUpdateRecipePricingTypes) => {
   const ownedIngredients = await fetchUserIngredientsHelper({
     setMessage: setMessage,
-  });
-  const estimatedRecipeCostInfo: {
-    ingredientCostInfo: GPIngredientDataTypes[];
-    estimatedCost: number;
-  } = await estimateRecipeCost({
+  }) ?? [];
+  const estimatedRecipeCostInfo = await estimateRecipeCost({
     ownedIngredients,
     recipeIngredients: recipe.ingredients,
   });
-  recipe.setIngredientCostInfo = estimatedRecipeCostInfo.ingredientCostInfo;
-  recipe.setTotalCost = estimatedRecipeCostInfo.estimatedCost;
+  recipe.setIngredientCostInfo = estimatedRecipeCostInfo?.ingredientCostInfo ?? [];
+  recipe.setTotalCost = estimatedRecipeCostInfo?.estimatedCost ?? 0;
   return recipe;
 };
 

@@ -188,7 +188,7 @@ const EditRecipeModal = ({
 
   const [inputError, setInputError] = useState(false);
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
   const { user } = useUser();
 
@@ -255,7 +255,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (item, index) => index !== action.itemIndex,
+              (_, index) => index !== action.itemIndex,
             ),
           };
         } else {

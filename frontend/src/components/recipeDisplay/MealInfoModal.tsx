@@ -14,7 +14,6 @@ import {
   ListItemContent,
   Box,
   Link,
-  AspectRatio,
 } from "@mui/joy";
 import PersonIcon from "@mui/icons-material/Person";
 import LinkIcon from "@mui/icons-material/Link";
@@ -38,7 +37,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   modalOpen,
   recipeInfo,
 }) => {
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);

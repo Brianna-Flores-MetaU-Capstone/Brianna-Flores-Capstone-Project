@@ -2,10 +2,8 @@ import {
   Modal,
   ModalClose,
   ModalDialog,
-  Typography,
   DialogContent,
   Checkbox,
-  Box,
   Button,
 } from "@mui/joy";
 import TitledListView from "../utils/TitledListView";

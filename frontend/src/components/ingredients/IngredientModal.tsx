@@ -211,7 +211,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 required
                 name={IngredientDataFields.UNIT}
                 value={newIngredientData?.unit}
-                onChange={(event, newValue) =>
+                onChange={(_, newValue) =>
                   dispatch({
                     type: actions.SET_INPUT,
                     ingredientField: "unit",
@@ -290,7 +290,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 required
                 name={IngredientDataFields.DEPARTMENT}
                 value={newIngredientData?.department}
-                onChange={(event, newValue) =>
+                onChange={(_, newValue) =>
                   dispatch({
                     type: actions.SET_INPUT,
                     ingredientField: "department",

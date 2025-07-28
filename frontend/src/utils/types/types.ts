@@ -1,4 +1,3 @@
-import type { User } from "firebase/auth";
 import TimeBlock from "../../../../backend/classes/TimeBlock";
 import type { Recipe } from "../../../../shared/Recipe";
 
@@ -24,13 +23,6 @@ type GPRecipeDataTypes = {
   totalCost?: number;
 };
 
-type GPAccountInfoTypes = {
-  firebaseId: string;
-  email: string;
-  intolerances: string[];
-  diets: string[];
-};
-
 type GPIngredientDataTypes = {
   id: number;
   ingredientName: string;
@@ -43,11 +35,9 @@ type GPIngredientDataTypes = {
   ingredientCostUnit?: number;
 };
 
-type GPCurrentUserTypes = {
-  user: User;
-  userEmail: string;
-  userIntolerances: string[];
-  userDiets: string[];
+type GPEstimateRecipeCostReturnTypes = {
+  ingredientCostInfo: GPRecipeIngredientTypes[];
+  estimatedCost: number;
 };
 
 type GPErrorMessageTypes = {
@@ -118,11 +108,57 @@ type GPPexelsImageType = {
   alt: string;
 };
 
+type GPPexelsReturnType = {
+  total_results: number;
+  page: number;
+  per_page: number;
+  photos: GPPexelsImageType[];
+  next_page: string;
+};
+
+type GPImgBBReturnType = {
+  data: {
+    id: string;
+    title: string;
+    url_viewer: string;
+    url: string;
+    display_url: string;
+    width: string;
+    height: string;
+    size: string;
+    time: string;
+    expiration: string;
+    image: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    thumb: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    medium: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    delete_url: string;
+  };
+  success: boolean;
+  status: number;
+};
+
 export type {
-  GPAccountInfoTypes,
-  GPCurrentUserTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
+  GPEstimateRecipeCostReturnTypes,
   GPErrorMessageTypes,
   GPOwnedIngredientsTypes,
   GPRecipeIngredientTypes,
@@ -131,4 +167,6 @@ export type {
   GPRecipeEventOptionType,
   GPRecipeDiscoveryCategories,
   GPPexelsImageType,
+  GPPexelsReturnType,
+  GPImgBBReturnType
 };

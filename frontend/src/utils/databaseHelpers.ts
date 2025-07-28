@@ -1,9 +1,6 @@
-import type {
-  GPCurrentUserTypes,
-  GPAccountInfoTypes,
-  GPErrorMessageTypes,
-  GPIngredientDataTypes,
-} from "./types/types";
+import type { GPErrorMessageTypes, GPIngredientDataTypes } from "./types/types";
+
+import type { GPCurrentUserTypes, GPAccountInfoTypes, GPUserDatabaseReturnType, GPUserAccountType } from "./types/authTypes";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
@@ -57,7 +54,7 @@ type GPUserDataHelperTypes = GPSetMessageType & {
 };
 const getUserData = async ({ user, setMessage }: GPUserDataHelperTypes) => {
   try {
-    const response = await axios.get(
+    const response = await axios.get<GPUserDatabaseReturnType>(
       `${databaseUrl}/account/${user.uid}`,
       axiosConfig,
     );
@@ -78,7 +75,7 @@ type GPNewUserHelperTypes = GPSetMessageType & {
 };
 const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
   try {
-    const response = await axios.post(
+    const response = await axios.post<GPUserAccountType>(
       `${databaseUrl}/signup`,
       newUser,
       axiosConfig,
@@ -105,7 +102,7 @@ const validateUserToken = async (user: User) => {
 
 const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
   try {
-    const response = await axios.get(`${databaseUrl}/ingredients`, axiosConfig);
+    const response = await axios.get<GPIngredientDataTypes[]>(`${databaseUrl}/ingredients`, axiosConfig);
     return response.data;
   } catch (error) {
     setMessage({
@@ -185,7 +182,7 @@ const fetchRecipes = async ({
   recipeGroup,
 }: GPFetchRecipeTypes) => {
   try {
-    const response = await axios.get(
+    const response = await axios.get<Recipe[]>(
       `${databaseUrl}/recipes/${recipeGroup}`,
       axiosConfig,
     );
@@ -268,7 +265,7 @@ const fetchGroceryList = async ({
   setGroceryListCost,
 }: GPFetchGroceryListTypes) => {
   try {
-    const response = await axios.get(
+    const response = await axios.get<{groceryList: GPIngredientDataTypes[], groceryListCost: number}>(
       `${databaseUrl}/generateList`,
       axiosConfig,
     );
@@ -302,7 +299,7 @@ const fetchDiscoverRecipes = async ({
   numRequested,
 }: GPFetchDiscoverRecipesType) => {
   try {
-    const response = await axios.post(
+    const response = await axios.post<Recipe[]>(
       `${databaseUrl}/recipes/discover`,
       { filter, offset, numRequested },
       axiosConfig,
@@ -329,13 +326,13 @@ const fetchAllRecipeCategories = async ({
 }: GPFetchRecipeCategoryType) => {
   try {
     const createdRecipeFilter = new RecipeFilter();
-    for (const [key, filter] of Object.entries(recipeFiltersList)) {
+    for (const [_, filter] of Object.entries(recipeFiltersList)) {
       const categoryRecipes = await fetchDiscoverRecipes({
         setMessage,
         filter,
         offset,
         numRequested: DISCOVERY_NUM_TO_REQUEST,
-      });
+      }) ?? [];
       createdRecipeFilter.setFilteredList(
         filter as recipeFilterType,
         categoryRecipes,
@@ -399,7 +396,7 @@ const fetchSingleRecipe = async ({
   selectedRecipe,
 }: GPFetchSingleRecipeType) => {
   try {
-    const originalRecipe = await axios.get(
+    const originalRecipe = await axios.get<Recipe>(
       `${databaseUrl}/recipes/original/${selectedRecipe.apiId}`,
       axiosConfig,
     );

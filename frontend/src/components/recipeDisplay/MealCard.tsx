@@ -73,14 +73,14 @@ const MealCard: React.FC<GPMealCardProps> = ({
     setLoading(true);
     const ownedIngredients = await fetchUserIngredientsHelper({
       setMessage: setMessage,
-    });
+    }) ?? [];
     const estimatedRecipeCostInfo = await estimateRecipeCost({
       ownedIngredients,
       recipeIngredients: parsedMealData.ingredients,
     });
     parsedMealData.ingredientCostInfo =
-      estimatedRecipeCostInfo.ingredientCostInfo;
-    parsedMealData.totalCost = estimatedRecipeCostInfo.estimatedCost;
+      estimatedRecipeCostInfo?.ingredientCostInfo ?? [];
+    parsedMealData.totalCost = estimatedRecipeCostInfo?.estimatedCost ?? 0;
     if (onLoadRecipeCost) {
       onLoadRecipeCost(parsedMealData, index);
     }
