@@ -8,7 +8,7 @@ const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
 import { axiosConfig } from "../../utils/databaseHelpers";
 
-import type { GPUserEventTypes } from "../../utils/types/types";
+import type { GPRecipeEventOptionType, GPUserEventTypes } from "../../utils/types/types";
 import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
 import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";
@@ -17,6 +17,7 @@ import { TimePreferenceString } from "../../../../shared/TimePreferenceString";
 import type { Recipe } from "../../../../shared/Recipe";
 import { useSelectedEvents } from "../../contexts/SelectedEventsContext";
 import { ZERO_OUT_START_DATE } from "../../utils/constants";
+import type { GPCalendarEventsListType } from "../../utils/types/calendarApiEventsListType";
 
 const REQUESTED_DAYS = 7;
 
@@ -127,7 +128,7 @@ const ConnectCalendar = ({
       const endDate = new Date(
         startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
       );
-      const response = await axios.get(
+      const response = await axios.get<GPCalendarEventsListType>(
         `${calendarUrl}/calendar/v3/calendars/primary/events`,
         {
           headers: {
@@ -154,7 +155,7 @@ const ConnectCalendar = ({
       const parsedFreeTime = parseFreeTime(freeTimeBlocks);
       if (singleRecipe && recipeInfo) {
         // suggest events for a single recipe
-        const recommendedEvents = await axios.post(
+        const recommendedEvents = await axios.post<GPRecipeEventOptionType[][]>(
           `${databaseUrl}/calendar/single/reccomendEvents`,
           { preferredStartDate, parsedFreeTime, userPreferences, recipeInfo },
           axiosConfig,
@@ -163,7 +164,7 @@ const ConnectCalendar = ({
         setEventOptions(eventOptions);
       } else {
         // suggest events for all saved recipes
-        const recommendedEvents = await axios.post(
+        const recommendedEvents = await axios.post<GPRecipeEventOptionType[][]>(
           `${databaseUrl}/calendar/reccomendEvents`,
           {
             preferredStartDate,

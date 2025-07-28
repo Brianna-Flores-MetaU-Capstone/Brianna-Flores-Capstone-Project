@@ -14,8 +14,10 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import type {
+  GPImgBBReturnType,
   GPErrorMessageTypes,
   GPPexelsImageType,
+  GPPexelsReturnType,
 } from "../../utils/types/types";
 import ErrorState from "../utils/ErrorState";
 import TitledListView from "../utils/TitledListView";
@@ -63,7 +65,7 @@ const ImageSearchModal = ({
   const handleSearchSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const imageResults = await axios.get(`${pexelsUrl}/search`, {
+      const imageResults = await axios.get<GPPexelsReturnType>(`${pexelsUrl}/search`, {
         headers: {
           Authorization: IMAGE_API_KEY,
         },
@@ -96,7 +98,7 @@ const ImageSearchModal = ({
   const handleImageConfirmation = async () => {
     if (uploadedImage) {
       try {
-        const response = await axios.post(
+        const response = await axios.post<GPImgBBReturnType>(
           `${imgBBUrl}/upload?key=${UPLOAD_IMAGE_API_KEY}`,
           uploadedImage,
         );

@@ -1,17 +1,13 @@
 import { createContext, useState, useContext, useEffect } from "react";
+import type { GPUserAccountType } from "../utils/types/authTypes";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-type GPUserAccountType = {
-  id: string;
-  userName: string;
-  intolerances: string[];
-  diets: string[];
-};
+
 
 type GPAccountContextType = {
   user: GPUserAccountType | null;
-  setUser: React.Dispatch<React.SetStateAction<null>>;
+  setUser: React.Dispatch<React.SetStateAction<GPUserAccountType | null>>;
 };
 
 // sets up global state to access anywhere in app
@@ -22,11 +18,11 @@ const UserContext = createContext<GPAccountContextType>({
 
 // provider is used to store auth data and have components update it
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<GPUserAccountType | null>(null);
 
   useEffect(() => {
     axios
-      .get(`${databaseUrl}/me`, { withCredentials: true })
+      .get<GPUserAccountType>(`${databaseUrl}/me`, { withCredentials: true })
       .then(function (response) {
         if (response.data.id) {
           setUser(response.data);

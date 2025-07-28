@@ -71,7 +71,7 @@ const RecipeDiscoveryPage = () => {
     const favoritedRecipesReturn = await fetchRecipes({
       setMessage,
       recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
-    });
+    }) ?? [];
     // set favorited recipes id
     for (const elem of favoritedRecipesReturn) {
       setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));

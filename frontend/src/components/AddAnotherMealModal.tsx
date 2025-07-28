@@ -35,6 +35,7 @@ import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { Recipe } from "../../../shared/Recipe";
 import MealInfoModal from "./recipeDisplay/MealInfoModal";
 import { useNavigate } from "react-router";
+import type { GPSpoonacularReturnType } from "../utils/types/spoonacularApiReturnType";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -97,7 +98,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       : `${spoonacularUrl}/recipes/complexSearch?apiKey=${API_KEY}&query=${recipeSearchTerm}&number=${numToRequest}&addRecipeInformation=true&fillIngredients=true&offset=${offset}&instructionsRequired=true`;
     try {
       setLoadingSearchButton(true);
-      const response = await axios.get(recipeUrl);
+      const response = await axios.get<GPSpoonacularReturnType>(recipeUrl);
       const parsedRecipes = await parseRecipeData(response.data.results);
       if (searchRecipesClicked) {
         setApiMealResults((prev) => [...prev, ...parsedRecipes]);

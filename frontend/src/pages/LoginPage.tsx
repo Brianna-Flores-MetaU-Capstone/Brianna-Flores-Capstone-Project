@@ -12,6 +12,7 @@ import { Button, Box, Card, Typography } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import { AuthFormData } from "../classes/authentication/AuthFormData";
 import axios from "axios";
+import type { GPUserAccountType } from "../utils/types/authTypes";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage = () => {
@@ -29,7 +30,7 @@ const LoginPage = () => {
           const userData = await validateUserToken(user);
           if (userData) {
             try {
-              const userExtendedData = await axios.get(`${databaseUrl}/me`, {
+              const userExtendedData = await axios.get<GPUserAccountType>(`${databaseUrl}/me`, {
                 withCredentials: true,
               });
               if (userExtendedData.data.id) {

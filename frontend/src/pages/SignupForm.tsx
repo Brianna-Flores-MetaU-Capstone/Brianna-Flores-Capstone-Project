@@ -49,7 +49,7 @@ const SignupForm = () => {
         };
         const newUserData = await handleNewUser({ newUser, setMessage });
         const response = await validateUserToken(user);
-        if (response) {
+        if (response && newUserData) {
           setMessage({
             error: false,
             message: "Registration successful!",

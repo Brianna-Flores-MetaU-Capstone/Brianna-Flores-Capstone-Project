@@ -35,6 +35,11 @@ type GPIngredientDataTypes = {
   ingredientCostUnit?: number;
 };
 
+type GPEstimateRecipeCostReturnTypes = {
+  ingredientCostInfo: GPRecipeIngredientTypes[];
+  estimatedCost: number;
+};
+
 type GPErrorMessageTypes = {
   error: boolean;
   message: string;
@@ -103,9 +108,57 @@ type GPPexelsImageType = {
   alt: string;
 };
 
+type GPPexelsReturnType = {
+  total_results: number;
+  page: number;
+  per_page: number;
+  photos: GPPexelsImageType[];
+  next_page: string;
+};
+
+type GPImgBBReturnType = {
+  data: {
+    id: string;
+    title: string;
+    url_viewer: string;
+    url: string;
+    display_url: string;
+    width: string;
+    height: string;
+    size: string;
+    time: string;
+    expiration: string;
+    image: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    thumb: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    medium: {
+      filename: string;
+      name: string;
+      mime: string;
+      extension: string;
+      url: string;
+    };
+    delete_url: string;
+  };
+  success: boolean;
+  status: number;
+};
+
 export type {
   GPIngredientDataTypes,
   GPRecipeDataTypes,
+  GPEstimateRecipeCostReturnTypes,
   GPErrorMessageTypes,
   GPOwnedIngredientsTypes,
   GPRecipeIngredientTypes,
@@ -114,4 +167,6 @@ export type {
   GPRecipeEventOptionType,
   GPRecipeDiscoveryCategories,
   GPPexelsImageType,
+  GPPexelsReturnType,
+  GPImgBBReturnType
 };

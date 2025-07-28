@@ -4,6 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../../utils/databaseHelpers";
+import type { GPUserAccountType } from "../../utils/types/authTypes";
 
 const WithAuth = <T extends object>(
   WrappedComponent: React.ComponentType<T>,
@@ -15,7 +16,7 @@ const WithAuth = <T extends object>(
     useEffect(() => {
       if (!user) {
         axios
-          .get(`${databaseUrl}/me`, axiosConfig)
+          .get<GPUserAccountType>(`${databaseUrl}/me`, axiosConfig)
           .then(function (response) {
             // handle success
             if (response.data.id) {
