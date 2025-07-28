@@ -109,50 +109,42 @@ const quantityNeeded = ({
 };
 
 type GPFuzzyMatchTypes = {
-  ingredientsToPurchase: GPRecipeIngredientTypes[];
+  ingredientToPurchase: GPRecipeIngredientTypes;
   ownedIngredients: GPIngredientDataTypes[];
 };
 
-const fuzzyMatchIngredients = ({
-  ingredientsToPurchase,
+const fuzzyMatchIngredient = ({
+  ingredientToPurchase,
   ownedIngredients,
 }: GPFuzzyMatchTypes) => {
-  let filteredIngredientsToPurchase: GPIngredientDataTypes[] = [];
-  for (const recipeIngredient of ingredientsToPurchase) {
-    let stillNeedToPurchase = true;
+  let similarIngredientInfo: GPIngredientDataTypes | null = null
     for (const ownedIngredient of ownedIngredients) {
       // check if one ingredient name is a substring of another (ex mozzarella cheese and mozzarella)
       if (
-        recipeIngredient.ingredientName.includes(
+        ingredientToPurchase.ingredientName.includes(
           ownedIngredient.ingredientName
         ) ||
-        ownedIngredient.ingredientName.includes(recipeIngredient.ingredientName)
+        ownedIngredient.ingredientName.includes(ingredientToPurchase.ingredientName)
       ) {
-        stillNeedToPurchase = false;
+        similarIngredientInfo = ownedIngredient;
+        break;
       }
       const levReturn = getLevenshteinDistance({
-        strA: recipeIngredient.ingredientName,
+        strA: ingredientToPurchase.ingredientName,
         strB: ownedIngredient.ingredientName,
       });
       const levRatio =
         levReturn /
         Math.min(
-          recipeIngredient.ingredientName.length,
+          ingredientToPurchase.ingredientName.length,
           ownedIngredient.ingredientName.length
         );
       if (levRatio < 0.2) {
-        stillNeedToPurchase = false;
-      }
-    }
-    // otherwise add to filtered ingredients to purchase
-    if (stillNeedToPurchase) {
-      filteredIngredientsToPurchase = [
-        ...filteredIngredientsToPurchase,
-        recipeIngredient,
-      ];
+        similarIngredientInfo = ownedIngredient;
+        break;
     }
   }
-  return filteredIngredientsToPurchase;
+  return similarIngredientInfo;
 };
 
 type GPMissingIngredientsListType = {
@@ -186,23 +178,14 @@ const getListOfMissingIngredients = ({
         ...recipeIngredient,
         quantity: totalQuantity,
       };
-      if (
-        ownedIngredientsNames.indexOf(
-          recipeIngredient.ingredientName.toLowerCase()
-        ) === -1
-      ) {
+      const ownedIngredientInfo = fuzzyMatchIngredient({ingredientToPurchase: recipeIngredient, ownedIngredients})
+      if (!ownedIngredientInfo) {
         // user does not have ingredient, add to grocery list
         ingredientsToPurchase = [...ingredientsToPurchase, updatedIngredient];
       } else {
         // user has ingredient, check if they have enough
-        const ingredientOnHand =
-          ownedIngredients[
-            ownedIngredientsNames.indexOf(
-              recipeIngredient.ingredientName.toLowerCase()
-            )
-          ];
         const quantityUserNeeds = quantityNeeded({
-          ingredientOnHand,
+          ingredientOnHand: ownedIngredientInfo,
           recipeIngredient: updatedIngredient,
         });
         if (quantityUserNeeds > 0) {
@@ -293,5 +276,5 @@ export {
   getListOfMissingIngredients,
   estimateListCost,
   getLevenshteinDistance,
-  fuzzyMatchIngredients,
+  fuzzyMatchIngredient,
 };

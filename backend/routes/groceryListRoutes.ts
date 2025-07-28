@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getListOfMissingIngredients, estimateListCost, fuzzyMatchIngredients } from "../utils/utils";
+import { getListOfMissingIngredients, estimateListCost } from "../utils/utils";
 
 const express = require("express");
 const router = express.Router();
@@ -98,9 +98,8 @@ router.post(
       recipeIngredients,
       ownedIngredients,
     });
-    const filteredIngredinetsToPurchase = fuzzyMatchIngredients({ingredientsToPurchase, ownedIngredients})
     try {
-      const estimatedCost = await estimateListCost({ ingredientsToPurchase: filteredIngredinetsToPurchase });
+      const estimatedCost = await estimateListCost({ ingredientsToPurchase });
       res.json(estimatedCost);
     } catch (error) {
       res.status(500).send("Error approximating ingredients cost");
