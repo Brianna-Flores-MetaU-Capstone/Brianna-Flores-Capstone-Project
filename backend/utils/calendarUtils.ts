@@ -2,7 +2,7 @@ import type {
   GPUserEventTypes,
   GPRecipeEventOptionType,
 } from "../../frontend/src/utils/types/types";
-import { TimePreferenceString } from "../../frontend/src/classes/calendar/TimePreferenceString";
+import { TimePreferenceString } from "../../shared/TimePreferenceString";
 
 const TO_MILLISECONDS = 1000 * 60;
 const TIME_BLOCK_INCREMENT = 15;
@@ -122,7 +122,7 @@ const getMealPrepTimeOptions = ({
         false,
         false,
         [],
-        null,
+        null
       ),
     };
     eventOptions = [...eventOptions, bestBlock];
@@ -204,7 +204,7 @@ const getAnyFreeTime = ({
   const freeBlockEnd = endAsDate.getTime();
   let optionArray: TimeBlock[] = [];
   const preferredStarts = new Set(
-    preferredOptions.map((option) => option.start.getTime()),
+    preferredOptions.map((option) => option.start.getTime())
   );
 
   while (freeBlockStart + readyInMilliseconds <= freeBlockEnd) {
@@ -213,7 +213,7 @@ const getAnyFreeTime = ({
         ...optionArray,
         new TimeBlock(
           new Date(freeBlockStart),
-          new Date(freeBlockStart + readyInMilliseconds),
+          new Date(freeBlockStart + readyInMilliseconds)
         ),
       ];
     }
@@ -255,10 +255,10 @@ const fitsUserPreferences = ({
       (parseInt(preference.end.substring(0, 2)) * 60 +
         parseInt(preference.end.substring(3))) *
         TO_MILLISECONDS;
-    
+
     const userPreferenceTimeBlock = new TimeBlock(
       new Date(preferredStart),
-      new Date(preferredEnd),
+      new Date(preferredEnd)
     );
     const overlap = userPreferenceTimeBlock.getOverlap(freeTimeBlock);
 
@@ -266,7 +266,7 @@ const fitsUserPreferences = ({
       let optionArray = [
         new TimeBlock(
           new Date(overlap.start),
-          new Date(overlap.start + readyInMilliseconds),
+          new Date(overlap.start + readyInMilliseconds)
         ),
       ];
       const newStart = overlap.start + TO_MILLISECONDS * TIME_BLOCK_INCREMENT;
@@ -275,7 +275,7 @@ const fitsUserPreferences = ({
           ...optionArray,
           new TimeBlock(
             new Date(newStart),
-            new Date(newStart + readyInMilliseconds),
+            new Date(newStart + readyInMilliseconds)
           ),
         ];
       }
