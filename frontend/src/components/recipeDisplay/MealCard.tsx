@@ -23,7 +23,6 @@ import { fetchUserIngredientsHelper } from "../../utils/databaseHelpers";
 import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
-import { CARD_WIDTH } from "../../utils/style/UIStyle";
 import LinkIcon from "@mui/icons-material/Link";
 
 type GPMealCardProps = {
@@ -32,9 +31,9 @@ type GPMealCardProps = {
   selectedToCompare: boolean;
   favorited: boolean;
   toggleCalendarTimeModal?: () => void;
-  onMealCardClick: () => void;
+  onMealCardClick?: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -67,13 +66,14 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);
-    const ownedIngredients = await fetchUserIngredientsHelper({
-      setMessage: setMessage,
-    }) ?? [];
+    const ownedIngredients =
+      (await fetchUserIngredientsHelper({
+        setMessage: setMessage,
+      })) ?? [];
     const estimatedRecipeCostInfo = await estimateRecipeCost({
       ownedIngredients,
       recipeIngredients: parsedMealData.ingredients,
@@ -92,7 +92,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
     <>
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
-      <Card variant="outlined" sx={{ minWidth: CARD_WIDTH, width: CARD_WIDTH }}>
+      <Card variant="outlined">
         <Box
           sx={{
             display: "flex",
@@ -156,7 +156,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
               Estimated Cost: ${parsedMealData.totalCost.toFixed(2)}
             </Typography>
           )}
-          <DietsAndIntolerances recipeInfo={parsedMealData} />
+          {onMealCardClick && (
+            <DietsAndIntolerances recipeInfo={parsedMealData} />
+          )}
           {toggleCalendarTimeModal && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {parsedMealData.calendarEvents.length > 0 ? (
@@ -182,20 +184,22 @@ const MealCard: React.FC<GPMealCardProps> = ({
                   recipeInfo={parsedMealData}
                 />
               )}
-              <Tooltip title="Remove recipe">
-                <IconButton
-                  color="primary"
-                  variant="plain"
-                  size="lg"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onDeleteRecipe?.(parsedMealData);
-                  }}
-                  sx={{ zIndex: 1, alignSelf: "flex-end" }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              {onDeleteRecipe && (
+                <Tooltip title="Remove recipe">
+                  <IconButton
+                    color="primary"
+                    variant="plain"
+                    size="lg"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDeleteRecipe?.(parsedMealData);
+                    }}
+                    sx={{ zIndex: 1, alignSelf: "flex-end" }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </Box>
           )}
           <Box
@@ -221,9 +225,11 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 </Button>
               </Tooltip>
             )}
-            <Button sx={{ flexGrow: 1 }} onClick={() => onMealCardClick()}>
-              View Recipe Details
-            </Button>
+            {onMealCardClick && (
+              <Button sx={{ flexGrow: 1 }} onClick={() => onMealCardClick()}>
+                View Recipe Details
+              </Button>
+            )}
             {onEditRecipe && (
               <Tooltip title="Create your own variant!">
                 <IconButton
