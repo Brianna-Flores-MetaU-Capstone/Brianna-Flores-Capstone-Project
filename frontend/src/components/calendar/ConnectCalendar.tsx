@@ -50,7 +50,7 @@ const ConnectCalendar = ({
   const [gapiInited, setGapiInited] = useState(false);
   const [gisInited, setGisInited] = useState(false);
   const tokenClientVar = useRef<google.accounts.oauth2.TokenClient | null>(
-    null
+    null,
   );
 
   // load on mount
@@ -115,7 +115,7 @@ const ConnectCalendar = ({
     preferredStartDate: string,
     userPreferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) {
     setLoading(true);
     try {
@@ -125,7 +125,7 @@ const ConnectCalendar = ({
         startDate = new Date();
       }
       const endDate = new Date(
-        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS
+        startDate.getTime() + 1000 * 60 * 60 * 24 * REQUESTED_DAYS,
       );
       const response = await axios.get(
         `${calendarUrl}/calendar/v3/calendars/primary/events`,
@@ -139,7 +139,7 @@ const ConnectCalendar = ({
             timeMin: startDate.toISOString(),
             timeMax: endDate.toISOString(),
           },
-        }
+        },
       );
       const userEvents = response.data.items;
       // parse events to extract out only needed information
@@ -157,7 +157,7 @@ const ConnectCalendar = ({
         const recommendedEvents = await axios.post(
           `${databaseUrl}/calendar/single/reccomendEvents`,
           { preferredStartDate, parsedFreeTime, userPreferences, recipeInfo },
-          axiosConfig
+          axiosConfig,
         );
         const eventOptions = recommendedEvents.data;
         setEventOptions(eventOptions);
@@ -172,7 +172,7 @@ const ConnectCalendar = ({
             singleDayPrep,
             servingsPerDay,
           },
-          axiosConfig
+          axiosConfig,
         );
         // get back a list of possible options for each event (shopping + each recipe)
         const eventOptions = recommendedEvents.data;
@@ -190,13 +190,13 @@ const ConnectCalendar = ({
     preferredStartDate: string,
     preferences: TimePreferenceString[],
     singleDayPrep: boolean,
-    servingsPerDay: number
+    servingsPerDay: number,
   ) => {
     await getUserFreeTime(
       preferredStartDate,
       preferences,
       singleDayPrep,
-      servingsPerDay
+      servingsPerDay,
     );
   };
 

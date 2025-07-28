@@ -14,7 +14,4 @@ type GPCurrentUserTypes = {
   userDiets: string[];
 };
 
-export type {
-  GPAccountInfoTypes,
-  GPCurrentUserTypes,
-}
+export type { GPAccountInfoTypes, GPCurrentUserTypes };

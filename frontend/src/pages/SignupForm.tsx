@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import type {
-  GPErrorMessageTypes,
-} from "../utils/types/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import type { GPAccountInfoTypes } from "../utils/types/authTypes";
 import { handleNewUser, validateUserToken } from "../utils/databaseHelpers";
 import AuthForm from "../components/authentication/AuthForm";

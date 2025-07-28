@@ -1,7 +1,4 @@
-import type {
-  GPErrorMessageTypes,
-  GPIngredientDataTypes,
-} from "./types/types";
+import type { GPErrorMessageTypes, GPIngredientDataTypes } from "./types/types";
 
 import type { GPCurrentUserTypes, GPAccountInfoTypes } from "./types/authTypes";
 import type { User } from "firebase/auth";
