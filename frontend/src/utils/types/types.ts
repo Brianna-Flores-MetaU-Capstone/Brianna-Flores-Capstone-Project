@@ -1,4 +1,3 @@
-import type { User } from "firebase/auth";
 import TimeBlock from "../../../../backend/classes/TimeBlock";
 import type { Recipe } from "../../../../shared/Recipe";
 
@@ -24,13 +23,6 @@ type GPRecipeDataTypes = {
   totalCost?: number;
 };
 
-type GPAccountInfoTypes = {
-  firebaseId: string;
-  email: string;
-  intolerances: string[];
-  diets: string[];
-};
-
 type GPIngredientDataTypes = {
   id: number;
   ingredientName: string;
@@ -41,13 +33,6 @@ type GPIngredientDataTypes = {
   isChecked: boolean;
   ingredientCost?: number;
   ingredientCostUnit?: number;
-};
-
-type GPCurrentUserTypes = {
-  user: User;
-  userEmail: string;
-  userIntolerances: string[];
-  userDiets: string[];
 };
 
 type GPErrorMessageTypes = {
@@ -119,8 +104,6 @@ type GPPexelsImageType = {
 };
 
 export type {
-  GPAccountInfoTypes,
-  GPCurrentUserTypes,
   GPIngredientDataTypes,
   GPRecipeDataTypes,
   GPErrorMessageTypes,

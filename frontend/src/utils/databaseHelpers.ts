@@ -1,9 +1,9 @@
 import type {
-  GPCurrentUserTypes,
-  GPAccountInfoTypes,
   GPErrorMessageTypes,
   GPIngredientDataTypes,
 } from "./types/types";
+
+import type { GPCurrentUserTypes, GPAccountInfoTypes } from "./types/authTypes";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
