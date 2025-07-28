@@ -12,7 +12,6 @@ const GPDiffOptionsEnum = {
   INSTRUCTIONS: "Instructions",
 } as const;
 
-
 class DiffRecipes {
   recipeA: Recipe;
   recipeB: Recipe;
