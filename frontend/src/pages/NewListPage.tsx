@@ -28,6 +28,7 @@ import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import EventSummaryModal from "../components/calendar/EventSummaryModal";
 import { RecipeFetchEnum } from "../utils/constants";
 import Masonry from "react-responsive-masonry";
+import CalendarDisplay from "../components/calendar/CalendarDisplay";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -134,6 +135,9 @@ const NewListPage = () => {
   return (
     <Box>
       <AppHeader />
+      <Box>
+        <CalendarDisplay selectedRecipes={selectedRecipes} />
+      </Box>
       <Box sx={{ m: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

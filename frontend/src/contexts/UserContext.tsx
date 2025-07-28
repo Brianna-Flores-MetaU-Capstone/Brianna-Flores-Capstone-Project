@@ -3,8 +3,6 @@ import type { GPUserAccountType } from "../utils/types/authTypes";
 import axios from "axios";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
-
-
 type GPAccountContextType = {
   user: GPUserAccountType | null;
   setUser: React.Dispatch<React.SetStateAction<GPUserAccountType | null>>;

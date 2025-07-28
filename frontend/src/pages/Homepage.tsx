@@ -37,9 +37,10 @@ const Homepage = () => {
   useEffect(() => {
     const setUserListPreviews = async () => {
       fetchGroceryList({ setMessage, setUserGroceryList });
-      const userIngredients = await fetchUserIngredientsHelper({
-        setMessage,
-      }) ?? [];
+      const userIngredients =
+        (await fetchUserIngredientsHelper({
+          setMessage,
+        })) ?? [];
       setUserIngredientList(userIngredients);
       await fetchRecipes({
         setMessage,

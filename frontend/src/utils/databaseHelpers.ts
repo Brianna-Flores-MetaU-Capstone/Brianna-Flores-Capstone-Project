@@ -1,6 +1,11 @@
 import type { GPErrorMessageTypes, GPIngredientDataTypes } from "./types/types";
 
-import type { GPCurrentUserTypes, GPAccountInfoTypes, GPUserDatabaseReturnType, GPUserAccountType } from "./types/authTypes";
+import type {
+  GPCurrentUserTypes,
+  GPAccountInfoTypes,
+  GPUserDatabaseReturnType,
+  GPUserAccountType,
+} from "./types/authTypes";
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
@@ -102,7 +107,10 @@ const validateUserToken = async (user: User) => {
 
 const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
   try {
-    const response = await axios.get<GPIngredientDataTypes[]>(`${databaseUrl}/ingredients`, axiosConfig);
+    const response = await axios.get<GPIngredientDataTypes[]>(
+      `${databaseUrl}/ingredients`,
+      axiosConfig,
+    );
     return response.data;
   } catch (error) {
     setMessage({
@@ -265,10 +273,10 @@ const fetchGroceryList = async ({
   setGroceryListCost,
 }: GPFetchGroceryListTypes) => {
   try {
-    const response = await axios.get<{groceryList: GPIngredientDataTypes[], groceryListCost: number}>(
-      `${databaseUrl}/generateList`,
-      axiosConfig,
-    );
+    const response = await axios.get<{
+      groceryList: GPIngredientDataTypes[];
+      groceryListCost: number;
+    }>(`${databaseUrl}/generateList`, axiosConfig);
     setUserGroceryList(response.data.groceryList);
     if (setGroceryDepartments) {
       const departments = parseGroceryListDepartments(
@@ -327,12 +335,13 @@ const fetchAllRecipeCategories = async ({
   try {
     const createdRecipeFilter = new RecipeFilter();
     for (const [_, filter] of Object.entries(recipeFiltersList)) {
-      const categoryRecipes = await fetchDiscoverRecipes({
-        setMessage,
-        filter,
-        offset,
-        numRequested: DISCOVERY_NUM_TO_REQUEST,
-      }) ?? [];
+      const categoryRecipes =
+        (await fetchDiscoverRecipes({
+          setMessage,
+          filter,
+          offset,
+          numRequested: DISCOVERY_NUM_TO_REQUEST,
+        })) ?? [];
       createdRecipeFilter.setFilteredList(
         filter as recipeFilterType,
         categoryRecipes,

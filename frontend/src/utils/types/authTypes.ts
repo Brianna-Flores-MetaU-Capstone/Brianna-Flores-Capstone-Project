@@ -15,15 +15,15 @@ type GPCurrentUserTypes = {
 };
 
 type GPUserDatabaseReturnType = {
-    id: number;
-    firebaseId: string;
-    email: string;
-    userName: string
-    intolerances: string[];
-    diets: string[]
-    groceryList: JSON | null;
-    groceryListCost: number
-}
+  id: number;
+  firebaseId: string;
+  email: string;
+  userName: string;
+  intolerances: string[];
+  diets: string[];
+  groceryList: JSON | null;
+  groceryListCost: number;
+};
 
 type GPUserAccountType = {
   id: string;
@@ -32,4 +32,9 @@ type GPUserAccountType = {
   diets: string[];
 };
 
-export type { GPAccountInfoTypes, GPCurrentUserTypes, GPUserDatabaseReturnType, GPUserAccountType };
+export type {
+  GPAccountInfoTypes,
+  GPCurrentUserTypes,
+  GPUserDatabaseReturnType,
+  GPUserAccountType,
+};

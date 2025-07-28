@@ -51,7 +51,6 @@ const RecipeDiscoveryPage = () => {
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    // setAllRecipeLists();
     fetchRecipesToDisplay();
   }, []);
 
@@ -63,18 +62,20 @@ const RecipeDiscoveryPage = () => {
         recipeGroup: RecipeFetchEnum.FAVORITED,
       });
     } else {
-      const fetchedRecipes = await fetchDiscoverRecipes({
-        setMessage,
-        filter: recipeFilter,
-        offset: 0,
-        numRequested: MAX_RECIPES_TO_DISPLAY,
-      }) ?? [];
+      const fetchedRecipes =
+        (await fetchDiscoverRecipes({
+          setMessage,
+          filter: recipeFilter,
+          offset: 0,
+          numRequested: MAX_RECIPES_TO_DISPLAY,
+        })) ?? [];
       setDisplayedRecipes(fetchedRecipes);
     }
-    const favoritedRecipesReturn = await fetchRecipes({
-      setMessage,
-      recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
-    }) ?? [];
+    const favoritedRecipesReturn =
+      (await fetchRecipes({
+        setMessage,
+        recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
+      })) ?? [];
     // set favorited recipes id
     for (const elem of favoritedRecipesReturn) {
       setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));

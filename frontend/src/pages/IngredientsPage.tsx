@@ -42,7 +42,8 @@ const IngredientsPage = () => {
   };
 
   const fetchUserIngredients = async () => {
-    const fetchedIngredients = await fetchUserIngredientsHelper({ setMessage }) ?? [];
+    const fetchedIngredients =
+      (await fetchUserIngredientsHelper({ setMessage })) ?? [];
     setUserIngredients(fetchedIngredients);
   };
 
