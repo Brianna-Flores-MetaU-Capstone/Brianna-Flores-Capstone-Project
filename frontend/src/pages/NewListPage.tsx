@@ -7,7 +7,6 @@ import MealCard from "../components/recipeDisplay/MealCard";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useState, useEffect } from "react";
 import AddAnotherMealModal from "../components/AddAnotherMealModal";
-import TitledListView from "../components/utils/TitledListView";
 import ErrorState from "../components/utils/ErrorState";
 import { useUser } from "../contexts/UserContext";
 import {

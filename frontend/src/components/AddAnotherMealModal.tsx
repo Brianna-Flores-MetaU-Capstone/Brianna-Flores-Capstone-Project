@@ -151,7 +151,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
     setSearchRecipesClicked(true);
   };
 
-  const handleGenerateMore = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGenerateMore = () => {
     handleFetchRecipes(false);
     setSearchRecipesClicked(false);
   };

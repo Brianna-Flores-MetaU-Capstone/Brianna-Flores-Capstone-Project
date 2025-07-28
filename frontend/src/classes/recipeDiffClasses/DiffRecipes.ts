@@ -12,8 +12,6 @@ const GPDiffOptionsEnum = {
   INSTRUCTIONS: "Instructions",
 } as const;
 
-type DiffOptionsKeys = keyof typeof GPDiffOptionsEnum;
-type DiffOptionsType = (typeof GPDiffOptionsEnum)[DiffOptionsKeys];
 
 class DiffRecipes {
   recipeA: Recipe;

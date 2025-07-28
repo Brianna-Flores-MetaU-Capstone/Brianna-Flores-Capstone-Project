@@ -22,7 +22,7 @@ const WithAuth = <T extends object>(
               setUser(response.data);
             }
           })
-          .catch(function (error) {
+          .catch(function () {
             navigate("/login");
           });
       }

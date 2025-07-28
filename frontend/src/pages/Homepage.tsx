@@ -14,7 +14,6 @@ import {
   fetchRecipes,
 } from "../utils/databaseHelpers";
 import { useState, useEffect } from "react";
-import { useUser } from "../contexts/UserContext";
 import { Box, Grid } from "@mui/joy";
 import { useNavigate } from "react-router";
 import {
@@ -24,7 +23,7 @@ import {
 import { Recipe } from "../../../shared/Recipe";
 
 const Homepage = () => {
-  const [message, setMessage] = useState<GPErrorMessageTypes>();
+  const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [userGroceryList, setUserGroceryList] = useState<
     GPIngredientDataTypes[]
   >([]);
@@ -33,7 +32,6 @@ const Homepage = () => {
   >([]);
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
 
-  const { user } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {

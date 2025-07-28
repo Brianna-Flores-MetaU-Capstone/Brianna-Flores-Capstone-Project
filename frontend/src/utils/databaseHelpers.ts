@@ -326,7 +326,7 @@ const fetchAllRecipeCategories = async ({
 }: GPFetchRecipeCategoryType) => {
   try {
     const createdRecipeFilter = new RecipeFilter();
-    for (const [key, filter] of Object.entries(recipeFiltersList)) {
+    for (const [_, filter] of Object.entries(recipeFiltersList)) {
       const categoryRecipes = await fetchDiscoverRecipes({
         setMessage,
         filter,

@@ -1,4 +1,3 @@
-const TO_MILLISECONDS = 1000 * 60;
 class TimeBlock {
   start: Date;
   end: Date;

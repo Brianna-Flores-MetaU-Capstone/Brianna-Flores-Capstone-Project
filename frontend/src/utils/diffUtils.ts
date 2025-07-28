@@ -75,5 +75,5 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
   return arr[strB.length][strA.length];
 };
 
-export { getRecipeDiffResults, DiffStatus };
+export { getRecipeDiffResults, getLevenshteinDistance, DiffStatus };
 export type { GPRecipeDiffType, GPDiffLineInfoType };

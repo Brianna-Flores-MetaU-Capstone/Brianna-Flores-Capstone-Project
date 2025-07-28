@@ -25,7 +25,6 @@ import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
 import { RecipeFilter } from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
-import Masonry from "react-responsive-masonry";
 import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 

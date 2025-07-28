@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import type { GPErrorMessageTypes } from "../../utils/types/types";
 import type { GPDiffLineInfoType } from "../../utils/diffUtils";
 import {
   AspectRatio,

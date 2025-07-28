@@ -67,7 +67,7 @@ const parseIngredients = (ingredientsData: any) => {
     department: ingredient.aisle,
     quantity: ingredient.amount,
     unit: ingredient.unit,
-    estimatedCost: getIngredientCost(ingredient.name),
+    estimatedCost: getIngredientCost(),
   }));
 };
 
@@ -77,7 +77,7 @@ const parseInstructions = (steps: any) => {
   }
 };
 
-const getIngredientCost = (ingredientName: string) => {
+const getIngredientCost = () => {
   return 0;
 };
 

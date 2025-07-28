@@ -10,7 +10,6 @@ import {
   FormLabel,
   Grid,
   AspectRatio,
-  Typography,
 } from "@mui/joy";
 import axios from "axios";
 import { useState } from "react";

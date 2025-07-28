@@ -32,7 +32,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(response.data);
         }
       })
-      .catch(function (error) {
+      .catch(function () {
         setUser(null);
       });
   }, []);

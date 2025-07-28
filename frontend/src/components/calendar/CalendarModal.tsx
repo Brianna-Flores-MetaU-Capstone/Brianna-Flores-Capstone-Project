@@ -100,7 +100,7 @@ const CalendarModal = ({
           eventData.htmlLink,
         );
         createdEvents = [...createdEvents, newEvent];
-        const savedCalendarEvent = await saveCalendarEvent({
+        await saveCalendarEvent({
           setMessage,
           selectedRecipe: eventInfo.recipe,
           calendarEvent: newEvent,
@@ -134,7 +134,6 @@ const CalendarModal = ({
                   key={index}
                   eventOptions={optionGroup}
                   groupNum={index + 1}
-                  adjustedSuggestion={false}
                 />
               )}
               listItemsStyle={ColumnNoOverflowTitledListStyle}
