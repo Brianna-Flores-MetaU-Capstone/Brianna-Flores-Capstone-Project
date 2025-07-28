@@ -24,6 +24,7 @@ router.post("/signup", async (req: Request, res: Response) => {
     });
     res.json(newUser);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Something went wrong during signup!" });
   }
 });
