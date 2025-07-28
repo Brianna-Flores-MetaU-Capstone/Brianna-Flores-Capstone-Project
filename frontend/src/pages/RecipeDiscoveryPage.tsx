@@ -23,6 +23,7 @@ import { Recipe } from "../../../shared/Recipe";
 import { RecipeFetchEnum } from "../utils/constants";
 import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
+import Masonry from "react-responsive-masonry";
 
 const MAX_RECIPES_TO_DISPLAY = 50;
 
@@ -67,7 +68,7 @@ const RecipeDiscoveryPage = () => {
         filter: recipeFilter,
         offset: 0,
         numRequested: MAX_RECIPES_TO_DISPLAY,
-      });
+      }) ?? [];
       setDisplayedRecipes(fetchedRecipes);
     }
     const favoritedRecipesReturn = await fetchRecipes({
