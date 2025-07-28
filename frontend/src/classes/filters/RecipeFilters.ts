@@ -1,11 +1,29 @@
 import type { Recipe } from "../../../../shared/Recipe";
 
+type recipeFilters =
+  | "all"
+  | "dairyFree"
+  | "glutenFree"
+  | "vegetarian"
+  | "vegan"
+  | "favorited";
+
+const recipeFiltersConst = [
+  { filter: "all", title: "All Recipes" },
+  { filter: "dairyFree", title: "Dairy Free" },
+  { filter: "glutenFree", title: "Gluten Free" },
+  { filter: "vegetarian", title: "Vegetarian" },
+  { filter: "vegan", title: "Vegan" },
+  { filter: "favorited", title: "Favorited" },
+] as const;
+
 const recipeFiltersList = {
   ALL: "all",
   DAIRY_FREE: "dairyFree",
   GLUTEN_FREE: "glutenFree",
   VEGETARIAN: "vegetarian",
   VEGAN: "vegan",
+  FAVORITED: "favorited",
 } as const;
 
 type recipeFilterKeys = keyof typeof recipeFiltersList;
@@ -17,6 +35,7 @@ class RecipeFilter {
   glutenFree: Recipe[];
   vegetarian: Recipe[];
   vegan: Recipe[];
+  favorited: Recipe[];
 
   constructor(old?: RecipeFilter) {
     this.all = old?.all ?? [];
@@ -24,6 +43,7 @@ class RecipeFilter {
     this.glutenFree = old?.glutenFree ?? [];
     this.vegetarian = old?.vegetarian ?? [];
     this.vegan = old?.vegan ?? [];
+    this.favorited = old?.favorited ?? [];
   }
 
   get allRecipes(): Recipe[] {
@@ -77,4 +97,10 @@ class RecipeFilter {
   }
 }
 
-export { RecipeFilter, recipeFiltersList, type recipeFilterType };
+export {
+  RecipeFilter,
+  recipeFiltersList,
+  type recipeFilterType,
+  recipeFiltersConst,
+  type recipeFilters,
+};

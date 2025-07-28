@@ -302,28 +302,27 @@ const getMultipleScheduleOptions = ({
   let scheduleOptions: GPRecipeEventOptionType[][] = [];
   let recipeArray = [...userRecipes];
   let freeTimeArray = [...userFreeTime];
+  if (singleDayPrep) {
+    const option = getMealPrepTimeOptions({
+      preferredStartDate,
+      userFreeTime: freeTimeArray,
+      userRecipes: userRecipes,
+      userPreferences: userPreferences,
+      servingsPerDay: servingsPerDay,
+    });
+    return [option];
+  }
+
   for (let i = 0; i < numOptions; i++) {
-    if (singleDayPrep) {
-      const option = getMealPrepTimeOptions({
-        preferredStartDate,
-        userFreeTime: freeTimeArray,
-        userRecipes: userRecipes,
-        userPreferences: userPreferences,
-        servingsPerDay: servingsPerDay,
-      });
-      scheduleOptions = [...scheduleOptions, option];
-      freeTimeArray = shuffleArray(freeTimeArray);
-    } else {
-      const option = getRecipeTimeOptions({
-        preferredStartDate,
-        userFreeTime: userFreeTime,
-        userRecipes: recipeArray,
-        userPreferences,
-        servingsPerDay: servingsPerDay,
-      });
-      scheduleOptions = [...scheduleOptions, option];
-      recipeArray = shuffleArray(recipeArray);
-    }
+    const option = getRecipeTimeOptions({
+      preferredStartDate,
+      userFreeTime: userFreeTime,
+      userRecipes: recipeArray,
+      userPreferences,
+      servingsPerDay: servingsPerDay,
+    });
+    scheduleOptions = [...scheduleOptions, option];
+    recipeArray = shuffleArray(recipeArray);
   }
   return scheduleOptions;
 };
