@@ -214,6 +214,7 @@ const fetchRecipes = async ({
         recipe.dairyFree,
         recipe.recipeTags,
         recipe.editingAuthorId,
+        recipe.likes,
         recipe.id,
         recipe.editingAuthorName,
         [],

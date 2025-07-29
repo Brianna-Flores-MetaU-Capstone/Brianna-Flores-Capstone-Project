@@ -33,7 +33,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick?: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -66,7 +66,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    event: React.MouseEvent<HTMLElement>
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -102,22 +102,24 @@ const MealCard: React.FC<GPMealCardProps> = ({
         >
           <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            {onFavoriteClick && (
-              <Tooltip
-                title={favorited ? "Remove from favorites" : "Add to favorites"}
-              >
-                <IconButton
-                  color="primary"
-                  sx={{ zIndex: 2 }}
-                  onClick={(event) => {
-                    event.stopPropagation();
+            <Tooltip
+              title={favorited ? "Remove from favorites" : "Add to favorites"}
+            >
+              <IconButton
+                color="primary"
+                sx={{ zIndex: 2 }}
+                disabled={onFavoriteClick ? false : true}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (onFavoriteClick) {
                     onFavoriteClick(parsedMealData);
-                  }}
-                >
-                  {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                </IconButton>
-              </Tooltip>
-            )}
+                  }
+                }}
+              >
+                {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                <Typography>{parsedMealData.likes}</Typography>
+              </IconButton>
+            </Tooltip>
             {onCompareSelect && (
               <Tooltip title="Compare recipes">
                 <Checkbox

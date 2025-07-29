@@ -22,6 +22,7 @@ class Recipe {
   ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
   calendarEvents: CalendarEvent[];
+  readonly likes: number;
 
   constructor(
     apiId: number,
@@ -39,6 +40,7 @@ class Recipe {
     dairyFree: boolean,
     recipeTags: string[],
     editingAuthorId: number | null,
+    likes: number,
     id?: number,
     editingAuthorName?: string,
     ingredientCostInfo?: GPIngredientDataTypes[],
@@ -59,6 +61,7 @@ class Recipe {
     this.glutenFree = glutenFree;
     this.dairyFree = dairyFree;
     this.recipeTags = recipeTags;
+    this.likes = likes
     this.id = id ?? 0;
     this.editingAuthorName = editingAuthorName ?? "";
     this.editingAuthorId = editingAuthorId ?? null;

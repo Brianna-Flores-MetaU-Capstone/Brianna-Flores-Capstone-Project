@@ -32,9 +32,7 @@ router.post("/popular", async (req: Request, res: Response) => {
   try {
     const mostPopular = await prisma.recipe.findMany({
       orderBy: {
-        usersThatFavorited: {
-          _count: "desc",
-        },
+        likes: "desc"
       },
       skip: parseInt(offset),
       take: parseInt(numRequested),
@@ -281,6 +279,7 @@ router.post(
           id: selectedRecipe.id,
         },
         data: {
+          likes: { increment: 1 },
           usersThatFavorited: {
             connect: {
               id: userId,
@@ -300,17 +299,18 @@ router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { selectedRecipe } = req.body;
   try {
-    const updatedUser = await prisma.user.update({
+    const updatedRecipe = await prisma.recipe.update({
       where: {
-        id: userId,
+        id: selectedRecipe.id,
       },
       data: {
-        favoritedRecipes: {
-          disconnect: { id: selectedRecipe.id },
+        likes: { decrement: 1 },
+        usersThatFavorited: {
+          disconnect: { id: userId },
         },
       },
     });
-    res.json(updatedUser);
+    res.json(updatedRecipe);
   } catch (error) {
     res.status(500).send("Failed to remove recipe from users list");
   }

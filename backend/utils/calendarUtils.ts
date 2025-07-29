@@ -123,6 +123,7 @@ const getMealPrepTimeOptions = ({
         false,
         [],
         null,
+        0,
       ),
     };
     eventOptions = [...eventOptions, bestBlock];
