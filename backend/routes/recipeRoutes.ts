@@ -27,6 +27,24 @@ router.post("/discover", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/popular", async (req: Request, res: Response) => {
+  const { offset, numRequested } = req.body;
+  try {
+    const mostPopular = await prisma.recipe.findMany({
+      orderBy: {
+        usersThatFavorited: {
+          _count: "desc",
+        },
+      },
+      skip: parseInt(offset),
+      take: parseInt(numRequested),
+    });
+    res.json(mostPopular);
+  } catch (error) {
+    res.status(500).send("Error fetching most popular recipes");
+  }
+});
+
 router.post(
   "/convertUnits",
   isAuthenticated,
@@ -34,7 +52,7 @@ router.post(
     const { convertTo, converting } = req.body;
     const converted = convertUnits({ convertTo, converting });
     res.json(converted);
-  },
+  }
 );
 
 router.get("/original/:apiId", async (req: Request, res: Response) => {
@@ -105,7 +123,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users favorited recipes
@@ -127,7 +145,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users edited recipes
@@ -244,7 +262,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // Add recipe to users favorites list
@@ -274,7 +292,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // remove recipe from users favorites list
