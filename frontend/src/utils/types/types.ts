@@ -1,5 +1,6 @@
 import TimeBlock from "../../../../backend/classes/TimeBlock";
 import type { Recipe } from "../../../../shared/Recipe";
+import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 
 type GPRecipeDataTypes = {
   id: number;
@@ -33,6 +34,7 @@ type GPIngredientDataTypes = {
   isChecked: boolean;
   ingredientCost?: number;
   ingredientCostUnit?: number;
+  ingredientSubstitutes?: IngredientSubstitutes[]
 };
 
 type GPEstimateRecipeCostReturnTypes = {

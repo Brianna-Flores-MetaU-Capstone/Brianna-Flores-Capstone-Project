@@ -1,4 +1,4 @@
-class Ingredient {
+class IngredientData {
  readonly id: number;
  readonly ingredientName: string;
  quantity: number;
@@ -34,4 +34,4 @@ class Ingredient {
 }
 
 
-export { Ingredient };
+export { IngredientData };
