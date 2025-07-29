@@ -204,7 +204,7 @@ const RecipeDiscoveryPage = () => {
           </Button>
         </Box>
         <Box sx={{ m: 2 }}>
-          <Masonry columnsCount={4}>
+          <Masonry columnsCount={4} gutter="2vw">
             {displayedRecipes.map((meal, index) => (
               <MealCard
                 key={index}
