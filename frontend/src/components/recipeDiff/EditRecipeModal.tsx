@@ -303,6 +303,7 @@ const EditRecipeModal = ({
       editedRecipeData.glutenFree,
       editedRecipeData.dairyFree,
       editedRecipeData.recipeTags,
+      0,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
       editedRecipeData.editingAuthorName,
