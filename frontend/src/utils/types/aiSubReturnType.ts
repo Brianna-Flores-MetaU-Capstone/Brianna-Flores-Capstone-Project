@@ -1,16 +1,16 @@
 type GPAiSubstitutionReturnType = {
-  substitutionTitle: string,
-  substitutionQuantity: number,
-  substitutionUnit: string,
-  storeBought: boolean,
+  substitutionTitle: string;
+  substitutionQuantity: number;
+  substitutionUnit: string;
+  storeBought: boolean;
   substitutionIngredients: [
     {
-      ingredientName: string,
-      quantity: number,
-      unit: string,
+      ingredientName: string;
+      quantity: number;
+      unit: string;
     },
   ];
-  substitutionInstructions: string[]
+  substitutionInstructions: string[];
 };
 
 export type { GPAiSubstitutionReturnType };
