@@ -34,13 +34,9 @@ import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import ImageSearchModal from "./ImageSearchModal";
+import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
+import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 
-type GPEditRecipeModalType = {
-  recipe: Recipe | undefined;
-  modalOpen: boolean;
-  toggleModal: () => void;
-  onSubmit: () => void;
-};
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -81,7 +77,7 @@ const recipeInputEditFields = [
 const ingredientInputEditFields = [
   { label: "Ingredient Name", field: EditRecipeFieldsEnum.ING_NAME, space: 6 },
   { label: "Quantity", field: EditRecipeFieldsEnum.ING_QUANTITY, space: 2 },
-  { label: "Unit", field: EditRecipeFieldsEnum.ING_UNIT, space: 3 },
+  { label: "Unit", field: EditRecipeFieldsEnum.ING_UNIT, space: 2 },
 ] as const;
 
 const dietaryEditFields = [
@@ -106,9 +102,18 @@ const GPDeleteIconStyle = {
   left: 10,
 };
 
+type GPEditRecipeModalType = {
+  recipe: Recipe | undefined;
+  modalOpen: boolean;
+  getDietarySubstitutes: boolean;
+  toggleModal: () => void;
+  onSubmit: () => void;
+};
+
 const EditRecipeModal = ({
   recipe,
   modalOpen,
+  getDietarySubstitutes,
   toggleModal,
   onSubmit,
 }: GPEditRecipeModalType) => {
@@ -190,6 +195,7 @@ const EditRecipeModal = ({
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
+  const [loadingSubstitutions, setLoadingSubstitutions] = useState(false);
   const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
@@ -330,6 +336,19 @@ const EditRecipeModal = ({
     });
   };
 
+  const handleSuggestIngredientSubstitution = async (ingredient: GPIngredientDataTypes) => {
+    setLoadingSubstitutions(true)
+    const response: GPAiSubstitutionReturnType[] =
+        await getSubstitutionForIngredient({
+          ingredient,
+          intolerancesAndDiets: [
+            ...(user?.intolerances ?? []),
+            ...(user?.diets ?? []),
+          ],
+        });
+    setLoadingSubstitutions(false)
+  }
+
   return (
     <>
       <Modal open={modalOpen} onClose={toggleModal}>
@@ -458,7 +477,7 @@ const EditRecipeModal = ({
                     { title: "Ingredients", spacing: MUI_GRID_FULL_SPACE },
                   ]}
                   renderItem={(ingredient, ingredientIndex) => (
-                    <Grid container key={ingredientIndex} alignItems="center">
+                    <Grid container key={ingredientIndex} alignItems="flex-end">
                       {ingredientInputEditFields.map((field, fieldIndex) => (
                         <Grid key={fieldIndex} xs={field.space}>
                           <FormControl>
@@ -484,7 +503,7 @@ const EditRecipeModal = ({
                           </FormControl>
                         </Grid>
                       ))}
-                      <Grid xs={1}>
+                      <Grid xs={0.5}>
                         <IconButton
                           onClick={() =>
                             dispatch({
@@ -497,6 +516,9 @@ const EditRecipeModal = ({
                           <RemoveCircleOutlineIcon />
                         </IconButton>
                       </Grid>
+                      {getDietarySubstitutes && <Grid xs={1.5}>
+                        <Button loading={loadingSubstitutions} onClick={() => handleSuggestIngredientSubstitution(ingredient)}>Suggest dietary substitutions</Button>
+                      </Grid>}
                     </Grid>
                   )}
                 />

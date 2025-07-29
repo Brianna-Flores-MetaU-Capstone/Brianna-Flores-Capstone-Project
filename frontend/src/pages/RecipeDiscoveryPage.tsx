@@ -196,7 +196,7 @@ const RecipeDiscoveryPage = () => {
         >
           <Select
             defaultValue={"all"}
-            onChange={(event, newValue) =>
+            onChange={(_, newValue) =>
               setRecipeFilter(newValue as recipeFilterType)
             }
           >
@@ -249,6 +249,7 @@ const RecipeDiscoveryPage = () => {
         <EditRecipeModal
           recipe={editRecipeInfo}
           modalOpen={editRecipeModalOpen}
+          getDietarySubstitutes={false}
           toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
           onSubmit={fetchRecipesToDisplay}
         />

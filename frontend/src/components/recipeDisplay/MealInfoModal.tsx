@@ -31,6 +31,7 @@ import ImageCarousel from "./ImageCarousel";
 import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 import { useUser } from "../../contexts/UserContext";
+import EditRecipeModal from "../recipeDiff/EditRecipeModal";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -51,6 +52,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
+  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false)
   const { user } = useUser();
 
   const onCompareWithOriginal = () => {
@@ -85,6 +87,13 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     substitutes: GPAiSubstitutionReturnType[];
   };
 
+  const onSubstituteClick = () => {
+    // open edit meal modal
+    setEditRecipeModalOpen(true)
+    // add all recipe information
+    // to the side of each ingredient have a "suggest substitutes" button
+  }
+
   const handleSubstituteClick = async () => {
     let ingredientSubstitutions: GPIngredientSubstitutionType[] = [];
     for (const ingredient of recipeInfo?.ingredients ?? []) {
@@ -102,6 +111,12 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
       ];
     }
   };
+
+  const handleCreateSubstitutionRecipe = () => {
+    // close modal
+    setEditRecipeModalOpen(false)
+    // set the newly updated recipe modal open
+  }
 
   return (
     // click on card to view more able to see more information about recipe (ingredients needed, steps, etc)
@@ -147,7 +162,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <Box>
             <Typography level="h3">Ingredients</Typography>
             {user && (
-              <Button onClick={handleSubstituteClick}>
+              <Button onClick={onSubstituteClick}>
                 Get Ingredient Substitutions For Diet
               </Button>
             )}
@@ -194,6 +209,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         toggleModal={() => setUserDiffOptionsOpen((prev) => !prev)}
         onSubmit={onSubmitUserDiffOptions}
       />
+      <EditRecipeModal getDietarySubstitutes={true} modalOpen={editRecipeModalOpen} toggleModal={() => setEditRecipeModalOpen((prev) => !prev)} recipe={recipeInfo} onSubmit={handleCreateSubstitutionRecipe}/>
     </>
   );
 };
