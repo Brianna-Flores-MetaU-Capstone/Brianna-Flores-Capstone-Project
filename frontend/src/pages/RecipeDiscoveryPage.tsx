@@ -215,27 +215,27 @@ const RecipeDiscoveryPage = () => {
         </Box>
         <Box sx={{ m: 2 }}>
           <Masonry columnsCount={4} gutter="2vw">
-            {displayedRecipes.map((meal, index) => (
-              <MealCard
-                key={index}
-                index={index}
-                parsedMealData={meal}
-                onMealCardClick={() => handleRecipeCardClick(meal)}
-                {...(user && {
-                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
-                })}
-                {...(user && {
-                  onEditRecipe: () => handleEditRecipe(meal),
-                })}
-                setMessage={setMessage}
-                {...(user && { onFavoriteClick: handleFavoriteClick })}
-                favorited={favoritedRecipesId.has(meal.id)}
-                selectedToCompare={recipesToCompare.some(
-                  (recipe) => recipe.apiId === meal.apiId
-                )}
-                onCompareSelect={handleToggleCompareRecipe}
-              />
-            ))}
+            {displayedRecipes.map((meal, index) => 
+                <MealCard
+                  key={meal.id}
+                  index={index}
+                  parsedMealData={meal}
+                  onMealCardClick={() => handleRecipeCardClick(meal)}
+                  {...(user && {
+                    onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                  })}
+                  {...(user && {
+                    onEditRecipe: () => handleEditRecipe(meal),
+                  })}
+                  setMessage={setMessage}
+                  {...(user && { onFavoriteClick: handleFavoriteClick })}
+                  favorited={favoritedRecipesId.has(meal.id)}
+                  selectedToCompare={recipesToCompare.some(
+                    (recipe) => recipe.apiId === meal.apiId
+                  )}
+                  onCompareSelect={handleToggleCompareRecipe}
+                />
+            )}
           </Masonry>
         </Box>
         {user && message && (

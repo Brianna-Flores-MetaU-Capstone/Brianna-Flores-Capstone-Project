@@ -60,6 +60,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentLikes, setCurrentLikes] = useState(parsedMealData.likes)
 
   const toggleModal = () => {
     setIngredientCostModalOpen((prev) => !prev);
@@ -112,12 +113,13 @@ const MealCard: React.FC<GPMealCardProps> = ({
                 onClick={(event) => {
                   event.stopPropagation();
                   if (onFavoriteClick) {
+                    setCurrentLikes((prev) => favorited ? prev - 1 : prev + 1)
                     onFavoriteClick(parsedMealData);
                   }
                 }}
               >
                 {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                <Typography>{parsedMealData.likes}</Typography>
+                <Typography>{currentLikes}</Typography>
               </IconButton>
             </Tooltip>
             {onCompareSelect && (

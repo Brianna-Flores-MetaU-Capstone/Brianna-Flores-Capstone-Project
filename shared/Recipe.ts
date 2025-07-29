@@ -19,10 +19,10 @@ class Recipe {
   readonly glutenFree: boolean;
   readonly dairyFree: boolean;
   readonly recipeTags: string[];
+  readonly likes: number;
   ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
   calendarEvents: CalendarEvent[];
-  readonly likes: number;
 
   constructor(
     apiId: number,
@@ -39,8 +39,8 @@ class Recipe {
     glutenFree: boolean,
     dairyFree: boolean,
     recipeTags: string[],
-    editingAuthorId: number | null,
     likes: number,
+    editingAuthorId: number | null,
     id?: number,
     editingAuthorName?: string,
     ingredientCostInfo?: GPIngredientDataTypes[],
