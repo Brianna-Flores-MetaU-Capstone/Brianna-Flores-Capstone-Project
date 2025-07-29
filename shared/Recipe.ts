@@ -1,5 +1,5 @@
 import type { CalendarEvent } from "../frontend/src/classes/calendar/CalendarEvent";
-import type { GPIngredientDataTypes } from "../frontend/src/utils/types/types";
+import type { IngredientData } from "./IngredientData";
 
 class Recipe {
   readonly id: number;
@@ -10,7 +10,7 @@ class Recipe {
   readonly recipeTitle: string;
   readonly previewImage: string[];
   readonly servings: number;
-  readonly ingredients: GPIngredientDataTypes[];
+  readonly ingredients: IngredientData[];
   readonly instructions: string[];
   readonly sourceUrl: string;
   readonly readyInMinutes: number;
@@ -20,7 +20,7 @@ class Recipe {
   readonly dairyFree: boolean;
   readonly recipeTags: string[];
   readonly likes: number;
-  ingredientCostInfo: GPIngredientDataTypes[];
+  ingredientCostInfo: IngredientData[];
   totalCost: number;
   calendarEvents: CalendarEvent[];
 
@@ -30,7 +30,7 @@ class Recipe {
     recipeTitle: string,
     previewImage: string[],
     servings: number,
-    ingredients: GPIngredientDataTypes[],
+    ingredients: IngredientData[],
     instructions: string[],
     sourceUrl: string,
     readyInMinutes: number,
@@ -43,9 +43,9 @@ class Recipe {
     editingAuthorId: number | null,
     id?: number,
     editingAuthorName?: string,
-    ingredientCostInfo?: GPIngredientDataTypes[],
+    ingredientCostInfo?: IngredientData[],
     totalCost?: number,
-    calendarEvents?: CalendarEvent[],
+    calendarEvents?: CalendarEvent[]
   ) {
     this.apiId = apiId;
     this.originalSource = originalSource;
@@ -61,7 +61,7 @@ class Recipe {
     this.glutenFree = glutenFree;
     this.dairyFree = dairyFree;
     this.recipeTags = recipeTags;
-    this.likes = likes
+    this.likes = likes;
     this.id = id ?? 0;
     this.editingAuthorName = editingAuthorName ?? "";
     this.editingAuthorId = editingAuthorId ?? null;
@@ -70,7 +70,7 @@ class Recipe {
     this.calendarEvents = calendarEvents ?? [];
   }
 
-  set setIngredientCostInfo(value: GPIngredientDataTypes[]) {
+  set setIngredientCostInfo(value: IngredientData[]) {
     this.ingredientCostInfo = value;
   }
 

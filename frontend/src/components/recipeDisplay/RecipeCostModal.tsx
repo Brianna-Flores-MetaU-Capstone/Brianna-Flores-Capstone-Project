@@ -1,8 +1,8 @@
-import type { GPIngredientDataTypes } from "../../utils/types/types";
 import TitledListView from "../utils/TitledListView";
 import IngredientCost from "../ingredients/IngredientCost";
 import { Box, Modal, ModalClose, Typography, Sheet } from "@mui/joy";
 import { ColumnOverflowTitledListStyle } from "../../utils/style/UIStyle";
+import type { IngredientData } from "../../../../shared/IngredientData";
 
 const GPCostModalStyle = {
   display: "flex",
@@ -16,7 +16,7 @@ const GPCostModalStyle = {
 };
 
 type GPRecipeCostModalTypes = {
-  ingredientsCostInformation: GPIngredientDataTypes[];
+  ingredientsCostInformation: IngredientData[];
   totalCost: number;
   modalOpen: boolean;
   onClose: () => void;

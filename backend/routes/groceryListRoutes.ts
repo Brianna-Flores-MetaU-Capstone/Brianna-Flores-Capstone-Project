@@ -8,7 +8,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 import { isAuthenticated } from "../utils/authMiddleware";
-import type { GPIngredientDataTypes } from "../../frontend/src/utils/types/types";
+import { IngredientData } from "../../shared/IngredientData";
 
 router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.session.userId;
@@ -39,9 +39,9 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
       return res.status(404).send("User not found");
     }
     const clearedList = user.groceryList.filter(
-      (ingredientItem: GPIngredientDataTypes) => {
+      (ingredientItem: IngredientData) => {
         return !ingredientItem.isChecked;
-      },
+      }
     );
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -68,14 +68,14 @@ router.put("/check", isAuthenticated, async (req: Request, res: Response) => {
       return res.status(404).send("User not found");
     }
     const checkedGroceryList = user.groceryList.map(
-      (ingredientItem: GPIngredientDataTypes) =>
+      (ingredientItem: IngredientData) =>
         ingredientItem.ingredientName.toLowerCase() ===
         ingredientName.toLowerCase()
           ? {
               ...ingredientItem,
               isChecked: !ingredientItem.isChecked,
             }
-          : ingredientItem,
+          : ingredientItem
     );
     const updatedUser = await prisma.user.update({
       where: { id: userId },
@@ -104,7 +104,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Error approximating ingredients cost");
     }
-  },
+  }
 );
 
 router.post(
@@ -140,7 +140,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Failure to update user with grocery list");
     }
-  },
+  }
 );
 
 module.exports = router;

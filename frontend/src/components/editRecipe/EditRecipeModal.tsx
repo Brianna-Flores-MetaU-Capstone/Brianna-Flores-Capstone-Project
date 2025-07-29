@@ -1,7 +1,6 @@
 import { useReducer, useEffect, useState } from "react";
 import type {
   GPErrorMessageTypes,
-  GPIngredientDataTypes,
   GPRecipeDataTypes,
 } from "../../utils/types/types";
 import {
@@ -37,6 +36,7 @@ import ImageSearchModal from "./ImageSearchModal";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 import { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
+import { IngredientData } from "../../../../shared/IngredientData";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -174,7 +174,7 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.UPDATE_INGREDIENT;
         ingredientIndex: number;
-        ingredientField: keyof GPIngredientDataTypes;
+        ingredientField: keyof IngredientData;
         value: string;
       }
     | {
@@ -195,7 +195,7 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.ADD_ITEM;
         addedField: keyof GPRecipeDataTypes;
-        addedItem: string | GPIngredientDataTypes;
+        addedItem: string | IngredientData;
       };
 
   const [inputError, setInputError] = useState(false);
@@ -353,7 +353,7 @@ const EditRecipeModal = ({
   };
 
   const handleSuggestIngredientSubstitution = async (
-    ingredient: GPIngredientDataTypes,
+    ingredient: IngredientData,
     index: number
   ) => {
     setLoadingSubstitutions(true);
@@ -518,7 +518,7 @@ const EditRecipeModal = ({
                                   type: actions.UPDATE_INGREDIENT,
                                   ingredientIndex: ingredientIndex,
                                   ingredientField:
-                                    field.field as keyof GPIngredientDataTypes,
+                                    field.field as keyof IngredientData,
                                   value: event.target.value,
                                 })
                               }
@@ -569,14 +569,7 @@ const EditRecipeModal = ({
                     dispatch({
                       type: actions.ADD_ITEM,
                       addedField: "ingredients",
-                      addedItem: {
-                        id: 0,
-                        ingredientName: "",
-                        quantity: 0,
-                        unit: "",
-                        department: "",
-                        isChecked: false,
-                      },
+                      addedItem: new IngredientData(0, "", 0, "", "", false),
                     })
                   }
                 >

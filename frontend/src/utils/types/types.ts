@@ -1,5 +1,6 @@
 import TimeBlock from "../../../../backend/classes/TimeBlock";
 import type { Recipe } from "../../../../shared/Recipe";
+import type { IngredientData } from "../../../../shared/IngredientData";
 import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 
 type GPRecipeDataTypes = {
@@ -11,7 +12,7 @@ type GPRecipeDataTypes = {
   recipeTitle: string;
   previewImage: string[];
   servings: number;
-  ingredients: GPIngredientDataTypes[];
+  ingredients: IngredientData[];
   instructions: string[];
   sourceUrl: string;
   readyInMinutes: number;
@@ -20,7 +21,7 @@ type GPRecipeDataTypes = {
   glutenFree: boolean;
   dairyFree: boolean;
   recipeTags: string[];
-  ingredientCostInfo?: GPIngredientDataTypes[];
+  ingredientCostInfo?: IngredientData[];
   totalCost?: number;
 };
 
@@ -33,12 +34,12 @@ type GPIngredientDataTypes = {
   expirationDate?: string | null;
   isChecked: boolean;
   ingredientCost?: number;
-  ingredientCostUnit?: number;
-  ingredientSubstitutes?: IngredientSubstitutes[]
+  ingredientCostUnit?: string;
+  ingredientSubstitutes?: IngredientSubstitutes[];
 };
 
 type GPEstimateRecipeCostReturnTypes = {
-  ingredientCostInfo: GPRecipeIngredientTypes[];
+  ingredientCostInfo: IngredientData[];
   estimatedCost: number;
 };
 
@@ -49,7 +50,7 @@ type GPErrorMessageTypes = {
 
 type GPOwnedIngredientsTypes = {
   userId: string;
-  ingredient: GPIngredientDataTypes;
+  ingredient: IngredientData;
   ingredientId: string;
 };
 
@@ -64,7 +65,7 @@ type GPRecipeIngredientTypes = {
 
 type GPIngredientApiInfoType = {
   ingredientCost: number;
-  ingredientCostUnit: number;
+  ingredientCostUnit: string;
 };
 
 type GPUserEventTypes = {

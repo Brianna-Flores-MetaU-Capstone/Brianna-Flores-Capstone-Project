@@ -1,15 +1,15 @@
 import { Box, Grid, Typography } from "@mui/joy";
 import RecipeDiffTable from "./RecipeDiffTable";
 import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
-import type { GPIngredientDataTypes } from "../../utils/types/types";
 import { GPDiffHeaderStyle } from "../../utils/style/UIStyle";
 import type { Recipe } from "../../../../shared/Recipe";
+import type { IngredientData } from "../../../../shared/IngredientData";
 
 type GPRecipeDiffInfo = {
   recipeA: Recipe | undefined;
   recipeB: Recipe | undefined;
   costDiff: boolean;
-  diffInfo: GPRecipeComparisonReturnType<GPIngredientDataTypes> | undefined;
+  diffInfo: GPRecipeComparisonReturnType<IngredientData> | undefined;
 };
 
 const RecipeDiffBlock = ({

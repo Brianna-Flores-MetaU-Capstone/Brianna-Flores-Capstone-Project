@@ -28,6 +28,7 @@
     "../backend/types/convert-units.d.ts",
     "../backend/classes/TimeBlock.ts",
     "../shared/Recipe.ts",
-    "../shared/TimePreferenceString.ts"
+    "../shared/TimePreferenceString.ts",
+    "../shared/IngredientData.ts"
   ]
 }

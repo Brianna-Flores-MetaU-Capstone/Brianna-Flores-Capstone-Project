@@ -1,12 +1,12 @@
 import type { GPRecipeComparisonReturnType } from "../../classes/recipeDiffClasses/DiffRecipeIngredients";
-import type { GPIngredientDataTypes } from "../../utils/types/types";
 import { Box, Table } from "@mui/joy";
 import { formatQuantity } from "../../utils/utils";
+import type { IngredientData } from "../../../../shared/IngredientData";
 
 type GPRecipeDiffInfo = {
   first: boolean;
   costDiff: boolean;
-  diffInfo: GPRecipeComparisonReturnType<GPIngredientDataTypes> | undefined;
+  diffInfo: GPRecipeComparisonReturnType<IngredientData> | undefined;
 };
 
 const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
@@ -52,7 +52,7 @@ const RecipeDiffTable = ({ first, diffInfo, costDiff }: GPRecipeDiffInfo) => {
                   {formatQuantity(
                     first
                       ? ingredient.itemA.quantity
-                      : ingredient.itemB.quantity,
+                      : ingredient.itemB.quantity
                   )}{" "}
                   {first ? ingredient.itemA.unit : ingredient.itemB.unit}
                 </Box>

@@ -1,14 +1,14 @@
-import type { GPIngredientDataTypes } from "./types/types";
 import type { GPRecipeComparisonReturnType } from "../classes/recipeDiffClasses/DiffRecipeIngredients";
 import { Recipe } from "../../../shared/Recipe";
 import { DiffRecipeIngredients } from "../classes/recipeDiffClasses/DiffRecipeIngredients";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 type GPRecipeDiffType = {
   recipeA: Recipe;
   recipeB: Recipe;
   servingsDiff: boolean;
-  recipeIngredientDiff: GPRecipeComparisonReturnType<GPIngredientDataTypes>;
-  purchasedIngredientsDiff: GPRecipeComparisonReturnType<GPIngredientDataTypes>;
+  recipeIngredientDiff: GPRecipeComparisonReturnType<IngredientData>;
+  purchasedIngredientsDiff: GPRecipeComparisonReturnType<IngredientData>;
 };
 type GPDiffType = {
   recipeA: Recipe;
@@ -17,13 +17,13 @@ type GPDiffType = {
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   const diffRecipeIngredients = new DiffRecipeIngredients(
     recipeA.ingredients,
-    recipeB.ingredients,
+    recipeB.ingredients
   );
   const diffRecipeIngredientsResults =
     diffRecipeIngredients.getIngredientsComparisonDiff();
   const diffIngredientsToPurchase = new DiffRecipeIngredients(
     recipeA.ingredientCostInfo,
-    recipeB.ingredientCostInfo,
+    recipeB.ingredientCostInfo
   );
   const diffIngredientsToPurchaseResults =
     diffIngredientsToPurchase.getIngredientsComparisonDiff();

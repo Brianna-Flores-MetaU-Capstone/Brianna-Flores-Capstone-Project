@@ -1,7 +1,4 @@
-import type {
-  GPErrorMessageTypes,
-  GPIngredientDataTypes,
-} from "../utils/types/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import GroceryListDepartment from "../components/GroceryListDepartment";
 import { useState, useEffect } from "react";
@@ -15,12 +12,11 @@ import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import axios from "axios";
 import { axiosConfig } from "../utils/databaseHelpers";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const GroceryList = () => {
   const [addGroceryItemModalOpen, setAddGroceryItemModalOpen] = useState(false);
-  const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientDataTypes[]
-  >([]);
+  const [userGroceryList, setUserGroceryList] = useState<IngredientData[]>([]);
   const [groceryDepartments, setGroceryDepartments] = useState<string[]>([]);
   const [groceryListCost, setGroceryListCost] = useState(0.0);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
@@ -42,7 +38,7 @@ const GroceryList = () => {
     await axios.put(
       `${databaseUrl}/generateList/check`,
       { ingredientName: groceryItem },
-      axiosConfig,
+      axiosConfig
     );
     fetchGroceryList({
       setMessage,
@@ -70,9 +66,9 @@ const GroceryList = () => {
         <Box sx={{ my: 3 }}>
           <TitledListView
             itemsList={groceryDepartments}
-            renderItem={(department) => (
+            renderItem={(department, index) => (
               <GroceryListDepartment
-                key={department}
+                key={index}
                 groceryList={userGroceryList}
                 department={department}
                 onGroceryCheck={toggleGroceryCheck}

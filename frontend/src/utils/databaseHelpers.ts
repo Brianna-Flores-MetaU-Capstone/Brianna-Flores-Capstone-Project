@@ -17,6 +17,7 @@ import {
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import { RecipeFetchEnum } from "./constants";
+import { IngredientData } from "../../../shared/IngredientData";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 const DISCOVERY_NUM_TO_REQUEST = 40;
@@ -111,7 +112,19 @@ const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
       `${databaseUrl}/ingredients`,
       axiosConfig
     );
-    return response.data;
+    const userIngredients = response.data.map(
+      (ingredient) =>
+        new IngredientData(
+          ingredient.id,
+          ingredient.ingredientName,
+          ingredient.quantity,
+          ingredient.unit,
+          ingredient.department,
+          ingredient.isChecked,
+          ingredient.expirationDate
+        )
+    );
+    return userIngredients;
   } catch (error) {
     setMessage({
       error: true,
@@ -121,7 +134,7 @@ const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
 };
 
 type GPDeleteUserIngredientTypes = GPSetMessageType & {
-  ingredient: GPIngredientDataTypes;
+  ingredient: IngredientData;
 };
 const deleteIngredient = async ({
   setMessage,
@@ -140,7 +153,7 @@ const deleteIngredient = async ({
 
 type GPAddIngredientTypes = {
   userId: string;
-  newIngredientData: GPIngredientDataTypes;
+  newIngredientData: IngredientData;
 };
 
 const addIngredientDatabase = async ({
@@ -161,7 +174,7 @@ const addIngredientDatabase = async ({
 
 type GPUpdateIngredientTypes = GPSetMessageType & {
   ingredientId: number | undefined;
-  newIngredientData: GPIngredientDataTypes;
+  newIngredientData: IngredientData;
 };
 const updateIngredientDatabase = async ({
   ingredientId,
@@ -261,9 +274,7 @@ const updateUserRecipes = async ({
 };
 
 type GPFetchGroceryListTypes = GPSetMessageType & {
-  setUserGroceryList: (
-    value: React.SetStateAction<GPIngredientDataTypes[]>
-  ) => void;
+  setUserGroceryList: (value: React.SetStateAction<IngredientData[]>) => void;
   setGroceryDepartments?: (value: React.SetStateAction<string[]>) => void;
   setGroceryListCost?: (value: React.SetStateAction<number>) => void;
 };
@@ -275,7 +286,7 @@ const fetchGroceryList = async ({
 }: GPFetchGroceryListTypes) => {
   try {
     const response = await axios.get<{
-      groceryList: GPIngredientDataTypes[];
+      groceryList: IngredientData[];
       groceryListCost: number;
     }>(`${databaseUrl}/generateList`, axiosConfig);
     setUserGroceryList(response.data.groceryList);
