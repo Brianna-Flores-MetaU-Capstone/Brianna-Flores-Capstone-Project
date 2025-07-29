@@ -1,23 +1,45 @@
 import {
   Accordion,
+  accordionClasses,
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
 } from "@mui/joy";
-import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 import SubstitutionOption from "./SubstitutionOption";
+import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 
 type GPSubstitutionOptionsType = {
-  substitutionOptions: GPAiSubstitutionReturnType[];
+  substitutionOptions: IngredientSubstitutes[];
 };
 
 const SubstitutionOptionsDropdown = ({
   substitutionOptions,
 }: GPSubstitutionOptionsType) => {
   return (
-    <AccordionGroup>
+    // Accordion styling adapted from: https://mui.com/joy-ui/react-accordion/
+    <AccordionGroup sx={(theme) => ({
+        [`& .${accordionClasses.root}`]: {
+          marginTop: '0.5rem',
+          transition: '0.2s ease',
+          '& button:not([aria-expanded="true"])': {
+            transition: '0.2s ease',
+            paddingBottom: '0.625rem',
+          },
+          '& button:hover': {
+            background: 'transparent',
+          },
+        },
+        [`& .${accordionClasses.root}.${accordionClasses.expanded}`]: {
+          borderRadius: 'md',
+          border: '2px solid',
+          borderColor: 'primary.400',
+        },
+        '& [aria-expanded="true"]': {
+          boxShadow: `inset 0 -1px 0 ${theme.vars.palette.divider}`,
+        },
+      })}>
       {substitutionOptions.map((option, index) => (
-        <Accordion>
+        <Accordion key={index}>
           <AccordionSummary>{option.substitutionTitle}</AccordionSummary>
           <AccordionDetails><SubstitutionOption optionData={option} /></AccordionDetails>
         </Accordion>

@@ -34,9 +34,9 @@ import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import ImageSearchModal from "./ImageSearchModal";
-import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
-import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
+import { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
+import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -196,6 +196,8 @@ const EditRecipeModal = ({
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
   const [loadingSubstitutions, setLoadingSubstitutions] = useState(false);
+  const [substututionResults, setSubstitutionResults] =
+    useState<IngredientSubstitutes[]>();
   const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
@@ -349,6 +351,7 @@ const EditRecipeModal = ({
         ],
       });
     setLoadingSubstitutions(false);
+    setSubstitutionResults(response);
   };
 
   return (
@@ -529,6 +532,11 @@ const EditRecipeModal = ({
                             Suggest dietary substitutions
                           </Button>
                         </Grid>
+                      )}
+                      {substututionResults && (
+                        <SubstitutionOptionsDropdown
+                          substitutionOptions={substututionResults}
+                        />
                       )}
                     </Grid>
                   )}
