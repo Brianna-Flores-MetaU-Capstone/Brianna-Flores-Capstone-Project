@@ -14,7 +14,7 @@ import MealCard from "../components/recipeDisplay/MealCard";
 import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
-import EditRecipeModal from "../components/recipeDiff/EditRecipeModal";
+import EditRecipeModal from "../components/editRecipe/EditRecipeModal";
 import {
   recipeFiltersConst,
   recipeFiltersList,
@@ -215,27 +215,27 @@ const RecipeDiscoveryPage = () => {
         </Box>
         <Box sx={{ m: 2 }}>
           <Masonry columnsCount={4} gutter="2vw">
-            {displayedRecipes.map((meal, index) => 
-                <MealCard
-                  key={meal.id}
-                  index={index}
-                  parsedMealData={meal}
-                  onMealCardClick={() => handleRecipeCardClick(meal)}
-                  {...(user && {
-                    onSelectRecipe: () => handleSelectRecipeToShop(meal),
-                  })}
-                  {...(user && {
-                    onEditRecipe: () => handleEditRecipe(meal),
-                  })}
-                  setMessage={setMessage}
-                  {...(user && { onFavoriteClick: handleFavoriteClick })}
-                  favorited={favoritedRecipesId.has(meal.id)}
-                  selectedToCompare={recipesToCompare.some(
-                    (recipe) => recipe.apiId === meal.apiId
-                  )}
-                  onCompareSelect={handleToggleCompareRecipe}
-                />
-            )}
+            {displayedRecipes.map((meal, index) => (
+              <MealCard
+                key={meal.id}
+                index={index}
+                parsedMealData={meal}
+                onMealCardClick={() => handleRecipeCardClick(meal)}
+                {...(user && {
+                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                })}
+                {...(user && {
+                  onEditRecipe: () => handleEditRecipe(meal),
+                })}
+                setMessage={setMessage}
+                {...(user && { onFavoriteClick: handleFavoriteClick })}
+                favorited={favoritedRecipesId.has(meal.id)}
+                selectedToCompare={recipesToCompare.some(
+                  (recipe) => recipe.apiId === meal.apiId
+                )}
+                onCompareSelect={handleToggleCompareRecipe}
+              />
+            ))}
           </Masonry>
         </Box>
         {user && message && (

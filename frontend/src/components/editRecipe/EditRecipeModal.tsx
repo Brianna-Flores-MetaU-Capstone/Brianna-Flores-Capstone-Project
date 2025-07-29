@@ -36,7 +36,7 @@ import InfoOutlined from "@mui/icons-material/InfoOutline";
 import ImageSearchModal from "./ImageSearchModal";
 import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
-
+import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -231,20 +231,20 @@ const EditRecipeModal = ({
         return {
           ...state,
           previewImage: state.previewImage.filter(
-            (imageUrl) => imageUrl !== action.value,
+            (imageUrl) => imageUrl !== action.value
           ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseFloat(action.value) <= 0,
+            parseFloat(action.value) <= 0
         );
         return {
           ...state,
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem,
+              : elem
           ),
         };
       case actions.UPDATE_INSTRUCTION:
@@ -252,7 +252,7 @@ const EditRecipeModal = ({
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step,
+            index === action.instructionIndex ? action.value : step
           ),
         };
       case actions.DELETE_ITEM:
@@ -261,7 +261,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (_, index) => index !== action.itemIndex,
+              (_, index) => index !== action.itemIndex
             ),
           };
         } else {
@@ -312,7 +312,7 @@ const EditRecipeModal = ({
       0,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName,
+      editedRecipeData.editingAuthorName
     );
     try {
       const userId = user.id;
@@ -336,18 +336,20 @@ const EditRecipeModal = ({
     });
   };
 
-  const handleSuggestIngredientSubstitution = async (ingredient: GPIngredientDataTypes) => {
-    setLoadingSubstitutions(true)
-    const response: GPAiSubstitutionReturnType[] =
-        await getSubstitutionForIngredient({
-          ingredient,
-          intolerancesAndDiets: [
-            ...(user?.intolerances ?? []),
-            ...(user?.diets ?? []),
-          ],
-        });
-    setLoadingSubstitutions(false)
-  }
+  const handleSuggestIngredientSubstitution = async (
+    ingredient: GPIngredientDataTypes
+  ) => {
+    setLoadingSubstitutions(true);
+    const response: IngredientSubstitutes[] =
+      await getSubstitutionForIngredient({
+        ingredient,
+        intolerancesAndDiets: [
+          ...(user?.intolerances ?? []),
+          ...(user?.diets ?? []),
+        ],
+      });
+    setLoadingSubstitutions(false);
+  };
 
   return (
     <>
@@ -516,9 +518,18 @@ const EditRecipeModal = ({
                           <RemoveCircleOutlineIcon />
                         </IconButton>
                       </Grid>
-                      {getDietarySubstitutes && <Grid xs={1.5}>
-                        <Button loading={loadingSubstitutions} onClick={() => handleSuggestIngredientSubstitution(ingredient)}>Suggest dietary substitutions</Button>
-                      </Grid>}
+                      {getDietarySubstitutes && (
+                        <Grid xs={1.5}>
+                          <Button
+                            loading={loadingSubstitutions}
+                            onClick={() =>
+                              handleSuggestIngredientSubstitution(ingredient)
+                            }
+                          >
+                            Suggest dietary substitutions
+                          </Button>
+                        </Grid>
+                      )}
                     </Grid>
                   )}
                 />
