@@ -29,8 +29,8 @@ import { Recipe } from "../../../../shared/Recipe";
 import UserDiffOptions from "../recipeDiff/UserDiffOptions";
 import ImageCarousel from "./ImageCarousel";
 import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
-import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 import { useUser } from "../../contexts/UserContext";
+import EditRecipeModal from "../editRecipe/EditRecipeModal";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -48,9 +48,10 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
+  const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
   const { user } = useUser();
 
   const onCompareWithOriginal = () => {
@@ -59,7 +60,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>,
+    noDiffFields: Set<string>
   ) => {
     // we are viewing the edited recipe, need to fetch original recipe
     setUserDiffOptionsOpen(false);
@@ -85,22 +86,17 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     substitutes: GPAiSubstitutionReturnType[];
   };
 
-  const handleSubstituteClick = async () => {
-    let ingredientSubstitutions: GPIngredientSubstitutionType[] = [];
-    for (const ingredient of recipeInfo?.ingredients ?? []) {
-      const response: GPAiSubstitutionReturnType[] =
-        await getSubstitutionForIngredient({
-          ingredient,
-          intolerancesAndDiets: [
-            ...(user?.intolerances ?? []),
-            ...(user?.diets ?? []),
-          ],
-        });
-      ingredientSubstitutions = [
-        ...ingredientSubstitutions,
-        { ingredient, substitutes: response },
-      ];
-    }
+  const onSubstituteClick = () => {
+    // open edit meal modal
+    setEditRecipeModalOpen(true);
+    // add all recipe information
+    // to the side of each ingredient have a "suggest substitutes" button
+  };
+
+  const handleCreateSubstitutionRecipe = () => {
+    // close modal
+    setEditRecipeModalOpen(false);
+    // set the newly updated recipe modal open
   };
 
   return (
@@ -147,7 +143,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           <Box>
             <Typography level="h3">Ingredients</Typography>
             {user && (
-              <Button onClick={handleSubstituteClick}>
+              <Button onClick={onSubstituteClick}>
                 Get Ingredient Substitutions For Diet
               </Button>
             )}
@@ -193,6 +189,13 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         modalOpen={userDiffOptionsOpen}
         toggleModal={() => setUserDiffOptionsOpen((prev) => !prev)}
         onSubmit={onSubmitUserDiffOptions}
+      />
+      <EditRecipeModal
+        getDietarySubstitutes={true}
+        modalOpen={editRecipeModalOpen}
+        toggleModal={() => setEditRecipeModalOpen((prev) => !prev)}
+        recipe={recipeInfo}
+        onSubmit={handleCreateSubstitutionRecipe}
       />
     </>
   );

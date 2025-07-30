@@ -34,13 +34,9 @@ import { updateUserRecipes } from "../../utils/databaseHelpers";
 import { Recipe } from "../../../../shared/Recipe";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import ImageSearchModal from "./ImageSearchModal";
-
-type GPEditRecipeModalType = {
-  recipe: Recipe | undefined;
-  modalOpen: boolean;
-  toggleModal: () => void;
-  onSubmit: () => void;
-};
+import { getSubstitutionForIngredient } from "../../utils/geminiApi";
+import { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
+import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -81,7 +77,7 @@ const recipeInputEditFields = [
 const ingredientInputEditFields = [
   { label: "Ingredient Name", field: EditRecipeFieldsEnum.ING_NAME, space: 6 },
   { label: "Quantity", field: EditRecipeFieldsEnum.ING_QUANTITY, space: 2 },
-  { label: "Unit", field: EditRecipeFieldsEnum.ING_UNIT, space: 3 },
+  { label: "Unit", field: EditRecipeFieldsEnum.ING_UNIT, space: 2 },
 ] as const;
 
 const dietaryEditFields = [
@@ -106,9 +102,18 @@ const GPDeleteIconStyle = {
   left: 10,
 };
 
+type GPEditRecipeModalType = {
+  recipe: Recipe | undefined;
+  modalOpen: boolean;
+  getDietarySubstitutes: boolean;
+  toggleModal: () => void;
+  onSubmit: () => void;
+};
+
 const EditRecipeModal = ({
   recipe,
   modalOpen,
+  getDietarySubstitutes,
   toggleModal,
   onSubmit,
 }: GPEditRecipeModalType) => {
@@ -190,6 +195,9 @@ const EditRecipeModal = ({
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
+  const [loadingSubstitutions, setLoadingSubstitutions] = useState(false);
+  const [substututionResults, setSubstitutionResults] =
+    useState<IngredientSubstitutes[]>();
   const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
@@ -225,20 +233,20 @@ const EditRecipeModal = ({
         return {
           ...state,
           previewImage: state.previewImage.filter(
-            (imageUrl) => imageUrl !== action.value,
+            (imageUrl) => imageUrl !== action.value
           ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseFloat(action.value) <= 0,
+            parseFloat(action.value) <= 0
         );
         return {
           ...state,
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem,
+              : elem
           ),
         };
       case actions.UPDATE_INSTRUCTION:
@@ -246,7 +254,7 @@ const EditRecipeModal = ({
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step,
+            index === action.instructionIndex ? action.value : step
           ),
         };
       case actions.DELETE_ITEM:
@@ -255,7 +263,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (_, index) => index !== action.itemIndex,
+              (_, index) => index !== action.itemIndex
             ),
           };
         } else {
@@ -306,7 +314,7 @@ const EditRecipeModal = ({
       0,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName,
+      editedRecipeData.editingAuthorName
     );
     try {
       const userId = user.id;
@@ -328,6 +336,22 @@ const EditRecipeModal = ({
       type: actions.ADD_IMAGE,
       value: selectedImages,
     });
+  };
+
+  const handleSuggestIngredientSubstitution = async (
+    ingredient: GPIngredientDataTypes
+  ) => {
+    setLoadingSubstitutions(true);
+    const response: IngredientSubstitutes[] =
+      await getSubstitutionForIngredient({
+        ingredient,
+        intolerancesAndDiets: [
+          ...(user?.intolerances ?? []),
+          ...(user?.diets ?? []),
+        ],
+      });
+    setLoadingSubstitutions(false);
+    setSubstitutionResults(response);
   };
 
   return (
@@ -458,7 +482,7 @@ const EditRecipeModal = ({
                     { title: "Ingredients", spacing: MUI_GRID_FULL_SPACE },
                   ]}
                   renderItem={(ingredient, ingredientIndex) => (
-                    <Grid container key={ingredientIndex} alignItems="center">
+                    <Grid container key={ingredientIndex} alignItems="flex-end">
                       {ingredientInputEditFields.map((field, fieldIndex) => (
                         <Grid key={fieldIndex} xs={field.space}>
                           <FormControl>
@@ -484,7 +508,7 @@ const EditRecipeModal = ({
                           </FormControl>
                         </Grid>
                       ))}
-                      <Grid xs={1}>
+                      <Grid xs={0.5}>
                         <IconButton
                           onClick={() =>
                             dispatch({
@@ -497,6 +521,23 @@ const EditRecipeModal = ({
                           <RemoveCircleOutlineIcon />
                         </IconButton>
                       </Grid>
+                      {getDietarySubstitutes && (
+                        <Grid xs={1.5}>
+                          <Button
+                            loading={loadingSubstitutions}
+                            onClick={() =>
+                              handleSuggestIngredientSubstitution(ingredient)
+                            }
+                          >
+                            Suggest dietary substitutions
+                          </Button>
+                        </Grid>
+                      )}
+                      {substututionResults && (
+                        <SubstitutionOptionsDropdown
+                          substitutionOptions={substututionResults}
+                        />
+                      )}
                     </Grid>
                   )}
                 />
