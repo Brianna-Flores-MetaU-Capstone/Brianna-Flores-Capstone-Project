@@ -54,7 +54,7 @@ const getTotalQuantity = ({
   // for the current ingredient, check to see if there are any of the same ingredient in the list
   const sameIngredients = recipeIngredients.filter(
     (ingredient) =>
-      ingredient.ingredientName === recipeIngredient.ingredientName
+      ingredient.ingredientName === recipeIngredient.ingredientName,
   );
   // loop through array of ingredients to get the quantity needed
   let totalQuantity = 0;
@@ -117,31 +117,33 @@ const fuzzyMatchIngredient = ({
   ingredientToPurchase,
   ownedIngredients,
 }: GPFuzzyMatchTypes) => {
-  let similarIngredientInfo: GPIngredientDataTypes | null = null
-    for (const ownedIngredient of ownedIngredients) {
-      // check if one ingredient name is a substring of another (ex mozzarella cheese and mozzarella)
-      if (
-        ingredientToPurchase.ingredientName.includes(
-          ownedIngredient.ingredientName
-        ) ||
-        ownedIngredient.ingredientName.includes(ingredientToPurchase.ingredientName)
-      ) {
-        similarIngredientInfo = ownedIngredient;
-        break;
-      }
-      const levReturn = getLevenshteinDistance({
-        strA: ingredientToPurchase.ingredientName,
-        strB: ownedIngredient.ingredientName,
-      });
-      const levRatio =
-        levReturn /
-        Math.min(
-          ingredientToPurchase.ingredientName.length,
-          ownedIngredient.ingredientName.length
-        );
-      if (levRatio < 0.2) {
-        similarIngredientInfo = ownedIngredient;
-        break;
+  let similarIngredientInfo: GPIngredientDataTypes | null = null;
+  for (const ownedIngredient of ownedIngredients) {
+    // check if one ingredient name is a substring of another (ex mozzarella cheese and mozzarella)
+    if (
+      ingredientToPurchase.ingredientName.includes(
+        ownedIngredient.ingredientName,
+      ) ||
+      ownedIngredient.ingredientName.includes(
+        ingredientToPurchase.ingredientName,
+      )
+    ) {
+      similarIngredientInfo = ownedIngredient;
+      break;
+    }
+    const levReturn = getLevenshteinDistance({
+      strA: ingredientToPurchase.ingredientName,
+      strB: ownedIngredient.ingredientName,
+    });
+    const levRatio =
+      levReturn /
+      Math.min(
+        ingredientToPurchase.ingredientName.length,
+        ownedIngredient.ingredientName.length,
+      );
+    if (levRatio < 0.2) {
+      similarIngredientInfo = ownedIngredient;
+      break;
     }
   }
   return similarIngredientInfo;
@@ -159,7 +161,7 @@ const getListOfMissingIngredients = ({
   let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
   const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
-    ingredient.ingredientName.toLowerCase()
+    ingredient.ingredientName.toLowerCase(),
   );
 
   // loop through list of ingredients for recipe
@@ -167,7 +169,7 @@ const getListOfMissingIngredients = ({
     const alreadyInGroceryList = ingredientsToPurchase.find(
       (ingredient) =>
         ingredient.ingredientName.toLowerCase() ===
-        recipeIngredient.ingredientName.toLowerCase()
+        recipeIngredient.ingredientName.toLowerCase(),
     );
     if (!alreadyInGroceryList) {
       const totalQuantity = getTotalQuantity({
@@ -178,7 +180,10 @@ const getListOfMissingIngredients = ({
         ...recipeIngredient,
         quantity: totalQuantity,
       };
-      const ownedIngredientInfo = fuzzyMatchIngredient({ingredientToPurchase: recipeIngredient, ownedIngredients})
+      const ownedIngredientInfo = fuzzyMatchIngredient({
+        ingredientToPurchase: recipeIngredient,
+        ownedIngredients,
+      });
       if (!ownedIngredientInfo) {
         // user does not have ingredient, add to grocery list
         ingredientsToPurchase = [...ingredientsToPurchase, updatedIngredient];
@@ -262,7 +267,7 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
           : Math.min(
               arr[i - 1][j] + 1,
               arr[i][j - 1] + 1,
-              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1)
+              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1),
             );
     }
   }

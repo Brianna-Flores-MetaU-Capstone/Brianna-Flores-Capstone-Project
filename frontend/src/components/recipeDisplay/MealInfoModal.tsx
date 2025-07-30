@@ -3,7 +3,10 @@ import {
   GPMealInfoModalTitleStyle,
   GPModalStyle,
 } from "../../utils/style/UIStyle";
-import type { GPErrorMessageTypes } from "../../utils/types/types";
+import type {
+  GPErrorMessageTypes,
+  GPRecipeIngredientTypes,
+} from "../../utils/types/types";
 import {
   Modal,
   Button,
@@ -25,6 +28,9 @@ import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
 import { Recipe } from "../../../../shared/Recipe";
 import UserDiffOptions from "../recipeDiff/UserDiffOptions";
 import ImageCarousel from "./ImageCarousel";
+import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
+import { getSubstitutionForIngredient } from "../../utils/geminiApi";
+import { useUser } from "../../contexts/UserContext";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -45,6 +51,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
+  const { user } = useUser();
 
   const onCompareWithOriginal = () => {
     setUserDiffOptionsOpen(true);
@@ -71,6 +78,29 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     });
     setOriginalRecipeInfo(originalRecipe);
     setDiffModalOpen(true);
+  };
+
+  type GPIngredientSubstitutionType = {
+    ingredient: GPRecipeIngredientTypes;
+    substitutes: GPAiSubstitutionReturnType[];
+  };
+
+  const handleSubstituteClick = async () => {
+    let ingredientSubstitutions: GPIngredientSubstitutionType[] = [];
+    for (const ingredient of recipeInfo?.ingredients ?? []) {
+      const response: GPAiSubstitutionReturnType[] =
+        await getSubstitutionForIngredient({
+          ingredient,
+          intolerancesAndDiets: [
+            ...(user?.intolerances ?? []),
+            ...(user?.diets ?? []),
+          ],
+        });
+      ingredientSubstitutions = [
+        ...ingredientSubstitutions,
+        { ingredient, substitutes: response },
+      ];
+    }
   };
 
   return (
@@ -116,6 +146,11 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           </Box>
           <Box>
             <Typography level="h3">Ingredients</Typography>
+            {user && (
+              <Button onClick={handleSubstituteClick}>
+                Get Ingredient Substitutions For Diet
+              </Button>
+            )}
             <List marker="circle">
               {(recipeInfo?.ingredients ?? []).map((ingredient, index) => {
                 return (
