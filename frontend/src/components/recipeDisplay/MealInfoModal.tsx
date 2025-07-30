@@ -32,12 +32,14 @@ type GPMealModalProps = {
   modalOpen: boolean;
   toggleModal: () => void;
   recipeInfo: Recipe | undefined;
+  refreshRecipes?: () => void;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
   toggleModal,
   modalOpen,
   recipeInfo,
+  refreshRecipes,
 }) => {
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
@@ -78,16 +80,13 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   };
 
   const onSubstituteClick = () => {
-    // open edit meal modal
     setEditRecipeModalOpen(true);
-    // add all recipe information
-    // to the side of each ingredient have a "suggest substitutes" button
+    toggleModal()
   };
 
   const handleCreateSubstitutionRecipe = () => {
-    // close modal
     setEditRecipeModalOpen(false);
-    // set the newly updated recipe modal open
+    refreshRecipes && refreshRecipes()
   };
 
   return (

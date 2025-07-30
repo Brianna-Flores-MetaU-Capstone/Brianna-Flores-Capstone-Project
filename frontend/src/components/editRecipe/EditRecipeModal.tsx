@@ -303,9 +303,9 @@ const EditRecipeModal = ({
       case actions.ADD_SUBSTITUTE_INSTRUCTIONS:
         // go through instructions and replace all instances of original ingredient with new ingredient
         const replacedInstructions = state.instructions.map((instruction) =>
-          instruction.replace(
-            action.originalIngredient,
-            action.substituteIngredient
+          instruction.toLowerCase().replace(
+            `${action.originalIngredient.toLowerCase()} `,
+            `${action.substituteIngredient.toLowerCase()} `
           )
         );
         return {
