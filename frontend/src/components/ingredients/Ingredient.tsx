@@ -78,10 +78,10 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             <Typography>{ingredient.expirationDate}</Typography>
           </Grid>
         )}
-        {ingredient.ingredientCost > 0 && (
+        {ingredient.ingredientCostUnit && (
           <Grid xs={GRID_EXP_QUANT_COST_SPACING}>
             <Typography>
-              Est. ${ingredient.ingredientCost.toFixed(2)}
+              {ingredient.ingredientCost > 0 ? `Est. $${ingredient.ingredientCost.toFixed(2)}` : ingredient.ingredientCostUnit}
             </Typography>
           </Grid>
         )}
