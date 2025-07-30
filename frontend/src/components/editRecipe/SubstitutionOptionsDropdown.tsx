@@ -4,7 +4,9 @@ import {
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Box,
   IconButton,
+  Typography,
 } from "@mui/joy";
 import SubstitutionOption from "./SubstitutionOption";
 import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
@@ -21,7 +23,10 @@ const SubstitutionOptionsDropdown = ({
   substitutionOptions,
   onSubstitutionSelect,
 }: GPSubstitutionOptionsType) => {
-  const handleSelectSubstitution = (option: IngredientSubstitutes, ingredientIndex: number) => {
+  const handleSelectSubstitution = (
+    option: IngredientSubstitutes,
+    ingredientIndex: number
+  ) => {
     onSubstitutionSelect(option, ingredientIndex);
   };
 
@@ -60,16 +65,21 @@ const SubstitutionOptionsDropdown = ({
               alignItems: "center",
             }}
           >
-            <IconButton
-              sx={{ "&:hover": { color: "success.200" } }}
+            <Typography
+              sx={{ display: "flex", gap: 5, alignItems: "center" }}
               onClick={(event) => {
                 event.stopPropagation();
                 handleSelectSubstitution(option, ingredientIndex);
               }}
             >
-              <CheckCircleOutlineIcon />
-            </IconButton>
-            {option.substitutionTitle}
+              <CheckCircleOutlineIcon
+                sx={{
+                  color: "primary.500",
+                  "&:hover": { color: "success.200" },
+                }}
+              />
+              {option.substitutionTitle}
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <SubstitutionOption optionData={option} />
