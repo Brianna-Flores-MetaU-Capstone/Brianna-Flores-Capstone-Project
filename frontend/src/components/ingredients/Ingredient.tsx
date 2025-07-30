@@ -12,8 +12,8 @@ import {
 } from "@mui/joy";
 import type { IngredientData } from "../../../../shared/IngredientData";
 
-const GRID_NAME_COST_SPACING = 4;
-const GRID_EXP_QUANT_SPACING = 3;
+const GRID_NAME_SPACING = 4;
+const GRID_EXP_QUANT_COST_SPACING = 3;
 const GRID_BUTTON_SPACING = 1;
 
 const GPIngredientStyle = {
@@ -29,6 +29,7 @@ type GPIngredientProps = {
   presentExpiration: boolean;
   presentButtons: boolean;
   onGroceryCheck?: (ingredientName: string) => void;
+  onGroceryDelete?: (ingredientName: string) => void;
   onEdit?: (ingredient: IngredientData) => void;
   onDelete?: (ingredient: IngredientData) => void;
 };
@@ -39,6 +40,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   presentExpiration,
   presentButtons,
   onGroceryCheck,
+  onGroceryDelete,
   onEdit,
   onDelete,
 }) => {
@@ -57,36 +59,51 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             />
           </Grid>
         )}
-        <Grid xs={GRID_NAME_COST_SPACING}>
-          {ingredient.ingredientWalmartId > 0 && presentGroceryCheck ? <Link href={`https://www.walmart.com/ip/${ingredient.ingredientWalmartId}`}>{ingredient.ingredientName}</Link> : <Typography>{ingredient.ingredientName}</Typography>}
+        <Grid xs={GRID_NAME_SPACING}>
+          {ingredient.ingredientWalmartId > 0 && presentGroceryCheck ? (
+            <Link
+              href={`https://www.walmart.com/ip/${ingredient.ingredientWalmartId}`}
+            >
+              {ingredient.ingredientName}
+            </Link>
+          ) : (
+            <Typography>{ingredient.ingredientName}</Typography>
+          )}
         </Grid>
-        <Grid xs={GRID_EXP_QUANT_SPACING}>
+        <Grid xs={GRID_EXP_QUANT_COST_SPACING}>
           <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
         </Grid>
         {presentExpiration && (
-          <Grid xs={GRID_EXP_QUANT_SPACING}>
+          <Grid xs={GRID_EXP_QUANT_COST_SPACING}>
             <Typography>{ingredient.expirationDate}</Typography>
           </Grid>
         )}
         {ingredient.ingredientCost > 0 && (
-          <Grid xs={GRID_NAME_COST_SPACING}>
+          <Grid xs={GRID_EXP_QUANT_COST_SPACING}>
             <Typography>
               Est. ${ingredient.ingredientCost.toFixed(2)}
             </Typography>
           </Grid>
         )}
-        {presentButtons && (
-          <Grid xs={GRID_BUTTON_SPACING}>
+        <Grid xs={GRID_BUTTON_SPACING}>
+          {presentButtons && (
             <ButtonGroup spacing={2}>
               <IconButton onClick={() => onEdit?.(ingredient)}>
-                <EditIcon />
+                <EditIcon /> 
               </IconButton>
               <IconButton onClick={() => onDelete?.(ingredient)}>
                 <DeleteIcon />
               </IconButton>
             </ButtonGroup>
-          </Grid>
-        )}
+          )}
+          {onGroceryDelete && (
+            <IconButton
+              onClick={() => onGroceryDelete(ingredient.ingredientName)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </Grid>
       </Grid>
     </Box>
   );

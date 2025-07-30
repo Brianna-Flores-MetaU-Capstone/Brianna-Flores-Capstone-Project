@@ -79,7 +79,7 @@ router.put("/delete", isAuthenticated, async (req: Request, res: Response) => {
       (ingredient: IngredientData) =>
         ingredient.ingredientName.toLowerCase() !== ingredientName.toLowerCase()
     );
-    const updatedGroceryListPrice = updateEstimatedListCost(deletedFromList);
+    const updatedGroceryListPrice = updateEstimatedListCost({ingredientsToPurchase: deletedFromList});
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
