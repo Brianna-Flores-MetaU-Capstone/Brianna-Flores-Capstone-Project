@@ -4,30 +4,37 @@ import {
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
-  Box,
-  IconButton,
   Typography,
 } from "@mui/joy";
 import SubstitutionOption from "./SubstitutionOption";
 import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import type { IngredientData } from "../../../../shared/IngredientData";
 
 type GPSubstitutionOptionsType = {
   ingredientIndex: number;
-  substitutionOptions: IngredientSubstitutes[];
-  onSubstitutionSelect: (option: IngredientSubstitutes, index: number) => void;
+  originalIngredient: IngredientData;
+  onSubstitutionSelect: (
+    option: IngredientSubstitutes,
+    index: number,
+    originalIngredientName: string
+  ) => void;
 };
 
 const SubstitutionOptionsDropdown = ({
   ingredientIndex,
-  substitutionOptions,
+  originalIngredient,
   onSubstitutionSelect,
 }: GPSubstitutionOptionsType) => {
   const handleSelectSubstitution = (
     option: IngredientSubstitutes,
     ingredientIndex: number
   ) => {
-    onSubstitutionSelect(option, ingredientIndex);
+    onSubstitutionSelect(
+      option,
+      ingredientIndex,
+      originalIngredient.ingredientName
+    );
   };
 
   return (
@@ -55,7 +62,7 @@ const SubstitutionOptionsDropdown = ({
         },
       })}
     >
-      {substitutionOptions.map((option, index) => (
+      {originalIngredient.ingredientSubstitutes.map((option, index) => (
         <Accordion key={index}>
           <AccordionSummary
             sx={{
@@ -65,14 +72,12 @@ const SubstitutionOptionsDropdown = ({
               alignItems: "center",
             }}
           >
-            <Typography
-              sx={{ display: "flex", gap: 5, alignItems: "center" }}
-              onClick={(event) => {
-                event.stopPropagation();
-                handleSelectSubstitution(option, ingredientIndex);
-              }}
-            >
+            <Typography sx={{ display: "flex", gap: 5, alignItems: "center" }}>
               <CheckCircleOutlineIcon
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSelectSubstitution(option, ingredientIndex);
+                }}
                 sx={{
                   color: "primary.500",
                   "&:hover": { color: "success.200" },

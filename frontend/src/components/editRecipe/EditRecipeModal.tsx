@@ -50,7 +50,7 @@ const actions = {
   UPDATE_INSTRUCTION: "setInstruction",
   DELETE_ITEM: "deleteItem",
   ADD_ITEM: "addItem",
-  ADD_SUBSTITUTE_INSTRUCTIONS: "addSubstituteInstructions"
+  ADD_SUBSTITUTE_INSTRUCTIONS: "addSubstituteInstructions",
 } as const;
 
 const EditRecipeFieldsEnum = {
@@ -201,7 +201,9 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.ADD_SUBSTITUTE_INSTRUCTIONS;
         addedInstructions: string[];
-      }
+        originalIngredient: string;
+        substituteIngredient: string;
+      };
 
   const [inputError, setInputError] = useState(false);
   const [editedRecipeData, dispatch] = useReducer(reducer, initialRecipeState);
@@ -299,10 +301,17 @@ const EditRecipeModal = ({
           return state;
         }
       case actions.ADD_SUBSTITUTE_INSTRUCTIONS:
+        // go through instructions and replace all instances of original ingredient with new ingredient
+        const replacedInstructions = state.instructions.map((instruction) =>
+          instruction.replace(
+            action.originalIngredient,
+            action.substituteIngredient
+          )
+        );
         return {
           ...state,
-          instructions: [...action.addedInstructions, ...state.instructions]
-        }
+          instructions: [...action.addedInstructions, ...replacedInstructions],
+        };
       default:
         return state;
     }
@@ -385,7 +394,8 @@ const EditRecipeModal = ({
 
   const handleSubstitutionSelected = (
     substitution: IngredientSubstitutes,
-    index: number
+    index: number,
+    originalIngredientName: string
   ) => {
     // delete the original ingredient
     dispatch({
@@ -416,8 +426,10 @@ const EditRecipeModal = ({
       // add instructions to the start of the recipe since we must create prior to using ingredient
       dispatch({
         type: actions.ADD_SUBSTITUTE_INSTRUCTIONS,
-        addedInstructions: substitution.substitutionInstructions
-      })
+        addedInstructions: substitution.substitutionInstructions,
+        originalIngredient: originalIngredientName,
+        substituteIngredient: substitution.substitutionTitle,
+      });
     } else {
       // otherwise, just replace with the new ingredient
       dispatch({
@@ -431,6 +443,12 @@ const EditRecipeModal = ({
           "",
           false
         ),
+      });
+      dispatch({
+        type: actions.ADD_SUBSTITUTE_INSTRUCTIONS,
+        addedInstructions: [],
+        originalIngredient: originalIngredientName,
+        substituteIngredient: substitution.substitutionTitle,
       });
     }
   };
@@ -619,8 +637,8 @@ const EditRecipeModal = ({
                       )}
                       {ingredient.ingredientSubstitutes && (
                         <SubstitutionOptionsDropdown
+                          originalIngredient={ingredient}
                           ingredientIndex={ingredientIndex}
-                          substitutionOptions={ingredient.ingredientSubstitutes}
                           onSubstitutionSelect={handleSubstitutionSelected}
                         />
                       )}
