@@ -28,7 +28,6 @@ type GPIngredientProps = {
   presentGroceryCheck: boolean;
   presentExpiration: boolean;
   presentButtons: boolean;
-  ingredientCost?: GPIngredientApiInfoType;
   onGroceryCheck?: (ingredientName: string) => void;
   onEdit?: (ingredient: IngredientData) => void;
   onDelete?: (ingredient: IngredientData) => void;
@@ -38,7 +37,6 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   ingredient,
   presentGroceryCheck,
   presentExpiration,
-  ingredientCost,
   presentButtons,
   onGroceryCheck,
   onEdit,
@@ -70,10 +68,10 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             <Typography>{ingredient.expirationDate}</Typography>
           </Grid>
         )}
-        {ingredientCost && (
+        {ingredient.ingredientCost > 0 && (
           <Grid xs={GRID_NAME_COST_SPACING}>
             <Typography>
-              Est. ${ingredientCost.ingredientCost?.toFixed(2)}
+              Est. ${ingredient.ingredientCost.toFixed(2)}
             </Typography>
           </Grid>
         )}

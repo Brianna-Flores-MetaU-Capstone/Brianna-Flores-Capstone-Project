@@ -147,59 +147,90 @@ const fuzzyMatchIngredient = ({
 };
 
 type GPMissingIngredientsListType = {
-  recipeIngredients: IngredientData[];
-  ownedIngredients: IngredientData[];
+ recipeIngredients: IngredientData[];
+ ownedIngredients: IngredientData[];
 };
 
-const getListOfMissingIngredients = ({
-  recipeIngredients,
-  ownedIngredients,
-}: GPMissingIngredientsListType) => {
-  let ingredientsToPurchase: IngredientData[] = [];
-  // create an array of names of ingredients on hand to find index of ingredient
-  const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
-    ingredient.ingredientName.toLowerCase()
-  );
 
-  // loop through list of ingredients for recipe
-  for (const recipeIngredient of recipeIngredients) {
-    const alreadyInGroceryList = ingredientsToPurchase.find(
-      (ingredient) =>
-        ingredient.ingredientName.toLowerCase() ===
-        recipeIngredient.ingredientName.toLowerCase()
-    );
-    if (!alreadyInGroceryList) {
-      const totalQuantity = getTotalQuantity({
-        recipeIngredient,
-        recipeIngredients,
-      });
-      const updatedIngredient = {
-        ...recipeIngredient,
-        quantity: totalQuantity,
-      };
-      const ownedIngredientInfo = fuzzyMatchIngredient({
-        ingredientToPurchase: recipeIngredient,
-        ownedIngredients,
-      });
-      if (!ownedIngredientInfo) {
-        // user does not have ingredient, add to grocery list
-        ingredientsToPurchase = [...ingredientsToPurchase, updatedIngredient];
-      } else {
-        // user has ingredient, check if they have enough
-        const quantityUserNeeds = quantityNeeded({
-          ingredientOnHand: ownedIngredientInfo,
-          recipeIngredient: updatedIngredient,
-        });
-        if (quantityUserNeeds > 0) {
-          ingredientsToPurchase = [
-            ...ingredientsToPurchase,
-            { ...updatedIngredient, quantity: quantityUserNeeds },
-          ];
-        }
-      }
-    }
-  }
-  return ingredientsToPurchase;
+const getListOfMissingIngredients = ({
+ recipeIngredients,
+ ownedIngredients,
+}: GPMissingIngredientsListType) => {
+ let ingredientsToPurchase: IngredientData[] = [];
+ // create an array of names of ingredients on hand to find index of ingredient
+ const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
+   ingredient.ingredientName.toLowerCase()
+ );
+
+ // loop through list of ingredients for recipe
+ for (const recipeIngredient of recipeIngredients) {
+   if (recipeIngredient.subIngredients?.length > 0) {
+     for (const subIngredient of recipeIngredient.subIngredients) {
+       const addIngredient = checkIfIngredientIsOwned(
+         ingredientsToPurchase,
+         subIngredient,
+         recipeIngredients,
+         ownedIngredients
+       );
+       ingredientsToPurchase = addIngredient
+         ? [...ingredientsToPurchase, addIngredient]
+         : ingredientsToPurchase;
+     }
+   } else {
+     const addIngredient = checkIfIngredientIsOwned(
+       ingredientsToPurchase,
+       recipeIngredient,
+       recipeIngredients,
+       ownedIngredients
+     );
+     ingredientsToPurchase = addIngredient
+       ? [...ingredientsToPurchase, addIngredient]
+       : ingredientsToPurchase;
+   }
+ }
+ return ingredientsToPurchase;
+};
+
+
+const checkIfIngredientIsOwned = (
+ ingredientsToPurchase: IngredientData[],
+ recipeIngredient: IngredientData,
+ recipeIngredients: IngredientData[],
+ ownedIngredients: IngredientData[]
+) => {
+ const alreadyInGroceryList = ingredientsToPurchase.find(
+   (ingredient) =>
+     ingredient.ingredientName.toLowerCase() ===
+     recipeIngredient.ingredientName.toLowerCase()
+ );
+ if (!alreadyInGroceryList) {
+   const totalQuantity = getTotalQuantity({
+     recipeIngredient,
+     recipeIngredients,
+   });
+   const updatedIngredient = {
+     ...recipeIngredient,
+     quantity: totalQuantity,
+   };
+   const ownedIngredientInfo = fuzzyMatchIngredient({
+     ingredientToPurchase: recipeIngredient,
+     ownedIngredients,
+   });
+   if (!ownedIngredientInfo) {
+     // user does not have ingredient, add to grocery list
+     return updatedIngredient;
+   } else {
+     // user has ingredient, check if they have enough
+     const quantityUserNeeds = quantityNeeded({
+       ingredientOnHand: ownedIngredientInfo,
+       recipeIngredient: updatedIngredient,
+     });
+     if (quantityUserNeeds > 0) {
+       return { ...updatedIngredient, quantity: quantityUserNeeds };
+     }
+   }
+ }
+ return null;
 };
 
 type GPEstimateListCostTypes = {
@@ -227,6 +258,7 @@ const estimateListCost = async ({
         ingredient.department,
         false,
         null,
+        [],
         ingredientApiInfo.ingredientCost,
         ingredientApiInfo.ingredientCostUnit
       ),
@@ -249,8 +281,9 @@ const getCostForAmountOfIngredient = async ({
     const ingredientCostUnit =
       searchResults.items[0]?.size ?? "Price not Found";
     return { ingredientCost, ingredientCostUnit };
+  } else {
+    return { ingredientCost: 0, ingredientCostUnit: "Price not Found" };
   }
-  return { ingredientCost: 0, ingredientCostUnit: "Price not Found" };
 };
 
 type GPLevenshteinDistanceType = {

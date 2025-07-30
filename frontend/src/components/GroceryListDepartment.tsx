@@ -42,10 +42,6 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentGroceryCheck={true}
             presentExpiration={false}
             presentButtons={false}
-            ingredientCost={{
-              ingredientCost: itemInfo?.ingredientCost ?? 0,
-              ingredientCostUnit: itemInfo.ingredientCostUnit ?? 0,
-            }}
             onGroceryCheck={onGroceryCheck}
           />
         )}

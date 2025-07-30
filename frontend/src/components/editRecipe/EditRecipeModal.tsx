@@ -417,7 +417,7 @@ const EditRecipeModal = ({
           ingredient.ingredientName,
           ingredient.quantity,
           ingredient.unit,
-          "",
+          ingredient.department,
           false
         );
         subIngredients.push(substitutionIngredient);
@@ -427,7 +427,7 @@ const EditRecipeModal = ({
         substitution.substitutionTitle,
         substitution.substitutionQuantity,
         substitution.substitutionUnit,
-        "",
+        substitution.substitutionDepartment,
         false,
         null,
         subIngredients
@@ -454,7 +454,7 @@ const EditRecipeModal = ({
           substitution.substitutionTitle,
           substitution.substitutionQuantity,
           substitution.substitutionUnit,
-          "",
+          substitution.substitutionDepartment,
           false
         ),
       });
