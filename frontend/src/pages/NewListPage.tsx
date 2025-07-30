@@ -158,7 +158,7 @@ const NewListPage = () => {
           <Typography level="h3" sx={GPTitledListHeaderStyle}>
             Selected Recipes to Shop and Schedule
           </Typography>
-          <Masonry columnsCount={4}>
+          <Masonry columnsCount={4} gutter="2vw">
             {selectedRecipes.map((meal, index) => (
               <MealCard
                 key={index}

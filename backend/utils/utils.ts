@@ -121,11 +121,11 @@ const fuzzyMatchIngredient = ({
   for (const ownedIngredient of ownedIngredients) {
     // check if one ingredient name is a substring of another (ex mozzarella cheese and mozzarella)
     if (
-      ingredientToPurchase.ingredientName.includes(
-        ownedIngredient.ingredientName,
+      ingredientToPurchase.ingredientName.toLowerCase().includes(
+        ownedIngredient.ingredientName.toLowerCase(),
       ) ||
-      ownedIngredient.ingredientName.includes(
-        ingredientToPurchase.ingredientName,
+      ownedIngredient.ingredientName.toLowerCase().includes(
+        ingredientToPurchase.ingredientName.toLowerCase(),
       )
     ) {
       similarIngredientInfo = ownedIngredient;
@@ -141,7 +141,7 @@ const fuzzyMatchIngredient = ({
         ingredientToPurchase.ingredientName.length,
         ownedIngredient.ingredientName.length,
       );
-    if (levRatio < 0.2) {
+    if (levRatio < 0.3) {
       similarIngredientInfo = ownedIngredient;
       break;
     }
