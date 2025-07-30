@@ -81,12 +81,12 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 
   const onSubstituteClick = () => {
     setEditRecipeModalOpen(true);
-    toggleModal()
+    toggleModal();
   };
 
   const handleCreateSubstitutionRecipe = () => {
     setEditRecipeModalOpen(false);
-    refreshRecipes && refreshRecipes()
+    refreshRecipes && refreshRecipes();
   };
 
   return (
@@ -152,6 +152,25 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                         {ingredient.unit}
                       </Typography>
                     </ListItemContent>
+                    {ingredient.subIngredients && (
+                      <List sx={{ ml: 4 }} marker="disc">
+                        {ingredient.subIngredients.map((subIngredient) => (
+                          <ListItem key={subIngredient.ingredientName}>
+                            <Typography>
+                              {subIngredient.ingredientName}
+                            </Typography>
+                            <Typography>
+                              {subIngredient.quantity % 1 === 0
+                                ? subIngredient.quantity
+                                : Number(subIngredient.quantity).toFixed(
+                                    2
+                                  )}{" "}
+                              {subIngredient.unit}
+                            </Typography>
+                          </ListItem>
+                        ))}
+                      </List>
+                    )}
                   </ListItem>
                 );
               })}

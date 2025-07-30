@@ -303,10 +303,12 @@ const EditRecipeModal = ({
       case actions.ADD_SUBSTITUTE_INSTRUCTIONS:
         // go through instructions and replace all instances of original ingredient with new ingredient
         const replacedInstructions = state.instructions.map((instruction) =>
-          instruction.toLowerCase().replace(
-            `${action.originalIngredient.toLowerCase()} `,
-            `${action.substituteIngredient.toLowerCase()} `
-          )
+          instruction
+            .toLowerCase()
+            .replace(
+              `${action.originalIngredient.toLowerCase()} `,
+              `${action.substituteIngredient.toLowerCase()} `
+            )
         );
         return {
           ...state,
@@ -408,6 +410,7 @@ const EditRecipeModal = ({
       substitution.substitutionIngredients.length > 0 &&
       substitution.substitutionInstructions.length > 0
     ) {
+      const subIngredients: IngredientData[] = [];
       substitution.substitutionIngredients.map((ingredient) => {
         const substitutionIngredient = new IngredientData(
           0,
@@ -417,11 +420,22 @@ const EditRecipeModal = ({
           "",
           false
         );
-        dispatch({
-          type: actions.ADD_ITEM,
-          addedField: "ingredients",
-          addedItem: substitutionIngredient,
-        });
+        subIngredients.push(substitutionIngredient);
+      });
+      const substituteAsIngredient = new IngredientData(
+        0,
+        substitution.substitutionTitle,
+        substitution.substitutionQuantity,
+        substitution.substitutionUnit,
+        "",
+        false,
+        null,
+        subIngredients
+      );
+      dispatch({
+        type: actions.ADD_ITEM,
+        addedField: "ingredients",
+        addedItem: substituteAsIngredient,
       });
       // add instructions to the start of the recipe since we must create prior to using ingredient
       dispatch({

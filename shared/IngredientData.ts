@@ -8,6 +8,7 @@ class IngredientData {
   readonly department: string;
   isChecked: boolean;
   expirationDate: string | null;
+  readonly subIngredients: IngredientData[];
   ingredientCost: number;
   ingredientCostUnit: string;
   ingredientSubstitutes: IngredientSubstitutes[];
@@ -20,6 +21,7 @@ class IngredientData {
     department: string,
     isChecked: boolean,
     expirationDate?: string | null,
+    subIngredients?: IngredientData[],
     ingredientCost?: number,
     ingredientCostUnit?: string,
     ingredientSubstitutes?: IngredientSubstitutes[]
@@ -31,6 +33,7 @@ class IngredientData {
     this.department = department;
     this.isChecked = isChecked;
     this.expirationDate = expirationDate ?? null;
+    this.subIngredients = subIngredients ?? [];
     this.ingredientCost = ingredientCost ?? 0;
     this.ingredientCostUnit = ingredientCostUnit ?? "";
     this.ingredientSubstitutes = ingredientSubstitutes ?? [];
