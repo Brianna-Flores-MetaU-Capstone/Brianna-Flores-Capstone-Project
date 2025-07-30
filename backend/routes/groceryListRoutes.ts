@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getListOfMissingIngredients, estimateListCost } from "../utils/utils";
+import {
+  getListOfMissingIngredients,
+  estimateListCost,
+  updateEstimatedListCost,
+} from "../utils/utils";
 
 const express = require("express");
 const router = express.Router();
@@ -43,10 +47,12 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
         return !ingredientItem.isChecked;
       }
     );
+    const updatedGroceryListPrice = updateEstimatedListCost({ingredientsToPurchase: clearedList});
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
         groceryList: clearedList,
+        groceryListCost: updatedGroceryListPrice,
       },
     });
     res.json(updatedUser);

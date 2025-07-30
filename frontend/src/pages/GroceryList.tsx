@@ -62,7 +62,15 @@ const GroceryList = () => {
     <Box>
       <AppHeader />
       <Box sx={{ m: 3 }}>
-        <Button onClick={handleClearGroceries}>Clear Purchased Items</Button>
+        <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "space-between"}}>
+          <Button onClick={handleClearGroceries}>Clear Purchased Items</Button>
+          <Box textAlign="right">
+          <Typography level="h3">Estimated Cost</Typography>
+          <Typography level="h4">
+            ${Number(groceryListCost).toFixed(2)}
+          </Typography>
+          </Box>
+        </Box>
         <Box sx={{ my: 3 }}>
           <TitledListView
             itemsList={groceryDepartments}
@@ -77,10 +85,6 @@ const GroceryList = () => {
             listItemsStyle={CenteredTitledListStyle}
           />
         </Box>
-        <Typography level="h3">Estimated Cost</Typography>
-        <Typography level="h4">
-          ${Number(groceryListCost).toFixed(2)}
-        </Typography>
       </Box>
       {addGroceryItemModalOpen && (
         <IngredientModal

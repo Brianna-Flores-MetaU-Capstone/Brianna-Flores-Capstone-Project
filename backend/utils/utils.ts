@@ -191,6 +191,13 @@ const getListOfMissingIngredients = ({
  return ingredientsToPurchase;
 };
 
+const updateEstimatedListCost = ({ingredientsToPurchase}: GPEstimateListCostTypes) => {
+  let totalEstimatedCost = 0;
+  for (const ingredient of ingredientsToPurchase) {
+    totalEstimatedCost += ingredient.ingredientCost ?? 0
+  }
+  return totalEstimatedCost;
+}
 
 const checkIfIngredientIsOwned = (
  ingredientsToPurchase: IngredientData[],
@@ -318,4 +325,5 @@ export {
   estimateListCost,
   getLevenshteinDistance,
   fuzzyMatchIngredient,
+  updateEstimatedListCost,
 };
