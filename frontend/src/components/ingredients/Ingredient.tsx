@@ -1,7 +1,6 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import type { GPIngredientApiInfoType } from "../../utils/types/types";
 import {
   Box,
   ButtonGroup,
@@ -9,6 +8,7 @@ import {
   Grid,
   IconButton,
   Typography,
+  Link,
 } from "@mui/joy";
 import type { IngredientData } from "../../../../shared/IngredientData";
 
@@ -58,7 +58,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
           </Grid>
         )}
         <Grid xs={GRID_NAME_COST_SPACING}>
-          <Typography>{ingredient.ingredientName}</Typography>
+          {ingredient.ingredientWalmartId > 0 && presentGroceryCheck ? <Link href={`https://www.walmart.com/ip/${ingredient.ingredientWalmartId}`}>{ingredient.ingredientName}</Link> : <Typography>{ingredient.ingredientName}</Typography>}
         </Grid>
         <Grid xs={GRID_EXP_QUANT_SPACING}>
           <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
