@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import type { GPErrorMessageTypes } from "../utils/types/types";
 import {
   fetchDiscoverRecipes,
+  fetchPopularRecipes,
   fetchRecipes,
   handleFavoriteRecipe,
   handleUnfavoriteRecipe,
@@ -34,7 +35,7 @@ const RecipeDiscoveryPage = () => {
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
-    new Set(),
+    new Set()
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
@@ -42,11 +43,11 @@ const RecipeDiscoveryPage = () => {
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
   const [recipeFilter, setRecipeFilter] = useState<recipeFilterType>(
-    recipeFiltersList.ALL,
+    recipeFiltersList.ALL
   );
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
 
@@ -55,12 +56,21 @@ const RecipeDiscoveryPage = () => {
   }, []);
 
   const fetchRecipesToDisplay = async () => {
-    if (recipeFilter === "favorited") {
+    if (recipeFilter === recipeFiltersList.FAVORITED) {
       await fetchRecipes({
         setMessage,
         setRecipes: setDisplayedRecipes,
         recipeGroup: RecipeFetchEnum.FAVORITED,
       });
+    }
+    if (recipeFilter === recipeFiltersList.POPULAR) {
+      const popularRecipes =
+        (await fetchPopularRecipes({
+          setMessage,
+          offset: 0,
+          numRequested: MAX_RECIPES_TO_DISPLAY,
+        })) ?? [];
+      setDisplayedRecipes(popularRecipes);
     } else {
       const fetchedRecipes =
         (await fetchDiscoverRecipes({
@@ -139,7 +149,7 @@ const RecipeDiscoveryPage = () => {
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
       );
     }
   };
@@ -152,7 +162,7 @@ const RecipeDiscoveryPage = () => {
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>,
+    noDiffFields: Set<string>
   ) => {
     setUserDiffOptionsOpen(false);
     if (!recipesToCompare[0] || !recipesToCompare[1]) {
@@ -205,27 +215,27 @@ const RecipeDiscoveryPage = () => {
         </Box>
         <Box sx={{ m: 2 }}>
           <Masonry columnsCount={4} gutter="2vw">
-            {displayedRecipes.map((meal, index) => (
-              <MealCard
-                key={index}
-                index={index}
-                parsedMealData={meal}
-                onMealCardClick={() => handleRecipeCardClick(meal)}
-                {...(user && {
-                  onSelectRecipe: () => handleSelectRecipeToShop(meal),
-                })}
-                {...(user && {
-                  onEditRecipe: () => handleEditRecipe(meal),
-                })}
-                setMessage={setMessage}
-                {...(user && { onFavoriteClick: handleFavoriteClick })}
-                favorited={favoritedRecipesId.has(meal.id)}
-                selectedToCompare={recipesToCompare.some(
-                  (recipe) => recipe.apiId === meal.apiId,
-                )}
-                onCompareSelect={handleToggleCompareRecipe}
-              />
-            ))}
+            {displayedRecipes.map((meal, index) => 
+                <MealCard
+                  key={meal.id}
+                  index={index}
+                  parsedMealData={meal}
+                  onMealCardClick={() => handleRecipeCardClick(meal)}
+                  {...(user && {
+                    onSelectRecipe: () => handleSelectRecipeToShop(meal),
+                  })}
+                  {...(user && {
+                    onEditRecipe: () => handleEditRecipe(meal),
+                  })}
+                  setMessage={setMessage}
+                  {...(user && { onFavoriteClick: handleFavoriteClick })}
+                  favorited={favoritedRecipesId.has(meal.id)}
+                  selectedToCompare={recipesToCompare.some(
+                    (recipe) => recipe.apiId === meal.apiId
+                  )}
+                  onCompareSelect={handleToggleCompareRecipe}
+                />
+            )}
           </Masonry>
         </Box>
         {user && message && (

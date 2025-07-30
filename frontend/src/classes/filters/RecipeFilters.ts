@@ -2,6 +2,7 @@ import type { Recipe } from "../../../../shared/Recipe";
 
 type recipeFilters =
   | "all"
+  | "popular"
   | "dairyFree"
   | "glutenFree"
   | "vegetarian"
@@ -10,6 +11,7 @@ type recipeFilters =
 
 const recipeFiltersConst = [
   { filter: "all", title: "All Recipes" },
+  { filter: "popular", title: "Popular Recipes" },
   { filter: "dairyFree", title: "Dairy Free" },
   { filter: "glutenFree", title: "Gluten Free" },
   { filter: "vegetarian", title: "Vegetarian" },
@@ -19,6 +21,7 @@ const recipeFiltersConst = [
 
 const recipeFiltersList = {
   ALL: "all",
+  POPULAR: "popular",
   DAIRY_FREE: "dairyFree",
   GLUTEN_FREE: "glutenFree",
   VEGETARIAN: "vegetarian",
@@ -31,6 +34,7 @@ type recipeFilterType = (typeof recipeFiltersList)[recipeFilterKeys];
 
 class RecipeFilter {
   all: Recipe[];
+  popular: Recipe[];
   dairyFree: Recipe[];
   glutenFree: Recipe[];
   vegetarian: Recipe[];
@@ -39,6 +43,7 @@ class RecipeFilter {
 
   constructor(old?: RecipeFilter) {
     this.all = old?.all ?? [];
+    this.popular = old?.popular ?? [];
     this.dairyFree = old?.dairyFree ?? [];
     this.glutenFree = old?.glutenFree ?? [];
     this.vegetarian = old?.vegetarian ?? [];

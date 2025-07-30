@@ -38,6 +38,7 @@ const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
         recipe.glutenFree,
         recipe.dairyFree,
         parsedTags,
+        0,
         null,
       );
       return newRecipe;

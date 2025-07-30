@@ -27,6 +27,22 @@ router.post("/discover", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/popular", async (req: Request, res: Response) => {
+  const { offset, numRequested } = req.body;
+  try {
+    const mostPopular = await prisma.recipe.findMany({
+      orderBy: {
+        likes: "desc"
+      },
+      skip: parseInt(offset),
+      take: parseInt(numRequested),
+    });
+    res.json(mostPopular);
+  } catch (error) {
+    res.status(500).send("Error fetching most popular recipes");
+  }
+});
+
 router.post(
   "/convertUnits",
   isAuthenticated,
@@ -34,7 +50,7 @@ router.post(
     const { convertTo, converting } = req.body;
     const converted = convertUnits({ convertTo, converting });
     res.json(converted);
-  },
+  }
 );
 
 router.get("/original/:apiId", async (req: Request, res: Response) => {
@@ -105,7 +121,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users favorited recipes
@@ -127,7 +143,7 @@ router.get(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // get a users edited recipes
@@ -244,7 +260,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // Add recipe to users favorites list
@@ -263,6 +279,7 @@ router.post(
           id: selectedRecipe.id,
         },
         data: {
+          likes: { increment: 1 },
           usersThatFavorited: {
             connect: {
               id: userId,
@@ -274,7 +291,7 @@ router.post(
     } catch (error) {
       res.status(500).send("Server Error");
     }
-  },
+  }
 );
 
 // remove recipe from users favorites list
@@ -282,17 +299,18 @@ router.put("/favorited/unfavorite", async (req: Request, res: Response) => {
   const userId = req.session.userId;
   const { selectedRecipe } = req.body;
   try {
-    const updatedUser = await prisma.user.update({
+    const updatedRecipe = await prisma.recipe.update({
       where: {
-        id: userId,
+        id: selectedRecipe.id,
       },
       data: {
-        favoritedRecipes: {
-          disconnect: { id: selectedRecipe.id },
+        likes: { decrement: 1 },
+        usersThatFavorited: {
+          disconnect: { id: userId },
         },
       },
     });
-    res.json(updatedUser);
+    res.json(updatedRecipe);
   } catch (error) {
     res.status(500).send("Failed to remove recipe from users list");
   }

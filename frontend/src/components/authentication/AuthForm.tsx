@@ -62,6 +62,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
     } else if (handleLoginSubmit) {
       handleLoginSubmit(event);
     }
+    setDisabled(false)
   };
 
   return (

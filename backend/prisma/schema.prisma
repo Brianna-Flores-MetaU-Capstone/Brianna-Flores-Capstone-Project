@@ -61,6 +61,7 @@ model Recipe {
   glutenFree         Boolean
   dairyFree          Boolean
   recipeTags         String[]
+  likes              Int             @default(0)
   users              User[]          @relation("PlannedRecipes")
   usersThatFavorited User[]          @relation("FavoritedRecipes")
   editingAuthorId    Int?

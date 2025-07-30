@@ -19,6 +19,7 @@ class Recipe {
   readonly glutenFree: boolean;
   readonly dairyFree: boolean;
   readonly recipeTags: string[];
+  readonly likes: number;
   ingredientCostInfo: GPIngredientDataTypes[];
   totalCost: number;
   calendarEvents: CalendarEvent[];
@@ -38,6 +39,7 @@ class Recipe {
     glutenFree: boolean,
     dairyFree: boolean,
     recipeTags: string[],
+    likes: number,
     editingAuthorId: number | null,
     id?: number,
     editingAuthorName?: string,
@@ -59,6 +61,7 @@ class Recipe {
     this.glutenFree = glutenFree;
     this.dairyFree = dairyFree;
     this.recipeTags = recipeTags;
+    this.likes = likes
     this.id = id ?? 0;
     this.editingAuthorName = editingAuthorName ?? "";
     this.editingAuthorId = editingAuthorId ?? null;
