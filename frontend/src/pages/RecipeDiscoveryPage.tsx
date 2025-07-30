@@ -26,7 +26,7 @@ import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 import Masonry from "react-responsive-masonry";
 
-const MAX_RECIPES_TO_DISPLAY = 50;
+const MAX_RECIPES_TO_DISPLAY = 40;
 
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
@@ -50,6 +50,8 @@ const RecipeDiscoveryPage = () => {
     recipeFiltersList.ALL
   );
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [loadingRecipes, setLoadingRecipes] = useState(false);
 
   useEffect(() => {
     fetchRecipesToDisplay();
@@ -67,19 +69,27 @@ const RecipeDiscoveryPage = () => {
       const popularRecipes =
         (await fetchPopularRecipes({
           setMessage,
-          offset: 0,
+          offset: offset,
           numRequested: MAX_RECIPES_TO_DISPLAY,
         })) ?? [];
-      setDisplayedRecipes(popularRecipes);
+      if (offset > 0) {
+        setDisplayedRecipes((prev) => [...prev, ...popularRecipes]);
+      } else {
+        setDisplayedRecipes(popularRecipes);
+      }
     } else {
       const fetchedRecipes =
         (await fetchDiscoverRecipes({
           setMessage,
           filter: recipeFilter,
-          offset: 0,
+          offset: offset,
           numRequested: MAX_RECIPES_TO_DISPLAY,
         })) ?? [];
-      setDisplayedRecipes(fetchedRecipes);
+      if (offset > 0) {
+        setDisplayedRecipes((prev) => [...prev, ...fetchedRecipes]);
+      } else {
+        setDisplayedRecipes(fetchedRecipes);
+      }
     }
     const favoritedRecipesReturn =
       (await fetchRecipes({
@@ -181,6 +191,16 @@ const RecipeDiscoveryPage = () => {
     fetchRecipesToDisplay();
   }, [recipeFilter]);
 
+  useEffect(() => {
+    fetchRecipesToDisplay();
+    setLoadingRecipes(false);
+  }, [offset]);
+
+  const handleLoadMoreRecipes = () => {
+    setLoadingRecipes(true);
+    setOffset((prev) => prev + MAX_RECIPES_TO_DISPLAY);
+  };
+
   return (
     <>
       <Box>
@@ -237,6 +257,14 @@ const RecipeDiscoveryPage = () => {
               />
             ))}
           </Masonry>
+          <Button
+            disabled={loadingRecipes}
+            sx={{ display: "block", margin: "auto", mt: 4 }}
+            size="lg"
+            onClick={() => handleLoadMoreRecipes()}
+          >
+            Load More Recipes!
+          </Button>
         </Box>
         {user && message && (
           <ErrorState error={message.error} message={message.message} />

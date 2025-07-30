@@ -10,6 +10,7 @@ import {
   IconButton,
   AspectRatio,
   Link,
+  Grid,
 } from "@mui/joy";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -60,7 +61,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
 }) => {
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [currentLikes, setCurrentLikes] = useState(parsedMealData.likes)
+  const [currentLikes, setCurrentLikes] = useState(parsedMealData.likes);
 
   const toggleModal = () => {
     setIngredientCostModalOpen((prev) => !prev);
@@ -94,49 +95,49 @@ const MealCard: React.FC<GPMealCardProps> = ({
     <>
       {/* Code referenced from MUI Joy Documentation https://mui.com/joy-ui/react-card/#interactive-card*/}
       <Card variant="outlined">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Tooltip
-              title={favorited ? "Remove from favorites" : "Add to favorites"}
-            >
-              <IconButton
-                color="primary"
-                sx={{ zIndex: 2 }}
-                disabled={onFavoriteClick ? false : true}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (onFavoriteClick) {
-                    setCurrentLikes((prev) => favorited ? prev - 1 : prev + 1)
-                    onFavoriteClick(parsedMealData);
-                  }
-                }}
+        <Grid container sx={{ mr: 2 }}>
+          <Grid xs={10}>
+            <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
+          </Grid>
+          <Grid xs={2}>
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+              <Tooltip
+                title={favorited ? "Remove from favorites" : "Add to favorites"}
               >
-                {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                <Typography>{currentLikes}</Typography>
-              </IconButton>
-            </Tooltip>
-            {onCompareSelect && (
-              <Tooltip title="Compare recipes">
-                <Checkbox
-                  sx={{ zIndex: 5 }}
-                  size="lg"
-                  checked={selectedToCompare}
+                <IconButton
+                  color="primary"
+                  sx={{ zIndex: 2 }}
+                  disabled={onFavoriteClick ? false : true}
                   onClick={(event) => {
                     event.stopPropagation();
-                    onCompareSelect(parsedMealData);
+                    if (onFavoriteClick) {
+                      setCurrentLikes((prev) =>
+                        favorited ? prev - 1 : prev + 1
+                      );
+                      onFavoriteClick(parsedMealData);
+                    }
                   }}
-                />
+                >
+                  {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  <Typography>{currentLikes}</Typography>
+                </IconButton>
               </Tooltip>
-            )}
-          </Box>
-        </Box>
+              {onCompareSelect && (
+                <Tooltip title="Compare recipes">
+                  <Checkbox
+                    sx={{ zIndex: 5 }}
+                    size="lg"
+                    checked={selectedToCompare}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onCompareSelect(parsedMealData);
+                    }}
+                  />
+                </Tooltip>
+              )}
+            </Box>
+          </Grid>
+        </Grid>
         <Box sx={{ my: 0, display: "flex", justifyContent: "space-between" }}>
           <Typography>Servings: {parsedMealData.servings}</Typography>
           <Typography>
