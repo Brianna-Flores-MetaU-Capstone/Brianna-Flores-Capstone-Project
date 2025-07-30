@@ -267,7 +267,9 @@ const estimateListCost = async ({
         null,
         [],
         ingredientApiInfo.ingredientCost,
-        ingredientApiInfo.ingredientCostUnit
+        ingredientApiInfo.ingredientCostUnit,
+        [],
+        ingredientApiInfo.ingredientItemId
       ),
     ];
   }
@@ -287,9 +289,10 @@ const getCostForAmountOfIngredient = async ({
     const ingredientCost = searchResults.items[0]?.salePrice ?? 0;
     const ingredientCostUnit =
       searchResults.items[0]?.size ?? "Price not Found";
-    return { ingredientCost, ingredientCostUnit };
+    const ingredientItemId = searchResults.items[0]?.itemId ?? -1;
+    return { ingredientCost, ingredientCostUnit, ingredientItemId };
   } else {
-    return { ingredientCost: 0, ingredientCostUnit: "Price not Found" };
+    return { ingredientCost: 0, ingredientCostUnit: "Price not Found", ingredientItemId: -1 };
   }
 };
 
