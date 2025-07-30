@@ -66,9 +66,9 @@ const getTotalQuantity = ({
           convertTo: recipeIngredient,
           converting: ingredient,
         });
-        totalQuantity += converted.converted.quantity;
+        totalQuantity += parseInt(converted.converted.quantity.toString());
       } else {
-        totalQuantity += ingredient.quantity;
+        totalQuantity += parseInt(ingredient.quantity.toString());
       }
     }
   } else {
