@@ -8,7 +8,10 @@ const calendarUrl = import.meta.env.VITE_CALENDAR_URL;
 import axios from "axios";
 import { axiosConfig } from "../../utils/databaseHelpers";
 
-import type { GPRecipeEventOptionType, GPUserEventTypes } from "../../utils/types/types";
+import type {
+  GPRecipeEventOptionType,
+  GPUserEventTypes,
+} from "../../utils/types/types";
 import { findFreeTime, parseFreeTime } from "../../utils/calendarUtils";
 import { useEventRec } from "../../contexts/EventRecContext";
 import CalendarTimeModal from "./CalendarTimeModal";

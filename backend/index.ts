@@ -6,7 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
-const ORIGIN = process.env.ORIGIN
+const ORIGIN = process.env.ORIGIN;
 app.use(
   cors({
     origin: ORIGIN,

@@ -37,10 +37,11 @@ const EditedRecipesPage = () => {
       setRecipes: setUserEditedRecipes,
       recipeGroup: RecipeFetchEnum.EDITED,
     });
-    const favoritedRecipesReturn = await fetchRecipes({
-      setMessage,
-      recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
-    }) ?? [];
+    const favoritedRecipesReturn =
+      (await fetchRecipes({
+        setMessage,
+        recipeGroup: RecipeFetchEnum.FAVORITED_IDS,
+      })) ?? [];
     // set favorited recipes id
     for (const elem of favoritedRecipesReturn) {
       setFavoritedRecipesId((prev) => new Set(prev.add(elem.id)));

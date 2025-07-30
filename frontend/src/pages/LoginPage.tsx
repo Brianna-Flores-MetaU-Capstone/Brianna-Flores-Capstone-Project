@@ -30,9 +30,12 @@ const LoginPage = () => {
           const userData = await validateUserToken(user);
           if (userData) {
             try {
-              const userExtendedData = await axios.get<GPUserAccountType>(`${databaseUrl}/me`, {
-                withCredentials: true,
-              });
+              const userExtendedData = await axios.get<GPUserAccountType>(
+                `${databaseUrl}/me`,
+                {
+                  withCredentials: true,
+                },
+              );
               if (userExtendedData.data.id) {
                 setUser(userExtendedData.data);
               }

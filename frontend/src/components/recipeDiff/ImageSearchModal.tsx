@@ -65,15 +65,18 @@ const ImageSearchModal = ({
   const handleSearchSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const imageResults = await axios.get<GPPexelsReturnType>(`${pexelsUrl}/search`, {
-        headers: {
-          Authorization: IMAGE_API_KEY,
+      const imageResults = await axios.get<GPPexelsReturnType>(
+        `${pexelsUrl}/search`,
+        {
+          headers: {
+            Authorization: IMAGE_API_KEY,
+          },
+          params: {
+            query: imageSearchTerm,
+            per_page: 8,
+          },
         },
-        params: {
-          query: imageSearchTerm,
-          per_page: 8,
-        },
-      });
+      );
       const photosArray = imageResults.data.photos;
       const photosSrc = photosArray.map(
         (photoInfo: GPPexelsImageType) => photoInfo.src?.original,
