@@ -34,9 +34,9 @@ import { Recipe } from "../../../../shared/Recipe";
 import InfoOutlined from "@mui/icons-material/InfoOutline";
 import ImageSearchModal from "./ImageSearchModal";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
-import { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
 import { IngredientData } from "../../../../shared/IngredientData";
+import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -181,7 +181,7 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.ADD_SUBSTITUTES;
         ingredientIndex: number;
-        value: IngredientSubstitutes[];
+        value: GPAiSubstitutionReturnType[];
       }
     | {
         type: typeof actions.UPDATE_INSTRUCTION;
@@ -378,7 +378,7 @@ const EditRecipeModal = ({
     index: number
   ) => {
     setLoadingSubstitutions(true);
-    const response: IngredientSubstitutes[] =
+    const response: GPAiSubstitutionReturnType[] =
       await getSubstitutionForIngredient({
         ingredient,
         intolerancesAndDiets: [
@@ -395,7 +395,7 @@ const EditRecipeModal = ({
   };
 
   const handleSubstitutionSelected = (
-    substitution: IngredientSubstitutes,
+    substitution: GPAiSubstitutionReturnType,
     index: number,
     originalIngredientName: string
   ) => {

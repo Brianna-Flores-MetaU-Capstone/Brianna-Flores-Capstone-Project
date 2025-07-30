@@ -1,4 +1,5 @@
 import type { IngredientSubstitutes } from "../frontend/src/classes/ingredients/IngredientSubstitutes";
+import { GPAiSubstitutionReturnType } from "../frontend/src/utils/types/aiSubReturnType";
 
 class IngredientData {
   readonly id: number;
@@ -11,7 +12,7 @@ class IngredientData {
   readonly subIngredients: IngredientData[];
   ingredientCost: number;
   ingredientCostUnit: string;
-  ingredientSubstitutes: IngredientSubstitutes[];
+  ingredientSubstitutes: GPAiSubstitutionReturnType[];
   ingredientWalmartId: number;
 
   constructor(
@@ -25,7 +26,7 @@ class IngredientData {
     subIngredients?: IngredientData[],
     ingredientCost?: number,
     ingredientCostUnit?: string,
-    ingredientSubstitutes?: IngredientSubstitutes[],
+    ingredientSubstitutes?: GPAiSubstitutionReturnType[],
     ingredientWalmartId?: number
   ) {
     this.id = id;
