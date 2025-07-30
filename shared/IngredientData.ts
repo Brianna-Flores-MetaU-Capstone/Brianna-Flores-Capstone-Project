@@ -1,4 +1,3 @@
-import type { IngredientSubstitutes } from "../frontend/src/classes/ingredients/IngredientSubstitutes";
 import { GPAiSubstitutionReturnType } from "../frontend/src/utils/types/aiSubReturnType";
 
 class IngredientData {

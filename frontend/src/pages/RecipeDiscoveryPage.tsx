@@ -51,7 +51,8 @@ const RecipeDiscoveryPage = () => {
   );
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
   const [offset, setOffset] = useState(0);
-  const [loadingRecipes, setLoadingRecipes] = useState(false);
+  const [disableLoadMore, setDisableLoadMore] = useState(false);
+  const [totalNumRecipes, setTotalNumRecipes] = useState(0);
 
   useEffect(() => {
     fetchRecipesToDisplay();
@@ -69,6 +70,7 @@ const RecipeDiscoveryPage = () => {
       const popularRecipes =
         (await fetchPopularRecipes({
           setMessage,
+          setTotalNumRecipes,
           offset: offset,
           numRequested: MAX_RECIPES_TO_DISPLAY,
         })) ?? [];
@@ -80,6 +82,7 @@ const RecipeDiscoveryPage = () => {
     } else {
       const fetchedRecipes =
         (await fetchDiscoverRecipes({
+          setTotalNumRecipes,
           setMessage,
           filter: recipeFilter,
           offset: offset,
@@ -188,16 +191,17 @@ const RecipeDiscoveryPage = () => {
   };
 
   useEffect(() => {
+    setOffset(0)
     fetchRecipesToDisplay();
   }, [recipeFilter]);
 
   useEffect(() => {
     fetchRecipesToDisplay();
-    setLoadingRecipes(false);
-  }, [offset]);
+    setDisableLoadMore(offset + MAX_RECIPES_TO_DISPLAY > totalNumRecipes)
+  }, [offset, totalNumRecipes]);
 
   const handleLoadMoreRecipes = () => {
-    setLoadingRecipes(true);
+    setDisableLoadMore(true);
     setOffset((prev) => prev + MAX_RECIPES_TO_DISPLAY);
   };
 
@@ -257,14 +261,13 @@ const RecipeDiscoveryPage = () => {
               />
             ))}
           </Masonry>
-          <Button
-            disabled={loadingRecipes}
+          {!disableLoadMore && <Button
             sx={{ display: "block", margin: "auto", mt: 4 }}
             size="lg"
             onClick={() => handleLoadMoreRecipes()}
           >
             Load More Recipes!
-          </Button>
+          </Button>}
         </Box>
         {user && message && (
           <ErrorState error={message.error} message={message.message} />
