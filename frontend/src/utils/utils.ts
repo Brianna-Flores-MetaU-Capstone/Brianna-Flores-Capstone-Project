@@ -1,6 +1,4 @@
 import type {
-  GPIngredientDataTypes,
-  GPRecipeIngredientTypes,
   GPErrorMessageTypes,
   GPEstimateRecipeCostReturnTypes,
 } from "./types/types";
@@ -13,6 +11,7 @@ import {
 import { Recipe } from "../../../shared/Recipe";
 import { MIN_PASSWORD_LENGTH } from "./constants";
 import type { GPSpoonacularResultsType } from "./types/spoonacularApiReturnType";
+import { IngredientData } from "../../../shared/IngredientData";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
@@ -20,7 +19,7 @@ const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
     recipeData.map(async (recipe: any) => {
       const parsedIngredients = parseIngredients(recipe.extendedIngredients);
       const parsedInstructions = parseInstructions(
-        recipe.analyzedInstructions[0].steps,
+        recipe.analyzedInstructions[0].steps
       );
       const parsedTags = parseTags(recipe);
       const newRecipe = new Recipe(
@@ -39,10 +38,10 @@ const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
         recipe.dairyFree,
         parsedTags,
         0,
-        null,
+        null
       );
       return newRecipe;
-    }),
+    })
   );
 };
 
@@ -64,14 +63,17 @@ const parseTags = (unparsedRecipeData: any) => {
 };
 
 const parseIngredients = (ingredientsData: any) => {
-  return ingredientsData.map((ingredient: any) => ({
-    id: ingredient.id,
-    ingredientName: ingredient.name,
-    department: ingredient.aisle,
-    quantity: ingredient.amount,
-    unit: ingredient.unit,
-    estimatedCost: getIngredientCost(),
-  }));
+  return ingredientsData.map(
+    (ingredient: any) =>
+      new IngredientData(
+        ingredient.id,
+        ingredient.name,
+        ingredient.amount,
+        ingredient.unit,
+        ingredient.aisle,
+        false
+      )
+  );
 };
 
 const parseInstructions = (steps: any) => {
@@ -80,13 +82,9 @@ const parseInstructions = (steps: any) => {
   }
 };
 
-const getIngredientCost = () => {
-  return 0;
-};
-
 type GPEstimateRecipeCostTypes = {
-  recipeIngredients: GPRecipeIngredientTypes[];
-  ownedIngredients: GPIngredientDataTypes[];
+  recipeIngredients: IngredientData[];
+  ownedIngredients: IngredientData[];
 };
 
 const estimateRecipeCost = async ({
@@ -97,7 +95,7 @@ const estimateRecipeCost = async ({
     const response = await axios.post<GPEstimateRecipeCostReturnTypes>(
       `${databaseUrl}/generateList/estimateCost`,
       { ownedIngredients, recipeIngredients },
-      axiosConfig,
+      axiosConfig
     );
     const estimatedCostFormatted: GPEstimateRecipeCostReturnTypes = {
       ingredientCostInfo: response.data.ingredientCostInfo ?? [],
@@ -126,7 +124,7 @@ const validateInput = (formData: AuthFormData) => {
 
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>,
+  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>
 ) => {
   const credential = event.target.dataset.credential as GPAuthFormType;
   const value = event.target.value;
@@ -137,7 +135,7 @@ const handleAuthInputChange = (
   });
 };
 
-const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {
+const parseGroceryListDepartments = (groceryList: IngredientData[]) => {
   let departments: string[] = [];
   for (const grocery of groceryList) {
     if (!departments.includes(grocery.department)) {
@@ -149,7 +147,7 @@ const parseGroceryListDepartments = (groceryList: GPIngredientDataTypes[]) => {
 
 type GPUpdateRecipePricingTypes = {
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>
   ) => void;
   recipe: Recipe;
 };

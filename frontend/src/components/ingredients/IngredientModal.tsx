@@ -1,10 +1,7 @@
 import React from "react";
 import { useReducer } from "react";
 import { IngredientUnitOptions, Departments } from "../../utils/enum";
-import type {
-  GPIngredientDataTypes,
-  GPErrorMessageTypes,
-} from "../../utils/types/types";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { IngredientDataFields, INGREDIENT_MODAL } from "../../utils/constants";
 import { GPModalStyle } from "../../utils/style/UIStyle";
 import { useState } from "react";
@@ -26,11 +23,12 @@ import {
   FormHelperText,
 } from "@mui/joy";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import { IngredientData } from "../../../../shared/IngredientData";
 
 type GPIngredientModalProps = {
   modalFor: string;
   isEditing: boolean;
-  ingredientData?: GPIngredientDataTypes;
+  ingredientData?: IngredientData;
   onClose: () => void;
   modalOpen: boolean;
   fetchUserIngredients: () => void;
@@ -53,28 +51,18 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const [ingredientInputError, setIngredientInputError] = useState(false);
 
-  const initialIngredientState = ingredientData ?? {
-    id: 0,
-    ingredientName: "",
-    quantity: 0,
-    unit: "units",
-    department: "",
-    expirationDate: null,
-    image: "",
-    isChecked: false,
-    ingredientCost: 0,
-    ingredientCostUnit: 0,
-  };
+  const initialIngredientState =
+    ingredientData ?? new IngredientData(0, "", 0, "", "", false, null, 0, "");
 
   type ACTIONTYPE =
     | {
         type: typeof actions.SET_INPUT;
-        ingredientField: keyof GPIngredientDataTypes;
+        ingredientField: keyof IngredientData;
         value: string;
       }
     | { type: typeof actions.SET_DATE; value: string | undefined };
 
-  function reducer(state: GPIngredientDataTypes, action: ACTIONTYPE) {
+  function reducer(state: IngredientData, action: ACTIONTYPE) {
     switch (action.type) {
       case actions.SET_INPUT:
         return { ...state, [action.ingredientField]: action.value };
@@ -85,7 +73,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   const [newIngredientData, dispatch] = useReducer(
     reducer,
-    initialIngredientState,
+    initialIngredientState
   );
 
   const handleModalSubmit = async (event: React.FormEvent) => {
@@ -166,8 +154,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 onChange={(event) =>
                   dispatch({
                     type: actions.SET_INPUT,
-                    ingredientField: event?.target
-                      .name as keyof GPIngredientDataTypes,
+                    ingredientField: event?.target.name as keyof IngredientData,
                     value: event.target.value,
                   })
                 }
@@ -191,8 +178,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                   setIngredientInputError(parseFloat(event.target.value) <= 0);
                   dispatch({
                     type: actions.SET_INPUT,
-                    ingredientField: event?.target
-                      .name as keyof GPIngredientDataTypes,
+                    ingredientField: event?.target.name as keyof IngredientData,
                     value: event.target.value,
                   });
                 }}
@@ -252,8 +238,7 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
                 onChange={(event) =>
                   dispatch({
                     type: actions.SET_INPUT,
-                    ingredientField: event?.target
-                      .name as keyof GPIngredientDataTypes,
+                    ingredientField: event?.target.name as keyof IngredientData,
                     value: event.target.value,
                   })
                 }

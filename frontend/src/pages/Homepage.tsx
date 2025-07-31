@@ -1,7 +1,4 @@
-import type {
-  GPErrorMessageTypes,
-  GPIngredientDataTypes,
-} from "../utils/types/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import TitledListView from "../components/utils/TitledListView";
 import { PreviewConstants, RecipeFetchEnum } from "../utils/constants";
@@ -21,14 +18,13 @@ import {
   RowOverflowTitledListStyle,
 } from "../utils/style/UIStyle";
 import { Recipe } from "../../../shared/Recipe";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const Homepage = () => {
   const [_, setMessage] = useState<GPErrorMessageTypes>();
-  const [userGroceryList, setUserGroceryList] = useState<
-    GPIngredientDataTypes[]
-  >([]);
+  const [userGroceryList, setUserGroceryList] = useState<IngredientData[]>([]);
   const [userIngredientList, setUserIngredientList] = useState<
-    GPIngredientDataTypes[]
+    IngredientData[]
   >([]);
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
 

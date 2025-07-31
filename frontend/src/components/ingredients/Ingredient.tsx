@@ -1,10 +1,7 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import type {
-  GPIngredientApiInfoType,
-  GPIngredientDataTypes,
-} from "../../utils/types/types";
+import type { GPIngredientApiInfoType } from "../../utils/types/types";
 import {
   Box,
   ButtonGroup,
@@ -13,6 +10,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/joy";
+import type { IngredientData } from "../../../../shared/IngredientData";
 
 const GRID_NAME_COST_SPACING = 4;
 const GRID_EXP_QUANT_SPACING = 3;
@@ -26,14 +24,14 @@ const GPIngredientStyle = {
 };
 
 type GPIngredientProps = {
-  ingredient: GPIngredientDataTypes;
+  ingredient: IngredientData;
   presentGroceryCheck: boolean;
   presentExpiration: boolean;
   presentButtons: boolean;
   ingredientCost?: GPIngredientApiInfoType;
   onGroceryCheck?: (ingredientName: string) => void;
-  onEdit?: (ingredient: GPIngredientDataTypes) => void;
-  onDelete?: (ingredient: GPIngredientDataTypes) => void;
+  onEdit?: (ingredient: IngredientData) => void;
+  onDelete?: (ingredient: IngredientData) => void;
 };
 
 const Ingredient: React.FC<GPIngredientProps> = ({

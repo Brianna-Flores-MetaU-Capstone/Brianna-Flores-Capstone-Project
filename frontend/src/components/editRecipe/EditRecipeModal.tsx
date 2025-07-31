@@ -1,7 +1,6 @@
 import { useReducer, useEffect, useState } from "react";
 import type {
   GPErrorMessageTypes,
-  GPIngredientDataTypes,
   GPRecipeDataTypes,
 } from "../../utils/types/types";
 import {
@@ -37,6 +36,7 @@ import ImageSearchModal from "./ImageSearchModal";
 import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 import { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
+import { IngredientData } from "../../../../shared/IngredientData";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -46,6 +46,7 @@ const actions = {
   SET_INPUT_NUM: "setInputNum",
   SET_DIETARY_TAGS: "toggleTag",
   UPDATE_INGREDIENT: "setIngredient",
+  ADD_SUBSTITUTES: "addSubstitutes",
   UPDATE_INSTRUCTION: "setInstruction",
   DELETE_ITEM: "deleteItem",
   ADD_ITEM: "addItem",
@@ -60,6 +61,7 @@ const EditRecipeFieldsEnum = {
   ING_NAME: "ingredientName",
   ING_QUANTITY: "quantity",
   ING_UNIT: "unit",
+  ING_SUBSTITUTES: "ingredientSubstitutes",
 } as const;
 
 const recipeInputEditFields = [
@@ -172,8 +174,13 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.UPDATE_INGREDIENT;
         ingredientIndex: number;
-        ingredientField: keyof GPIngredientDataTypes;
+        ingredientField: keyof IngredientData;
         value: string;
+      }
+    | {
+        type: typeof actions.ADD_SUBSTITUTES;
+        ingredientIndex: number;
+        value: IngredientSubstitutes[];
       }
     | {
         type: typeof actions.UPDATE_INSTRUCTION;
@@ -188,7 +195,7 @@ const EditRecipeModal = ({
     | {
         type: typeof actions.ADD_ITEM;
         addedField: keyof GPRecipeDataTypes;
-        addedItem: string | GPIngredientDataTypes;
+        addedItem: string | IngredientData;
       };
 
   const [inputError, setInputError] = useState(false);
@@ -196,8 +203,6 @@ const EditRecipeModal = ({
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [imageSearchModalOpen, setImageSearchModalOpen] = useState(false);
   const [loadingSubstitutions, setLoadingSubstitutions] = useState(false);
-  const [substututionResults, setSubstitutionResults] =
-    useState<IngredientSubstitutes[]>();
   const { user } = useUser();
 
   function reducer(state: GPRecipeDataTypes, action: ACTIONTYPE) {
@@ -246,6 +251,15 @@ const EditRecipeModal = ({
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
+              : elem
+          ),
+        };
+      case actions.ADD_SUBSTITUTES:
+        return {
+          ...state,
+          ingredients: state.ingredients.map((elem, index) =>
+            index === action.ingredientIndex
+              ? { ...elem, ["ingredientSubstitutes"]: action.value }
               : elem
           ),
         };
@@ -339,7 +353,8 @@ const EditRecipeModal = ({
   };
 
   const handleSuggestIngredientSubstitution = async (
-    ingredient: GPIngredientDataTypes
+    ingredient: IngredientData,
+    index: number
   ) => {
     setLoadingSubstitutions(true);
     const response: IngredientSubstitutes[] =
@@ -350,8 +365,12 @@ const EditRecipeModal = ({
           ...(user?.diets ?? []),
         ],
       });
+    dispatch({
+      type: actions.ADD_SUBSTITUTES,
+      ingredientIndex: index,
+      value: response,
+    });
     setLoadingSubstitutions(false);
-    setSubstitutionResults(response);
   };
 
   return (
@@ -499,7 +518,7 @@ const EditRecipeModal = ({
                                   type: actions.UPDATE_INGREDIENT,
                                   ingredientIndex: ingredientIndex,
                                   ingredientField:
-                                    field.field as keyof GPIngredientDataTypes,
+                                    field.field as keyof IngredientData,
                                   value: event.target.value,
                                 })
                               }
@@ -526,16 +545,19 @@ const EditRecipeModal = ({
                           <Button
                             loading={loadingSubstitutions}
                             onClick={() =>
-                              handleSuggestIngredientSubstitution(ingredient)
+                              handleSuggestIngredientSubstitution(
+                                ingredient,
+                                ingredientIndex
+                              )
                             }
                           >
                             Suggest dietary substitutions
                           </Button>
                         </Grid>
                       )}
-                      {substututionResults && (
+                      {ingredient.ingredientSubstitutes && (
                         <SubstitutionOptionsDropdown
-                          substitutionOptions={substututionResults}
+                          substitutionOptions={ingredient.ingredientSubstitutes}
                         />
                       )}
                     </Grid>
@@ -547,14 +569,7 @@ const EditRecipeModal = ({
                     dispatch({
                       type: actions.ADD_ITEM,
                       addedField: "ingredients",
-                      addedItem: {
-                        id: 0,
-                        ingredientName: "",
-                        quantity: 0,
-                        unit: "",
-                        department: "",
-                        isChecked: false,
-                      },
+                      addedItem: new IngredientData(0, "", 0, "", "", false),
                     })
                   }
                 >

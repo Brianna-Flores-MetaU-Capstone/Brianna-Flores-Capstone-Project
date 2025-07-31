@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { GPAiSubstitutionReturnType } from "./types/aiSubReturnType";
-import type { GPRecipeIngredientTypes } from "./types/types";
 import { IngredientSubstitutes } from "../classes/ingredients/IngredientSubstitutes";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -9,7 +9,7 @@ const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey });
 
 type GPIngredientSubstituteTypes = {
-  ingredient: GPRecipeIngredientTypes;
+  ingredient: IngredientData;
   intolerancesAndDiets: string[];
 };
 
@@ -31,8 +31,15 @@ async function getSubstitutionForIngredient({
   const asJson: GPAiSubstitutionReturnType[] = JSON.parse(prepForJson);
   let substitutionResults: IngredientSubstitutes[] = [];
   for (const substitute of asJson) {
-    const ingredientSubstitute = new IngredientSubstitutes(substitute.substitutionTitle, substitute.substitutionQuantity, substitute.substitutionUnit, substitute.storeBought, substitute.substitutionIngredients, substitute.substitutionInstructions)
-    substitutionResults = [...substitutionResults, ingredientSubstitute]
+    const ingredientSubstitute = new IngredientSubstitutes(
+      substitute.substitutionTitle,
+      substitute.substitutionQuantity,
+      substitute.substitutionUnit,
+      substitute.storeBought,
+      substitute.substitutionIngredients,
+      substitute.substitutionInstructions
+    );
+    substitutionResults = [...substitutionResults, ingredientSubstitute];
   }
   return substitutionResults;
 }

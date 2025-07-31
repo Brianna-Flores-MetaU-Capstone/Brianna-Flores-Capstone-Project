@@ -1,13 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-import type {
-  GPRecipeIngredientTypes,
-  GPIngredientDataTypes,
-} from "../../frontend/src/utils/types/types";
 import { unitConversions } from "./constants";
 import convert from "convert-units";
 import { searchWalmart } from "./walmartAPI";
+import { IngredientData } from "../../shared/IngredientData";
 
 const checkUserExists = async (firebaseId: string) => {
   const user = await prisma.user.findUnique({
@@ -17,8 +14,8 @@ const checkUserExists = async (firebaseId: string) => {
 };
 
 type GPConvertUnitsType = {
-  convertTo: GPRecipeIngredientTypes;
-  converting: GPRecipeIngredientTypes;
+  convertTo: IngredientData;
+  converting: IngredientData;
 };
 const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
   let convertToUnit = unitConversions[convertTo.unit.toLowerCase()];
@@ -44,8 +41,8 @@ const convertUnits = ({ convertTo, converting }: GPConvertUnitsType) => {
 };
 
 type GPTotalQuantityTypes = {
-  recipeIngredient: GPRecipeIngredientTypes;
-  recipeIngredients: GPRecipeIngredientTypes[];
+  recipeIngredient: IngredientData;
+  recipeIngredients: IngredientData[];
 };
 const getTotalQuantity = ({
   recipeIngredient,
@@ -54,7 +51,7 @@ const getTotalQuantity = ({
   // for the current ingredient, check to see if there are any of the same ingredient in the list
   const sameIngredients = recipeIngredients.filter(
     (ingredient) =>
-      ingredient.ingredientName === recipeIngredient.ingredientName,
+      ingredient.ingredientName === recipeIngredient.ingredientName
   );
   // loop through array of ingredients to get the quantity needed
   let totalQuantity = 0;
@@ -81,8 +78,8 @@ const getTotalQuantity = ({
 };
 
 type GPQuantityNeededTypes = {
-  ingredientOnHand: GPIngredientDataTypes;
-  recipeIngredient: GPRecipeIngredientTypes;
+  ingredientOnHand: IngredientData;
+  recipeIngredient: IngredientData;
 };
 
 const quantityNeeded = ({
@@ -109,24 +106,24 @@ const quantityNeeded = ({
 };
 
 type GPFuzzyMatchTypes = {
-  ingredientToPurchase: GPRecipeIngredientTypes;
-  ownedIngredients: GPIngredientDataTypes[];
+  ingredientToPurchase: IngredientData;
+  ownedIngredients: IngredientData[];
 };
 
 const fuzzyMatchIngredient = ({
   ingredientToPurchase,
   ownedIngredients,
 }: GPFuzzyMatchTypes) => {
-  let similarIngredientInfo: GPIngredientDataTypes | null = null;
+  let similarIngredientInfo: IngredientData | null = null;
   for (const ownedIngredient of ownedIngredients) {
     // check if one ingredient name is a substring of another (ex mozzarella cheese and mozzarella)
     if (
-      ingredientToPurchase.ingredientName.toLowerCase().includes(
-        ownedIngredient.ingredientName.toLowerCase(),
-      ) ||
-      ownedIngredient.ingredientName.toLowerCase().includes(
-        ingredientToPurchase.ingredientName.toLowerCase(),
-      )
+      ingredientToPurchase.ingredientName
+        .toLowerCase()
+        .includes(ownedIngredient.ingredientName.toLowerCase()) ||
+      ownedIngredient.ingredientName
+        .toLowerCase()
+        .includes(ingredientToPurchase.ingredientName.toLowerCase())
     ) {
       similarIngredientInfo = ownedIngredient;
       break;
@@ -139,7 +136,7 @@ const fuzzyMatchIngredient = ({
       levReturn /
       Math.min(
         ingredientToPurchase.ingredientName.length,
-        ownedIngredient.ingredientName.length,
+        ownedIngredient.ingredientName.length
       );
     if (levRatio < 0.3) {
       similarIngredientInfo = ownedIngredient;
@@ -150,18 +147,18 @@ const fuzzyMatchIngredient = ({
 };
 
 type GPMissingIngredientsListType = {
-  recipeIngredients: GPRecipeIngredientTypes[];
-  ownedIngredients: GPIngredientDataTypes[];
+  recipeIngredients: IngredientData[];
+  ownedIngredients: IngredientData[];
 };
 
 const getListOfMissingIngredients = ({
   recipeIngredients,
   ownedIngredients,
 }: GPMissingIngredientsListType) => {
-  let ingredientsToPurchase: GPRecipeIngredientTypes[] = [];
+  let ingredientsToPurchase: IngredientData[] = [];
   // create an array of names of ingredients on hand to find index of ingredient
   const ownedIngredientsNames = ownedIngredients.map((ingredient) =>
-    ingredient.ingredientName.toLowerCase(),
+    ingredient.ingredientName.toLowerCase()
   );
 
   // loop through list of ingredients for recipe
@@ -169,7 +166,7 @@ const getListOfMissingIngredients = ({
     const alreadyInGroceryList = ingredientsToPurchase.find(
       (ingredient) =>
         ingredient.ingredientName.toLowerCase() ===
-        recipeIngredient.ingredientName.toLowerCase(),
+        recipeIngredient.ingredientName.toLowerCase()
     );
     if (!alreadyInGroceryList) {
       const totalQuantity = getTotalQuantity({
@@ -206,13 +203,13 @@ const getListOfMissingIngredients = ({
 };
 
 type GPEstimateListCostTypes = {
-  ingredientsToPurchase: GPRecipeIngredientTypes[];
+  ingredientsToPurchase: IngredientData[];
 };
 
 const estimateListCost = async ({
   ingredientsToPurchase,
 }: GPEstimateListCostTypes) => {
-  let ingredientCostInfo: GPIngredientDataTypes[] = [];
+  let ingredientCostInfo: IngredientData[] = [];
   let estimatedCost = 0;
   for (const ingredient of ingredientsToPurchase) {
     const ingredientApiInfo = await getCostForAmountOfIngredient({
@@ -222,18 +219,24 @@ const estimateListCost = async ({
     estimatedCost += ingredientCost;
     ingredientCostInfo = [
       ...ingredientCostInfo,
-      {
-        ...ingredient,
-        isChecked: false,
-        ...ingredientApiInfo,
-      },
+      new IngredientData(
+        ingredient.id,
+        ingredient.ingredientName,
+        ingredient.quantity,
+        ingredient.unit,
+        ingredient.department,
+        false,
+        null,
+        ingredientApiInfo.ingredientCost,
+        ingredientApiInfo.ingredientCostUnit
+      ),
     ];
   }
   return { ingredientCostInfo, estimatedCost };
 };
 
 type GPGetItemCostType = {
-  ingredient: GPRecipeIngredientTypes;
+  ingredient: IngredientData;
 };
 
 const getCostForAmountOfIngredient = async ({
@@ -267,7 +270,7 @@ const getLevenshteinDistance = ({ strA, strB }: GPLevenshteinDistanceType) => {
           : Math.min(
               arr[i - 1][j] + 1,
               arr[i][j - 1] + 1,
-              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1),
+              arr[i - 1][j - 1] + (strA[j - 1] === strB[i - 1] ? 0 : 1)
             );
     }
   }

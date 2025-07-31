@@ -1,10 +1,7 @@
 import AppHeader from "../components/utils/AppHeader";
 import { useState, useEffect } from "react";
 import IngredientModal from "../components/ingredients/IngredientModal";
-import type {
-  GPIngredientDataTypes,
-  GPErrorMessageTypes,
-} from "../utils/types/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import { Box, Button, Sheet } from "@mui/joy";
 import { INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/utils/TitledListView";
@@ -16,15 +13,14 @@ import {
 } from "../utils/databaseHelpers";
 import { useUser } from "../contexts/UserContext";
 import { ColumnNoOverflowTitledListStyle } from "../utils/style/UIStyle";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const IngredientsPage = () => {
   const [addIngredientModalOpen, setAddIngredientModalOpen] = useState(false);
   const [editIngredientData, setEditIngredientData] =
-    useState<GPIngredientDataTypes>();
+    useState<IngredientData>();
   const [editIngredientModalOpen, setEditIngredientModalOpen] = useState(false);
-  const [userIngredients, setUserIngredients] = useState<
-    GPIngredientDataTypes[]
-  >([]);
+  const [userIngredients, setUserIngredients] = useState<IngredientData[]>([]);
   const [message, setMessage] = useState<GPErrorMessageTypes>();
   const { user } = useUser();
 
@@ -36,7 +32,7 @@ const IngredientsPage = () => {
     setAddIngredientModalOpen((prev) => !prev);
   };
 
-  const handleEditClick = (ingredient: GPIngredientDataTypes) => {
+  const handleEditClick = (ingredient: IngredientData) => {
     setEditIngredientData(ingredient);
     setEditIngredientModalOpen((prev) => !prev);
   };
@@ -47,7 +43,7 @@ const IngredientsPage = () => {
     setUserIngredients(fetchedIngredients);
   };
 
-  const handleDeleteIngredient = async (ingredient: GPIngredientDataTypes) => {
+  const handleDeleteIngredient = async (ingredient: IngredientData) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
       return;

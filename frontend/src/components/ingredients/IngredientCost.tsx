@@ -1,8 +1,8 @@
-import type { GPIngredientDataTypes } from "../../utils/types/types";
+import type { IngredientData } from "../../../../shared/IngredientData";
 import { Box, Grid, Typography } from "@mui/joy";
 
 type GPIngredientCostTypes = {
-  ingredientCostInfo: GPIngredientDataTypes;
+  ingredientCostInfo: IngredientData;
 };
 
 const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
@@ -15,7 +15,9 @@ const IngredientCost = ({ ingredientCostInfo }: GPIngredientCostTypes) => {
           </Grid>
         </Grid>
         <Grid xs={4}>
-          <Typography>{ingredientCostInfo.quantity}</Typography>
+          <Typography>
+            {ingredientCostInfo.quantity} {ingredientCostInfo.unit}
+          </Typography>
         </Grid>
         <Grid xs={2}>
           <Typography>

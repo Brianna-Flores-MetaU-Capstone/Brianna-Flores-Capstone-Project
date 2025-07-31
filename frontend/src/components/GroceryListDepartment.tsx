@@ -1,5 +1,4 @@
 import React from "react";
-import type { GPIngredientDataTypes } from "../utils/types/types";
 import TitledListView from "./utils/TitledListView";
 import Ingredient from "./ingredients/Ingredient";
 import { Box } from "@mui/joy";
@@ -7,6 +6,7 @@ import {
   ColumnOverflowTitledListStyle,
   MUI_GRID_FULL_SPACE,
 } from "../utils/style/UIStyle";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const GPGroceryListDepartmentStyle = {
   p: 2,
@@ -17,7 +17,7 @@ const GPGroceryListDepartmentStyle = {
 };
 
 type GPGroceryListDepartmentProps = {
-  groceryList: GPIngredientDataTypes[];
+  groceryList: IngredientData[];
   department: string;
   onGroceryCheck: (ingredientName: string) => void;
 };
@@ -27,7 +27,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   onGroceryCheck,
 }) => {
   const filteredGroceries = groceryList.filter(
-    (item) => item.department === department,
+    (item) => item.department === department
   );
 
   return (

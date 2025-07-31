@@ -1,7 +1,4 @@
-import type {
-  GPErrorMessageTypes,
-  GPRecipeIngredientTypes,
-} from "../utils/types/types";
+import type { GPErrorMessageTypes } from "../utils/types/types";
 import AppHeader from "../components/utils/AppHeader";
 import MealCard from "../components/recipeDisplay/MealCard";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
@@ -29,6 +26,7 @@ import EventSummaryModal from "../components/calendar/EventSummaryModal";
 import { RecipeFetchEnum } from "../utils/constants";
 import Masonry from "react-responsive-masonry";
 import CalendarDisplay from "../components/calendar/CalendarDisplay";
+import type { IngredientData } from "../../../shared/IngredientData";
 
 const NewListPage = () => {
   const [addAnotherRecipeModalOpen, setAddAnotherRecipeModalOpen] =
@@ -85,7 +83,7 @@ const NewListPage = () => {
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
-        axiosConfig,
+        axiosConfig
       );
       await fetchRecipes({
         setMessage,
@@ -98,7 +96,7 @@ const NewListPage = () => {
   };
 
   const getRecipeIngredients = (recipes: Recipe[]) => {
-    let recipeIngredients: GPRecipeIngredientTypes[] = [];
+    let recipeIngredients: IngredientData[] = [];
     for (const recipe of recipes) {
       recipeIngredients = [...recipeIngredients, ...recipe.ingredients];
     }
@@ -114,7 +112,7 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig,
+        axiosConfig
       );
       navigate("/grocery-list");
     } catch (error) {

@@ -3,10 +3,7 @@ import {
   GPMealInfoModalTitleStyle,
   GPModalStyle,
 } from "../../utils/style/UIStyle";
-import type {
-  GPErrorMessageTypes,
-  GPRecipeIngredientTypes,
-} from "../../utils/types/types";
+import type { GPErrorMessageTypes } from "../../utils/types/types";
 import {
   Modal,
   Button,
@@ -28,7 +25,6 @@ import DiffOriginalRecipe from "../recipeDiff/DiffOriginalRecipe";
 import { Recipe } from "../../../../shared/Recipe";
 import UserDiffOptions from "../recipeDiff/UserDiffOptions";
 import ImageCarousel from "./ImageCarousel";
-import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 import { useUser } from "../../contexts/UserContext";
 import EditRecipeModal from "../editRecipe/EditRecipeModal";
 
@@ -79,11 +75,6 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
     });
     setOriginalRecipeInfo(originalRecipe);
     setDiffModalOpen(true);
-  };
-
-  type GPIngredientSubstitutionType = {
-    ingredient: GPRecipeIngredientTypes;
-    substitutes: GPAiSubstitutionReturnType[];
   };
 
   const onSubstituteClick = () => {
