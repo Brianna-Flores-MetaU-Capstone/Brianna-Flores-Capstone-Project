@@ -32,12 +32,14 @@ type GPMealModalProps = {
   modalOpen: boolean;
   toggleModal: () => void;
   recipeInfo: Recipe | undefined;
+  refreshRecipes?: () => void;
 };
 
 const MealInfoModal: React.FC<GPMealModalProps> = ({
   toggleModal,
   modalOpen,
   recipeInfo,
+  refreshRecipes,
 }) => {
   const [_, setMessage] = useState<GPErrorMessageTypes>();
   const [diffModalOpen, setDiffModalOpen] = useState(false);
@@ -78,16 +80,13 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   };
 
   const onSubstituteClick = () => {
-    // open edit meal modal
     setEditRecipeModalOpen(true);
-    // add all recipe information
-    // to the side of each ingredient have a "suggest substitutes" button
+    toggleModal();
   };
 
   const handleCreateSubstitutionRecipe = () => {
-    // close modal
     setEditRecipeModalOpen(false);
-    // set the newly updated recipe modal open
+    refreshRecipes && refreshRecipes();
   };
 
   return (
@@ -153,6 +152,25 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                         {ingredient.unit}
                       </Typography>
                     </ListItemContent>
+                    {ingredient.subIngredients && (
+                      <List sx={{ ml: 4 }} marker="disc">
+                        {ingredient.subIngredients.map((subIngredient) => (
+                          <ListItem key={subIngredient.ingredientName}>
+                            <Typography>
+                              {subIngredient.ingredientName}
+                            </Typography>
+                            <Typography>
+                              {subIngredient.quantity % 1 === 0
+                                ? subIngredient.quantity
+                                : Number(subIngredient.quantity).toFixed(
+                                    2
+                                  )}{" "}
+                              {subIngredient.unit}
+                            </Typography>
+                          </ListItem>
+                        ))}
+                      </List>
+                    )}
                   </ListItem>
                 );
               })}

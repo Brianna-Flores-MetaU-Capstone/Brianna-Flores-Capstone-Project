@@ -29,18 +29,17 @@ async function getSubstitutionForIngredient({
   const responseText = response.text;
   const prepForJson = responseText?.replace(/`/g, "").replace("json", "") ?? "";
   const asJson: GPAiSubstitutionReturnType[] = JSON.parse(prepForJson);
-  let substitutionResults: IngredientSubstitutes[] = [];
-  for (const substitute of asJson) {
-    const ingredientSubstitute = new IngredientSubstitutes(
-      substitute.substitutionTitle,
-      substitute.substitutionQuantity,
-      substitute.substitutionUnit,
-      substitute.storeBought,
-      substitute.substitutionIngredients,
-      substitute.substitutionInstructions
-    );
-    substitutionResults = [...substitutionResults, ingredientSubstitute];
-  }
+  const substitutionResults = asJson.map(
+    (substitute) =>
+      new IngredientSubstitutes(
+        substitute.substitutionTitle,
+        substitute.substitutionQuantity,
+        substitute.substitutionUnit,
+        substitute.storeBought,
+        substitute.substitutionIngredients,
+        substitute.substitutionInstructions
+      )
+  );
   return substitutionResults;
 }
 

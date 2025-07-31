@@ -52,7 +52,8 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
   const [ingredientInputError, setIngredientInputError] = useState(false);
 
   const initialIngredientState =
-    ingredientData ?? new IngredientData(0, "", 0, "", "", false, null, 0, "");
+    ingredientData ??
+    new IngredientData(0, "", 0, "", "", false, null, [], 0, "");
 
   type ACTIONTYPE =
     | {

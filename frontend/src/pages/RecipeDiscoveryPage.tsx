@@ -245,6 +245,7 @@ const RecipeDiscoveryPage = () => {
           toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}
           modalOpen={recipeInfoModalOpen}
           recipeInfo={recipeInfoModalInfo}
+          refreshRecipes={() => fetchRecipesToDisplay()}
         />
         <EditRecipeModal
           recipe={editRecipeInfo}

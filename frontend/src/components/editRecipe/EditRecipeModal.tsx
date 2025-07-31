@@ -50,6 +50,7 @@ const actions = {
   UPDATE_INSTRUCTION: "setInstruction",
   DELETE_ITEM: "deleteItem",
   ADD_ITEM: "addItem",
+  ADD_SUBSTITUTE_INSTRUCTIONS: "addSubstituteInstructions",
 } as const;
 
 const EditRecipeFieldsEnum = {
@@ -196,6 +197,12 @@ const EditRecipeModal = ({
         type: typeof actions.ADD_ITEM;
         addedField: keyof GPRecipeDataTypes;
         addedItem: string | IngredientData;
+      }
+    | {
+        type: typeof actions.ADD_SUBSTITUTE_INSTRUCTIONS;
+        addedInstructions: string[];
+        originalIngredient: string;
+        substituteIngredient: string;
       };
 
   const [inputError, setInputError] = useState(false);
@@ -293,6 +300,20 @@ const EditRecipeModal = ({
         } else {
           return state;
         }
+      case actions.ADD_SUBSTITUTE_INSTRUCTIONS:
+        // go through instructions and replace all instances of original ingredient with new ingredient
+        const replacedInstructions = state.instructions.map((instruction) =>
+          instruction
+            .toLowerCase()
+            .replace(
+              `${action.originalIngredient.toLowerCase()} `,
+              `${action.substituteIngredient.toLowerCase()} `
+            )
+        );
+        return {
+          ...state,
+          instructions: [...action.addedInstructions, ...replacedInstructions],
+        };
       default:
         return state;
     }
@@ -371,6 +392,79 @@ const EditRecipeModal = ({
       value: response,
     });
     setLoadingSubstitutions(false);
+  };
+
+  const handleSubstitutionSelected = (
+    substitution: IngredientSubstitutes,
+    index: number,
+    originalIngredientName: string
+  ) => {
+    // delete the original ingredient
+    dispatch({
+      type: actions.DELETE_ITEM,
+      deletedField: "ingredients",
+      itemIndex: index,
+    });
+    // if the substitution has ingredients or instructions, add ingredients and instructions
+    if (
+      substitution.substitutionIngredients.length > 0 &&
+      substitution.substitutionInstructions.length > 0
+    ) {
+      const subIngredients: IngredientData[] = [];
+      substitution.substitutionIngredients.map((ingredient) => {
+        const substitutionIngredient = new IngredientData(
+          0,
+          ingredient.ingredientName,
+          ingredient.quantity,
+          ingredient.unit,
+          "",
+          false
+        );
+        subIngredients.push(substitutionIngredient);
+      });
+      const substituteAsIngredient = new IngredientData(
+        0,
+        substitution.substitutionTitle,
+        substitution.substitutionQuantity,
+        substitution.substitutionUnit,
+        "",
+        false,
+        null,
+        subIngredients
+      );
+      dispatch({
+        type: actions.ADD_ITEM,
+        addedField: "ingredients",
+        addedItem: substituteAsIngredient,
+      });
+      // add instructions to the start of the recipe since we must create prior to using ingredient
+      dispatch({
+        type: actions.ADD_SUBSTITUTE_INSTRUCTIONS,
+        addedInstructions: substitution.substitutionInstructions,
+        originalIngredient: originalIngredientName,
+        substituteIngredient: substitution.substitutionTitle,
+      });
+    } else {
+      // otherwise, just replace with the new ingredient
+      dispatch({
+        type: actions.ADD_ITEM,
+        addedField: "ingredients",
+        addedItem: new IngredientData(
+          0,
+          substitution.substitutionTitle,
+          substitution.substitutionQuantity,
+          substitution.substitutionUnit,
+          "",
+          false
+        ),
+      });
+      dispatch({
+        type: actions.ADD_SUBSTITUTE_INSTRUCTIONS,
+        addedInstructions: [],
+        originalIngredient: originalIngredientName,
+        substituteIngredient: substitution.substitutionTitle,
+      });
+    }
   };
 
   return (
@@ -557,7 +651,9 @@ const EditRecipeModal = ({
                       )}
                       {ingredient.ingredientSubstitutes && (
                         <SubstitutionOptionsDropdown
-                          substitutionOptions={ingredient.ingredientSubstitutes}
+                          originalIngredient={ingredient}
+                          ingredientIndex={ingredientIndex}
+                          onSubstitutionSelect={handleSubstitutionSelected}
                         />
                       )}
                     </Grid>
