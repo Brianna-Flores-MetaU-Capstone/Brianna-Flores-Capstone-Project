@@ -54,6 +54,8 @@ const ZERO_OUT_START_DATE = "T00:00:00";
 
 const MIN_PASSWORD_LENGTH = 8;
 
+const ALERT_TIMEOUT = 1750
+
 const PreviewConstants = {
   GROCERY: "Grocery List",
   INGREDIENT: "Ingredients on Hand",
@@ -82,4 +84,5 @@ export {
   ZERO_OUT_START_DATE,
   MIN_PASSWORD_LENGTH,
   RecipeFetchEnum,
+  ALERT_TIMEOUT,
 };
