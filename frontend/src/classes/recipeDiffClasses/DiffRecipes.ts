@@ -158,7 +158,7 @@ class DiffRecipes {
       this.recipeA.previewImage,
       this.recipeB.previewImage
     );
-    const imageDiffResults = diffImages.getStringArrayDiff();
+    const imageDiffResults = diffImages.getLcsDiff();
     return imageDiffResults;
   }
 

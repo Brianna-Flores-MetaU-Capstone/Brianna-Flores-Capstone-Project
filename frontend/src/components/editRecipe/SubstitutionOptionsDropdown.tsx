@@ -7,15 +7,15 @@ import {
   Typography,
 } from "@mui/joy";
 import SubstitutionOption from "./SubstitutionOption";
-import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import type { IngredientData } from "../../../../shared/IngredientData";
+import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 
 type GPSubstitutionOptionsType = {
   ingredientIndex: number;
   originalIngredient: IngredientData;
   onSubstitutionSelect: (
-    option: IngredientSubstitutes,
+    option: GPAiSubstitutionReturnType,
     index: number,
     originalIngredientName: string
   ) => void;
@@ -27,7 +27,7 @@ const SubstitutionOptionsDropdown = ({
   onSubstitutionSelect,
 }: GPSubstitutionOptionsType) => {
   const handleSelectSubstitution = (
-    option: IngredientSubstitutes,
+    option: GPAiSubstitutionReturnType,
     ingredientIndex: number
   ) => {
     onSubstitutionSelect(
