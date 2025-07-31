@@ -26,7 +26,7 @@ import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 import Masonry from "react-responsive-masonry";
 
-const MAX_RECIPES_TO_DISPLAY = 50;
+const MAX_RECIPES_TO_DISPLAY = 40;
 
 const RecipeDiscoveryPage = () => {
   // fetch recipes from the database
@@ -50,6 +50,9 @@ const RecipeDiscoveryPage = () => {
     recipeFiltersList.ALL
   );
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [disableLoadMore, setDisableLoadMore] = useState(false);
+  const [totalNumRecipes, setTotalNumRecipes] = useState(0);
 
   useEffect(() => {
     fetchRecipesToDisplay();
@@ -67,19 +70,29 @@ const RecipeDiscoveryPage = () => {
       const popularRecipes =
         (await fetchPopularRecipes({
           setMessage,
-          offset: 0,
+          setTotalNumRecipes,
+          offset: offset,
           numRequested: MAX_RECIPES_TO_DISPLAY,
         })) ?? [];
-      setDisplayedRecipes(popularRecipes);
+      if (offset > 0) {
+        setDisplayedRecipes((prev) => [...prev, ...popularRecipes]);
+      } else {
+        setDisplayedRecipes(popularRecipes);
+      }
     } else {
       const fetchedRecipes =
         (await fetchDiscoverRecipes({
+          setTotalNumRecipes,
           setMessage,
           filter: recipeFilter,
-          offset: 0,
+          offset: offset,
           numRequested: MAX_RECIPES_TO_DISPLAY,
         })) ?? [];
-      setDisplayedRecipes(fetchedRecipes);
+      if (offset > 0) {
+        setDisplayedRecipes((prev) => [...prev, ...fetchedRecipes]);
+      } else {
+        setDisplayedRecipes(fetchedRecipes);
+      }
     }
     const favoritedRecipesReturn =
       (await fetchRecipes({
@@ -178,8 +191,19 @@ const RecipeDiscoveryPage = () => {
   };
 
   useEffect(() => {
+    setOffset(0)
     fetchRecipesToDisplay();
   }, [recipeFilter]);
+
+  useEffect(() => {
+    fetchRecipesToDisplay();
+    setDisableLoadMore(offset + MAX_RECIPES_TO_DISPLAY > totalNumRecipes)
+  }, [offset, totalNumRecipes]);
+
+  const handleLoadMoreRecipes = () => {
+    setDisableLoadMore(true);
+    setOffset((prev) => prev + MAX_RECIPES_TO_DISPLAY);
+  };
 
   return (
     <>
@@ -237,6 +261,13 @@ const RecipeDiscoveryPage = () => {
               />
             ))}
           </Masonry>
+          {!disableLoadMore && <Button
+            sx={{ display: "block", margin: "auto", mt: 4 }}
+            size="lg"
+            onClick={() => handleLoadMoreRecipes()}
+          >
+            Load More Recipes!
+          </Button>}
         </Box>
         {user && message && (
           <ErrorState error={message.error} message={message.message} />

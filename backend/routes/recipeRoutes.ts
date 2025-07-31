@@ -10,6 +10,18 @@ const prisma = new PrismaClient();
 import { isAuthenticated } from "../utils/authMiddleware";
 import { convertUnits } from "../utils/utils";
 
+router.post("/totalNumRecipes", async (req: Request, res: Response) => {
+  const { filter } = req.body;
+  try {
+    const numRecipes = await prisma.recipe.count({
+      ...(filter !== "all" ? { where: { [filter]: true } } : {}),
+    });
+    res.json(numRecipes);
+  } catch (error) {
+    res.status(500).send("Error fetching number of recipes in database");
+  }
+});
+
 router.post("/discover", async (req: Request, res: Response) => {
   const { filter, offset, numRequested } = req.body;
   try {
@@ -32,7 +44,7 @@ router.post("/popular", async (req: Request, res: Response) => {
   try {
     const mostPopular = await prisma.recipe.findMany({
       orderBy: {
-        likes: "desc"
+        likes: "desc",
       },
       skip: parseInt(offset),
       take: parseInt(numRequested),

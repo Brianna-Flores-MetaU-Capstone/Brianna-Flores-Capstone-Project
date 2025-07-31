@@ -9,18 +9,13 @@ import type {
 import type { User } from "firebase/auth";
 import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
-import {
-  RecipeFilter,
-  recipeFiltersList,
-  type recipeFilterType,
-} from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import { RecipeFetchEnum } from "./constants";
 import { IngredientData } from "../../../shared/IngredientData";
+import { recipeFiltersList } from "../classes/filters/RecipeFilters";
 
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
-const DISCOVERY_NUM_TO_REQUEST = 40;
 
 const axiosConfig = {
   headers: {
@@ -308,17 +303,23 @@ const fetchGroceryList = async ({
 };
 
 type GPFetchDiscoverRecipesType = GPSetMessageType & {
+  setTotalNumRecipes: (
+    value: React.SetStateAction<number>
+  ) => void;
   filter: string;
   offset: number;
   numRequested: number;
 };
 const fetchDiscoverRecipes = async ({
   setMessage,
+  setTotalNumRecipes,
   filter,
   offset,
   numRequested,
 }: GPFetchDiscoverRecipesType) => {
   try {
+    const numRecipes = await axios.post<number>(`${databaseUrl}/recipes/totalNumRecipes`, {filter}, axiosConfig)
+    setTotalNumRecipes(numRecipes.data)
     const response = await axios.post<Recipe[]>(
       `${databaseUrl}/recipes/discover`,
       { filter, offset, numRequested },
@@ -334,11 +335,15 @@ const fetchDiscoverRecipes = async ({
 };
 
 type GPFetchPopularRecipesType = GPSetMessageType & {
+  setTotalNumRecipes: (
+    value: React.SetStateAction<number>
+  ) => void;
   offset: number;
   numRequested: number;
 };
 const fetchPopularRecipes = async ({
   setMessage,
+  setTotalNumRecipes,
   offset,
   numRequested,
 }: GPFetchPopularRecipesType) => {
@@ -348,46 +353,13 @@ const fetchPopularRecipes = async ({
       { offset, numRequested },
       axiosConfig
     );
+    const numRecipes = await axios.post<number>(`${databaseUrl}/recipes/totalNumRecipes`, {filter: recipeFiltersList.ALL}, axiosConfig)
+    setTotalNumRecipes(numRecipes.data)
     return response.data;
   } catch (error) {
     setMessage({
       error: true,
       message: `Error fetching popular recipes`,
-    });
-  }
-};
-
-type GPFetchRecipeCategoryType = GPSetMessageType & {
-  setRecipeDiscoveryResults: (
-    value: React.SetStateAction<RecipeFilter>
-  ) => void;
-  offset: number;
-};
-const fetchAllRecipeCategories = async ({
-  setMessage,
-  setRecipeDiscoveryResults,
-  offset,
-}: GPFetchRecipeCategoryType) => {
-  try {
-    const createdRecipeFilter = new RecipeFilter();
-    for (const [_, filter] of Object.entries(recipeFiltersList)) {
-      const categoryRecipes =
-        (await fetchDiscoverRecipes({
-          setMessage,
-          filter,
-          offset,
-          numRequested: DISCOVERY_NUM_TO_REQUEST,
-        })) ?? [];
-      createdRecipeFilter.setFilteredList(
-        filter as recipeFilterType,
-        categoryRecipes
-      );
-    }
-    setRecipeDiscoveryResults(new RecipeFilter(createdRecipeFilter));
-  } catch (error) {
-    setMessage({
-      error: true,
-      message: "Error fetching recipes",
     });
   }
 };
@@ -487,7 +459,6 @@ export {
   fetchGroceryList,
   fetchDiscoverRecipes,
   fetchPopularRecipes,
-  fetchAllRecipeCategories,
   handleUnfavoriteRecipe,
   handleFavoriteRecipe,
   fetchSingleRecipe,
