@@ -23,7 +23,7 @@ const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
 import EventSummaryModal from "../components/calendar/EventSummaryModal";
-import { RecipeFetchEnum } from "../utils/constants";
+import { ALERT_TIMEOUT, RecipeFetchEnum } from "../utils/constants";
 import Masonry from "react-responsive-masonry";
 import CalendarDisplay from "../components/calendar/CalendarDisplay";
 import type { IngredientData } from "../../../shared/IngredientData";
@@ -80,11 +80,15 @@ const NewListPage = () => {
 
   const handleDeleteRecipe = async (deletedRecipe: Recipe) => {
     try {
+      setMessage({ error: false, message: `Successfully deleted ${deletedRecipe.recipeTitle}`})
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
         axiosConfig
       );
+      setTimeout(() => {
+        setMessage(undefined)
+      }, ALERT_TIMEOUT);
       await fetchRecipes({
         setMessage,
         setRecipes: setSelectedRecipes,

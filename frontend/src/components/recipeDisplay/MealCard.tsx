@@ -25,6 +25,7 @@ import type { GPErrorMessageTypes } from "../../utils/types/types";
 import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
 import LinkIcon from "@mui/icons-material/Link";
+import { ALERT_TIMEOUT } from "../../utils/constants";
 
 type GPMealCardProps = {
   index: number;
@@ -223,6 +224,9 @@ const MealCard: React.FC<GPMealCardProps> = ({
                       error: false,
                       message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
                     });
+                    setTimeout(() => {
+                      setMessage(undefined)
+                    }, ALERT_TIMEOUT);
                     onSelectRecipe(parsedMealData);
                   }}
                 >

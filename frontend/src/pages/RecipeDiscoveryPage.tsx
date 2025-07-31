@@ -11,7 +11,6 @@ import {
   updateUserRecipes,
 } from "../utils/databaseHelpers";
 import MealCard from "../components/recipeDisplay/MealCard";
-import ErrorState from "../components/utils/ErrorState";
 import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { useUser } from "../contexts/UserContext";
 import EditRecipeModal from "../components/editRecipe/EditRecipeModal";
@@ -21,10 +20,11 @@ import {
   type recipeFilterType,
 } from "../classes/filters/RecipeFilters";
 import { Recipe } from "../../../shared/Recipe";
-import { RecipeFetchEnum } from "../utils/constants";
+import { ALERT_TIMEOUT, RecipeFetchEnum } from "../utils/constants";
 import DiffOriginalRecipe from "../components/recipeDiff/DiffOriginalRecipe";
 import UserDiffOptions from "../components/recipeDiff/UserDiffOptions";
 import Masonry from "react-responsive-masonry";
+import AlertSnackbar from "../components/utils/AlertSnackbar";
 
 const MAX_RECIPES_TO_DISPLAY = 40;
 
@@ -53,6 +53,7 @@ const RecipeDiscoveryPage = () => {
   const [offset, setOffset] = useState(0);
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const [totalNumRecipes, setTotalNumRecipes] = useState(0);
+  const [alertSnackbarOpen, setAlertSnackbarOpen] = useState(false);
 
   useEffect(() => {
     fetchRecipesToDisplay();
@@ -123,8 +124,16 @@ const RecipeDiscoveryPage = () => {
         selectedRecipe: recipe,
         setMessage,
       });
+      setAlertSnackbarOpen(true);
+      setTimeout(() => {
+        setAlertSnackbarOpen(false);
+      }, ALERT_TIMEOUT);
     } catch (error) {
-      setMessage({ error: true, message: "Error adding recipe" });
+      setAlertSnackbarOpen(true);
+      setTimeout(() => {
+        setAlertSnackbarOpen(false);
+      }, ALERT_TIMEOUT);
+      setMessage({ error: true, message: "Error saving recipe" });
     }
   };
 
@@ -191,13 +200,13 @@ const RecipeDiscoveryPage = () => {
   };
 
   useEffect(() => {
-    setOffset(0)
+    setOffset(0);
     fetchRecipesToDisplay();
   }, [recipeFilter]);
 
   useEffect(() => {
     fetchRecipesToDisplay();
-    setDisableLoadMore(offset + MAX_RECIPES_TO_DISPLAY > totalNumRecipes)
+    setDisableLoadMore(offset + MAX_RECIPES_TO_DISPLAY > totalNumRecipes);
   }, [offset, totalNumRecipes]);
 
   const handleLoadMoreRecipes = () => {
@@ -261,16 +270,22 @@ const RecipeDiscoveryPage = () => {
               />
             ))}
           </Masonry>
-          {!disableLoadMore && <Button
-            sx={{ display: "block", margin: "auto", mt: 4 }}
-            size="lg"
-            onClick={() => handleLoadMoreRecipes()}
-          >
-            Load More Recipes!
-          </Button>}
+          {!disableLoadMore && (
+            <Button
+              sx={{ display: "block", margin: "auto", mt: 4 }}
+              size="lg"
+              onClick={() => handleLoadMoreRecipes()}
+            >
+              Load More Recipes!
+            </Button>
+          )}
         </Box>
-        {user && message && (
-          <ErrorState error={message.error} message={message.message} />
+        {user && (
+          <AlertSnackbar
+            error={message?.error ?? false}
+            open={alertSnackbarOpen}
+            message={message?.message ?? ""}
+          />
         )}
         <MealInfoModal
           toggleModal={() => setRecipeInfoModalOpen((prev) => !prev)}

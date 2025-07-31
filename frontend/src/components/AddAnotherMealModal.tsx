@@ -36,6 +36,7 @@ import { Recipe } from "../../../shared/Recipe";
 import MealInfoModal from "./recipeDisplay/MealInfoModal";
 import { useNavigate } from "react-router";
 import type { GPSpoonacularReturnType } from "../utils/types/spoonacularApiReturnType";
+import AlertSnackbar from "./utils/AlertSnackbar";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -136,7 +137,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           (prev) =>
             prev +
             GROUP_OF_DISPLAYED_CARDS -
-            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS),
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS)
         );
       }
     }
@@ -174,7 +175,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
       );
     }
   };
@@ -191,7 +192,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
         // find index of recipe in meal results so we can also update the recipe information there too
         const index = apiMealResults.findIndex(
-          (element) => element.apiId === recipe.apiId,
+          (element) => element.apiId === recipe.apiId
         );
         handleUpdateRecipeInfo(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
@@ -253,7 +254,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                       <Switch
                         checked={usePreferences}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>,
+                          event: React.ChangeEvent<HTMLInputElement>
                         ) => {
                           setUsePreferences(event.target.checked);
                         }}
@@ -282,9 +283,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 </Box>
               </form>
             </Box>
-            {message && (
-              <ErrorState error={message.error} message={message.message} />
-            )}
+            <AlertSnackbar
+              open={message ? true : false}
+              message={message?.message ?? ""}
+              error={message?.error ?? false}
+            />
             <TitledListView
               itemsList={apiMealResults}
               renderItem={(meal, index) => (
@@ -298,7 +301,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   onSelectRecipe={onSelectRecipe}
                   onLoadRecipeCost={handleUpdateRecipeInfo}
                   selectedToCompare={recipesToCompare.some(
-                    (recipe) => recipe.apiId === meal.apiId,
+                    (recipe) => recipe.apiId === meal.apiId
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
                 />
