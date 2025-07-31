@@ -156,17 +156,19 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                       <List sx={{ ml: 4 }} marker="disc">
                         {ingredient.subIngredients.map((subIngredient) => (
                           <ListItem key={subIngredient.ingredientName}>
-                            <Typography>
-                              {subIngredient.ingredientName}
-                            </Typography>
-                            <Typography>
-                              {subIngredient.quantity % 1 === 0
-                                ? subIngredient.quantity
-                                : Number(subIngredient.quantity).toFixed(
-                                    2
-                                  )}{" "}
-                              {subIngredient.unit}
-                            </Typography>
+                            <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                              <Typography>
+                                {subIngredient.ingredientName}
+                              </Typography>
+                              <Typography>
+                                {subIngredient.quantity % 1 === 0
+                                  ? subIngredient.quantity
+                                  : Number(subIngredient.quantity).toFixed(
+                                      2
+                                    )}{" "}
+                                {subIngredient.unit}
+                              </Typography>
+                            </Box>
                           </ListItem>
                         ))}
                       </List>

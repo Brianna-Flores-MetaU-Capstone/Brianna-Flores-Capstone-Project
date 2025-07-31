@@ -19,7 +19,7 @@ async function getSubstitutionForIngredient({
 }: GPIngredientSubstituteTypes) {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: `Give me 3 substitutions for ${ingredient.quantity} ${ingredient.unit} of ${ingredient.ingredientName} for the intolerances and diets ${intolerancesAndDiets}, json formatted as { substitutionTitle: string, substitutionQuantity: number, substitutionUnit: string, storeBought: boolean, substitutionIngredients: [{ingredientName: string, quantity: number, unit: string}], substitutionInstructions: string[] } but if its storebought, then the substitutionIngredients and substitutionInstructions will be empty arrays`,
+    contents: `Give me 3 substitutions for ${ingredient.quantity} ${ingredient.unit} of ${ingredient.ingredientName} for the intolerances and diets ${intolerancesAndDiets}, json formatted as { substitutionTitle: string, substitutionQuantity: number, substitutionUnit: string, substitutionDepartment: string, storeBought: boolean, substitutionIngredients: [{ingredientName: string, quantity: number, unit: string, department: string}], substitutionInstructions: string[] } but if its storebought, then the substitutionIngredients and substitutionInstructions will be empty arrays`,
     config: {
       thinkingConfig: {
         thinkingBudget: 0, // Disables thinking
@@ -35,6 +35,7 @@ async function getSubstitutionForIngredient({
         substitute.substitutionTitle,
         substitute.substitutionQuantity,
         substitute.substitutionUnit,
+        substitute.substitutionDepartment,
         substitute.storeBought,
         substitute.substitutionIngredients,
         substitute.substitutionInstructions

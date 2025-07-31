@@ -1,7 +1,6 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import type { GPIngredientApiInfoType } from "../../utils/types/types";
 import {
   Box,
   ButtonGroup,
@@ -9,6 +8,7 @@ import {
   Grid,
   IconButton,
   Typography,
+  Link,
 } from "@mui/joy";
 import type { IngredientData } from "../../../../shared/IngredientData";
 
@@ -28,7 +28,6 @@ type GPIngredientProps = {
   presentGroceryCheck: boolean;
   presentExpiration: boolean;
   presentButtons: boolean;
-  ingredientCost?: GPIngredientApiInfoType;
   onGroceryCheck?: (ingredientName: string) => void;
   onEdit?: (ingredient: IngredientData) => void;
   onDelete?: (ingredient: IngredientData) => void;
@@ -38,7 +37,6 @@ const Ingredient: React.FC<GPIngredientProps> = ({
   ingredient,
   presentGroceryCheck,
   presentExpiration,
-  ingredientCost,
   presentButtons,
   onGroceryCheck,
   onEdit,
@@ -60,7 +58,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
           </Grid>
         )}
         <Grid xs={GRID_NAME_COST_SPACING}>
-          <Typography>{ingredient.ingredientName}</Typography>
+          {ingredient.ingredientWalmartId > 0 && presentGroceryCheck ? <Link href={`https://www.walmart.com/ip/${ingredient.ingredientWalmartId}`}>{ingredient.ingredientName}</Link> : <Typography>{ingredient.ingredientName}</Typography>}
         </Grid>
         <Grid xs={GRID_EXP_QUANT_SPACING}>
           <Typography>{`${formatQuantity} ${ingredient.unit}`}</Typography>
@@ -70,10 +68,10 @@ const Ingredient: React.FC<GPIngredientProps> = ({
             <Typography>{ingredient.expirationDate}</Typography>
           </Grid>
         )}
-        {ingredientCost && (
+        {ingredient.ingredientCost > 0 && (
           <Grid xs={GRID_NAME_COST_SPACING}>
             <Typography>
-              Est. ${ingredientCost.ingredientCost?.toFixed(2)}
+              Est. ${ingredient.ingredientCost.toFixed(2)}
             </Typography>
           </Grid>
         )}

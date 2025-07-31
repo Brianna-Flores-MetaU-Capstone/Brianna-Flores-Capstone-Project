@@ -12,6 +12,7 @@ class IngredientData {
   ingredientCost: number;
   ingredientCostUnit: string;
   ingredientSubstitutes: IngredientSubstitutes[];
+  ingredientWalmartId: number;
 
   constructor(
     id: number,
@@ -24,7 +25,8 @@ class IngredientData {
     subIngredients?: IngredientData[],
     ingredientCost?: number,
     ingredientCostUnit?: string,
-    ingredientSubstitutes?: IngredientSubstitutes[]
+    ingredientSubstitutes?: IngredientSubstitutes[],
+    ingredientWalmartId?: number
   ) {
     this.id = id;
     this.ingredientName = ingredientName;
@@ -37,6 +39,7 @@ class IngredientData {
     this.ingredientCost = ingredientCost ?? 0;
     this.ingredientCostUnit = ingredientCostUnit ?? "";
     this.ingredientSubstitutes = ingredientSubstitutes ?? [];
+    this.ingredientWalmartId = ingredientWalmartId ?? -1
   }
 }
 
