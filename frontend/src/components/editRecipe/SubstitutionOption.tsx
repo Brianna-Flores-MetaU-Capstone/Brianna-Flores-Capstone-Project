@@ -9,10 +9,10 @@ import {
   Table,
   Typography,
 } from "@mui/joy";
-import type { IngredientSubstitutes } from "../../classes/ingredients/IngredientSubstitutes";
+import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
 
 type GPSubstitutionOptionType = {
-  optionData: IngredientSubstitutes;
+  optionData: GPAiSubstitutionReturnType;
 };
 
 const SubstitutionOption = ({ optionData }: GPSubstitutionOptionType) => {

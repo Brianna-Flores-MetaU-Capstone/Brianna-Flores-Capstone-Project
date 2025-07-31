@@ -37,7 +37,7 @@ const CalendarDisplay = ({ selectedRecipes }: GPUpcomingScheduleType) => {
                   borderRadius: "md",
                 }}
               >
-                {currentDay} {currentDayStart.getMonth()}/
+                {currentDay} {currentDayStart.getMonth() + 1}/
                 {currentDayStart.getDate()}
               </Typography>
               {scheduledRecipes
@@ -49,7 +49,7 @@ const CalendarDisplay = ({ selectedRecipes }: GPUpcomingScheduleType) => {
                 })
                 .map((eventInfo, index) => {
                   return (
-                    <Box key={index} sx={{ display: "flex", flexGrow: 1 }}>
+                    <Box key={index} sx={{ display: "flex", flexGrow: 1, my: 2 }}>
                       <MealCard
                         index={index}
                         toggleCalendarTimeModal={() => {}}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GPDiffLineInfoType } from "../../utils/diffUtils";
+import { DiffStatus, type GPDiffLineInfoType } from "../../utils/diffUtils";
 import {
   AspectRatio,
   List,
@@ -40,6 +40,7 @@ type GPOriginalRecipeDiffType = {
   cookTimeDiffResults?: GPDiffLineInfoType[];
   ingredientsDiffResults?: GPDiffLineInfoType[];
   instructionsDiffResults?: GPDiffLineInfoType[];
+  imageDiffResults?: GPDiffLineInfoType[];
 };
 
 const DiffOriginalRecipe = ({
@@ -64,7 +65,7 @@ const DiffOriginalRecipe = ({
       // otherwise diff only requested fields
       const recipeDiffInfo = recipeDiff.getRequestedDiff(
         userDiffChoices,
-        noDiffFields,
+        noDiffFields
       );
       setRecipeDiffInfo(recipeDiffInfo);
     }
@@ -86,10 +87,31 @@ const DiffOriginalRecipe = ({
         <ModalDialog layout="fullscreen">
           <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
           <DialogContent sx={{ m: 4 }}>
+            <Box sx={{ display: "flex" }}>
+              {recipeDiffInfo?.imageDiffResults?.map((image, index) => 
+                  <AspectRatio
+                    key={index}
+                    ratio="1"
+                    sx={{
+                      ...(image.status === DiffStatus.ADDED ||
+                      image.status === DiffStatus.DELETED
+                        ? {
+                            border: 5,
+                            ...(image.status === DiffStatus.ADDED
+                              ? { borderColor: "success.200" }
+                              : { borderColor: "danger.200" }),
+                          }
+                        : {}),
+                      width: 350,
+                      borderRadius: "md",
+                      mx: 1,
+                    }}
+                  >
+                    <img src={image.line} />
+                  </AspectRatio>
+              )}
+            </Box>
             <Box sx={GPMealInfoModalTitleStyle}>
-              <AspectRatio ratio="1" sx={{ width: 350, borderRadius: "md" }}>
-                <img src={originalRecipeInfo.previewImage[0]} />
-              </AspectRatio>
               <Box sx={GPCenteredBoxStyle}>
                 {recipeDiffInfo?.titleDiffResults && (
                   <DiffOriginalContentDisplay
@@ -99,6 +121,12 @@ const DiffOriginalRecipe = ({
                     childComponentProps={{ level: "h2" }}
                   />
                 )}
+                <Typography level="h4">
+                  Original Creator: {editedRecipeInfo.originalSource}
+                </Typography>
+                <Typography level="h4">
+                  Edited By: {editedRecipeInfo.editingAuthorName}
+                </Typography>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography>Servings:</Typography>
                   {recipeDiffInfo?.servingsDiffResults && (
