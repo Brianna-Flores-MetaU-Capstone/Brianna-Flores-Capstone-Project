@@ -88,9 +88,7 @@ const DiffOriginalRecipe = ({
           <ModalClose variant="plain" sx={{ zIndex: 2, m: 1 }} />
           <DialogContent sx={{ m: 4 }}>
             <Box sx={{ display: "flex" }}>
-              {recipeDiffInfo?.imageDiffResults?.map((image, index) => {
-                console.log(image);
-                return (
+              {recipeDiffInfo?.imageDiffResults?.map((image, index) => 
                   <AspectRatio
                     key={index}
                     ratio="1"
@@ -111,8 +109,7 @@ const DiffOriginalRecipe = ({
                   >
                     <img src={image.line} />
                   </AspectRatio>
-                );
-              })}
+              )}
             </Box>
             <Box sx={GPMealInfoModalTitleStyle}>
               <Box sx={GPCenteredBoxStyle}>
