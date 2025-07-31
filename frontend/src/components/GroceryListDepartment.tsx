@@ -20,11 +20,13 @@ type GPGroceryListDepartmentProps = {
   groceryList: IngredientData[];
   department: string;
   onGroceryCheck: (ingredientName: string) => void;
+  onGroceryDelete: (ingredientName: string) => void;
 };
 const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,
   department,
   onGroceryCheck,
+  onGroceryDelete
 }) => {
   const filteredGroceries = groceryList.filter(
     (item) => item.department === department
@@ -43,6 +45,7 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
             presentExpiration={false}
             presentButtons={false}
             onGroceryCheck={onGroceryCheck}
+            onGroceryDelete={onGroceryDelete}
           />
         )}
         listItemsStyle={ColumnOverflowTitledListStyle}

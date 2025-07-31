@@ -47,7 +47,9 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
         return !ingredientItem.isChecked;
       }
     );
-    const updatedGroceryListPrice = updateEstimatedListCost({ingredientsToPurchase: clearedList});
+    const updatedGroceryListPrice = updateEstimatedListCost({
+      ingredientsToPurchase: clearedList,
+    });
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
@@ -58,6 +60,36 @@ router.put("/clear", isAuthenticated, async (req: Request, res: Response) => {
     res.json(updatedUser);
   } catch (error) {
     res.status(500).send("Error updating grocery list");
+  }
+});
+
+router.put("/delete", isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.session.userId;
+  const { ingredientName } = req.body;
+  try {
+    const user = await prisma.User.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    const deletedFromList = user.groceryList.filter(
+      (ingredient: IngredientData) =>
+        ingredient.ingredientName.toLowerCase() !== ingredientName.toLowerCase()
+    );
+    const updatedGroceryListPrice = updateEstimatedListCost({ingredientsToPurchase: deletedFromList});
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        groceryList: deletedFromList,
+        groceryListCost: updatedGroceryListPrice,
+      },
+    });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).send("Error deleting item from grocery list");
   }
 });
 
