@@ -17,13 +17,13 @@ type GPDiffType = {
 const getRecipeDiffResults = ({ recipeA, recipeB }: GPDiffType) => {
   const diffRecipeIngredients = new DiffRecipeIngredients(
     recipeA.ingredients,
-    recipeB.ingredients
+    recipeB.ingredients,
   );
   const diffRecipeIngredientsResults =
     diffRecipeIngredients.getIngredientsComparisonDiff();
   const diffIngredientsToPurchase = new DiffRecipeIngredients(
     recipeA.ingredientCostInfo,
-    recipeB.ingredientCostInfo
+    recipeB.ingredientCostInfo,
   );
   const diffIngredientsToPurchaseResults =
     diffIngredientsToPurchase.getIngredientsComparisonDiff();

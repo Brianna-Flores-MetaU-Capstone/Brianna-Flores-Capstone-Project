@@ -25,6 +25,7 @@ import { CalendarEvent } from "../../classes/calendar/CalendarEvent";
 import { saveCalendarEvent } from "../../utils/databaseHelpers";
 import CalendarTourTooltip from "./CalendarTourTooltip";
 import { CalendarRecipesModalTour } from "../../utils/calendarTour/CalendarTourSteps";
+import { ALERT_TIMEOUT } from "../../utils/constants";
 
 type GPCalendarModalTypes = {
   modalOpen: boolean;
@@ -64,6 +65,9 @@ const CalendarModal = ({
         error: true,
         message: "Not authenticated, refresh and try again",
       });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     setLoading(true);

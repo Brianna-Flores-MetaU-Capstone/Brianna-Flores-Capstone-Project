@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import MealCard from "./recipeDisplay/MealCard";
 import {
+  ALERT_TIMEOUT,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
 import type { GPErrorMessageTypes } from "../utils/types/types";
-import ErrorState from "./utils/ErrorState";
 import TitledListView from "./utils/TitledListView";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
@@ -112,6 +112,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         error: true,
         message: "Error fetching from api",
       });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 
@@ -137,7 +140,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
           (prev) =>
             prev +
             GROUP_OF_DISPLAYED_CARDS -
-            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS)
+            (recipesOnHand % GROUP_OF_DISPLAYED_CARDS),
         );
       }
     }
@@ -175,7 +178,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
       );
     }
   };
@@ -192,7 +195,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         updatedRecipesToCompare = [...updatedRecipesToCompare, updatedRecipe];
         // find index of recipe in meal results so we can also update the recipe information there too
         const index = apiMealResults.findIndex(
-          (element) => element.apiId === recipe.apiId
+          (element) => element.apiId === recipe.apiId,
         );
         handleUpdateRecipeInfo(updatedRecipe, index);
         setRecipesToCompare(updatedRecipesToCompare);
@@ -254,7 +257,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                       <Switch
                         checked={usePreferences}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
+                          event: React.ChangeEvent<HTMLInputElement>,
                         ) => {
                           setUsePreferences(event.target.checked);
                         }}
@@ -301,7 +304,7 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                   onSelectRecipe={onSelectRecipe}
                   onLoadRecipeCost={handleUpdateRecipeInfo}
                   selectedToCompare={recipesToCompare.some(
-                    (recipe) => recipe.apiId === meal.apiId
+                    (recipe) => recipe.apiId === meal.apiId,
                   )}
                   onCompareSelect={handleToggleCompareRecipe}
                 />

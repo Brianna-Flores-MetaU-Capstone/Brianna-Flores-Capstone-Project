@@ -17,7 +17,7 @@ type GPSubstitutionOptionsType = {
   onSubstitutionSelect: (
     option: GPAiSubstitutionReturnType,
     index: number,
-    originalIngredientName: string
+    originalIngredientName: string,
   ) => void;
 };
 
@@ -28,12 +28,12 @@ const SubstitutionOptionsDropdown = ({
 }: GPSubstitutionOptionsType) => {
   const handleSelectSubstitution = (
     option: GPAiSubstitutionReturnType,
-    ingredientIndex: number
+    ingredientIndex: number,
   ) => {
     onSubstitutionSelect(
       option,
       ingredientIndex,
-      originalIngredient.ingredientName
+      originalIngredient.ingredientName,
     );
   };
 

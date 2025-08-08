@@ -26,6 +26,7 @@ import { Recipe } from "../../../../shared/Recipe";
 import ConnectCalendar from "../calendar/ConnectCalendar";
 import LinkIcon from "@mui/icons-material/Link";
 import { ALERT_TIMEOUT } from "../../utils/constants";
+import { useUser } from "../../contexts/UserContext";
 
 type GPMealCardProps = {
   index: number;
@@ -35,7 +36,7 @@ type GPMealCardProps = {
   toggleCalendarTimeModal?: () => void;
   onMealCardClick?: () => void;
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
   onSelectRecipe?: (data: Recipe) => void;
   onEditRecipe?: (data: Recipe) => void;
@@ -63,13 +64,14 @@ const MealCard: React.FC<GPMealCardProps> = ({
   const [ingredientCostModalOpen, setIngredientCostModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentLikes, setCurrentLikes] = useState(parsedMealData.likes);
+  const { user } = useUser();
 
   const toggleModal = () => {
     setIngredientCostModalOpen((prev) => !prev);
   };
 
   const handleCostEstimateClick = async (
-    event: React.MouseEvent<HTMLElement>
+    event: React.MouseEvent<HTMLElement>,
   ) => {
     event.stopPropagation();
     setLoading(true);
@@ -101,28 +103,39 @@ const MealCard: React.FC<GPMealCardProps> = ({
             <Typography level="h4">{parsedMealData.recipeTitle}</Typography>
           </Grid>
           <Grid xs={2}>
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-              <Tooltip
-                title={favorited ? "Remove from favorites" : "Add to favorites"}
-              >
-                <IconButton
-                  color="primary"
-                  sx={{ zIndex: 2 }}
-                  disabled={onFavoriteClick ? false : true}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    if (onFavoriteClick) {
-                      setCurrentLikes((prev) =>
-                        favorited ? prev - 1 : prev + 1
-                      );
-                      onFavoriteClick(parsedMealData);
-                    }
-                  }}
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              {onFavoriteClick && (
+                <Tooltip
+                  title={
+                    favorited ? "Remove from favorites" : "Add to favorites"
+                  }
                 >
-                  {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  <Typography>{currentLikes}</Typography>
-                </IconButton>
-              </Tooltip>
+                  <IconButton
+                    color="primary"
+                    sx={{ zIndex: 2 }}
+                    disabled={user ? false : true}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      if (onFavoriteClick) {
+                        setCurrentLikes((prev) =>
+                          favorited ? prev - 1 : prev + 1,
+                        );
+                        onFavoriteClick(parsedMealData);
+                      }
+                    }}
+                  >
+                    {favorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    <Typography>{currentLikes}</Typography>
+                  </IconButton>
+                </Tooltip>
+              )}
               {onCompareSelect && (
                 <Tooltip title="Compare recipes">
                   <Checkbox
@@ -225,7 +238,7 @@ const MealCard: React.FC<GPMealCardProps> = ({
                       message: `Added ${parsedMealData.recipeTitle} to selected meals!`,
                     });
                     setTimeout(() => {
-                      setMessage(undefined)
+                      setMessage(undefined);
                     }, ALERT_TIMEOUT);
                     onSelectRecipe(parsedMealData);
                   }}

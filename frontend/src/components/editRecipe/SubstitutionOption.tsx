@@ -58,7 +58,7 @@ const SubstitutionOption = ({ optionData }: GPSubstitutionOptionType) => {
                               {ingredient.quantity} {ingredient.unit}
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                     </tbody>
                   </Table>
@@ -68,7 +68,7 @@ const SubstitutionOption = ({ optionData }: GPSubstitutionOptionType) => {
                     {optionData.substitutionInstructions.map(
                       (instruction, index) => (
                         <ListItem key={index}>{instruction}</ListItem>
-                      )
+                      ),
                     )}
                   </List>
                 </Grid>

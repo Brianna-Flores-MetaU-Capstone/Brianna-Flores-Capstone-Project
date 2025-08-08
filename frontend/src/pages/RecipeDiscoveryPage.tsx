@@ -35,7 +35,7 @@ const RecipeDiscoveryPage = () => {
   const [recipeInfoModalInfo, setRecipeInfoModalInfo] = useState<Recipe>();
   const { user } = useUser();
   const [favoritedRecipesId, setFavoritedRecipesId] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [editRecipeInfo, setEditRecipeInfo] = useState<Recipe>();
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
@@ -43,11 +43,11 @@ const RecipeDiscoveryPage = () => {
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
   const [recipeFilter, setRecipeFilter] = useState<recipeFilterType>(
-    recipeFiltersList.ALL
+    recipeFiltersList.ALL,
   );
   const [displayedRecipes, setDisplayedRecipes] = useState<Recipe[]>([]);
   const [offset, setOffset] = useState(0);
@@ -114,6 +114,9 @@ const RecipeDiscoveryPage = () => {
   const handleSelectRecipeToShop = async (recipe: Recipe) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     try {
@@ -171,7 +174,7 @@ const RecipeDiscoveryPage = () => {
       setRecipesToCompare((prev) => [...prev, clickedRecipe]);
     } else {
       setRecipesToCompare((prev) =>
-        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId)
+        prev.filter((recipe) => recipe.apiId !== clickedRecipe.apiId),
       );
     }
   };
@@ -184,7 +187,7 @@ const RecipeDiscoveryPage = () => {
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>
+    noDiffFields: Set<string>,
   ) => {
     setUserDiffOptionsOpen(false);
     if (!recipesToCompare[0] || !recipesToCompare[1]) {
@@ -192,6 +195,9 @@ const RecipeDiscoveryPage = () => {
         error: true,
         message: "Error could not get recipes to compare",
       });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     setUserDiffChoices(userChoices);
@@ -264,7 +270,7 @@ const RecipeDiscoveryPage = () => {
                 {...(user && { onFavoriteClick: handleFavoriteClick })}
                 favorited={favoritedRecipesId.has(meal.id)}
                 selectedToCompare={recipesToCompare.some(
-                  (recipe) => recipe.apiId === meal.apiId
+                  (recipe) => recipe.apiId === meal.apiId,
                 )}
                 onCompareSelect={handleToggleCompareRecipe}
               />

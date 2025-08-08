@@ -9,13 +9,13 @@ type GPAlertSnackbarTypes = {
 const AlertSnackbar = ({ open, message, error }: GPAlertSnackbarTypes) => {
   return (
     <Snackbar
-        autoHideDuration={3000}
-        open={open}
-        variant="soft"
-        color={error ? "danger" : "success"}
-      >
-        {message}
-      </Snackbar>
+      autoHideDuration={3000}
+      open={open}
+      variant="soft"
+      color={error ? "danger" : "success"}
+    >
+      {message}
+    </Snackbar>
   );
 };
 

@@ -80,14 +80,17 @@ const NewListPage = () => {
 
   const handleDeleteRecipe = async (deletedRecipe: Recipe) => {
     try {
-      setMessage({ error: false, message: `Successfully deleted ${deletedRecipe.recipeTitle}`})
+      setMessage({
+        error: false,
+        message: `Successfully deleted ${deletedRecipe.recipeTitle}`,
+      });
       await axios.put(
         `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/remove`,
         { deletedRecipe },
-        axiosConfig
+        axiosConfig,
       );
       setTimeout(() => {
-        setMessage(undefined)
+        setMessage(undefined);
       }, ALERT_TIMEOUT);
       await fetchRecipes({
         setMessage,
@@ -96,6 +99,9 @@ const NewListPage = () => {
       });
     } catch (error) {
       setMessage({ error: true, message: "Failed to delete recipe" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 
@@ -116,11 +122,14 @@ const NewListPage = () => {
       await axios.post(
         `${databaseUrl}/generateList/${user?.id}`,
         { ownedIngredients, recipeIngredients },
-        axiosConfig
+        axiosConfig,
       );
       navigate("/grocery-list");
     } catch (error) {
       setMessage({ error: true, message: "Failed to generate grocery list" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 

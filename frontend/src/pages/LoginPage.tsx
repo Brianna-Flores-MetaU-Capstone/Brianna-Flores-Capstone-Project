@@ -13,6 +13,7 @@ import { useUser } from "../contexts/UserContext";
 import { AuthFormData } from "../classes/authentication/AuthFormData";
 import axios from "axios";
 import type { GPUserAccountType } from "../utils/types/authTypes";
+import { ALERT_TIMEOUT } from "../utils/constants";
 const databaseUrl = import.meta.env.VITE_DATABASE_URL;
 
 const LoginPage = () => {
@@ -40,18 +41,30 @@ const LoginPage = () => {
                 setUser(userExtendedData.data);
               }
               setMessage({ error: false, message: "Successfully logged in!" });
+              setTimeout(() => {
+                setMessage(undefined);
+              }, ALERT_TIMEOUT);
               navigate("/discovery");
             } catch (error) {
               setUser(null);
               setMessage({ error: true, message: "Error saving login" });
+              setTimeout(() => {
+                setMessage(undefined);
+              }, ALERT_TIMEOUT);
             }
           }
         } else {
           setMessage({ error: true, message: "Account not found" });
+          setTimeout(() => {
+            setMessage(undefined);
+          }, ALERT_TIMEOUT);
         }
       })
       .catch((error) => {
         setMessage({ error: true, message: error.code });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
       });
   }
 

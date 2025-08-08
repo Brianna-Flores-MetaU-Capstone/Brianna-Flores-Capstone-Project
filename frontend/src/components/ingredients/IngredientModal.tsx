@@ -2,7 +2,11 @@ import React from "react";
 import { useReducer } from "react";
 import { IngredientUnitOptions, Departments } from "../../utils/enum";
 import type { GPErrorMessageTypes } from "../../utils/types/types";
-import { IngredientDataFields, INGREDIENT_MODAL } from "../../utils/constants";
+import {
+  IngredientDataFields,
+  INGREDIENT_MODAL,
+  ALERT_TIMEOUT,
+} from "../../utils/constants";
 import { GPModalStyle } from "../../utils/style/UIStyle";
 import { useState } from "react";
 import ErrorState from "../utils/ErrorState";
@@ -74,13 +78,16 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
 
   const [newIngredientData, dispatch] = useReducer(
     reducer,
-    initialIngredientState
+    initialIngredientState,
   );
 
   const handleModalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     if (isEditing) {
@@ -90,6 +97,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
             error: true,
             message: "Quantity must be greater than 0",
           });
+          setTimeout(() => {
+            setMessage(undefined);
+          }, ALERT_TIMEOUT);
           return;
         }
         const ingredientId = ingredientData.id;
@@ -100,6 +110,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
         });
       } else {
         setMessage({ error: true, message: "No ingredient to update" });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
       }
       onClose();
       fetchUserIngredients();
@@ -117,6 +130,9 @@ const IngredientModal: React.FC<GPIngredientModalProps> = ({
           error: true,
           message: "Failed to add ingredient, duplicate may exist",
         });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
       }
     }
   };

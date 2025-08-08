@@ -15,7 +15,7 @@ import MealInfoModal from "../components/recipeDisplay/MealInfoModal";
 import { CenteredTitledListStyle } from "../utils/style/UIStyle";
 import { useUser } from "../contexts/UserContext";
 import { Recipe } from "../../../shared/Recipe";
-import { RecipeFetchEnum } from "../utils/constants";
+import { ALERT_TIMEOUT, RecipeFetchEnum } from "../utils/constants";
 
 const EditedRecipesPage = () => {
   const [userEditedRecipes, setUserEditedRecipes] = useState<Recipe[]>([]);
@@ -76,6 +76,9 @@ const EditedRecipesPage = () => {
   const handleSelectRecipeToShop = async (recipe: Recipe) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     try {
@@ -88,6 +91,9 @@ const EditedRecipesPage = () => {
       });
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 

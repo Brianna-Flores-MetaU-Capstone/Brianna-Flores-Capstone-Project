@@ -26,7 +26,7 @@ class IngredientData {
     ingredientCost?: number,
     ingredientCostUnit?: string,
     ingredientSubstitutes?: GPAiSubstitutionReturnType[],
-    ingredientWalmartId?: number
+    ingredientWalmartId?: number,
   ) {
     this.id = id;
     this.ingredientName = ingredientName;
@@ -39,7 +39,7 @@ class IngredientData {
     this.ingredientCost = ingredientCost ?? 0;
     this.ingredientCostUnit = ingredientCostUnit ?? "";
     this.ingredientSubstitutes = ingredientSubstitutes ?? [];
-    this.ingredientWalmartId = ingredientWalmartId ?? -1
+    this.ingredientWalmartId = ingredientWalmartId ?? -1;
   }
 }
 

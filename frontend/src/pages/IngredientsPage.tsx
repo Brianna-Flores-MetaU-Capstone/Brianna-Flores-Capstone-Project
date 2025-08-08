@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import IngredientModal from "../components/ingredients/IngredientModal";
 import type { GPErrorMessageTypes } from "../utils/types/types";
 import { Box, Button, Sheet } from "@mui/joy";
-import { INGREDIENT_MODAL } from "../utils/constants";
+import { ALERT_TIMEOUT, INGREDIENT_MODAL } from "../utils/constants";
 import TitledListView from "../components/utils/TitledListView";
 import Ingredient from "../components/ingredients/Ingredient";
 import ErrorState from "../components/utils/ErrorState";
@@ -46,6 +46,9 @@ const IngredientsPage = () => {
   const handleDeleteIngredient = async (ingredient: IngredientData) => {
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     await deleteIngredient({ setMessage, ingredient });
