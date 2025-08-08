@@ -27,6 +27,7 @@ import UserDiffOptions from "../recipeDiff/UserDiffOptions";
 import ImageCarousel from "./ImageCarousel";
 import { useUser } from "../../contexts/UserContext";
 import EditRecipeModal from "../editRecipe/EditRecipeModal";
+import { ALERT_TIMEOUT } from "../../utils/constants";
 
 type GPMealModalProps = {
   modalOpen: boolean;
@@ -46,7 +47,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
   const [originalRecipeInfo, setOriginalRecipeInfo] = useState<Recipe>();
   const [userDiffOptionsOpen, setUserDiffOptionsOpen] = useState(false);
   const [userDiffChoices, setUserDiffChoices] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [noDiffFields, setNoDiffFields] = useState<Set<string>>(new Set());
   const [editRecipeModalOpen, setEditRecipeModalOpen] = useState(false);
@@ -58,7 +59,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
 
   const onSubmitUserDiffOptions = async (
     userChoices: Set<string>,
-    noDiffFields: Set<string>
+    noDiffFields: Set<string>,
   ) => {
     // we are viewing the edited recipe, need to fetch original recipe
     setUserDiffOptionsOpen(false);
@@ -67,6 +68,9 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
         error: true,
         message: "Error no recipe info set",
       });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     setUserDiffChoices(userChoices);
@@ -132,7 +136,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
           </Box>
           <Box>
             <Typography level="h3">Ingredients</Typography>
-            {user && (
+            {user && refreshRecipes && (
               <Button onClick={onSubstituteClick}>
                 Get Ingredient Substitutions For Diet
               </Button>
@@ -156,7 +160,12 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                       <List sx={{ ml: 4 }} marker="disc">
                         {ingredient.subIngredients.map((subIngredient) => (
                           <ListItem key={subIngredient.ingredientName}>
-                            <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
                               <Typography>
                                 {subIngredient.ingredientName}
                               </Typography>
@@ -164,7 +173,7 @@ const MealInfoModal: React.FC<GPMealModalProps> = ({
                                 {subIngredient.quantity % 1 === 0
                                   ? subIngredient.quantity
                                   : Number(subIngredient.quantity).toFixed(
-                                      2
+                                      2,
                                     )}{" "}
                                 {subIngredient.unit}
                               </Typography>

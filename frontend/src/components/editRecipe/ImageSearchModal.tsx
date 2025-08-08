@@ -25,6 +25,7 @@ import {
   CenteredTitledListStyle,
   GPModalStyle,
 } from "../../utils/style/UIStyle";
+import { ALERT_TIMEOUT } from "../../utils/constants";
 const IMAGE_API_KEY = import.meta.env.VITE_IMAGE_API_KEY;
 const pexelsUrl = import.meta.env.VITE_PEXELS_URL;
 const UPLOAD_IMAGE_API_KEY = import.meta.env.VITE_IMAGE_UPLOAD_API_KEY;
@@ -84,6 +85,9 @@ const ImageSearchModal = ({
       setImageSearchResults(photosSrc);
     } catch (error) {
       setMessage({ error: true, message: "Error fetching images from API" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 
@@ -112,6 +116,9 @@ const ImageSearchModal = ({
           error: true,
           message: "Error uploading image, try again",
         });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
         return;
       }
     }

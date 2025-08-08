@@ -12,6 +12,7 @@ import { Box, Card } from "@mui/joy";
 import { useUser } from "../contexts/UserContext";
 import { AuthFormData } from "../classes/authentication/AuthFormData";
 import { useNavigate } from "react-router";
+import { ALERT_TIMEOUT } from "../utils/constants";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState<AuthFormData>(new AuthFormData());
@@ -38,6 +39,9 @@ const SignupForm = () => {
             error: true,
             message: "Unable to create account, missing required information",
           });
+          setTimeout(() => {
+            setMessage(undefined);
+          }, ALERT_TIMEOUT);
           return;
         }
 
@@ -63,6 +67,9 @@ const SignupForm = () => {
           error: true,
           message: error.code,
         });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
       });
   }
 

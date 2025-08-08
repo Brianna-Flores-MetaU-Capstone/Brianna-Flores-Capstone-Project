@@ -19,7 +19,7 @@ const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
     recipeData.map(async (recipe: any) => {
       const parsedIngredients = parseIngredients(recipe.extendedIngredients);
       const parsedInstructions = parseInstructions(
-        recipe.analyzedInstructions[0].steps
+        recipe.analyzedInstructions[0].steps,
       );
       const parsedTags = parseTags(recipe);
       const newRecipe = new Recipe(
@@ -38,10 +38,10 @@ const parseRecipeData = async (recipeData: GPSpoonacularResultsType[]) => {
         recipe.dairyFree,
         parsedTags,
         0,
-        null
+        null,
       );
       return newRecipe;
-    })
+    }),
   );
 };
 
@@ -71,8 +71,8 @@ const parseIngredients = (ingredientsData: any) => {
         ingredient.amount,
         ingredient.unit,
         ingredient.aisle,
-        false
-      )
+        false,
+      ),
   );
 };
 
@@ -95,7 +95,7 @@ const estimateRecipeCost = async ({
     const response = await axios.post<GPEstimateRecipeCostReturnTypes>(
       `${databaseUrl}/generateList/estimateCost`,
       { ownedIngredients, recipeIngredients },
-      axiosConfig
+      axiosConfig,
     );
     const estimatedCostFormatted: GPEstimateRecipeCostReturnTypes = {
       ingredientCostInfo: response.data.ingredientCostInfo ?? [],
@@ -124,7 +124,7 @@ const validateInput = (formData: AuthFormData) => {
 
 const handleAuthInputChange = (
   event: React.ChangeEvent<HTMLInputElement>,
-  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>
+  setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>,
 ) => {
   const credential = event.target.dataset.credential as GPAuthFormType;
   const value = event.target.value;
@@ -147,7 +147,7 @@ const parseGroceryListDepartments = (groceryList: IngredientData[]) => {
 
 type GPUpdateRecipePricingTypes = {
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
   recipe: Recipe;
 };

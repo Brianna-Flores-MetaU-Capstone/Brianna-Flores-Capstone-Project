@@ -30,7 +30,7 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
 }) => {
   const [userIntolerances, setUserIntolerances] = useState<string[]>([]);
   const [userDiets, setUserDiets] = useState<string[]>([]);
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(false);
 
   const handlePreferenceClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -56,13 +56,13 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
 
   const onRegistrationSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setDisabled(true)
+    setDisabled(true);
     if (handleRegistrationSubmit) {
       handleRegistrationSubmit({ userIntolerances, userDiets });
     } else if (handleLoginSubmit) {
       handleLoginSubmit(event);
     }
-    setDisabled(false)
+    setDisabled(false);
   };
 
   return (
@@ -113,7 +113,11 @@ const AuthForm: React.FC<GPAuthFormEventProps> = ({
           />
         </Box>
       )}
-      <Button type="submit" disabled={disabled} sx={{ display: "block", mx: "auto", mt: 1 }}>
+      <Button
+        type="submit"
+        disabled={disabled}
+        sx={{ display: "block", mx: "auto", mt: 1 }}
+      >
         {handleRegistrationSubmit ? "Sign Up!" : "Login!"}
       </Button>
     </form>

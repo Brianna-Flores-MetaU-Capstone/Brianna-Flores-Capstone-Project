@@ -34,13 +34,13 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<IngredientData> {
       this.itemAData.map((ingredient) => [
         ingredient.ingredientName,
         ingredient,
-      ])
+      ]),
     );
     let ingredientsBMap = new Map(
       this.itemBData.map((ingredient) => [
         ingredient.ingredientName,
         ingredient,
-      ])
+      ]),
     );
 
     for (const ingredientA of this.itemAData) {
@@ -86,7 +86,7 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<IngredientData> {
         " " +
         formatQuantity(ingredient.quantity) +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const parsedIngredientsB = ingredientsB.map(
       (ingredient) =>
@@ -94,11 +94,11 @@ class DiffRecipeIngredients extends DiffRecipeFieldAbstract<IngredientData> {
         " " +
         formatQuantity(ingredient.quantity) +
         " " +
-        ingredient.unit
+        ingredient.unit,
     );
     const ingredientDiff = new DiffRecipeStringArray(
       parsedIngredientsA,
-      parsedIngredientsB
+      parsedIngredientsB,
     );
     const detailedIngredientsDiff = ingredientDiff.getStringArrayDiff();
     return detailedIngredientsDiff;

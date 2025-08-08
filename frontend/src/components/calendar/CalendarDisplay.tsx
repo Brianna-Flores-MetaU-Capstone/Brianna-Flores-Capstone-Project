@@ -49,7 +49,10 @@ const CalendarDisplay = ({ selectedRecipes }: GPUpcomingScheduleType) => {
                 })
                 .map((eventInfo, index) => {
                   return (
-                    <Box key={index} sx={{ display: "flex", flexGrow: 1, my: 2 }}>
+                    <Box
+                      key={index}
+                      sx={{ display: "flex", flexGrow: 1, my: 2 }}
+                    >
                       <MealCard
                         index={index}
                         toggleCalendarTimeModal={() => {}}

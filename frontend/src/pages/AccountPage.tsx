@@ -17,6 +17,7 @@ import { updateAccount, getUserData } from "../utils/databaseHelpers";
 import {
   PreferenceCategoryEnum,
   AuthenticationFieldEnum,
+  ALERT_TIMEOUT,
 } from "../utils/constants";
 import AuthenticatePassword from "../components/authentication/AuthenticatePassword";
 import ErrorState from "../components/utils/ErrorState";
@@ -116,6 +117,9 @@ const AccountPage = () => {
     event.currentTarget.reset();
     if (!userPassword) {
       setMessage({ error: true, message: "auth/no-password" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
 
@@ -133,6 +137,9 @@ const AccountPage = () => {
             if (user.email && userEmail && user.email !== userEmail) {
               updateEmail(user, userEmail).catch((error) => {
                 setMessage({ error: true, message: error.code });
+                setTimeout(() => {
+                  setMessage(undefined);
+                }, ALERT_TIMEOUT);
               });
             }
             updateAccount({
@@ -143,6 +150,9 @@ const AccountPage = () => {
               setMessage,
             });
             setMessage({ error: false, message: "success/profile-update" });
+            setTimeout(() => {
+              setMessage(undefined);
+            }, ALERT_TIMEOUT);
           })
           .catch((error) => {
             setMessage({ error: true, message: error.code });
@@ -150,6 +160,9 @@ const AccountPage = () => {
           });
       } catch (error) {
         setMessage({ error: true, message: "auth/operation-not-allowed" });
+        setTimeout(() => {
+          setMessage(undefined);
+        }, ALERT_TIMEOUT);
       }
     }
   };
@@ -166,8 +179,14 @@ const AccountPage = () => {
       );
       setUser(null);
       setMessage({ error: false, message: "Successfully logged out" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     } catch (error) {
       setMessage({ error: true, message: "Logout failed" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 

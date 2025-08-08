@@ -38,7 +38,7 @@ const GroceryList = () => {
     await axios.put(
       `${databaseUrl}/generateList/check`,
       { ingredientName: groceryItem },
-      axiosConfig
+      axiosConfig,
     );
     fetchGroceryList({
       setMessage,
@@ -62,7 +62,7 @@ const GroceryList = () => {
     await axios.put(
       `${databaseUrl}/generateList/delete`,
       { ingredientName: ingredientName },
-      axiosConfig
+      axiosConfig,
     );
     fetchGroceryList({
       setMessage,

@@ -11,7 +11,7 @@ import { parseGroceryListDepartments } from "./utils";
 import axios from "axios";
 import { Recipe } from "../../../shared/Recipe";
 import { CalendarEvent } from "../classes/calendar/CalendarEvent";
-import { RecipeFetchEnum } from "./constants";
+import { ALERT_TIMEOUT, RecipeFetchEnum } from "./constants";
 import { IngredientData } from "../../../shared/IngredientData";
 import { recipeFiltersList } from "../classes/filters/RecipeFilters";
 
@@ -26,7 +26,7 @@ const axiosConfig = {
 
 type GPSetMessageType = {
   setMessage: (
-    value: React.SetStateAction<GPErrorMessageTypes | undefined>
+    value: React.SetStateAction<GPErrorMessageTypes | undefined>,
   ) => void;
 };
 
@@ -47,6 +47,9 @@ const updateAccount = async ({
     await axios.put(`${databaseUrl}/account/${user.uid}`, body, axiosConfig);
   } catch (error) {
     setMessage({ error: true, message: "Failed to update user" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -57,7 +60,7 @@ const getUserData = async ({ user, setMessage }: GPUserDataHelperTypes) => {
   try {
     const response = await axios.get<GPUserDatabaseReturnType>(
       `${databaseUrl}/account/${user.uid}`,
-      axiosConfig
+      axiosConfig,
     );
     const userDataObj: GPCurrentUserTypes = {
       user,
@@ -68,6 +71,9 @@ const getUserData = async ({ user, setMessage }: GPUserDataHelperTypes) => {
     return userDataObj;
   } catch (error) {
     setMessage({ error: true, message: "Failed to get user data" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -79,11 +85,14 @@ const handleNewUser = async ({ newUser, setMessage }: GPNewUserHelperTypes) => {
     const response = await axios.post<GPUserAccountType>(
       `${databaseUrl}/signup`,
       newUser,
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to add user to database" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -93,7 +102,7 @@ const validateUserToken = async (user: User) => {
     const response = await axios.post(
       `${databaseUrl}/login`,
       { token },
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -105,7 +114,7 @@ const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
   try {
     const response = await axios.get<GPIngredientDataTypes[]>(
       `${databaseUrl}/ingredients`,
-      axiosConfig
+      axiosConfig,
     );
     const userIngredients = response.data.map(
       (ingredient) =>
@@ -116,8 +125,8 @@ const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
           ingredient.unit,
           ingredient.department,
           ingredient.isChecked,
-          ingredient.expirationDate
-        )
+          ingredient.expirationDate,
+        ),
     );
     return userIngredients;
   } catch (error) {
@@ -125,6 +134,9 @@ const fetchUserIngredientsHelper = async ({ setMessage }: GPSetMessageType) => {
       error: true,
       message: "Error displaying user ingredients",
     });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -138,11 +150,17 @@ const deleteIngredient = async ({
   try {
     await axios.delete(
       `${databaseUrl}/ingredients/${ingredient.id}`,
-      axiosConfig
+      axiosConfig,
     );
     setMessage({ error: false, message: "Sucessfully deleted ingredient" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   } catch (error) {
     setMessage({ error: true, message: "Failed to delete ingredient" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -159,7 +177,7 @@ const addIngredientDatabase = async ({
     await axios.post(
       `${databaseUrl}/ingredients/${userId}`,
       newIngredientData,
-      axiosConfig
+      axiosConfig,
     );
     return true;
   } catch (error) {
@@ -180,11 +198,17 @@ const updateIngredientDatabase = async ({
     await axios.put(
       `${databaseUrl}/ingredients/${ingredientId}`,
       newIngredientData,
-      axiosConfig
+      axiosConfig,
     );
     setMessage({ error: false, message: "Sucessfully updated ingredient" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   } catch (error) {
     setMessage({ error: true, message: "Failed to update ingredient" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -200,7 +224,7 @@ const fetchRecipes = async ({
   try {
     const response = await axios.get<Recipe[]>(
       `${databaseUrl}/recipes/${recipeGroup}`,
-      axiosConfig
+      axiosConfig,
     );
     if (recipeGroup === RecipeFetchEnum.FAVORITED_IDS) {
       return response.data;
@@ -232,9 +256,9 @@ const fetchRecipes = async ({
             eventInfo.eventTitle,
             eventInfo.start.toString(),
             eventInfo.end.toString(),
-            eventInfo.eventLink
+            eventInfo.eventLink,
           );
-        })
+        }),
       );
     });
     if (setRecipes) {
@@ -243,6 +267,9 @@ const fetchRecipes = async ({
     return recipesWithCalendarInfo;
   } catch (error) {
     setMessage({ error: true, message: "Failed to fetch user recipes" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -261,10 +288,13 @@ const updateUserRecipes = async ({
     await axios.post(
       `${databaseUrl}/recipes/${RecipeFetchEnum.PLANNED}/${userId}`,
       { editedRecipe: editedRecipe, ...selectedRecipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Failed to save recipe" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -287,7 +317,7 @@ const fetchGroceryList = async ({
     setUserGroceryList(response.data.groceryList);
     if (setGroceryDepartments) {
       const departments = parseGroceryListDepartments(
-        response.data.groceryList
+        response.data.groceryList,
       );
       setGroceryDepartments(departments);
     }
@@ -303,9 +333,7 @@ const fetchGroceryList = async ({
 };
 
 type GPFetchDiscoverRecipesType = GPSetMessageType & {
-  setTotalNumRecipes: (
-    value: React.SetStateAction<number>
-  ) => void;
+  setTotalNumRecipes: (value: React.SetStateAction<number>) => void;
   filter: string;
   offset: number;
   numRequested: number;
@@ -318,12 +346,16 @@ const fetchDiscoverRecipes = async ({
   numRequested,
 }: GPFetchDiscoverRecipesType) => {
   try {
-    const numRecipes = await axios.post<number>(`${databaseUrl}/recipes/totalNumRecipes`, {filter}, axiosConfig)
-    setTotalNumRecipes(numRecipes.data)
+    const numRecipes = await axios.post<number>(
+      `${databaseUrl}/recipes/totalNumRecipes`,
+      { filter },
+      axiosConfig,
+    );
+    setTotalNumRecipes(numRecipes.data);
     const response = await axios.post<Recipe[]>(
       `${databaseUrl}/recipes/discover`,
       { filter, offset, numRequested },
-      axiosConfig
+      axiosConfig,
     );
     return response.data;
   } catch (error) {
@@ -335,9 +367,7 @@ const fetchDiscoverRecipes = async ({
 };
 
 type GPFetchPopularRecipesType = GPSetMessageType & {
-  setTotalNumRecipes: (
-    value: React.SetStateAction<number>
-  ) => void;
+  setTotalNumRecipes: (value: React.SetStateAction<number>) => void;
   offset: number;
   numRequested: number;
 };
@@ -351,10 +381,14 @@ const fetchPopularRecipes = async ({
     const response = await axios.post<Recipe[]>(
       `${databaseUrl}/recipes/popular`,
       { offset, numRequested },
-      axiosConfig
+      axiosConfig,
     );
-    const numRecipes = await axios.post<number>(`${databaseUrl}/recipes/totalNumRecipes`, {filter: recipeFiltersList.ALL}, axiosConfig)
-    setTotalNumRecipes(numRecipes.data)
+    const numRecipes = await axios.post<number>(
+      `${databaseUrl}/recipes/totalNumRecipes`,
+      { filter: recipeFiltersList.ALL },
+      axiosConfig,
+    );
+    setTotalNumRecipes(numRecipes.data);
     return response.data;
   } catch (error) {
     setMessage({
@@ -376,10 +410,13 @@ const handleUnfavoriteRecipe = async ({
     await axios.put(
       `${databaseUrl}/recipes/${RecipeFetchEnum.FAVORITED}/unfavorite`,
       { selectedRecipe: recipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Error unfavoriting recipe" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -397,10 +434,13 @@ const handleFavoriteRecipe = async ({
     await axios.post(
       `${databaseUrl}/recipes/${RecipeFetchEnum.FAVORITED}/${userId}`,
       { selectedRecipe },
-      axiosConfig
+      axiosConfig,
     );
   } catch (error) {
     setMessage({ error: true, message: "Error favoriting recipe" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 
@@ -415,7 +455,7 @@ const fetchSingleRecipe = async ({
   try {
     const originalRecipe = await axios.get<Recipe>(
       `${databaseUrl}/recipes/original/${selectedRecipe.apiId}`,
-      axiosConfig
+      axiosConfig,
     );
     return originalRecipe.data;
   } catch (error) {
@@ -437,11 +477,14 @@ const saveCalendarEvent = async ({
     const savedCalendarEvent = await axios.post(
       `${databaseUrl}/calendar/createEvent`,
       { selectedRecipe, ...calendarEvent },
-      axiosConfig
+      axiosConfig,
     );
     return savedCalendarEvent.data;
   } catch (error) {
     setMessage({ error: true, message: "Failed to save event to database" });
+    setTimeout(() => {
+      setMessage(undefined);
+    }, ALERT_TIMEOUT);
   }
 };
 

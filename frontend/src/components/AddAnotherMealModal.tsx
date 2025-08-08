@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import MealCard from "./recipeDisplay/MealCard";
 import {
+  ALERT_TIMEOUT,
   GROUP_OF_DISPLAYED_CARDS,
   TOTAL_SEARCH_REQUESTS,
 } from "../utils/constants";
 import { parseRecipeData } from "../utils/utils";
 import type { GPErrorMessageTypes } from "../utils/types/types";
-import ErrorState from "./utils/ErrorState";
 import TitledListView from "./utils/TitledListView";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
@@ -36,6 +36,7 @@ import { Recipe } from "../../../shared/Recipe";
 import MealInfoModal from "./recipeDisplay/MealInfoModal";
 import { useNavigate } from "react-router";
 import type { GPSpoonacularReturnType } from "../utils/types/spoonacularApiReturnType";
+import AlertSnackbar from "./utils/AlertSnackbar";
 
 const spoonacularUrl = import.meta.env.VITE_SPOONACULAR_URL;
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
@@ -111,6 +112,9 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
         error: true,
         message: "Error fetching from api",
       });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 
@@ -282,9 +286,11 @@ const AddAnotherMealModal: React.FC<GPAddAnotherMealProps> = ({
                 </Box>
               </form>
             </Box>
-            {message && (
-              <ErrorState error={message.error} message={message.message} />
-            )}
+            <AlertSnackbar
+              open={message ? true : false}
+              message={message?.message ?? ""}
+              error={message?.error ?? false}
+            />
             <TitledListView
               itemsList={apiMealResults}
               renderItem={(meal, index) => (

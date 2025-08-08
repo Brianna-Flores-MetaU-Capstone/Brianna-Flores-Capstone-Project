@@ -37,6 +37,7 @@ import { getSubstitutionForIngredient } from "../../utils/geminiApi";
 import SubstitutionOptionsDropdown from "./SubstitutionOptionsDropdown";
 import { IngredientData } from "../../../../shared/IngredientData";
 import type { GPAiSubstitutionReturnType } from "../../utils/types/aiSubReturnType";
+import { ALERT_TIMEOUT } from "../../utils/constants";
 
 const actions = {
   SET_RECIPE: "setRecipe",
@@ -245,20 +246,20 @@ const EditRecipeModal = ({
         return {
           ...state,
           previewImage: state.previewImage.filter(
-            (imageUrl) => imageUrl !== action.value
+            (imageUrl) => imageUrl !== action.value,
           ),
         };
       case actions.UPDATE_INGREDIENT:
         setInputError(
           action.ingredientField === EditRecipeFieldsEnum.ING_QUANTITY &&
-            parseFloat(action.value) <= 0
+            parseFloat(action.value) <= 0,
         );
         return {
           ...state,
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, [action.ingredientField]: action.value }
-              : elem
+              : elem,
           ),
         };
       case actions.ADD_SUBSTITUTES:
@@ -267,7 +268,7 @@ const EditRecipeModal = ({
           ingredients: state.ingredients.map((elem, index) =>
             index === action.ingredientIndex
               ? { ...elem, ["ingredientSubstitutes"]: action.value }
-              : elem
+              : elem,
           ),
         };
       case actions.UPDATE_INSTRUCTION:
@@ -275,7 +276,7 @@ const EditRecipeModal = ({
         return {
           ...state,
           instructions: state.instructions.map((step, index) =>
-            index === action.instructionIndex ? action.value : step
+            index === action.instructionIndex ? action.value : step,
           ),
         };
       case actions.DELETE_ITEM:
@@ -284,7 +285,7 @@ const EditRecipeModal = ({
           return {
             ...state,
             [action.deletedField]: deletedItemArray.filter(
-              (_, index) => index !== action.itemIndex
+              (_, index) => index !== action.itemIndex,
             ),
           };
         } else {
@@ -307,8 +308,8 @@ const EditRecipeModal = ({
             .toLowerCase()
             .replace(
               `${action.originalIngredient.toLowerCase()} `,
-              `${action.substituteIngredient.toLowerCase()} `
-            )
+              `${action.substituteIngredient.toLowerCase()} `,
+            ),
         );
         return {
           ...state,
@@ -329,6 +330,9 @@ const EditRecipeModal = ({
     event.preventDefault();
     if (!user) {
       setMessage({ error: true, message: "Error user not signed in" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
       return;
     }
     const newRecipe = new Recipe(
@@ -349,7 +353,7 @@ const EditRecipeModal = ({
       0,
       editedRecipeData.editingAuthorId,
       editedRecipeData.id,
-      editedRecipeData.editingAuthorName
+      editedRecipeData.editingAuthorName,
     );
     try {
       const userId = user.id;
@@ -363,6 +367,9 @@ const EditRecipeModal = ({
       onSubmit();
     } catch (error) {
       setMessage({ error: true, message: "Error adding recipe" });
+      setTimeout(() => {
+        setMessage(undefined);
+      }, ALERT_TIMEOUT);
     }
   };
 
@@ -375,7 +382,7 @@ const EditRecipeModal = ({
 
   const handleSuggestIngredientSubstitution = async (
     ingredient: IngredientData,
-    index: number
+    index: number,
   ) => {
     setLoadingSubstitutions(true);
     const response: GPAiSubstitutionReturnType[] =
@@ -397,7 +404,7 @@ const EditRecipeModal = ({
   const handleSubstitutionSelected = (
     substitution: GPAiSubstitutionReturnType,
     index: number,
-    originalIngredientName: string
+    originalIngredientName: string,
   ) => {
     // delete the original ingredient
     dispatch({
@@ -418,7 +425,7 @@ const EditRecipeModal = ({
           ingredient.quantity,
           ingredient.unit,
           ingredient.department,
-          false
+          false,
         );
         subIngredients.push(substitutionIngredient);
       });
@@ -430,7 +437,7 @@ const EditRecipeModal = ({
         substitution.substitutionDepartment,
         false,
         null,
-        subIngredients
+        subIngredients,
       );
       dispatch({
         type: actions.ADD_ITEM,
@@ -455,7 +462,7 @@ const EditRecipeModal = ({
           substitution.substitutionQuantity,
           substitution.substitutionUnit,
           substitution.substitutionDepartment,
-          false
+          false,
         ),
       });
       dispatch({
@@ -641,7 +648,7 @@ const EditRecipeModal = ({
                             onClick={() =>
                               handleSuggestIngredientSubstitution(
                                 ingredient,
-                                ingredientIndex
+                                ingredientIndex,
                               )
                             }
                           >

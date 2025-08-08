@@ -81,7 +81,9 @@ const Ingredient: React.FC<GPIngredientProps> = ({
         {ingredient.ingredientCostUnit && (
           <Grid xs={GRID_EXP_QUANT_COST_SPACING}>
             <Typography>
-              {ingredient.ingredientCost > 0 ? `Est. $${ingredient.ingredientCost.toFixed(2)}` : ingredient.ingredientCostUnit}
+              {ingredient.ingredientCost > 0
+                ? `Est. $${ingredient.ingredientCost.toFixed(2)}`
+                : ingredient.ingredientCostUnit}
             </Typography>
           </Grid>
         )}
@@ -89,7 +91,7 @@ const Ingredient: React.FC<GPIngredientProps> = ({
           {presentButtons && (
             <ButtonGroup spacing={2}>
               <IconButton onClick={() => onEdit?.(ingredient)}>
-                <EditIcon /> 
+                <EditIcon />
               </IconButton>
               <IconButton onClick={() => onDelete?.(ingredient)}>
                 <DeleteIcon />

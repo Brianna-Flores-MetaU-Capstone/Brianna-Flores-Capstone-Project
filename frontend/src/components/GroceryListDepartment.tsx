@@ -26,10 +26,10 @@ const GroceryListDepartment: React.FC<GPGroceryListDepartmentProps> = ({
   groceryList,
   department,
   onGroceryCheck,
-  onGroceryDelete
+  onGroceryDelete,
 }) => {
   const filteredGroceries = groceryList.filter(
-    (item) => item.department === department
+    (item) => item.department === department,
   );
 
   return (
